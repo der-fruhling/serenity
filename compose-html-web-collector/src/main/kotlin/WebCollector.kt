@@ -106,7 +106,7 @@ class WebCollector(
                     @JsName("$hashFunctionName")
                     @InternalPageEntryPoint
                     fun page${function.simpleName.asString()}ClientBehavior() {
-                        invokeCommonEntryPoint(IndexPage)
+                        invokeCommonEntryPoint(${function.simpleName.asString()})
                     }
                 """.trimIndent())
             }
