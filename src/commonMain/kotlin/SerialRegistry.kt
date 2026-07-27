@@ -1,0 +1,92 @@
+package net.derfruhling.html
+
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.builtins.ArraySerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import kotlinx.serialization.serializer
+import net.derfruhling.html.event.ClickEvent
+import net.derfruhling.html.event.EventType
+import kotlin.reflect.KClass
+
+object SerialRegistry {
+    private data class SerialEntry<T : Any>(val kClass: KClass<T>, val kSerializer: KSerializer<T>)
+
+    private val composedModules = mutableListOf<SerializersModule>()
+    private val subclasses = mutableMapOf<KClass<*>, SerialEntry<*>>()
+
+    private var _serializersModule: SerializersModule? = null
+    private var _json: Json? = null
+
+    private inline fun <reified T> wrap(fn: () -> KSerializer<T> = { serializer<T>() }): KSerializer<T> {
+        return Wrapped.Serializer(fn())
+    }
+
+    private inline fun <reified T> wrap(name: String, fn: () -> KSerializer<T> = { serializer<T>() }): KSerializer<T> {
+        return Wrapped.Serializer(fn(), name)
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    private fun buildSerializersModule() = SerializersModule {
+        polymorphic(EventType::class) {
+            subclass(ClickEvent.Type::class, ClickEvent.Type.serializer())
+        }
+
+        polymorphic(Any::class) {
+            subclass(SerialSavedData::class)
+            subclass(SerialSavedState::class)
+            subclass(MutableStateWrapper.serializer(PolymorphicSerializer(Any::class)))
+            subclass(Boolean::class, wrap($$"$bool"))
+            subclass(Char::class, wrap($$"$char"))
+            subclass(String::class, wrap($$"$string"))
+            subclass(Double::class, wrap($$"$double"))
+            subclass(Float::class, wrap($$"$float"))
+            subclass(Int::class, wrap($$"$int"))
+            subclass(Long::class, wrap($$"$long"))
+            subclass(BooleanArray::class, wrap($$"$bool[]"))
+            subclass(CharArray::class, wrap($$"$char[]"))
+            subclass(DoubleArray::class, wrap($$"$double[]"))
+            subclass(FloatArray::class, wrap($$"$float[]"))
+            subclass(IntArray::class, wrap($$"$int[]"))
+            subclass(LongArray::class, wrap($$"$long[]"))
+
+            @Suppress("DestructuringDeclaration")
+            for(subClass in subclasses.values) {
+                subclass(subClass.kClass, subClass.kSerializer)
+            }
+        }
+
+        composedModules.forEach { include(it) }
+    }
+
+    val serializersModule: SerializersModule get() {
+        return _serializersModule ?: buildSerializersModule().also { _serializersModule = it }
+    }
+
+    val json: Json get() {
+        return _json ?: Json {
+            this.serializersModule = this@SerialRegistry.serializersModule
+        }
+    }
+
+    fun <T : Any> register(kClass: KClass<T>, kSerializer: KSerializer<T>) {
+        subclasses[kClass] = SerialEntry(kClass, kSerializer)
+    }
+
+    inline fun <reified T : Any> register() {
+        register(T::class, serializer<T>())
+    }
+
+    inline fun <reified T> decode(value: String): T {
+        return json.decodeFromString(value)
+    }
+
+    inline fun <reified T> encode(value: T): String {
+        return json.encodeToString(value)
+    }
+}

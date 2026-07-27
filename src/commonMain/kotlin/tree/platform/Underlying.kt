@@ -1,0 +1,9 @@
+package net.derfruhling.html.tree.platform
+
+expect open class UnderlyingBase
+expect class UnderlyingElement : UnderlyingBase
+expect class UnderlyingAttribute : UnderlyingBase
+expect class UnderlyingText : UnderlyingBase
+expect class UnderlyingComment : UnderlyingBase
+expect class UnderlyingDocument : UnderlyingBase
+expect class UnderlyingDocumentFragment : UnderlyingBase

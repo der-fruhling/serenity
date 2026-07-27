@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="compose-html-jvm">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="compose-html-jvm.jar">
+      <element id="module-output" name="compose-html.jvmMain" />
+    </root>
+  </artifact>
+</component>

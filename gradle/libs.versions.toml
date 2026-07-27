@@ -1,0 +1,56 @@
+# Version catalog is a central place for you to declare and version dependencies
+# https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
+# https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
+
+[versions]
+kotlin = "2.4.10"
+androidx-compose = "1.11.4"
+junit-jupiter = "6.1.1"
+kotlinx-serialization = "1.11.0"
+kotlinx-collections = "0.5.1"
+kotlinx-io = "0.9.1"
+kotlinx-datetime = "0.8.0"
+compose-html = "0.1.0-SNAPSHOT"
+kotlin-wrappers = "2026.7.2"
+ktor = "3.5.1"
+ksp-version = "2.3.10"
+
+[libraries]
+compose-html = { module = "net.derfruhling.html:compose-html", version.ref = "compose-html" }
+
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
+kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+
+androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidx-compose" }
+androidx-compose-runtime-saveable = { module = "androidx.compose.runtime:runtime-saveable", version.ref = "androidx-compose" }
+androidx-collections = { module = "androidx.collection:collection", version = "1.5.0" }
+
+ksoup = { module = "com.fleeksoft.ksoup:ksoup", version = "0.2.6" }
+junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+kermit = { module = "co.touchlab:kermit", version = "2.0.4" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version = "2.+" }
+
+kotlin-wrappers-web = { module = "org.jetbrains.kotlin-wrappers:kotlin-web", version.ref = "kotlin-wrappers" }
+kotlin-wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser", version.ref = "kotlin-wrappers" }
+kotlin-wrappers-js = { module = "org.jetbrains.kotlin-wrappers:kotlin-js", version.ref = "kotlin-wrappers" }
+
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+
+logback-classic = { module = "ch.qos.logback:logback-classic", version = "1.5.38" }
+
+ksp-symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp-version" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+sassBase = { id = "io.freefair.sass-base", version = "9.5.0" }
+stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.11.1" }
+

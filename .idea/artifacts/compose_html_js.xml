@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="compose-html-js">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="compose-html-js.jar">
+      <element id="module-output" name="compose-html.jsMain" />
+    </root>
+  </artifact>
+</component>

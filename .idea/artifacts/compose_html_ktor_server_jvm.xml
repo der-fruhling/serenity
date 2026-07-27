@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="compose-html-ktor-server-jvm">
+    <output-path>$PROJECT_DIR$/compose-html-ktor-server/build/libs</output-path>
+    <root id="archive" name="compose-html-ktor-server-jvm.jar">
+      <element id="module-output" name="compose-html.compose-html-ktor-server.jvmMain" />
+    </root>
+  </artifact>
+</component>
