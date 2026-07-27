@@ -1,27 +1,30 @@
 package net.derfruhling.html
 
-import net.derfruhling.html.tree.ResolvableName
+import androidx.compose.runtime.Immutable
 
+@Immutable
 abstract class Name {
     abstract val namespaceUrl: String?
     abstract val namespace: String?
     abstract val localName: String
 
-    private class Simple(override val localName: String, namespaceUrl: String? = null) : ResolvableName() {
+    @Immutable
+    private class Simple(override val localName: String, namespaceUrl: String? = null) : Name() {
         override val namespace: String? get() = null
-        override var namespaceUrl: String? = namespaceUrl ?: HTML_NS
+        override val namespaceUrl: String = namespaceUrl ?: HTML_NS
 
         override fun toString(): String {
             return localName
         }
     }
 
+    @Immutable
     private class Qualified(
         override val namespace: String,
         namespaceUrl: String?,
         override val localName: String
-    ) : ResolvableName() {
-        override var namespaceUrl: String? = namespaceUrl ?: HTML_NS
+    ) : Name() {
+        override val namespaceUrl: String = namespaceUrl ?: HTML_NS
 
         override fun toString(): String {
             return "$namespace($namespaceUrl):$localName"
