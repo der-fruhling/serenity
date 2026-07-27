@@ -1,11 +1,20 @@
 package net.derfruhling.html.ktor.server
 
+import co.touchlab.kermit.Logger
+import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.EntityTagVersion
+import io.ktor.http.content.VersionCheckResult
 import io.ktor.http.defaultForFilePath
 import io.ktor.server.plugins.*
+import io.ktor.server.request.header
+import io.ktor.server.response.cacheControl
+import io.ktor.server.response.etag
+import io.ktor.server.response.respond
 import io.ktor.server.response.respondSource
 import io.ktor.server.routing.*
+import io.ktor.util.sha1
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
@@ -21,14 +30,16 @@ import kotlinx.io.Buffer
 import kotlinx.io.IOException
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readByteArray
 import platform.posix.ENOENT
 import platform.posix.errno
 import platform.posix.stat
 import platform.posix.strerror
+import kotlin.io.encoding.Base64
 import kotlin.time.Instant
 import kotlin.to
 
-val staticPath = SystemFileSystem.resolve(Path("_static"))
+val staticPath = runCatching { SystemFileSystem.resolve(Path("_static")) }.getOrNull()
 
 private tailrec fun ensureNoSneakyBusiness(parent: Path, expectedDescendent: Path) {
     val descParent = expectedDescendent.parent
@@ -86,7 +97,7 @@ private suspend fun loadResource(path: Path): Pair<FileMetadata, Buffer> = memSc
                 val buffer = Buffer()
                 var offset = 0L
 
-                while (true) {
+                while (offset < cur.size) {
                     val readSize = source.readAtMostTo(buffer, cur.size - offset)
                     if (readSize == -1L) break
                     offset += readSize
@@ -108,20 +119,38 @@ private suspend fun loadResource(path: Path): Pair<FileMetadata, Buffer> = memSc
 }
 
 actual fun Route.serveStatic(remotePath: String) {
-    route(remotePath) {
-        get("{path...}") {
-            val pathString = call.parameters.getAll("path")!!.toTypedArray()
-            val path = SystemFileSystem.resolve(Path(staticPath, *pathString))
+    val logger = Logger.withTag("net.derfruhling.html.ktor.server.ServeStaticKt")
 
-            ensureNoSneakyBusiness(staticPath, path)
+    if(staticPath != null) {
+        logger.i { "Serving static resources from: $staticPath" }
+        route(remotePath) {
+            get("{path...}") {
+                val pathString = call.parameters.getAll("path")!!.toTypedArray()
+                val path = SystemFileSystem.resolve(Path(staticPath, *pathString))
 
-            val (meta, buffer) = loadResource(path)
-            call.respondSource(
-                buffer,
-                ContentType.defaultForFilePath(pathString.last()),
-                status = HttpStatusCode.OK,
-                contentLength = meta.size
-            )
+                ensureNoSneakyBusiness(staticPath, path)
+
+                val (meta, buffer) = loadResource(path)
+                val etag = Base64.UrlSafe.encode(sha1(buffer.peek().readByteArray()))
+
+                call.response.cacheControl(CacheControl.MaxAge(maxAgeSeconds = 1800, visibility = CacheControl.Visibility.Public))
+                call.response.etag(etag)
+
+                call.request.header("If-None-Match")?.let {
+                    if(EntityTagVersion(etag, weak = false).noneMatch(EntityTagVersion.parse(it)) == VersionCheckResult.NOT_MODIFIED) {
+                        return@get call.respond(HttpStatusCode.NotModified)
+                    }
+                }
+
+                call.respondSource(
+                    buffer.peek(),
+                    ContentType.defaultForFilePath(pathString.last()),
+                    status = HttpStatusCode.OK,
+                    contentLength = meta.size
+                )
+            }
         }
+    } else {
+        logger.i { "Not serving static resources (directory _static not found)" }
     }
 }

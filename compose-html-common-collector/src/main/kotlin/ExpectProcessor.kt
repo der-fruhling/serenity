@@ -34,9 +34,13 @@ class ExpectProcessor(
                 out.appendLine("import androidx.compose.runtime.Composable")
                 out.appendLine("import net.derfruhling.html.PageHolder")
                 out.appendLine("import net.derfruhling.html.annotations.HtmlComposable")
+                out.appendLine("import kotlinx.serialization.Serializable")
+                out.appendLine("import kotlinx.serialization.SerialName")
 
                 out.appendLine()
                 out.appendLine("""
+                    @Serializable
+                    @SerialName("${hashFunctionName(function.qualifiedName!!.asString())}")
                     expect object ${function.simpleName.asString()} : PageHolder {
                         override val id: String
                         override val path: String

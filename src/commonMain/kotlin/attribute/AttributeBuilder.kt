@@ -6,13 +6,17 @@ import kotlin.reflect.KClass
 class AttributeBuilder<T : Any>(val name: Name, val kClass: KClass<T>) {
     var permitExplicitSet: Boolean = true
     var defaultValue: (() -> T)? = null
-    lateinit var parser: (String) -> T
+    lateinit var parser: (String?) -> T?
 
     init {
-        if(kClass == String::class) {
-            parser = {
-                @Suppress("UNCHECKED_CAST")
-                it as T
+        @Suppress("UNCHECKED_CAST")
+        when (kClass) {
+            String::class -> {
+                parser = { it as T? }
+            }
+
+            Boolean::class -> {
+                parser = { (it != null) as T }
             }
         }
     }
@@ -21,7 +25,7 @@ class AttributeBuilder<T : Any>(val name: Name, val kClass: KClass<T>) {
         defaultValue = fn
     }
 
-    fun parser(fn: (String) -> T) {
+    fun parser(fn: (String?) -> T?) {
         parser = fn
     }
 

@@ -71,8 +71,8 @@ class AttributeNode<T : Any> : ComposeNodeWithReal<RealAttribute>, ChildNode<Ele
         }
 
     var value: T?
-        get() = real.value?.let { parser.parser(it) }
-        set(value) { real.value = value?.let { AttributeValue.of(it) } }
+        get() = real.value.let { parser.parser(it) }
+        set(value) { real.value = value.let { AttributeValue.of(it) } }
 
     override val index: Index<AttributeNode<*>> = Index(this)
 

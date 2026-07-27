@@ -4,7 +4,7 @@ import net.derfruhling.html.Name
 import kotlin.reflect.KClass
 
 abstract class Attribute<T : Any> : UntypedAttribute() {
-    abstract override val parser: (String) -> T
+    abstract override val parser: (String?) -> T?
     abstract val kClass: KClass<T>
 }
 

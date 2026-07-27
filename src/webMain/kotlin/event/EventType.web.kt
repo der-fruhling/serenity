@@ -5,9 +5,11 @@ import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import web.events.Event
 
+sealed interface GenerateFromDomEvent<T> {
+    fun generate(event: Event): T
+}
+
 @Serializable
 @Polymorphic
 @Immutable
-actual abstract class EventType<T>(actual val name: String) {
-    abstract fun generate(event: Event): T
-}
+actual abstract class EventType<T> actual constructor(actual val name: String) : GenerateFromDomEvent<T>

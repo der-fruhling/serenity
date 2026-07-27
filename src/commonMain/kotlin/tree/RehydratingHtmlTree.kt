@@ -3,18 +3,14 @@ package net.derfruhling.html.tree
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.ControlledComposition
-import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.snapshots.MutableSnapshot
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.withCompositionLocal
-import co.touchlab.kermit.Logger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.html.SerialSavedData
 import net.derfruhling.html.annotations.HtmlComposable
-import net.derfruhling.html.of
 import net.derfruhling.html.tree.platform.ElementNode
 import net.derfruhling.html.tree.platform.NodeWithChildren
 import net.derfruhling.html.tree.platform.RootNode
@@ -26,7 +22,7 @@ class RehydratingHtmlTree<Node: RootNode> internal constructor(
     val saveableRegistry: SaveableStateRegistry
 ) : AutoCloseable {
     companion object {
-        private val logger = Logger.of<RehydratingHtmlTree<*>>()
+        private val logger = KotlinLogging.logger {}
     }
 
     val rootElement: ElementNode

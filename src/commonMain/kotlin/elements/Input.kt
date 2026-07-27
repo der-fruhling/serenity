@@ -6,8 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
 import net.derfruhling.html.Element
 import net.derfruhling.html.Text
+import net.derfruhling.html.annotations.Client
 import net.derfruhling.html.annotations.HtmlComposable
 import net.derfruhling.html.event.ClickEvent
+import net.derfruhling.html.event.ElementPointerEvent
 import net.derfruhling.html.event.On
 import kotlin.jvm.JvmName
 
@@ -38,7 +40,7 @@ fun Button(label: String, fn: @Composable Button.() -> Unit = {}) {
 @JvmName("ButtonWithEvent")
 fun Button(
     label: String,
-    onClick: @DisallowComposableCalls (ClickEvent) -> Unit,
+    onClick: @Client (ElementPointerEvent) -> Unit,
     fn: @Composable Button.() -> Unit = {}
 ) {
     Button {

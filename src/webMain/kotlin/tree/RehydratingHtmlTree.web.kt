@@ -48,7 +48,7 @@ fun RehydratingHtmlTree(
     val doc = Document.CURRENT
     val restoreValues = doc.findImmediateElementNamed(Name.of("head"))
         ?.findImmediateElementNamed(Name.of("script")) {
-            it.attribute(Attributes.type) == "application/x-compose-shared"
+            it.attribute(Attributes.type) == "application/json+x-compose-shared"
         }
         ?.textContent
         ?.let { SerialRegistry.decode<SerialSavedData>(it) }

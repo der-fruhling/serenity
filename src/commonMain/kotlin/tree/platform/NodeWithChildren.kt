@@ -171,6 +171,10 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
         return children.find { it is ElementNode && it.name == name } as ElementNode?
     }
 
+    fun findImmediateElementIndexNamed(name: Name): Int {
+        return children.indexOfFirst { it is ElementNode && it.name == name }
+    }
+
     inline fun findImmediateElementNamed(name: Name, filter: (ElementNode) -> Boolean): ElementNode? {
         return children.find { it is ElementNode && it.name == name && filter(it) } as ElementNode?
     }

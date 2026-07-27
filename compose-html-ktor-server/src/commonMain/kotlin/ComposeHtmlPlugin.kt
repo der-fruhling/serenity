@@ -1,29 +1,81 @@
 package net.derfruhling.html.ktor.server
 
 import androidx.compose.runtime.*
-import co.touchlab.kermit.Logger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.application.hooks.*
+import io.ktor.server.engine.ApplicationEngine
+import io.ktor.server.engine.EmbeddedServer
+import io.ktor.server.http.link
+import io.ktor.server.plugins.conditionalheaders.ConditionalHeaders
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.util.*
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Dispatchers
+import net.derfruhling.html.Name
+import net.derfruhling.html.SerialRegistry
 import net.derfruhling.html.annotations.HtmlComposable
+import net.derfruhling.html.attribute.Attributes
 import net.derfruhling.html.tree.HtmlCompositionContext
 import net.derfruhling.html.tree.RehydratingHtmlTree
-import net.derfruhling.html.tree.composeHtmlOnce
 import net.derfruhling.html.tree.encodeToString
 import net.derfruhling.html.tree.platform.Document
+import net.derfruhling.html.tree.platform.ElementNode
 import net.derfruhling.html.tree.platform.PlatformApplier
-import kotlin.coroutines.CoroutineContext
+import net.derfruhling.html.tree.platform.TextNode
+import net.derfruhling.html.tree.platform.head
 
-private val logger = Logger.withTag("net.derfruhling.html.ktor.server.ComposeHtmlPluginKt")
+private val logger = KotlinLogging.logger {}
 
 interface ComposeHtmlConfig {
     fun registerTransformation(fn: Transformer)
+
+    fun useScript(uri: String, async: Boolean = false, defer: Boolean = false, preload: Boolean = uri.startsWith('/')) {
+        registerTransformation {
+            if(preload) {
+                response.link(LinkHeader(uri, listOf(
+                    HeaderValueParam("rel", "preload"),
+                    HeaderValueParam("as", "script")
+                )))
+
+                val titleIndex = it.head!!.findImmediateElementIndexNamed(Name.of("title"))
+                if(titleIndex != -1) {
+                    it.head!!.insert(titleIndex + 1, ElementNode("link").apply {
+                        attribute(Attributes.rel, "preload")
+                        attribute(Attributes.`as`, "script")
+                        attribute(Attributes.href, uri)
+                    })
+                }
+            }
+
+            it.head!!.add(ElementNode("script").apply {
+                if(async) attribute(Attributes.async, null)
+                if(defer) attribute(Attributes.defer, null)
+                attribute(Attributes.src, uri)
+            })
+
+            it
+        }
+    }
+
+    fun useEntrypoint(projectName: String) {
+        registerTransformation {
+            val hash = attributes[pageFunctionName]
+
+            it.head!!.add(ElementNode("script").apply element@ {
+                //language=javascript
+                add(TextNode("""
+                    const entryFn = window["$projectName"]["$hash"];
+                    if(entryFn) entryFn();
+                    else console.warn("Entry function for", "$hash", "not found");
+                """.trimIndent()))
+            })
+
+            it
+        }
+    }
 }
 
 fun interface Transformer {
@@ -36,7 +88,7 @@ private class ComposeHtmlConfigImpl : ComposeHtmlConfig {
 
     override fun registerTransformation(fn: Transformer) {
         transformations.add(fn)
-        logger.i { "Registered transformation: $fn" }
+        logger.info { "Registered transformation: $fn" }
     }
 }
 
@@ -81,7 +133,9 @@ val ComposeHtml = createApplicationPlugin(
         it.attributes[contextKey] = context
     }
 
-    logger.i { "ComposeHTML initialized" }
+    application.install(ConditionalHeaders)
+
+    logger.info { "ComposeHTML initialized" }
 }
 
 suspend inline fun ApplicationCall.respondCompose(crossinline fn: @Composable @HtmlComposable () -> Unit) {
@@ -99,6 +153,16 @@ suspend inline fun ApplicationCall.respondCompose(crossinline fn: @Composable @H
     }
 
     val doc = context.transform(this, tree.root) { /* TODO */ }
+    val save = tree.save()
+
+    if(!save.isEmpty) {
+        doc.head!!.add(ElementNode("script").apply {
+            attribute(Attributes.type, "application/json+x-compose-shared")
+            add(TextNode(SerialRegistry.encode(save).replace("<", "\\u003e")))
+        })
+    }
 
     respondText(ContentType.Text.Html) { doc.encodeToString() }
 }
+
+expect fun <E : ApplicationEngine, C: ApplicationEngine.Configuration> EmbeddedServer<E, C>.startAwait()

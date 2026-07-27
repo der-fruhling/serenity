@@ -6,8 +6,11 @@ import androidx.compose.runtime.remember
 import net.derfruhling.html.Element
 import net.derfruhling.html.PageHolder
 import net.derfruhling.html.Text
+import net.derfruhling.html.annotations.Client
 import net.derfruhling.html.attribute.Attributes
 import net.derfruhling.html.attribute.ComposableAttribute
+import net.derfruhling.html.event.ClickEvent
+import net.derfruhling.html.event.On
 
 val linkBase = compositionLocalOf { "" }
 
@@ -24,7 +27,7 @@ object Link : GeneralStructure<Link>(), ElementContext<Link.Attr> {
 fun Link(to: String, fn: @Composable Link.() -> Unit) {
     Element("a") {
         Link.with {
-            if(to.startsWith('/')) {
+            if (to.startsWith('/')) {
                 val linkBase = linkBase.current
                 val actualLink = remember(to, linkBase) { linkBase + to }
 
@@ -48,6 +51,10 @@ fun Link(to: PageHolder, fn: @Composable Link.() -> Unit) {
             attributes.href { actualLink }
 
             fn()
+        }
+
+        On(ClickEvent) @Client {
+
         }
     }
 }

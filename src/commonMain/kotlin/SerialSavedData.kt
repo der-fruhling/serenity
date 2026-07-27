@@ -9,6 +9,8 @@ import kotlinx.serialization.Serializable
 class SerialSavedData private constructor(
     internal val items: Map<String, List<@Polymorphic Any?>>
 ) {
+    val isEmpty: Boolean get() = items.isEmpty()
+
     fun items() = items.mapValues { (_, value) -> mapList(value, ::fromSerial) }
 
     override fun toString(): String {

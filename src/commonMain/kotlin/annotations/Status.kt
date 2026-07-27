@@ -1,0 +1,15 @@
+package net.derfruhling.html.annotations
+
+import kotlinx.datetime.Month
+
+@Retention(AnnotationRetention.BINARY)
+@MustBeDocumented
+annotation class WidelyAvailable(val since: Since = Since(year = 2015, month = Month.JULY))
+
+@Retention(AnnotationRetention.BINARY)
+@MustBeDocumented
+annotation class NewlyAvailable(val since: Since)
+
+@Retention(AnnotationRetention.BINARY)
+@MustBeDocumented
+annotation class LimitedAvailability

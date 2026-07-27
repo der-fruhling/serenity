@@ -19,7 +19,7 @@ composeHtml {
         implementation(rootProject)
         implementation(libs.androidx.compose.runtime)
         implementation(libs.androidx.compose.runtime.saveable)
-        implementation(libs.kermit)
+        implementation(libs.oshai.kotlinLogging)
     }
 
     testDependencies {

@@ -2,6 +2,7 @@ package net.derfruhling.html.tree.platform
 
 import androidx.compose.runtime.Composable
 import com.fleeksoft.ksoup.nodes.Attribute
+import com.fleeksoft.ksoup.nodes.Attributes
 import com.fleeksoft.ksoup.nodes.Comment
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element

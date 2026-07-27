@@ -9,4 +9,6 @@ import kotlinx.serialization.Serializable
 @Immutable
 expect abstract class EventType<T> {
     val name: String
+
+    constructor(name: String)
 }

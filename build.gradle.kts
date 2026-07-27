@@ -84,11 +84,11 @@ kotlin {
                 api(libs.androidx.compose.runtime)
                 api(libs.androidx.compose.runtime.saveable)
                 api(libs.androidx.collections)
-                api(libs.kermit)
+                api(libs.oshai.kotlinLogging)
                 api(libs.kotlinx.datetime)
 
                 api(libs.kotlinx.serialization.core)
-                implementation(libs.kotlinx.serialization.json)
+                api(libs.kotlinx.serialization.json)
             }
         }
 

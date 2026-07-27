@@ -1,63 +1,65 @@
 package net.derfruhling.html.ktor.server
 
-import co.touchlab.kermit.Logger
-import co.touchlab.kermit.Severity
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLoggingConfiguration
+import io.github.oshai.kotlinlogging.Level
 import io.ktor.server.application.Application
 import io.ktor.util.logging.LogLevel
 import io.ktor.util.logging.Logger as KtorLogger
 
-var ktorLogger: Logger = Logger.withTag(Application::class.qualifiedName!!)
+var ktorLogger: KLogger = KotlinLogging.logger(Application::class.qualifiedName!!)
 
 actual fun createKtorLogger(): KtorLogger {
     return object : KtorLogger {
         override val level: LogLevel
-            get() = when (ktorLogger.mutableConfig.minSeverity) {
-                Severity.Verbose -> LogLevel.TRACE
-                Severity.Debug -> LogLevel.DEBUG
-                Severity.Info -> LogLevel.INFO
-                Severity.Warn -> LogLevel.WARN
-                Severity.Error -> LogLevel.ERROR
-                Severity.Assert -> LogLevel.ERROR
+            get() = when (KotlinLoggingConfiguration.direct.logLevel) {
+                Level.TRACE -> LogLevel.TRACE
+                Level.DEBUG -> LogLevel.DEBUG
+                Level.INFO -> LogLevel.INFO
+                Level.WARN -> LogLevel.WARN
+                Level.ERROR -> LogLevel.ERROR
+                else -> kotlin.error("what")
             }
 
         override fun error(message: String) {
-            ktorLogger.e(message)
+            ktorLogger.error { message }
         }
 
         override fun error(message: String, cause: Throwable) {
-            ktorLogger.e(message, cause)
+            ktorLogger.error(cause) { message }
         }
 
         override fun warn(message: String) {
-            ktorLogger.w(message)
+            ktorLogger.warn { message }
         }
 
         override fun warn(message: String, cause: Throwable) {
-            ktorLogger.w(message, cause)
+            ktorLogger.warn(cause) { message }
         }
 
         override fun info(message: String) {
-            ktorLogger.i(message)
+            ktorLogger.info { message }
         }
 
         override fun info(message: String, cause: Throwable) {
-            ktorLogger.i(message, cause)
+            ktorLogger.info(cause) { message }
         }
 
         override fun debug(message: String) {
-            ktorLogger.d(message)
+            ktorLogger.debug { message }
         }
 
         override fun debug(message: String, cause: Throwable) {
-            ktorLogger.d(message, cause)
+            ktorLogger.debug(cause) { message }
         }
 
         override fun trace(message: String) {
-            ktorLogger.v(message)
+            ktorLogger.trace { message }
         }
 
         override fun trace(message: String, cause: Throwable) {
-            ktorLogger.v(message, cause)
+            ktorLogger.trace(cause) { message }
         }
     }
 }

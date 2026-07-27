@@ -14,8 +14,13 @@ import net.derfruhling.html.tree.RehydratingHtmlTree
 import net.derfruhling.html.tree.platform.*
 import web.console.console
 import web.dom.document
+import web.events.EventHandler
+import web.history.PopStateEvent
+import web.history.history
+import web.location.location
 import web.prompts.alert
 import web.time.DOMHighResTimeStamp
+import web.window.window
 import kotlin.coroutines.resume
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -25,8 +30,8 @@ import kotlin.time.toDuration
 @MustBeDocumented
 annotation class InternalPageEntryPoint
 
-lateinit var htmlContext: HtmlCompositionContext
-    private set
+lateinit var htmlContext: HtmlCompositionContext private set
+lateinit var currentPage: PageHolder internal set
 
 private val htmlContextStartHandlers = mutableListOf<(HtmlCompositionContext) -> Unit>()
 
@@ -41,6 +46,17 @@ fun onHtmlContextStart(fn: (HtmlCompositionContext) -> Unit) {
 @OptIn(ExperimentalWasmJsInterop::class)
 @InternalPageEntryPoint
 fun invokeCommonEntryPoint(page: PageHolder) {
+    currentPage = page
+    history.pushState(SerialRegistry.encodeToObject(page), "", location.href)
+
+    window.onpopstate = EventHandler { ev: PopStateEvent ->
+        val state = ev.state
+        if(state != null) {
+            val page = SerialRegistry.decodeFromObject<PageHolder>(state)
+            navigateDirect(page)
+        }
+    }
+
     CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock).launch {
         console.log(Formatter.formatString(Document.CURRENT::format))
         var clientMode by mutableStateOf(false)
@@ -99,6 +115,8 @@ private external fun windowRequestAnimationFrame(fn: (DOMHighResTimeStamp) -> Un
 @JsFun("(id) => window.cancelAnimationFrame(id)")
 private external fun windowCancelAnimationFrame(id: Int)
 
+@Suppress("UnnecessaryOptInAnnotation")
+@OptIn(ExperimentalWasmJsInterop::class)
 private object AnimationFrameClock : MonotonicFrameClock {
     override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R {
         return suspendCancellableCoroutine { continuation ->

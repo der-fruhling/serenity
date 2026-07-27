@@ -42,8 +42,9 @@ kotlin {
             dependencies {
                 api(rootProject)
                 api(libs.ktor.server.core)
+                api(libs.ktor.server.conditionalHeaders)
                 api(libs.kotlinx.collections.immutable)
-                api(libs.kermit)
+                api(libs.oshai.kotlinLogging)
             }
         }
 

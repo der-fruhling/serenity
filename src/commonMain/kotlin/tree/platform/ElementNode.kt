@@ -5,9 +5,10 @@ import net.derfruhling.html.Formatter
 import net.derfruhling.html.Name
 import net.derfruhling.html.attribute.Attribute
 import net.derfruhling.html.event.EventSubscriptionHandle
+import net.derfruhling.html.event.EventTarget
 import net.derfruhling.html.event.EventType
 
-open class ElementNode : NodeWithChildren<RealElement>, ChildNode<NodeWithChildren<*>>, ComposeNodeLifecycleCallback {
+open class ElementNode : NodeWithChildren<RealElement>, ChildNode<NodeWithChildren<*>>, ComposeNodeLifecycleCallback, EventTarget {
     override var parent: NodeWithChildren<*>? = null
     override val index: Index<ElementNode> = Index(this)
 
@@ -39,6 +40,9 @@ open class ElementNode : NodeWithChildren<RealElement>, ChildNode<NodeWithChildr
     constructor(from: RealElement) : super(from) {
         updateReal()
     }
+
+    constructor(name: Name) : super(RealElement(name))
+    constructor(name: String) : this(Name.of(name))
 
     final override fun testAttribute() {}
 

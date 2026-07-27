@@ -1,11 +1,11 @@
 package net.derfruhling.html
 
-import co.touchlab.kermit.LogWriter
-import co.touchlab.kermit.Logger
-import co.touchlab.kermit.Message
-import co.touchlab.kermit.MessageStringFormatter
-import co.touchlab.kermit.Severity
-import co.touchlab.kermit.Tag
+import io.github.oshai.kotlinlogging.Appender
+import io.github.oshai.kotlinlogging.Level
+import io.github.oshai.kotlinlogging.Formatter
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KLoggingEvent
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.UtcOffset
@@ -14,24 +14,22 @@ import kotlinx.datetime.format.DateTimeComponents
 import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.format.char
 import kotlinx.datetime.offsetAt
-import kotlin.time.Clock
+import kotlin.properties.ReadOnlyProperty
 import kotlin.time.Instant
 
-expect object LogWriters {
-    fun createStandardLogWriter(fmt: MessageStringFormatter): LogWriter
-}
+open class NeatMessageFormatter : Formatter {
+    open fun formatLevel(level: Level): String = level.name
 
-open class NeatMessageFormatter : MessageStringFormatter {
-    override fun formatSeverity(severity: Severity): String = when(severity) {
-        Severity.Verbose -> "VERBOSE"
-        Severity.Debug -> "DEBUG"
-        Severity.Info -> "INFO"
-        Severity.Warn -> "WARN"
-        Severity.Error -> "ERROR"
-        Severity.Assert -> "ASSERT"
+    open fun formatName(name: String): String = name
+
+    override fun formatMessage(loggingEvent: KLoggingEvent): String {
+        val time = formatTime(Instant.fromEpochMilliseconds(loggingEvent.timestamp))
+        val name = formatName(loggingEvent.loggerName)
+        val level = formatLevel(loggingEvent.level)
+        return "$time <$name> $level: ${loggingEvent.message}" + loggingEvent.cause?.let { '\n' + formatException(it.stackTraceToString()) }
     }
 
-    override fun formatTag(tag: Tag): String = tag.tag
+    open fun formatException(stackTrace: String) = stackTrace
 
     open val dateTimeFormatter: DateTimeFormat<DateTimeComponents> =
         DateTimeComponents.Format {
@@ -52,16 +50,6 @@ open class NeatMessageFormatter : MessageStringFormatter {
 
     open fun formatTime(instant: Instant): String =
         instant.format(dateTimeFormatter, TimeZone.currentSystemDefault().offsetAt(instant))
-
-    override fun formatMessage(
-        severity: Severity?,
-        tag: Tag?,
-        message: Message
-    ): String {
-        val instant = Clock.System.now()
-        val time = formatTime(instant)
-        return "$time <${formatTag(tag!!)}> ${formatSeverity(severity!!)}: ${message.message}"
-    }
 }
 
 enum class AnsiColorCode(val fg: String, val bg: String) {
@@ -111,7 +99,7 @@ data class AnsiColorState(
 }
 
 class AnsiColorCodeMessageFormatter(
-    val verboseColor: AnsiColorState = AnsiColorState(AnsiColorCode.GRAY),
+    val traceColor: AnsiColorState = AnsiColorState(AnsiColorCode.GRAY),
     val debugColor: AnsiColorState = AnsiColorState(AnsiColorCode.PURPLE),
     val infoColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_GREEN),
     val warnColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_YELLOW, underline = true),
@@ -120,19 +108,19 @@ class AnsiColorCodeMessageFormatter(
     val tagColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_CYAN),
     val timeColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_PURPLE)
 ) : NeatMessageFormatter() {
-    override fun formatSeverity(severity: Severity): String {
-        return when(severity) {
-            Severity.Verbose -> verboseColor
-            Severity.Debug -> debugColor
-            Severity.Info -> infoColor
-            Severity.Warn -> warnColor
-            Severity.Error -> errorColor
-            Severity.Assert -> assertColor
-        }.value + super.formatSeverity(severity) + AnsiColorState.RESET
+    override fun formatLevel(level: Level): String {
+        return when(level) {
+            Level.TRACE -> traceColor
+            Level.DEBUG -> debugColor
+            Level.INFO -> infoColor
+            Level.WARN -> warnColor
+            Level.ERROR -> errorColor
+            else -> AnsiColorState()
+        }.value + super.formatLevel(level) + AnsiColorState.RESET
     }
 
-    override fun formatTag(tag: Tag): String {
-        return tagColor.value + super.formatTag(tag) + AnsiColorState.RESET
+    override fun formatName(name: String): String {
+        return tagColor.value + super.formatName(name) + AnsiColorState.RESET
     }
 
     override fun formatTime(instant: Instant): String {
@@ -140,4 +128,4 @@ class AnsiColorCodeMessageFormatter(
     }
 }
 
-expect inline fun <reified T> Logger.of(): Logger
+val log = KotlinLogging.logger {  }

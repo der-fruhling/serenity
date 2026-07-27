@@ -5,6 +5,10 @@ import net.derfruhling.html.Formatter
 class TextNode(real: RealText) : ComposeNodeWithReal<RealText>(real), ChildNode<ElementNode> {
     constructor() : this(RealText())
 
+    constructor(textContent: String) : this() {
+        this.textContent = textContent
+    }
+
     override val index: Index<TextNode> = Index(this)
     override var parent: ElementNode? = null
 

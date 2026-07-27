@@ -17,7 +17,7 @@ object Attributes {
         permitExplicitSet = false
 
         defaultValue { mutableSetOf<String>() }
-        parser { it.split(setParserRegex).toMutableSet() }
+        parser { it?.split(setParserRegex)?.toMutableSet() }
     }
 
     val type by name<String>("type")
@@ -26,6 +26,8 @@ object Attributes {
     val async by name<Boolean>("async")
     val defer by name<Boolean>("defer")
     val href by name<String>("href")
+    val rel by name<String>("rel")
+    val `as` by name<String>("as")
     val target by name<String>("target")
     val id by name<String>("id")
     val `class` by name<MutableSet<String>>("class") { stringSet() }

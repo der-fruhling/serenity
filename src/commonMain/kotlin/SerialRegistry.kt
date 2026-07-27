@@ -3,14 +3,12 @@ package net.derfruhling.html
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.builtins.ArraySerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlinx.serialization.serializer
-import net.derfruhling.html.event.ClickEvent
 import net.derfruhling.html.event.EventType
 import kotlin.reflect.KClass
 
@@ -19,6 +17,7 @@ object SerialRegistry {
 
     private val composedModules = mutableListOf<SerializersModule>()
     private val subclasses = mutableMapOf<KClass<*>, SerialEntry<*>>()
+    private val pages = mutableMapOf<KClass<out PageHolder>, SerialEntry<out PageHolder>>()
 
     private var _serializersModule: SerializersModule? = null
     private var _json: Json? = null
@@ -31,10 +30,12 @@ object SerialRegistry {
         return Wrapped.Serializer(fn(), name)
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     private fun buildSerializersModule() = SerializersModule {
-        polymorphic(EventType::class) {
-            subclass(ClickEvent.Type::class, ClickEvent.Type.serializer())
+        polymorphic(PageHolder::class) {
+            @Suppress("DestructuringDeclaration")
+            for(page in pages.values) {
+                subclass(page.kClass, page.kSerializer)
+            }
         }
 
         polymorphic(Any::class) {
@@ -76,6 +77,10 @@ object SerialRegistry {
 
     fun <T : Any> register(kClass: KClass<T>, kSerializer: KSerializer<T>) {
         subclasses[kClass] = SerialEntry(kClass, kSerializer)
+    }
+
+    fun <T : PageHolder> registerPage(kClass: KClass<T>, kSerializer: KSerializer<T>) {
+        pages[kClass] = SerialEntry(kClass, kSerializer)
     }
 
     inline fun <reified T : Any> register() {

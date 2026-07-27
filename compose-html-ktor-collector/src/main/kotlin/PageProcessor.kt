@@ -52,8 +52,12 @@ class PageProcessor(
                 out.appendLine("import net.derfruhling.html.ktor.server.currentCall")
                 out.appendLine("import net.derfruhling.html.PageHolder")
                 out.appendLine("import net.derfruhling.html.annotations.HtmlComposable")
+                out.appendLine("import kotlinx.serialization.Serializable")
+                out.appendLine("import kotlinx.serialization.SerialName")
 
                 out.appendLine()
+                out.appendLine("@Serializable")
+                out.appendLine("@SerialName(\"${hashFunctionName(function.qualifiedName!!.asString())}\")")
                 out.appendLine("actual object ${function.simpleName.asString()} : PageHolder {")
 
                 if (!function.annotations.any { it.annotationType.resolve().declaration.qualifiedName!!.asString() == "androidx.compose.runtime.Composable" }) {
