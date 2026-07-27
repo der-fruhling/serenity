@@ -46,5 +46,6 @@ fun Application.configure() {
         serveStatic()
 
         register(IndexPage)
+        register(ButtonsPage)
     }
 }

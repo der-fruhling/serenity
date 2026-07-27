@@ -7,7 +7,7 @@ import net.derfruhling.html.Element
 import net.derfruhling.html.Text
 import net.derfruhling.html.annotations.HtmlComposable
 
-object Div : GeneralStructure(), ElementContext<Div.Attr> {
+object Div : GeneralStructure<Div>(), ElementContext<Div.Attr> {
     override val attributes: Attr
         get() = Attr
 
@@ -30,7 +30,7 @@ fun Div(vararg classes: String, fn: @Composable Div.() -> Unit = {}) {
     }
 }
 
-object SpanContext : GeneralStructure(), ElementContext<SpanContext.Attr> {
+object Span : GeneralStructure<Span>(), ElementContext<Span.Attr> {
     override val attributes: Attr
         get() = Attr
 
@@ -38,14 +38,14 @@ object SpanContext : GeneralStructure(), ElementContext<SpanContext.Attr> {
 }
 
 @Composable
-fun Span(fn: @Composable SpanContext.() -> Unit) {
-    Element("span") { SpanContext.fn() }
+fun Span(fn: @Composable Span.() -> Unit) {
+    Element("span") { Span.fn() }
 }
 
 @Composable
-fun Span(vararg classes: String, fn: @Composable SpanContext.() -> Unit = {}) {
+fun Span(vararg classes: String, fn: @Composable Span.() -> Unit = {}) {
     Element("span") {
-        with(SpanContext) {
+        with(Span) {
             attributes.classes(*classes)
 
             fn()
@@ -53,7 +53,7 @@ fun Span(vararg classes: String, fn: @Composable SpanContext.() -> Unit = {}) {
     }
 }
 
-object Paragraph : GeneralStructure(), ElementContext<Paragraph.Attr> {
+object Paragraph : GeneralStructure<Paragraph>(), ElementContext<Paragraph.Attr> {
     override val attributes: Attr
         get() = Attr
 
@@ -71,7 +71,7 @@ fun Paragraph(string: String) {
     Paragraph { Text(string.reflow) }
 }
 
-object Bold : GeneralStructure(), ElementContext<Bold.Attr> {
+object Bold : GeneralStructure<Bold>(), ElementContext<Bold.Attr> {
     override val attributes: Attr
         get() = Attr
 
@@ -89,7 +89,7 @@ fun Bold(string: String) {
     Bold { Text(string.reflow) }
 }
 
-object Italic : GeneralStructure(), ElementContext<Italic.Attr> {
+object Italic : GeneralStructure<Italic>(), ElementContext<Italic.Attr> {
     override val attributes: Attr
         get() = Attr
 

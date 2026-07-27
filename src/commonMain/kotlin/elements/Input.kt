@@ -11,7 +11,7 @@ import net.derfruhling.html.event.ClickEvent
 import net.derfruhling.html.event.On
 import kotlin.jvm.JvmName
 
-object Button : GeneralStructure(), ElementContext<Button.Attr> {
+object Button : GeneralStructure<Button>(), ElementContext<Button.Attr> {
     override val attributes: Attr
         get() = Attr
 

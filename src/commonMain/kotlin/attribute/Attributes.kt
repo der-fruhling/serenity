@@ -25,6 +25,8 @@ object Attributes {
     val src by name<String>("src")
     val async by name<Boolean>("async")
     val defer by name<Boolean>("defer")
+    val href by name<String>("href")
+    val target by name<String>("target")
     val id by name<String>("id")
     val `class` by name<MutableSet<String>>("class") { stringSet() }
 
