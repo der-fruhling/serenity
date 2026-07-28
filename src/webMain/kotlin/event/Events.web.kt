@@ -1,7 +1,7 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import kotlinx.serialization.Serializable
-import net.derfruhling.html.tree.platform.ElementNode
+import net.derfruhling.serenity.tree.platform.ElementNode
 import web.events.Event
 import web.pointer.PointerEvent as DomPointerEvent
 

@@ -1,4 +1,4 @@
-package net.derfruhling.html.tree
+package net.derfruhling.serenity.tree
 
 interface StructureProvider {
     val includeScripts: List<String>

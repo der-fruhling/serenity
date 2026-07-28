@@ -1,8 +1,8 @@
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
-import net.derfruhling.html.Element
-import net.derfruhling.html.Text
+import net.derfruhling.serenity.Element
+import net.derfruhling.serenity.Text
 
 abstract class GenericList<T: GenericList<T>> : GeneralStructure<T>() {
     abstract class Attr : GeneralStructure.Attr() {

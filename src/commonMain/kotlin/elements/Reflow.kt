@@ -1,12 +1,12 @@
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.withCompositionLocal
-import net.derfruhling.html.tree.HtmlApplier
-import net.derfruhling.html.annotations.HtmlComposable
+import net.derfruhling.serenity.tree.HtmlApplier
+import net.derfruhling.serenity.annotations.HtmlComposable
 
 @PublishedApi
 internal val reflowEnabled = compositionLocalOf { true }

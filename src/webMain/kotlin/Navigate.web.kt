@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalWasmJsInterop::class)
 
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 import web.history.history
 import web.navigator.navigator

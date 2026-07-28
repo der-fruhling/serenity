@@ -1,6 +1,6 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
-import net.derfruhling.html.Formatter
+import net.derfruhling.serenity.Formatter
 
 class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real), ChildNode<NodeWithChildren<*>> {
     constructor() : this(RealComment())

@@ -1,4 +1,4 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import kotlin.jvm.JvmInline
 

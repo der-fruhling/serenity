@@ -22,13 +22,13 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/compose-html-collector-lib" />
-            <option value="$PROJECT_DIR$/compose-html-common-collector" />
-            <option value="$PROJECT_DIR$/compose-html-ktor-collector" />
-            <option value="$PROJECT_DIR$/compose-html-ktor-server" />
-            <option value="$PROJECT_DIR$/compose-html-web-collector" />
             <option value="$PROJECT_DIR$/gradle-plugin" />
             <option value="$PROJECT_DIR$/gradle-plugin/sass-gradle-plugin" />
+            <option value="$PROJECT_DIR$/serenity-collector-lib" />
+            <option value="$PROJECT_DIR$/serenity-common-collector" />
+            <option value="$PROJECT_DIR$/serenity-ktor-collector" />
+            <option value="$PROJECT_DIR$/serenity-ktor-server" />
+            <option value="$PROJECT_DIR$/serenity-web-collector" />
             <option value="$PROJECT_DIR$/test-app" />
           </set>
         </option>

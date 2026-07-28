@@ -1,4 +1,4 @@
-package net.derfruhling.html.attribute
+package net.derfruhling.serenity.attribute
 
 import kotlin.reflect.cast
 import kotlin.reflect.safeCast

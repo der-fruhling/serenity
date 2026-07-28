@@ -1,4 +1,4 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
 expect open class UnderlyingBase
 expect class UnderlyingElement : UnderlyingBase

@@ -1,4 +1,4 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.tooling.CompositionObserver
@@ -9,9 +9,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import net.derfruhling.html.tree.HtmlCompositionContext
-import net.derfruhling.html.tree.RehydratingHtmlTree
-import net.derfruhling.html.tree.platform.*
+import net.derfruhling.serenity.tree.HtmlCompositionContext
+import net.derfruhling.serenity.tree.RehydratingHtmlTree
+import net.derfruhling.serenity.tree.platform.*
 import web.console.console
 import web.dom.document
 import web.events.EventHandler

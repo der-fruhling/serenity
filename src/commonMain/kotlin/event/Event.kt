@@ -1,8 +1,8 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import kotlinx.datetime.Month
-import net.derfruhling.html.annotations.Since
-import net.derfruhling.html.annotations.WidelyAvailable
+import net.derfruhling.serenity.annotations.Since
+import net.derfruhling.serenity.annotations.WidelyAvailable
 
 @WidelyAvailable
 interface Event<T: EventTarget> {

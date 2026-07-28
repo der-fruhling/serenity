@@ -1,4 +1,4 @@
-package net.derfruhling.html.tree
+package net.derfruhling.serenity.tree
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
@@ -9,11 +9,11 @@ import androidx.compose.runtime.snapshots.MutableSnapshot
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.withCompositionLocal
 import io.github.oshai.kotlinlogging.KotlinLogging
-import net.derfruhling.html.SerialSavedData
-import net.derfruhling.html.annotations.HtmlComposable
-import net.derfruhling.html.tree.platform.ElementNode
-import net.derfruhling.html.tree.platform.NodeWithChildren
-import net.derfruhling.html.tree.platform.RootNode
+import net.derfruhling.serenity.SerialSavedData
+import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.tree.platform.NodeWithChildren
+import net.derfruhling.serenity.tree.platform.RootNode
 
 class RehydratingHtmlTree<Node: RootNode> internal constructor(
     val root: Node,

@@ -1,7 +1,7 @@
-package net.derfruhling.html.gradle
+package net.derfruhling.serenity.gradle
 
 import org.gradle.api.attributes.Attribute
 
 object Attributes {
-    val USAGE = Attribute.of("net.derfruhling.compose-html.usage", ComposeHtmlUsage::class.java)
+    val USAGE = Attribute.of("net.derfruhling.serenity.usage", SerenityUsage::class.java)
 }

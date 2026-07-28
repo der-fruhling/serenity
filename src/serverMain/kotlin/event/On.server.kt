@@ -1,8 +1,8 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
-import net.derfruhling.html.annotations.Client
+import net.derfruhling.serenity.annotations.Client
 import kotlin.coroutines.CoroutineContext
 
 @Composable

@@ -1,4 +1,4 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 fun interface EventSubscriptionHandle {
     fun unsubscribe()

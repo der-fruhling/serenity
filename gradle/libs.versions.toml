@@ -10,14 +10,14 @@ kotlinx-serialization = "1.11.0"
 kotlinx-collections = "0.5.1"
 kotlinx-io = "0.9.1"
 kotlinx-datetime = "0.8.0"
-compose-html = "0.1.0-SNAPSHOT"
+serenity = "0.1.0-SNAPSHOT"
 kotlin-wrappers = "2026.7.2"
 kotlin-logging = "8.0.4"
 ktor = "3.5.1"
 ksp-version = "2.3.10"
 
 [libraries]
-compose-html = { module = "net.derfruhling.html:compose-html", version.ref = "compose-html" }
+serenity = { module = "net.derfruhling.serenity:serenity", version.ref = "serenity" }
 
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
@@ -59,3 +59,4 @@ kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.re
 sassBase = { id = "io.freefair.sass-base", version = "9.5.0" }
 stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.11.1" }
 javaModularity = { id = "org.javamodularity.moduleplugin", version = "2.0.0" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version = "2.3.10" }

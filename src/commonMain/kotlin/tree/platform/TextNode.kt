@@ -1,6 +1,6 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
-import net.derfruhling.html.Formatter
+import net.derfruhling.serenity.Formatter
 
 class TextNode(real: RealText) : ComposeNodeWithReal<RealText>(real), ChildNode<ElementNode> {
     constructor() : this(RealText())

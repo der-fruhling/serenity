@@ -1,8 +1,8 @@
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
-import net.derfruhling.html.attribute.Attributes
-import net.derfruhling.html.attribute.StringSetComposableAttribute
+import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.StringSetComposableAttribute
 
 abstract class GeneralStructure<T: GeneralStructure<T>> {
     abstract class Attr {

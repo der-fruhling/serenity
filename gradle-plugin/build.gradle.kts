@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-    group = "net.derfruhling.html.gradle"
+    group = "net.derfruhling.serenity.gradle"
     version = "0.1.0"
 
     repositories {
@@ -18,17 +18,17 @@ gradlePlugin {
     plugins {
         fun new(name: String?, implClass: String) {
             create(name ?: "main") {
-                id = "net.derfruhling.compose-html${name?.let { ".$it" } ?: ""}"
-                implementationClass = "net.derfruhling.html.gradle.$implClass"
+                id = "net.derfruhling.serenity${name?.let { ".$it" } ?: ""}"
+                implementationClass = "net.derfruhling.serenity.gradle.$implClass"
             }
         }
 
-        new("base", "ComposeHtmlBasePlugin")
-        new("server", "server.ComposeHtmlServerPlugin")
-        new("web", "web.ComposeHtmlWebPlugin")
-        new("convention", "ComposeHtmlConventionPlugin")
-        new("vendor-resources", "resources.ResourceVendorPlugin")
-        new(null, "ComposeHtmlPlugin")
+        new("base", "SerenityBasePlugin")
+        new("server", "server.SerenityServerPlugin")
+        new("web", "web.SerenityWebPlugin")
+        new("convention", "SerenityConventionPlugin")
+        new("vendor-resources", "resources.SerenityResourcesPlugin")
+        new(null, "SerenityPlugin")
     }
 }
 

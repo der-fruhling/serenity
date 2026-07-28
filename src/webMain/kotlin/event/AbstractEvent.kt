@@ -1,10 +1,10 @@
 @file:OptIn(ExperimentalWasmJsInterop::class)
 
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import js.numbers.JsNumbers.toKotlinDouble
 import js.string.JsStrings.toKotlinString
-import net.derfruhling.html.tree.platform.ElementNode
+import net.derfruhling.serenity.tree.platform.ElementNode
 import web.dom.Element as DomElement
 import web.events.Event as DomEvent
 import web.events.EventTarget as DomEventTarget

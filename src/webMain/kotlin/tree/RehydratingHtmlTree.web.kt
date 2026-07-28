@@ -1,17 +1,17 @@
-package net.derfruhling.html.tree
+package net.derfruhling.serenity.tree
 
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.CompositionContext
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.snapshots.Snapshot
-import net.derfruhling.html.Name
-import net.derfruhling.html.SerialRegistry
-import net.derfruhling.html.SerialSavedData
-import net.derfruhling.html.attribute.Attributes
-import net.derfruhling.html.tree.platform.CURRENT
-import net.derfruhling.html.tree.platform.Document
-import net.derfruhling.html.tree.platform.PlatformApplier
-import net.derfruhling.html.tree.platform.textContent
+import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.SerialRegistry
+import net.derfruhling.serenity.SerialSavedData
+import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.tree.platform.CURRENT
+import net.derfruhling.serenity.tree.platform.Document
+import net.derfruhling.serenity.tree.platform.PlatformApplier
+import net.derfruhling.serenity.tree.platform.textContent
 
 fun RehydratingHtmlTree(
     parent: CompositionContext,

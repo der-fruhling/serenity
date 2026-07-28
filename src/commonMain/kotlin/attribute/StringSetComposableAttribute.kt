@@ -1,12 +1,12 @@
-package net.derfruhling.html.attribute
+package net.derfruhling.serenity.attribute
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.ReusableComposeNode
 import androidx.compose.runtime.mutableStateSetOf
-import net.derfruhling.html.annotations.HtmlComposable
-import net.derfruhling.html.tree.HtmlApplier
-import net.derfruhling.html.tree.platform.AttributeNode
+import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.tree.HtmlApplier
+import net.derfruhling.serenity.tree.platform.AttributeNode
 
 open class StringSetComposableAttribute(attribute: Attribute<MutableSet<String>>)
     : AbstractComposableAttribute<MutableSet<String>>(attribute) {

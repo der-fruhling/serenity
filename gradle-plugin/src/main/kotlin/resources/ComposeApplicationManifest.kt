@@ -1,4 +1,4 @@
-package net.derfruhling.html.gradle.resources
+package net.derfruhling.serenity.gradle.resources
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection

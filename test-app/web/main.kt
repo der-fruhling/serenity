@@ -1,8 +1,8 @@
-package net.derfruhling.html.testapp
+package net.derfruhling.serenity.testapp
 
-import net.derfruhling.html.SerialRegistry
-import net.derfruhling.html.onHtmlContextStart
-import net.derfruhling.html.registerClientPages
+import net.derfruhling.serenity.SerialRegistry
+import net.derfruhling.serenity.onHtmlContextStart
+import net.derfruhling.serenity.registerClientPages
 
 fun main() {
     SerialRegistry.registerClientPages { registerPages() }

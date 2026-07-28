@@ -1,4 +1,4 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun navigate(to: PageHolder) {}

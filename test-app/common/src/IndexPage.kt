@@ -1,13 +1,13 @@
-package net.derfruhling.html.testapp
+package net.derfruhling.serenity.testapp
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSerializable
 import io.github.oshai.kotlinlogging.KotlinLogging
-import net.derfruhling.html.annotations.Client
-import net.derfruhling.html.elements.Button
-import net.derfruhling.html.elements.Link
-import net.derfruhling.html.elements.Page
-import net.derfruhling.html.elements.UnorderedList
+import net.derfruhling.serenity.annotations.Client
+import net.derfruhling.serenity.elements.Button
+import net.derfruhling.serenity.elements.Link
+import net.derfruhling.serenity.elements.Page
+import net.derfruhling.serenity.elements.UnorderedList
 
 private val logger = KotlinLogging.logger {}
 

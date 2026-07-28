@@ -1,15 +1,15 @@
-package net.derfruhling.html.tree
+package net.derfruhling.serenity.tree
 
-import net.derfruhling.html.Name
-import net.derfruhling.html.attribute.Attribute
-import net.derfruhling.html.attribute.AttributeMap
-import net.derfruhling.html.attribute.Attributes
-import net.derfruhling.html.tree.platform.AttributeNode
-import net.derfruhling.html.tree.platform.ComposeNode
-import net.derfruhling.html.tree.platform.Document
-import net.derfruhling.html.tree.platform.ElementNode
-import net.derfruhling.html.tree.platform.NodeWithChildren
-import net.derfruhling.html.tree.platform.TextNode
+import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.attribute.Attribute
+import net.derfruhling.serenity.attribute.AttributeMap
+import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.tree.platform.AttributeNode
+import net.derfruhling.serenity.tree.platform.ComposeNode
+import net.derfruhling.serenity.tree.platform.Document
+import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.tree.platform.NodeWithChildren
+import net.derfruhling.serenity.tree.platform.TextNode
 import kotlin.jvm.JvmInline
 
 @JvmInline

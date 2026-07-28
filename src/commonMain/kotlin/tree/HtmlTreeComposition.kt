@@ -1,11 +1,11 @@
-package net.derfruhling.html.tree
+package net.derfruhling.serenity.tree
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReusableComposition
 import io.github.oshai.kotlinlogging.KotlinLogging
-import net.derfruhling.html.annotations.HtmlComposable
-import net.derfruhling.html.tree.platform.DocumentFragment
-import net.derfruhling.html.tree.platform.PlatformApplier
+import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.tree.platform.DocumentFragment
+import net.derfruhling.serenity.tree.platform.PlatformApplier
 
 private val logger = KotlinLogging.logger {}
 

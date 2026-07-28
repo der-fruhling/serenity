@@ -1,8 +1,8 @@
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import net.derfruhling.html.annotations.HtmlComposable
+import net.derfruhling.serenity.annotations.HtmlComposable
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable

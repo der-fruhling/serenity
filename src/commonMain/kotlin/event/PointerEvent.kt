@@ -1,7 +1,7 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import kotlinx.datetime.Month
-import net.derfruhling.html.annotations.*
+import net.derfruhling.serenity.annotations.*
 
 @WidelyAvailable(Since(year = 2020, month = Month.JULY))
 interface PointerEvent<T: EventTarget> : MouseEvent<T> {

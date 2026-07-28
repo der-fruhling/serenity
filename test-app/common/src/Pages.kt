@@ -1,7 +1,7 @@
-package net.derfruhling.html.testapp
+package net.derfruhling.serenity.testapp
 
-import net.derfruhling.html.PageRegistry
-import net.derfruhling.html.register
+import net.derfruhling.serenity.PageRegistry
+import net.derfruhling.serenity.register
 
 fun PageRegistry.registerPages() {
     register(IndexPage)

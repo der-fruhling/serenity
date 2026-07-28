@@ -1,3 +1,3 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 actual interface EventTarget

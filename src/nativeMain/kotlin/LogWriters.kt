@@ -1,4 +1,4 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 import io.github.oshai.kotlinlogging.Appender
 import io.github.oshai.kotlinlogging.Formatter

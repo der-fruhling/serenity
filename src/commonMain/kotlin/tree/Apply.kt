@@ -1,4 +1,4 @@
-package net.derfruhling.html.tree
+package net.derfruhling.serenity.tree
 
 interface Apply<T, out P> {
     val parent: P?

@@ -1,3 +1,3 @@
-package net.derfruhling.html.attribute
+package net.derfruhling.serenity.attribute
 
 abstract class AbstractComposableAttribute<T : Any>(val attribute: Attribute<T>)

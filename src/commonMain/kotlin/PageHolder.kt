@@ -1,4 +1,4 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -6,7 +6,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
-import net.derfruhling.html.annotations.HtmlComposable
+import net.derfruhling.serenity.annotations.HtmlComposable
 import kotlin.reflect.KClass
 
 @Immutable

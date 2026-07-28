@@ -1,9 +1,9 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
 import androidx.compose.runtime.Composable
-import net.derfruhling.html.Name
-import net.derfruhling.html.event.EventSubscriptionHandle
-import net.derfruhling.html.event.EventType
+import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.event.EventSubscriptionHandle
+import net.derfruhling.serenity.event.EventType
 
 interface RealNode {
     val node: UnderlyingBase

@@ -1,4 +1,4 @@
-package net.derfruhling.html.gradle.resources
+package net.derfruhling.serenity.gradle.resources
 
 import kotlinx.serialization.json.Json
 import net.openhft.hashing.LongHashFunction

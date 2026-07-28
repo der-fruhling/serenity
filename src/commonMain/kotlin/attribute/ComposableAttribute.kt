@@ -1,12 +1,12 @@
-package net.derfruhling.html.attribute
+package net.derfruhling.serenity.attribute
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.ReusableComposeNode
 import androidx.compose.runtime.remember
-import net.derfruhling.html.annotations.HtmlComposable
-import net.derfruhling.html.tree.HtmlApplier
-import net.derfruhling.html.tree.platform.AttributeNode
+import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.tree.HtmlApplier
+import net.derfruhling.serenity.tree.platform.AttributeNode
 
 open class ComposableAttribute<T : Any>(attribute: Attribute<T>) : AbstractComposableAttribute<T>(attribute) {
     @Composable

@@ -1,7 +1,7 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
-import net.derfruhling.html.Formatter
-import net.derfruhling.html.event.EventType
+import net.derfruhling.serenity.Formatter
+import net.derfruhling.serenity.event.EventType
 
 abstract class AbstractEventHandlerNode<T> : ComposeNode, ChildNode<NodeWithChildren<*>>, DisallowReuse
 

@@ -1,7 +1,7 @@
-package net.derfruhling.html.tree
+package net.derfruhling.serenity.tree
 
-import net.derfruhling.html.tree.platform.CURRENT
-import net.derfruhling.html.tree.platform.Document
+import net.derfruhling.serenity.tree.platform.CURRENT
+import net.derfruhling.serenity.tree.platform.Document
 
 actual fun getDocumentForTesting(): Document {
     return Document.CURRENT

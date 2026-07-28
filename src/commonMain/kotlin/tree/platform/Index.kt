@@ -1,4 +1,4 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
 import kotlin.properties.Delegates
 

@@ -1,16 +1,16 @@
 @file:HtmlComposable
 
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
-import net.derfruhling.html.Element
-import net.derfruhling.html.Text
-import net.derfruhling.html.annotations.Client
-import net.derfruhling.html.annotations.HtmlComposable
-import net.derfruhling.html.event.ClickEvent
-import net.derfruhling.html.event.ElementPointerEvent
-import net.derfruhling.html.event.On
+import net.derfruhling.serenity.Element
+import net.derfruhling.serenity.Text
+import net.derfruhling.serenity.annotations.Client
+import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.event.ClickEvent
+import net.derfruhling.serenity.event.ElementPointerEvent
+import net.derfruhling.serenity.event.On
 import kotlin.jvm.JvmName
 
 object Button : GeneralStructure<Button>(), ElementContext<Button.Attr> {

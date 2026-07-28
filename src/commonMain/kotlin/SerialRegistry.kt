@@ -1,4 +1,4 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -9,7 +9,7 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlinx.serialization.serializer
-import net.derfruhling.html.event.EventType
+import net.derfruhling.serenity.event.EventType
 import kotlin.reflect.KClass
 
 object SerialRegistry {

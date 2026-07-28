@@ -1,4 +1,4 @@
-package net.derfruhling.html.tree
+package net.derfruhling.serenity.tree
 
 @DslMarker
 annotation class BuilderDsl

@@ -1,4 +1,4 @@
-package net.derfruhling.html.annotations
+package net.derfruhling.serenity.annotations
 
 import kotlinx.datetime.Month
 

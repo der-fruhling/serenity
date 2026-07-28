@@ -1,4 +1,4 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

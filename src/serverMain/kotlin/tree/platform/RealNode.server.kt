@@ -1,4 +1,4 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
 import androidx.compose.runtime.Composable
 import com.fleeksoft.ksoup.nodes.Attribute
@@ -8,9 +8,9 @@ import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.nodes.Node
 import com.fleeksoft.ksoup.nodes.TextNode
-import net.derfruhling.html.Name
-import net.derfruhling.html.event.EventSubscriptionHandle
-import net.derfruhling.html.event.EventType
+import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.event.EventSubscriptionHandle
+import net.derfruhling.serenity.event.EventType
 
 actual fun RealNode(base: UnderlyingBase): RealNode? {
     return when (base) {

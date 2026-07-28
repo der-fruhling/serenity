@@ -1,6 +1,6 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
-import net.derfruhling.html.Formatter
+import net.derfruhling.serenity.Formatter
 
 open class Document(node: RealDocument) : NodeWithChildren<RealDocument>(node), RootNode {
     init {

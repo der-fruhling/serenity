@@ -1,4 +1,4 @@
-package net.derfruhling.html.manifest
+package net.derfruhling.serenity.manifest
 
 import kotlinx.serialization.Polymorphic
 

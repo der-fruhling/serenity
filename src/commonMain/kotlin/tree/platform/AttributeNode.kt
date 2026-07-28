@@ -1,9 +1,9 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
-import net.derfruhling.html.Formatter
-import net.derfruhling.html.Name
-import net.derfruhling.html.attribute.Attribute
-import net.derfruhling.html.attribute.AttributeValue
+import net.derfruhling.serenity.Formatter
+import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.attribute.Attribute
+import net.derfruhling.serenity.attribute.AttributeValue
 
 class AttributeNode<T : Any> : ComposeNodeWithReal<RealAttribute>, ChildNode<ElementNode> {
     override var parent: ElementNode? = null

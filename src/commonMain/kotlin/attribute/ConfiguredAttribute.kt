@@ -1,6 +1,6 @@
-package net.derfruhling.html.attribute
+package net.derfruhling.serenity.attribute
 
-import net.derfruhling.html.Name
+import net.derfruhling.serenity.Name
 import kotlin.reflect.KClass
 
 data class ConfiguredAttribute<T : Any>(

@@ -1,9 +1,9 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
 import androidx.compose.runtime.ComposeNodeLifecycleCallback
-import net.derfruhling.html.Formatter
-import net.derfruhling.html.event.EventSubscriptionHandle
-import net.derfruhling.html.event.EventType
+import net.derfruhling.serenity.Formatter
+import net.derfruhling.serenity.event.EventSubscriptionHandle
+import net.derfruhling.serenity.event.EventType
 import kotlin.properties.Delegates
 
 actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>(), ComposeNodeLifecycleCallback {

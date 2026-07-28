@@ -1,7 +1,7 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
-import net.derfruhling.html.Name
-import net.derfruhling.html.attribute.Attribute
+import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.attribute.Attribute
 
 abstract class Registry<in R, out T>(val namer: Namer<R>, val default: (R) -> T) {
     fun interface Namer<in R> {

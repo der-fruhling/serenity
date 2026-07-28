@@ -1,6 +1,6 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
-import net.derfruhling.html.annotations.HashCodeDsl
+import net.derfruhling.serenity.annotations.HashCodeDsl
 import kotlin.jvm.JvmName
 
 @HashCodeDsl

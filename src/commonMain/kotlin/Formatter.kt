@@ -1,4 +1,4 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 fun interface Formatter {
     fun write(string: String)

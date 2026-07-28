@@ -8,12 +8,12 @@ gradlePlugin {
     plugins {
         fun new(name: String?, implClass: String) {
             create(name ?: "main") {
-                id = "net.derfruhling.compose-html${name?.let { ".$it" } ?: ""}"
-                implementationClass = "net.derfruhling.html.gradle.$implClass"
+                id = "net.derfruhling.serenity${name?.let { ".$it" } ?: ""}"
+                implementationClass = "net.derfruhling.serenity.gradle.$implClass"
             }
         }
 
-        new("stylist-sass", "stylist.ComposeHtmlSassPlugin")
+        new("stylist-sass", "stylist.SerenitySassPlugin")
     }
 }
 

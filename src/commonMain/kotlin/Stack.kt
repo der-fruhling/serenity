@@ -1,4 +1,4 @@
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 class Stack<T> {
     private val list = ArrayList<T>()

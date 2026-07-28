@@ -1,10 +1,10 @@
 @file:OptIn(ExperimentalWasmJsInterop::class)
 
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
-import net.derfruhling.html.annotations.NewWebApi
-import net.derfruhling.html.hasField
-import net.derfruhling.html.takeIfPresent
+import net.derfruhling.serenity.annotations.NewWebApi
+import net.derfruhling.serenity.hasField
+import net.derfruhling.serenity.takeIfPresent
 import web.mouse.*
 import web.mouse.MouseButton as DomMouseButton
 import web.mouse.MouseEvent as DomMouseEvent

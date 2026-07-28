@@ -1,8 +1,8 @@
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
-import net.derfruhling.html.tree.StructureProvider
-import net.derfruhling.html.annotations.HtmlComposable
+import net.derfruhling.serenity.tree.StructureProvider
+import net.derfruhling.serenity.annotations.HtmlComposable
 import java.util.ServiceLoader
 
 val provider by lazy { ServiceLoader.load(StructureProvider::class.java).firstOrNull() }

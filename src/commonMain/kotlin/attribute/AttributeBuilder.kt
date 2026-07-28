@@ -1,6 +1,6 @@
-package net.derfruhling.html.attribute
+package net.derfruhling.serenity.attribute
 
-import net.derfruhling.html.Name
+import net.derfruhling.serenity.Name
 import kotlin.reflect.KClass
 
 class AttributeBuilder<T : Any>(val name: Name, val kClass: KClass<T>) {

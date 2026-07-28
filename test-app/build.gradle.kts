@@ -2,18 +2,14 @@ import io.freefair.gradle.plugins.sass.SassCompile
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
-    id("net.derfruhling.compose-html")
-    id("net.derfruhling.compose-html.stylist-sass")
-    id("net.derfruhling.compose-html.convention")
-    id("net.derfruhling.compose-html.vendor-resources")
+    id("net.derfruhling.serenity")
+    id("net.derfruhling.serenity.stylist-sass")
+    id("net.derfruhling.serenity.convention")
+    id("net.derfruhling.serenity.vendor-resources")
     id("com.google.devtools.ksp") version "2.3.10"
 }
 
-ksp {
-    arg("net.derfruhling.compose-html.package", "net.derfruhling.html.testapp")
-}
-
-composeHtml {
+serenity {
     javaVersion = 25
     disableDefaultDependencies = true
 
@@ -33,7 +29,7 @@ composeHtml {
     }
 
     server {
-        nativeEntryPoint = "net.derfruhling.html.testapp.main"
+        nativeEntryPoint = "net.derfruhling.serenity.testapp.main"
 
         jvm()
         macosArm64()
@@ -42,7 +38,7 @@ composeHtml {
 
         dependencies {
             common {
-                implementation(project(":compose-html-ktor-server"))
+                implementation(project(":serenity-ktor-server"))
             }
 
             jvm {
@@ -77,13 +73,13 @@ composeHtml {
 }
 
 dependencies {
-    add("kspCommonMainMetadata", project(":compose-html-common-collector"))
-    add("kspJs", project(":compose-html-web-collector"))
-    add("kspWasmJs", project(":compose-html-web-collector"))
-    add("kspLinuxX64", project(":compose-html-ktor-collector"))
-    add("kspLinuxArm64", project(":compose-html-ktor-collector"))
-    add("kspMacosArm64", project(":compose-html-ktor-collector"))
-    add("kspJvm", project(":compose-html-ktor-collector"))
+    add("kspCommonMainMetadata", project(":serenity-common-collector"))
+    add("kspJs", project(":serenity-web-collector"))
+    add("kspWasmJs", project(":serenity-web-collector"))
+    add("kspLinuxX64", project(":serenity-ktor-collector"))
+    add("kspLinuxArm64", project(":serenity-ktor-collector"))
+    add("kspMacosArm64", project(":serenity-ktor-collector"))
+    add("kspJvm", project(":serenity-ktor-collector"))
 }
 
 val resourcesDir = fileTree("src/commonMain/resources/style")

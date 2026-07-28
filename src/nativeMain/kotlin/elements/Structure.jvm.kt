@@ -1,11 +1,11 @@
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import net.derfruhling.html.tree.StructureProvider
-import net.derfruhling.html.annotations.HtmlComposable
+import net.derfruhling.serenity.tree.StructureProvider
+import net.derfruhling.serenity.annotations.HtmlComposable
 
 var structureProvider: StructureProvider? by mutableStateOf(null as StructureProvider?)
 

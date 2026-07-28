@@ -1,11 +1,11 @@
 @file:HtmlComposable
 
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
-import net.derfruhling.html.Element
-import net.derfruhling.html.Text
-import net.derfruhling.html.annotations.HtmlComposable
+import net.derfruhling.serenity.Element
+import net.derfruhling.serenity.Text
+import net.derfruhling.serenity.annotations.HtmlComposable
 
 object Div : GeneralStructure<Div>(), ElementContext<Div.Attr> {
     override val attributes: Attr

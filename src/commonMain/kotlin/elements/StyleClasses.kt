@@ -1,4 +1,4 @@
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 object StyleClasses {
 

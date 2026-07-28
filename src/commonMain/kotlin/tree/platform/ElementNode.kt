@@ -1,12 +1,12 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
 import androidx.compose.runtime.ComposeNodeLifecycleCallback
-import net.derfruhling.html.Formatter
-import net.derfruhling.html.Name
-import net.derfruhling.html.attribute.Attribute
-import net.derfruhling.html.event.EventSubscriptionHandle
-import net.derfruhling.html.event.EventTarget
-import net.derfruhling.html.event.EventType
+import net.derfruhling.serenity.Formatter
+import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.attribute.Attribute
+import net.derfruhling.serenity.event.EventSubscriptionHandle
+import net.derfruhling.serenity.event.EventTarget
+import net.derfruhling.serenity.event.EventType
 
 open class ElementNode : NodeWithChildren<RealElement>, ChildNode<NodeWithChildren<*>>, ComposeNodeLifecycleCallback, EventTarget {
     override var parent: NodeWithChildren<*>? = null

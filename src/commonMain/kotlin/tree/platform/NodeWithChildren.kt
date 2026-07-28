@@ -1,9 +1,9 @@
-package net.derfruhling.html.tree.platform
+package net.derfruhling.serenity.tree.platform
 
-import net.derfruhling.html.Name
-import net.derfruhling.html.attribute.AttributeValue
-import net.derfruhling.html.attribute.UntypedAttribute
-import net.derfruhling.html.tree.Apply
+import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.attribute.AttributeValue
+import net.derfruhling.serenity.attribute.UntypedAttribute
+import net.derfruhling.serenity.tree.Apply
 
 sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, Apply<ChildNode<*>, NodeWithChildren<*>> {
     override fun updateReal() {

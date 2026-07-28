@@ -1,16 +1,16 @@
 @file:HtmlComposable
 
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.ReusableComposeNode
 import androidx.compose.runtime.Updater
-import net.derfruhling.html.annotations.HtmlComposable
-import net.derfruhling.html.tree.HtmlApplier
-import net.derfruhling.html.tree.platform.ElementNode
-import net.derfruhling.html.tree.platform.TextNode
+import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.tree.HtmlApplier
+import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.tree.platform.TextNode
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable

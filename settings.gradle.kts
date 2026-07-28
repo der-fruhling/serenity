@@ -13,13 +13,13 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "compose-html"
+rootProject.name = "serenity"
 
-include("compose-html-ktor-server")
-include("compose-html-collector-lib")
-include("compose-html-common-collector")
-include("compose-html-ktor-collector")
-include("compose-html-web-collector")
+include("serenity-ktor-server")
+include("serenity-collector-lib")
+include("serenity-common-collector")
+include("serenity-ktor-collector")
+include("serenity-web-collector")
 
 include("test-app")
 

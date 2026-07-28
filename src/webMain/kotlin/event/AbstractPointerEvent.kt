@@ -1,12 +1,12 @@
 @file:OptIn(ExperimentalWasmJsInterop::class)
 
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import js.array.toList
-import net.derfruhling.html.annotations.NewWebApi
-import net.derfruhling.html.annotations.UnsupportedOnSafari
-import net.derfruhling.html.takeIfPresent
-import net.derfruhling.html.tree.platform.ElementNode
+import net.derfruhling.serenity.annotations.NewWebApi
+import net.derfruhling.serenity.annotations.UnsupportedOnSafari
+import net.derfruhling.serenity.takeIfPresent
+import net.derfruhling.serenity.tree.platform.ElementNode
 import web.pointer.PointerEvent as DomPointerEvent
 
 abstract class AbstractPointerEvent<T: EventTarget>(dom: DomPointerEvent) : AbstractMouseEvent<T>(dom), PointerEvent<T> {

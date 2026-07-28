@@ -1,12 +1,12 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import kotlinx.datetime.Month
 import kotlinx.serialization.Serializable
-import net.derfruhling.html.annotations.LimitedAvailability
-import net.derfruhling.html.annotations.Since
-import net.derfruhling.html.annotations.UnsupportedOnSafari
-import net.derfruhling.html.annotations.WidelyAvailable
-import net.derfruhling.html.tree.platform.ElementNode
+import net.derfruhling.serenity.annotations.LimitedAvailability
+import net.derfruhling.serenity.annotations.Since
+import net.derfruhling.serenity.annotations.UnsupportedOnSafari
+import net.derfruhling.serenity.annotations.WidelyAvailable
+import net.derfruhling.serenity.tree.platform.ElementNode
 
 @Serializable
 actual sealed interface BuiltinEventType

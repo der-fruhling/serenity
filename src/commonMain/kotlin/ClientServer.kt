@@ -1,11 +1,11 @@
 @file:HtmlComposable
 
-package net.derfruhling.html
+package net.derfruhling.serenity
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.key
-import net.derfruhling.html.annotations.HtmlComposable
+import net.derfruhling.serenity.annotations.HtmlComposable
 
 @get:Composable
 @get:ReadOnlyComposable

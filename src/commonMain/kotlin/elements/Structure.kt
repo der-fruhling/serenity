@@ -1,11 +1,11 @@
-package net.derfruhling.html.elements
+package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
-import net.derfruhling.html.Element
-import net.derfruhling.html.Text
-import net.derfruhling.html.annotations.HtmlComposable
-import net.derfruhling.html.attribute.Attributes
-import net.derfruhling.html.attribute.ComposableAttribute
+import net.derfruhling.serenity.Element
+import net.derfruhling.serenity.Text
+import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.ComposableAttribute
 
 object HeadContext {
     @Composable

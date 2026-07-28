@@ -1,16 +1,16 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.snapshots.Snapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import net.derfruhling.html.InternalPageEntryPoint
-import net.derfruhling.html.SnapshotContext
-import net.derfruhling.html.htmlComposer
-import net.derfruhling.html.ifClient
-import net.derfruhling.html.tree.HtmlApplier
-import net.derfruhling.html.tree.platform.EventHandlerNode
+import net.derfruhling.serenity.InternalPageEntryPoint
+import net.derfruhling.serenity.SnapshotContext
+import net.derfruhling.serenity.htmlComposer
+import net.derfruhling.serenity.ifClient
+import net.derfruhling.serenity.tree.HtmlApplier
+import net.derfruhling.serenity.tree.platform.EventHandlerNode
 import web.function.async
 import kotlin.coroutines.AbstractCoroutineContextElement
 import kotlin.coroutines.Continuation

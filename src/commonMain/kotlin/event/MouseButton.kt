@@ -1,4 +1,4 @@
-package net.derfruhling.html.event
+package net.derfruhling.serenity.event
 
 enum class MouseButton(val flag: Int) {
     PRIMARY(MouseButtons.PRIMARY),

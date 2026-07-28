@@ -1,4 +1,4 @@
-package net.derfruhling.html.attribute
+package net.derfruhling.serenity.attribute
 
 private val setParserRegex by lazy { Regex("\\s+") }
 
