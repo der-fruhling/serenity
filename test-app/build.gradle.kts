@@ -28,6 +28,12 @@ serenity {
         prettyJson = true
     }
 
+    collectors {
+        useCommon(project(":serenity-common-collector"))
+        useWeb(project(":serenity-web-collector"))
+        useServer(project(":serenity-ktor-collector"))
+    }
+
     server {
         nativeEntryPoint = "net.derfruhling.serenity.testapp.main"
 
@@ -71,54 +77,6 @@ serenity {
         }
     }
 }
-
-dependencies {
-    add("kspCommonMainMetadata", project(":serenity-common-collector"))
-    add("kspJs", project(":serenity-web-collector"))
-    add("kspWasmJs", project(":serenity-web-collector"))
-    add("kspLinuxX64", project(":serenity-ktor-collector"))
-    add("kspLinuxArm64", project(":serenity-ktor-collector"))
-    add("kspMacosArm64", project(":serenity-ktor-collector"))
-    add("kspJvm", project(":serenity-ktor-collector"))
-}
-
-val resourcesDir = fileTree("src/commonMain/resources/style")
-val sassOutDir = layout.buildDirectory.dir("sass")
-
-val compileSass = tasks.register<SassCompile>("compileSass") {
-    description = "Compiles stylesheets"
-
-    source(resourcesDir)
-    destinationDir.set(sassOutDir)
-    group = BasePlugin.BUILD_GROUP
-}
-
-afterEvaluate {
-    tasks.named { it.startsWith("ksp") && it != "kspAll" && it != "kspCommonMainKotlinMetadata" }.configureEach {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
-
-    tasks.register("kspAll") {
-        dependsOn(tasks.named { it.startsWith("ksp") && it != "kspAll" })
-    }
-}
-
-//val resourcesOutPath = layout.buildDirectory.dir("resources")
-//val resourcesIn = kotlin.sourceSets.commonMain.map { it.resources }
-//
-//tasks.processResources {
-//    dependsOn(compileSass)
-//
-//    into(resourcesOutPath)
-//
-//    from(resourcesIn) {
-//        exclude("style/**")
-//    }
-//
-//    into("style") {
-//        from(sassOutDir)
-//    }
-//}
 
 tasks.named<Test>("jvmTest") {
     useJUnitPlatform()

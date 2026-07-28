@@ -61,6 +61,8 @@ abstract class SerenityWebExtension(internal val base: SerenityExtension) : Exte
     }
 
     private fun KotlinJsTargetDsl.commonJsOptions() {
+        base.webTargets.add(this.name)
+
         browser {
             webpackTask {
                 if(mode == KotlinWebpackConfig.Mode.PRODUCTION) {

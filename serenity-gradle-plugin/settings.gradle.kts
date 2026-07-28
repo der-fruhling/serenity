@@ -10,4 +10,6 @@ dependencyResolutionManagement {
     }
 }
 
-include("sass-gradle-plugin")
+rootProject.name = "serenity-gradle-plugin"
+
+include("serenity-sass-gradle-plugin")

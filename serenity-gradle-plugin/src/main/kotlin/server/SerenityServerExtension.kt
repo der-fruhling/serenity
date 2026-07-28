@@ -2,8 +2,8 @@ package net.derfruhling.serenity.gradle.server
 
 import net.derfruhling.serenity.gradle.SerenityDependencyHandler
 import net.derfruhling.serenity.gradle.SerenityDependencyHandlerImpl
-import net.derfruhling.serenity.gradle.SerenityGradleDsl
 import net.derfruhling.serenity.gradle.SerenityExtension
+import net.derfruhling.serenity.gradle.SerenityGradleDsl
 import org.gradle.api.Action
 import org.gradle.api.InvalidUserCodeException
 import org.gradle.api.Project
@@ -18,6 +18,7 @@ import org.gradle.api.tasks.bundling.Compression
 import org.gradle.api.tasks.bundling.Tar
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.register
+import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
@@ -68,17 +69,26 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
         resourceTask.convention(syncServerResourcesTask("", "").name)
     }
 
+    private fun KotlinTarget.configureTarget() {
+        base.serverTargets.add(this.name)
+    }
+
     fun jvm() {
         base.mpp.jvmToolchain(base.javaVersion.get())
-        base.mpp.jvm()
+        base.mpp.jvm { configureTarget() }
     }
 
     fun jvm(configure: Action<KotlinJvmTarget>) {
         base.mpp.jvmToolchain(base.javaVersion.get())
-        base.mpp.jvm(configure)
+        base.mpp.jvm {
+            configureTarget()
+            configure.execute(this)
+        }
     }
 
     private fun KotlinNativeTarget.configureNativeTarget() {
+        configureTarget()
+
         if(createDefaultBinaries.get()) {
             binaries {
                 executable {

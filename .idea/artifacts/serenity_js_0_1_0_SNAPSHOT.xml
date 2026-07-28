@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="serenity-js-0.1.0-SNAPSHOT">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="serenity-js-0.1.0-SNAPSHOT.jar">
+      <element id="module-output" name="serenity.jsMain" />
+    </root>
+  </artifact>
+</component>

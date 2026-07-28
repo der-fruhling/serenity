@@ -57,6 +57,6 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 sassBase = { id = "io.freefair.sass-base", version = "9.5.0" }
-stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.11.1" }
+stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.12.0" }
 javaModularity = { id = "org.javamodularity.moduleplugin", version = "2.0.0" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version = "2.3.10" }

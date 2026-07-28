@@ -1,5 +1,6 @@
 package net.derfruhling.serenity.gradle
 
+import com.google.devtools.ksp.gradle.KspGradleSubplugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.attributes.Usage
@@ -24,6 +25,7 @@ class SerenityBasePlugin @Inject constructor(val objects: NamedObjectInstantiato
         target.plugins.apply(KotlinMultiplatformPluginWrapper::class)
         target.plugins.apply(SerializationGradleSubplugin::class)
         target.plugins.apply(ComposeCompilerGradleSubplugin::class)
+        target.plugins.apply(KspGradleSubplugin::class)
 
         target.repositories.mavenCentral()
         target.repositories.google()
@@ -124,6 +126,16 @@ class SerenityBasePlugin @Inject constructor(val objects: NamedObjectInstantiato
                 from(commonResources)
 
                 duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            }
+        }
+
+        target.afterEvaluate {
+            tasks.named { it.startsWith("ksp") && it != "kspAll" && it != "kspCommonMainKotlinMetadata" }.configureEach {
+                dependsOn("kspCommonMainKotlinMetadata")
+            }
+
+            tasks.register("kspAll") {
+                dependsOn(tasks.named { it.startsWith("ksp") && it != "kspAll" })
             }
         }
     }

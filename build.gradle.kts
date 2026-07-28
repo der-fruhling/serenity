@@ -7,12 +7,13 @@ plugins {
     alias(libs.plugins.kotlin.plugin.compose)
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.sassBase)
-//    alias(libs.plugins.stabilityAnalyzer)
+    alias(libs.plugins.stabilityAnalyzer)
 }
 
-repositories {
-    mavenCentral()
-    google()
+allprojects {
+    group = "net.derfruhling.serenity"
+
+    apply(from = rootProject.file("common.gradle.kts"))
 }
 
 kotlin {
@@ -120,9 +121,9 @@ kotlin {
 
         webMain {
             dependencies {
-                implementation(libs.kotlin.wrappers.js)
-                implementation(libs.kotlin.wrappers.browser)
-                implementation(libs.kotlin.wrappers.web)
+                api(libs.kotlin.wrappers.js)
+                api(libs.kotlin.wrappers.browser)
+                api(libs.kotlin.wrappers.web)
             }
         }
     }

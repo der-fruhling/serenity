@@ -4,7 +4,7 @@
 // https://docs.gradle.org/current/userguide/settings_file_basics.html
 
 pluginManagement {
-    includeBuild("gradle-plugin")
+    includeBuild("serenity-gradle-plugin")
 }
 
 plugins {

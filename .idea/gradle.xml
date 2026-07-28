@@ -7,10 +7,10 @@
         <compositeConfiguration>
           <compositeBuild compositeDefinitionSource="SCRIPT">
             <builds>
-              <build path="$PROJECT_DIR$/gradle-plugin" name="gradle-plugin">
+              <build path="$PROJECT_DIR$/serenity-gradle-plugin" name="serenity-gradle-plugin">
                 <projects>
-                  <project path="$PROJECT_DIR$/gradle-plugin" />
-                  <project path="$PROJECT_DIR$/gradle-plugin/sass-gradle-plugin" />
+                  <project path="$PROJECT_DIR$/serenity-gradle-plugin" />
+                  <project path="$PROJECT_DIR$/serenity-gradle-plugin/serenity-sass-gradle-plugin" />
                 </projects>
               </build>
             </builds>
@@ -22,10 +22,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/gradle-plugin" />
-            <option value="$PROJECT_DIR$/gradle-plugin/sass-gradle-plugin" />
             <option value="$PROJECT_DIR$/serenity-collector-lib" />
             <option value="$PROJECT_DIR$/serenity-common-collector" />
+            <option value="$PROJECT_DIR$/serenity-gradle-plugin" />
+            <option value="$PROJECT_DIR$/serenity-gradle-plugin/serenity-sass-gradle-plugin" />
             <option value="$PROJECT_DIR$/serenity-ktor-collector" />
             <option value="$PROJECT_DIR$/serenity-ktor-server" />
             <option value="$PROJECT_DIR$/serenity-web-collector" />
