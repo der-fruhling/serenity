@@ -1,6 +1,6 @@
 package net.derfruhling.html.ktor.server
 
-import co.touchlab.kermit.Logger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -119,10 +119,10 @@ private suspend fun loadResource(path: Path): Pair<FileMetadata, Buffer> = memSc
 }
 
 actual fun Route.serveStatic(remotePath: String) {
-    val logger = Logger.withTag("net.derfruhling.html.ktor.server.ServeStaticKt")
+    val logger = KotlinLogging.logger {}
 
     if(staticPath != null) {
-        logger.i { "Serving static resources from: $staticPath" }
+        logger.info { "Serving static resources from: $staticPath" }
         route(remotePath) {
             get("{path...}") {
                 val pathString = call.parameters.getAll("path")!!.toTypedArray()
@@ -151,6 +151,6 @@ actual fun Route.serveStatic(remotePath: String) {
             }
         }
     } else {
-        logger.i { "Not serving static resources (directory _static not found)" }
+        logger.info { "Not serving static resources (directory _static not found)" }
     }
 }

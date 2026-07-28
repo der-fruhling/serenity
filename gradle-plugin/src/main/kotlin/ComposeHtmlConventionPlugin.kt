@@ -13,20 +13,53 @@ class ComposeHtmlConventionPlugin : Plugin<Project> {
         target.afterEvaluate {
             configure<KotlinMultiplatformExtension> {
                 val projectDirectory = target.layout.projectDirectory
-                val src = projectDirectory.dir("src")
                 sourceSets.configureEach {
-                    kotlin.setSrcDirs(listOf(src.dir(name.replace("Main", ""))))
-
-                    when {
-                        name.startsWith("jvm") -> {
-                            resources.setSrcDirs(listOf(src.dir(name.replace("Main", "") + "Resources")))
+                    when (name) {
+                        "jvmMain" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("jvm/src")))
+                            resources.setSrcDirs(listOf(projectDirectory.dir("jvm/resources")))
                         }
-
-                        name == "commonMain" -> {
-                            resources.setSrcDirs(listOf(projectDirectory.dir("resources")))
+                        "jvmTest" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("test/jvm/src")))
+                            resources.setSrcDirs(listOf(projectDirectory.dir("test/jvm/resources")))
                         }
-
+                        "commonMain" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("common/src")))
+                            resources.setSrcDirs(listOf(projectDirectory.dir("common/resources")))
+                        }
+                        "commonTest" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("test/common")))
+                            resources.setSrcDirs(emptyList<Directory>())
+                        }
+                        "serverMain" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("server/src")))
+                            resources.setSrcDirs(listOf(projectDirectory.dir("server/resources")))
+                        }
+                        "serverTest" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("test/server")))
+                            resources.setSrcDirs(emptyList<Directory>())
+                        }
+                        "nativeMain" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("native/src")))
+                            resources.setSrcDirs(listOf(projectDirectory.dir("native/resources")))
+                        }
+                        "webMain" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("web")))
+                            resources.setSrcDirs(emptyList<Directory>())
+                        }
+                        "webTest" -> {
+                            kotlin.setSrcDirs(listOf(projectDirectory.dir("test/web")))
+                            resources.setSrcDirs(emptyList<Directory>())
+                        }
                         else -> {
+                            if(name.endsWith("Test")) {
+                                kotlin.setSrcDirs(emptyList<Directory>())
+                            } else if (name.startsWith("linux") || name.startsWith("macos")) {
+                                kotlin.setSrcDirs(listOf(projectDirectory.dir("native-platform").dir(name.replace("Main", ""))))
+                            } else {
+                                kotlin.setSrcDirs(listOf(projectDirectory.dir(name.replace("Main", ""))))
+                            }
+
                             resources.setSrcDirs(emptyList<Directory>())
                         }
                     }
@@ -47,7 +80,7 @@ class ComposeHtmlConventionPlugin : Plugin<Project> {
                             }
                             kotlinSourceSets.forEach {
                                 val sources = kspDir.dir(it.name).dir("kotlin")
-                                it.kotlin.srcDir(sources)
+                                it.generatedKotlin.srcDir(sources)
                             }
                         }
                     }

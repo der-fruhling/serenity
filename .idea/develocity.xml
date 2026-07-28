@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DevelocitySettings">
-    <option name="buildScanIntegration" value="NONE" />
-    <option name="configureTheBuild" value="true" />
+    <option name="version" value="4" />
     <option name="develocityGradlePluginVersionSet" value="true" />
     <option name="develocityGradlePluginVersion" value="4.3.2" />
     <option name="queryPatterns">

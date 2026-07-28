@@ -16,13 +16,13 @@ plugins {
 rootProject.name = "compose-html"
 
 include("compose-html-ktor-server")
+include("compose-html-collector-lib")
 include("compose-html-common-collector")
 include("compose-html-ktor-collector")
 include("compose-html-web-collector")
+
 include("test-app")
 
 develocity {
     server
 }
-
-include("compose-html-collector-lib")

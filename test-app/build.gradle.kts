@@ -3,7 +3,9 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     id("net.derfruhling.compose-html")
+    id("net.derfruhling.compose-html.stylist-sass")
     id("net.derfruhling.compose-html.convention")
+    id("net.derfruhling.compose-html.vendor-resources")
     id("com.google.devtools.ksp") version "2.3.10"
 }
 
@@ -24,6 +26,10 @@ composeHtml {
 
     testDependencies {
         implementation(kotlin("test"))
+    }
+
+    resources {
+        prettyJson = true
     }
 
     server {

@@ -10,6 +10,7 @@
               <build path="$PROJECT_DIR$/gradle-plugin" name="gradle-plugin">
                 <projects>
                   <project path="$PROJECT_DIR$/gradle-plugin" />
+                  <project path="$PROJECT_DIR$/gradle-plugin/sass-gradle-plugin" />
                 </projects>
               </build>
             </builds>
@@ -27,6 +28,7 @@
             <option value="$PROJECT_DIR$/compose-html-ktor-server" />
             <option value="$PROJECT_DIR$/compose-html-web-collector" />
             <option value="$PROJECT_DIR$/gradle-plugin" />
+            <option value="$PROJECT_DIR$/gradle-plugin/sass-gradle-plugin" />
             <option value="$PROJECT_DIR$/test-app" />
           </set>
         </option>

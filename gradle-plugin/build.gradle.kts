@@ -1,44 +1,34 @@
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
+    kotlin("plugin.serialization") version embeddedKotlinVersion
 }
 
-repositories {
-    mavenCentral()
-    gradlePluginPortal()
+allprojects {
+    group = "net.derfruhling.html.gradle"
+    version = "0.1.0"
+
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
 }
 
 gradlePlugin {
     plugins {
-        create("base") {
-            id = "net.derfruhling.compose-html.base"
-            implementationClass = "net.derfruhling.html.gradle.ComposeHtmlBasePlugin"
+        fun new(name: String?, implClass: String) {
+            create(name ?: "main") {
+                id = "net.derfruhling.compose-html${name?.let { ".$it" } ?: ""}"
+                implementationClass = "net.derfruhling.html.gradle.$implClass"
+            }
         }
 
-        create("server") {
-            id = "net.derfruhling.compose-html.server"
-            implementationClass = "net.derfruhling.html.gradle.server.ComposeHtmlServerPlugin"
-        }
-
-        create("web") {
-            id = "net.derfruhling.compose-html.web"
-            implementationClass = "net.derfruhling.html.gradle.web.ComposeHtmlWebPlugin"
-        }
-
-        create("stylist") {
-            id = "net.derfruhling.compose-html.stylist"
-            implementationClass = "net.derfruhling.html.gradle.stylist.ComposeHtmlStylePlugin"
-        }
-
-        create("main") {
-            id = "net.derfruhling.compose-html"
-            implementationClass = "net.derfruhling.html.gradle.ComposeHtmlPlugin"
-        }
-
-        create("convention") {
-            id = "net.derfruhling.compose-html.convention"
-            implementationClass = "net.derfruhling.html.gradle.ComposeHtmlConventionPlugin"
-        }
+        new("base", "ComposeHtmlBasePlugin")
+        new("server", "server.ComposeHtmlServerPlugin")
+        new("web", "web.ComposeHtmlWebPlugin")
+        new("convention", "ComposeHtmlConventionPlugin")
+        new("vendor-resources", "resources.ResourceVendorPlugin")
+        new(null, "ComposeHtmlPlugin")
     }
 }
 
@@ -47,6 +37,8 @@ dependencies {
     api(plugin(libs.plugins.kotlin.plugin.compose))
     api(plugin(libs.plugins.kotlin.plugin.serialization))
     api(plugin(libs.plugins.sassBase))
+    implementation(libs.openhft.zeroAllocationHashing)
+    implementation(libs.kotlinx.serialization.json)
 }
 
 fun plugin(p: Provider<PluginDependency>): Provider<String> = p.map {

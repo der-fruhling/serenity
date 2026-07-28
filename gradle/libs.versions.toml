@@ -48,6 +48,9 @@ logback-classic = { module = "ch.qos.logback:logback-classic", version = "1.5.38
 
 ksp-symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp-version" }
 
+openhft-zeroAllocationHashing = { module = "net.openhft:zero-allocation-hashing", version = "2026.0" }
+jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -55,4 +58,4 @@ kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization"
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 sassBase = { id = "io.freefair.sass-base", version = "9.5.0" }
 stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.11.1" }
-
+javaModularity = { id = "org.javamodularity.moduleplugin", version = "2.0.0" }

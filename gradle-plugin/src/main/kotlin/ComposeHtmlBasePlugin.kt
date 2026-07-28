@@ -109,6 +109,22 @@ class ComposeHtmlBasePlugin @Inject constructor(val objects: NamedObjectInstanti
             compilerOptions {
                 freeCompilerArgs.add("-Xexpect-actual-classes")
             }
+
+            val commonResources = sourceSets.commonMain.map { it.resources }
+
+            target.tasks.register("processCommonResources", ProcessResources::class) {
+                into(target.layout.buildDirectory.dir("resources/common"))
+                from(commonResources)
+
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            }
+
+            target.tasks.register("processCommonResourcesDebug", ProcessResources::class) {
+                into(target.layout.buildDirectory.dir("resources/common-debug"))
+                from(commonResources)
+
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            }
         }
     }
 }

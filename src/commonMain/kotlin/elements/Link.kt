@@ -11,6 +11,7 @@ import net.derfruhling.html.attribute.Attributes
 import net.derfruhling.html.attribute.ComposableAttribute
 import net.derfruhling.html.event.ClickEvent
 import net.derfruhling.html.event.On
+import net.derfruhling.html.navigate
 
 val linkBase = compositionLocalOf { "" }
 
@@ -54,7 +55,8 @@ fun Link(to: PageHolder, fn: @Composable Link.() -> Unit) {
         }
 
         On(ClickEvent) @Client {
-
+            it.preventDefault()
+            navigate(to)
         }
     }
 }

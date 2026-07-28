@@ -8,20 +8,23 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import org.gradle.kotlin.dsl.assign
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
 import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinWasmJsTargetDsl
-import org.jetbrains.kotlin.gradle.targets.js.ir.JsIrBinary
-import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrCompilation
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackOutput
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import javax.inject.Inject
 
 @ComposeHtmlDsl
 abstract class ComposeHtmlWebExtension(internal val base: ComposeHtmlExtension) : ExtensionAware {
     @get:Inject
     abstract val project: Project
+
+    abstract val includeSourceMapsInProductionBuilds: Property<Boolean>
+
+    init {
+        includeSourceMapsInProductionBuilds.convention(false)
+    }
 
     abstract val jsCompilations: ListProperty<String>
 
@@ -60,12 +63,15 @@ abstract class ComposeHtmlWebExtension(internal val base: ComposeHtmlExtension) 
     private fun KotlinJsTargetDsl.commonJsOptions() {
         browser {
             webpackTask {
-                mainOutputFileName = "page.js"
+                if(mode == KotlinWebpackConfig.Mode.PRODUCTION) {
+                    sourceMaps = includeSourceMapsInProductionBuilds.get()
+                }
+                mainOutputFileName.set("page.js")
             }
         }
 
         compilerOptions {
-            target = "es2015"
+            target.set("es2015")
         }
 
         binaries.executable()

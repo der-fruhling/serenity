@@ -1,7 +1,6 @@
 package net.derfruhling.html.gradle
 
 import net.derfruhling.html.gradle.server.ComposeHtmlServerPlugin
-import net.derfruhling.html.gradle.stylist.ComposeHtmlStylePlugin
 import net.derfruhling.html.gradle.web.ComposeHtmlWebPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -12,6 +11,5 @@ class ComposeHtmlPlugin : Plugin<Project> {
         target.plugins.apply(ComposeHtmlBasePlugin::class)
         target.plugins.apply(ComposeHtmlServerPlugin::class)
         target.plugins.apply(ComposeHtmlWebPlugin::class)
-        target.plugins.apply(ComposeHtmlStylePlugin::class)
     }
 }
