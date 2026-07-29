@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package net.derfruhling.serenity.tree.platform
 
 import androidx.compose.runtime.Composable
@@ -83,8 +85,11 @@ actual sealed class RealElementLike : RealNode {
     actual val children: MutableList<RealNode> by lazy { ChildList() }
 }
 
-actual class RealElement actual constructor(actual override val node: UnderlyingElement) :
+actual class RealElement actual constructor(node: UnderlyingElement) :
     RealElementLike() {
+    actual override var node = node
+        internal set
+
     actual val name: Name = if (node.tag.prefix() != "") {
         when (node.tag.namespace) {
             "" -> Name.qualified(node.tag.prefix(), node.tag.localName())
@@ -197,6 +202,7 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
     constructor(baseUri: String) : this(Document(baseUri))
 }
 
+@Deprecated("Avoid if possible")
 actual class RealAttribute actual constructor(actual override val node: UnderlyingAttribute) : RealNode {
     actual val name: Name
         get() = if (node.prefix() != "") {

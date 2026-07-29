@@ -2,7 +2,12 @@
 
 package net.derfruhling.serenity
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import kotlinx.serialization.KSerializer
+import net.derfruhling.serenity.elements.HeadContext
 import kotlin.reflect.KClass
 
 @PublishedApi
@@ -19,8 +24,14 @@ inline fun <reified T> SerialRegistry.decodeFromObject(obj: JsAny): T {
     return decode(jsonStringify(obj))
 }
 
+internal var headBuilder by mutableStateOf(null as (@Composable HeadContext.() -> Unit)?)
+
 fun SerialRegistry.registerClientPages(fn: PageRegistry.() -> Unit) {
     (object : PageRegistry {
+        override fun head(fn: @Composable (HeadContext.() -> Unit)) {
+            headBuilder = fn
+        }
+
         override fun <T : PageHolder> register(kClass: KClass<T>, kSerializer: KSerializer<T>, page: T) {
             registerPage(kClass, kSerializer)
         }

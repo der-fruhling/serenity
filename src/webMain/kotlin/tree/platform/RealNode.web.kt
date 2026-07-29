@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package net.derfruhling.serenity.tree.platform
 
 import js.array.asList
@@ -83,13 +85,16 @@ actual sealed class RealElementLike : RealNode {
     actual open val children: MutableList<RealNode> by lazy { ChildList() }
 }
 
-actual class RealElement actual constructor(actual override val node: UnderlyingElement) : RealElementLike() {
+actual class RealElement actual constructor(node: UnderlyingElement) : RealElementLike() {
     actual constructor(name: Name) : this(
         document.createElementNS(
             name.namespaceUrl ?: HTML_NS,
             (name.namespace?.let { "$it:" } ?: "") + name.localName
         )
     )
+
+    actual override var node = node
+        internal set
 
     override val parent: ParentNode
         get() = node
@@ -205,7 +210,7 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
         override fun add(index: Int, element: RealNode) {
             if(element is RealElement) {
                 val newIndex = _children.indexOfFirst { it is RealElement }
-                if(newIndex >= 0) _children[newIndex] = element
+                if(newIndex >= 0) this[newIndex] = element
                 else _children.add(index, element)
             } else _children.add(index, element)
         }
@@ -218,7 +223,19 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
             index: Int,
             element: RealNode
         ): RealNode {
-            return _children.set(index, element)
+            if(element is RealElement) {
+                node.documentElement.replaceChildren(*element.children.mapNotNull { (it as? RealElement)?.node }.toTypedArray())
+
+                for(attr in element.attributeSet) {
+                    node.documentElement.attributes.setNamedItemNS(attr.node)
+                }
+
+                element.node = node.documentElement
+
+                return element
+            } else {
+                return _children.set(index, element)
+            }
         }
 
         override fun get(index: Int): RealNode {
@@ -243,6 +260,7 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
     }
 }
 
+@Deprecated("Avoid if possible")
 actual class RealAttribute actual constructor(actual override val node: UnderlyingAttribute) : RealNode {
     actual constructor(name: Name) : this(
         document.createAttributeNS(

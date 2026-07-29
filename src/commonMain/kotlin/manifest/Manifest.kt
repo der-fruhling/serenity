@@ -1,20 +1,20 @@
 package net.derfruhling.serenity.manifest
 
-import kotlinx.serialization.ExperimentalSerializationApi
+import androidx.compose.runtime.ProvidedValue
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.listSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.serializer
-import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.cast
 
 @Serializable(with = Manifest.Serializer::class)
-class Manifest(
+data class Manifest(
     private val entries: MutableMap<KClass<out ManifestEntry>, ManifestEntry>
 ) {
     object Serializer : KSerializer<Manifest> {
@@ -26,7 +26,7 @@ class Manifest(
             encoder: Encoder,
             value: Manifest
         ) {
-            encoder.encodeSerializableValue(
+            encoder.encodeSerializableValue<List<ManifestEntry>>(
                 listSerializer,
                 value.entries.values.toList().filterIsInstance<SharedManifestEntry>()
             )
@@ -65,5 +65,12 @@ class Manifest(
 
     inline fun <reified T : ManifestEntry> initializing(noinline initializer: () -> T): Initializing<T> {
         return Initializing(T::class, initializer)
+    }
+
+    val provide: Array<ProvidedValue<*>>
+        get() = entries.values.flatMap { it.provide.toList() }.toTypedArray()
+
+    companion object {
+        val local = staticCompositionLocalOf<Manifest> { throw IllegalStateException("No manifest provided") }
     }
 }

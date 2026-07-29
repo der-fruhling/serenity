@@ -38,7 +38,9 @@ actual open class PlatformApplier actual constructor(document: RootNode) :
     actual override fun insertBottomUp(index: Int, instance: ComposeNode) {
         require(instance is ChildNode<*>)
 
-        withChildren { it.insert(index, instance) }
+        withChildren {
+            it.insert(index, instance)
+        }
     }
 
     actual override fun remove(index: Int, count: Int) {

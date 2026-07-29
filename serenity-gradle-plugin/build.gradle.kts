@@ -2,6 +2,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     kotlin("plugin.serialization") version embeddedKotlinVersion
+    `maven-publish`
 }
 
 allprojects {
@@ -11,6 +12,14 @@ allprojects {
 
     repositories {
         gradlePluginPortal()
+    }
+}
+
+publishing {
+    repositories {
+        maven(rootProject.layout.projectDirectory.dir("../build/local-publish")) {
+            name = "LocalDirectory"
+        }
     }
 }
 
@@ -27,7 +36,7 @@ gradlePlugin {
         new("server", "server.SerenityServerPlugin")
         new("web", "web.SerenityWebPlugin")
         new("convention", "SerenityConventionPlugin")
-        new("vendor-resources", "resources.SerenityResourcesPlugin")
+        new("resources", "resources.SerenityResourcesPlugin")
         new(null, "SerenityPlugin")
     }
 }

@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("published-jvm")
 }
 
 repositories {
@@ -8,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation(rootProject)
+    implementation(project(":"))
     implementation(project(":serenity-collector-lib"))
     implementation(libs.ksp.symbolProcessingApi)
 }

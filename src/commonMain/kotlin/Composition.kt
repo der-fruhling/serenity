@@ -14,7 +14,7 @@ import net.derfruhling.serenity.tree.platform.TextNode
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-fun Element(
+inline fun Element(
     name: Name,
 ) {
     ComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
@@ -23,7 +23,7 @@ fun Element(
 }
 
 @Composable
-fun Element(
+inline fun Element(
     name: Name,
     content: @Composable () -> Unit
 ) {
@@ -34,19 +34,19 @@ fun Element(
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-fun Element(
+inline fun Element(
     name: String,
 ) = Element(Name.of(name))
 
 @Composable
-fun Element(
+inline fun Element(
     name: String,
     content: @Composable () -> Unit
 ) = Element(Name.of(name), content = content)
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-fun Element(
+inline fun Element(
     update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
     name: Name,
 ) {
@@ -57,7 +57,7 @@ fun Element(
 }
 
 @Composable
-fun Element(
+inline fun Element(
     update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
     name: Name,
     content: @Composable () -> Unit
@@ -70,13 +70,13 @@ fun Element(
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-fun Element(
+inline fun Element(
     update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
     name: String,
 ) = Element(update, Name.of(name))
 
 @Composable
-fun Element(
+inline fun Element(
     update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
     name: String,
     content: @Composable () -> Unit

@@ -32,6 +32,8 @@ object Attributes {
     val id by name<String>("id")
     val `class` by name<MutableSet<String>>("class") { stringSet() }
 
+    val serenityKeepIfRemoved by name<Boolean>("data-keep-if-removed")
+
     operator fun get(name: String): Lazy<UntypedAttribute>? {
         return map[name]
     }

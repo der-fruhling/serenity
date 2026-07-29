@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package net.derfruhling.serenity.tree.platform
 
 import androidx.compose.runtime.Composable
@@ -41,7 +43,8 @@ expect class RealElement(node: UnderlyingElement) : RealElementLike {
 
     val name: Name
 
-    override val node: UnderlyingElement
+    override var node: UnderlyingElement
+        internal set
     override val attributeSet: MutableSet<RealAttribute>
 
     inline fun <T> subscribe(type: EventType<T>, crossinline handler: (T) -> Unit): EventSubscriptionHandle
@@ -69,6 +72,7 @@ object RealElementNamer : Registry.Namer<RealElement> {
     }
 }
 
+@Deprecated("Avoid if possible")
 expect class RealAttribute(node: UnderlyingAttribute) : RealNode {
     constructor(name: Name)
     constructor(name: Name, value: String?)
@@ -78,6 +82,7 @@ expect class RealAttribute(node: UnderlyingAttribute) : RealNode {
     var value: String?
 }
 
+@Deprecated("Avoid if possible")
 object RealAttributeNamer : Registry.Namer<RealAttribute> {
     override fun nameOf(value: RealAttribute): Name {
         return value.name

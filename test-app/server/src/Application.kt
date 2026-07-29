@@ -7,10 +7,7 @@ import net.derfruhling.serenity.ktor.server.registerServerPages
 import net.derfruhling.serenity.ktor.server.serveStatic
 
 fun Application.configure() {
-    install(ComposeHtml) {
-        useScript("/_/js/page.js")
-        useEntrypoint("test-app")
-    }
+    install(ComposeHtml)
 
     routing {
         serveStatic()

@@ -13,23 +13,16 @@ import net.derfruhling.serenity.event.ElementPointerEvent
 import net.derfruhling.serenity.event.On
 import kotlin.jvm.JvmName
 
-object Button : GeneralStructure<Button>(), ElementContext<Button.Attr> {
-    override val attributes: Attr
-        get() = Attr
-
-    object Attr : GeneralStructure.Attr()
-}
-
 @Composable
-fun Button(fn: @Composable Button.() -> Unit) {
+fun Button(fn: @Composable () -> Unit) {
     Element("button") {
-        Button.fn()
+        fn()
     }
 }
 
 @Composable
 @JvmName("ButtonLabeled")
-fun Button(label: String, fn: @Composable Button.() -> Unit = {}) {
+fun Button(label: String, fn: @Composable () -> Unit = {}) {
     Button {
         Text(label.reflow)
         fn()
@@ -41,7 +34,7 @@ fun Button(label: String, fn: @Composable Button.() -> Unit = {}) {
 fun Button(
     label: String,
     onClick: @Client (ElementPointerEvent) -> Unit,
-    fn: @Composable Button.() -> Unit = {}
+    fn: @Composable () -> Unit = {}
 ) {
     Button {
         Text(label.reflow)

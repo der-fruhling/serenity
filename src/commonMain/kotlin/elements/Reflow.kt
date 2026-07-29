@@ -1,10 +1,9 @@
 package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.withCompositionLocal
 import net.derfruhling.serenity.tree.HtmlApplier
 import net.derfruhling.serenity.annotations.HtmlComposable
 
@@ -23,10 +22,10 @@ val String.reflow: String
 
 @Composable
 fun cram(fn: @Composable () -> Unit) {
-    withCompositionLocal(reflowEnabled provides false, fn)
+    CompositionLocalProvider(reflowEnabled provides false, fn)
 }
 
 @Composable
 fun reflow(fn: @Composable () -> Unit) {
-    withCompositionLocal(reflowEnabled provides true, fn)
+    CompositionLocalProvider(reflowEnabled provides true, fn)
 }

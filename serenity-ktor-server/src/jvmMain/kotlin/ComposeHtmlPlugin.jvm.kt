@@ -5,6 +5,9 @@ import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.EmbeddedServer
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.io.buffered
+import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readString
 import sun.misc.Signal
 
 actual fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> EmbeddedServer<E, C>.startAwait(): Unit =
@@ -23,3 +26,14 @@ actual fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> Embedded
 
         startSuspend(wait = true)
     }
+
+actual fun ComposeHtmlConfig.readManifest(): String {
+    return if(manifestAlwaysInFileSystem) {
+        SystemFileSystem.source(manifestPath).use {
+            it.buffered().readString()
+        }
+    } else {
+        ClassLoader.getSystemClassLoader().getResource(manifestPath.toString())?.readText()
+            ?: throw IllegalStateException("Application manifest not found at root of classpath")
+    }
+}

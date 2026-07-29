@@ -1,9 +1,8 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.kotlin.plugin.compose)
-    alias(libs.plugins.kotlin.plugin.serialization)
+    id("net.derfruhling.serenity.base")
+    id("published")
 }
 
 repositories {
@@ -40,7 +39,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(rootProject)
+                api(project(":"))
                 api(libs.ktor.server.core)
                 api(libs.ktor.server.conditionalHeaders)
                 api(libs.kotlinx.collections.immutable)

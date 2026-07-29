@@ -7,6 +7,7 @@ import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
 import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.elements.HeadContext
 import kotlin.reflect.KClass
 
 @Immutable
@@ -21,6 +22,8 @@ interface PageHolder {
 }
 
 interface PageRegistry {
+    fun head(fn: @Composable HeadContext.() -> Unit)
+
     fun <T: PageHolder> register(kClass: KClass<T>, kSerializer: KSerializer<T>, page: T)
 }
 

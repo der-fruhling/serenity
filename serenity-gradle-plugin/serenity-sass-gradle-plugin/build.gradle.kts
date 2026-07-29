@@ -2,6 +2,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     kotlin("plugin.serialization") version embeddedKotlinVersion
+    `maven-publish`
 }
 
 gradlePlugin {
@@ -17,8 +18,16 @@ gradlePlugin {
     }
 }
 
+publishing {
+    repositories {
+        maven(rootProject.layout.projectDirectory.dir("../build/local-publish")) {
+            name = "LocalDirectory"
+        }
+    }
+}
+
 dependencies {
-    api(rootProject)
+    api(project(":"))
     api(plugin(libs.plugins.sassBase))
 }
 

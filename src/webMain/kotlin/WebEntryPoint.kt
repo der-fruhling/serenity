@@ -5,10 +5,16 @@ import androidx.compose.runtime.tooling.CompositionObserver
 import androidx.compose.runtime.tooling.ObservableComposition
 import androidx.compose.runtime.tooling.setObserver
 import js.numbers.JsNumbers.toKotlinDouble
+import js.objects.Object
+import js.objects.TypedPropertyDescriptor
+import js.promise.await
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import net.derfruhling.serenity.elements.currentPageLocal
+import net.derfruhling.serenity.elements.headBuilderLocal
+import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
 import net.derfruhling.serenity.tree.platform.*
@@ -17,6 +23,7 @@ import web.dom.document
 import web.events.EventHandler
 import web.history.PopStateEvent
 import web.history.history
+import web.http.fetchAsync
 import web.location.location
 import web.prompts.alert
 import web.time.DOMHighResTimeStamp
@@ -44,67 +51,134 @@ fun onHtmlContextStart(fn: (HtmlCompositionContext) -> Unit) {
 }
 
 @OptIn(ExperimentalWasmJsInterop::class)
-@InternalPageEntryPoint
-fun invokeCommonEntryPoint(page: PageHolder) {
-    currentPage = page
-    history.pushState(SerialRegistry.encodeToObject(page), "", location.href)
+private fun createSerenityDebugProperty(get: () -> Boolean, set: (Boolean) -> Unit): TypedPropertyDescriptor<JsBoolean> = js("""
+    {get, set}
+""")
 
-    window.onpopstate = EventHandler { ev: PopStateEvent ->
-        val state = ev.state
-        if(state != null) {
-            val page = SerialRegistry.decodeFromObject<PageHolder>(state)
-            navigateDirect(page)
-        }
-    }
-
-    CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock).launch {
-        console.log(Formatter.formatString(Document.CURRENT::format))
-        var clientMode by mutableStateOf(false)
-
-        htmlContext = HtmlCompositionContext(Recomposer(coroutineContext))
-        htmlContextStartHandlers.forEach { it(htmlContext) }
-
-        @OptIn(ExperimentalComposeRuntimeApi::class)
-        if(htmlContext.enableDebugMode) {
-            htmlComposer = RehydratingHtmlTree(htmlContext.compositionContext, ::DebuggingHtmlApplier)
-            htmlComposer.composition.setObserver(LoggingCompositionObserver)
-        } else {
-            htmlComposer = RehydratingHtmlTree(htmlContext.compositionContext)
-        }
-
-        launch {
-            console.debug("Entering recomposition loop")
-            try {
-                htmlComposer.snapshot.enter {
-                    htmlContext.compositionContext.runRecomposeAndApplyChanges()
-                }
-                console.warn("Composition loop exited normally???")
-            } catch (e: Exception) {
-                console.error("Recomposition loop stopped\n${e.stackTraceToString()}")
-                alert("An error has occurred: ${e::class.simpleName}\n${e.message}")
+@OptIn(ExperimentalWasmJsInterop::class)
+internal class WebEntryPoint private constructor() {
+    init {
+        window.onpopstate = EventHandler { ev: PopStateEvent ->
+            val state = ev.state
+            if(state != null) {
+                val page = SerialRegistry.decodeFromObject<PageHolder>(state)
+                navigateDirect(page)
             }
         }
 
-        // first apply what should be the server's version
+        Object.defineProperty(window, "serenityDebug", createSerenityDebugProperty(
+            { htmlContext.enableDebugMode },
+            { htmlContext.enableDebugMode = it }
+        ))
+    }
+
+    private val manifestRequest = fetchAsync("/_/application-manifest.json").flatThen {
+        it.jsonAsync()
+    }
+
+    private lateinit var manifest: Manifest
+    private var first: Boolean = true
+    private var clientMode by mutableStateOf(false)
+    private var page: PageHolder? by mutableStateOf(null)
+
+    private val scope = CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock)
+
+    @OptIn(InternalPageEntryPoint::class)
+    private fun initialize() {
+        scope.launch {
+            console.log(Formatter.formatString(Document.CURRENT::format))
+
+            htmlContext = HtmlCompositionContext(Recomposer(coroutineContext))
+            htmlContextStartHandlers.forEach { it(htmlContext) }
+
+            @OptIn(ExperimentalComposeRuntimeApi::class)
+            if(htmlContext.enableDebugMode) {
+                htmlComposer = RehydratingHtmlTree(htmlContext.compositionContext, ::DebuggingHtmlApplier)
+                htmlComposer.composition.setObserver(LoggingCompositionObserver)
+            } else {
+                htmlComposer = RehydratingHtmlTree(htmlContext.compositionContext)
+            }
+
+            launch {
+                console.debug("Entering recomposition loop")
+                try {
+                    htmlComposer.snapshot.enter {
+                        htmlContext.compositionContext.runRecomposeAndApplyChanges()
+                    }
+                    console.warn("Composition loop exited normally???")
+                } catch (e: Exception) {
+                    console.error("Recomposition loop stopped\n${e.stackTraceToString()}")
+                    alert("An error has occurred: ${e::class.simpleName}\n${e.message}")
+                }
+            }
+
+            manifest = try {
+                val manifestJson = manifestRequest.await()
+                SerialRegistry.decodeFromObject<Manifest>(manifestJson!!)
+            } catch (e: Exception) {
+                alert("An error occurred trying to fetch the application manifest: ${e::class.simpleName}\n${e.message}\n\n" +
+                        "If you're the developer of this site, this error is likely due to a misconfiguration. " +
+                        "Ensure you are service the application-manifest.json file from your server.")
+                Manifest(mutableMapOf())
+            }
+
+            // first apply what should be the server's version
+            setPageContent()
+
+            console.debug(htmlComposer.rootElement.dom)
+            document.replaceChild(htmlComposer.rootElement.dom, document.documentElement)
+
+            // then, update the tree with the client's version
+            htmlComposer.snapshot.enter { clientMode = true }
+        }
+    }
+
+    @OptIn(InternalPageEntryPoint::class)
+    private fun setPageContent() {
         try {
             htmlComposer.setContent {
-                withCompositionLocal(
-                    isClientLocal provides clientMode
-                ) {
-                    page.Main()
+                val manifestServices = remember(manifest) { manifest.provide }
+                CompositionLocalProvider(*manifestServices) {
+                    CompositionLocalProvider(
+                        Manifest.local provides manifest,
+                        isClientLocal provides clientMode,
+                        headBuilderLocal provides headBuilder,
+                        currentPageLocal provides page!!
+                    ) {
+                        page!!.Main()
+                    }
                 }
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             alert("An error occurred: ${e::class.simpleName}\n${e.message}")
-            return@launch
+            throw e
         }
-
-        console.debug(htmlComposer.rootElement.dom)
-        document.replaceChild(htmlComposer.rootElement.dom, document.documentElement)
-
-        // then, update the tree with the client's version
-        htmlComposer.snapshot.enter { clientMode = true }
     }
+
+    internal fun setPage(page: PageHolder) {
+        setPageDirect(page)
+        history.pushState(SerialRegistry.encodeToObject(page), "", page.path)
+    }
+
+    internal fun setPageDirect(page: PageHolder) {
+        currentPage = page
+        this.page = page
+
+        if(first) {
+            initialize()
+            first = false
+        }
+    }
+
+    companion object {
+        val current by lazy { WebEntryPoint() }
+    }
+}
+
+@InternalPageEntryPoint
+fun invokeCommonEntryPoint(page: PageHolder) {
+    WebEntryPoint.current.setPage(page)
 }
 
 @OptIn(ExperimentalWasmJsInterop::class)

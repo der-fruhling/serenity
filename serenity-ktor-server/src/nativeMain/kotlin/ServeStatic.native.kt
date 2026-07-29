@@ -50,12 +50,14 @@ private tailrec fun ensureNoSneakyBusiness(parent: Path, expectedDescendent: Pat
     }
 }
 
+expect fun stat.modifiedTime(): Instant
+
 private data class FileMetadata(
     val lastModified: Instant,
     val size: Long
 ) {
     constructor(stat: stat) : this(
-        lastModified = Instant.fromEpochSeconds(stat.st_mtim.tv_sec, stat.st_mtim.tv_nsec),
+        lastModified = stat.modifiedTime(),
         size = stat.st_size
     )
 }

@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.io.buffered
+import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readString
 import platform.posix.*
 
 private val closeMutex = MutableStateFlow<Int?>(null)
@@ -30,4 +33,10 @@ actual fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> Embedded
     log.info { "Received ${strsignal(signal)?.toKString()}, stopping server" }
     stopSuspend()
     log.info { "Stopped server" }
+}
+
+actual fun ComposeHtmlConfig.readManifest(): String {
+    return SystemFileSystem.source(manifestPath).use {
+        it.buffered().readString()
+    }
 }

@@ -9,7 +9,7 @@ interface AttributeValue {
                 Unit -> ""
                 is AttributeValue -> value.asValue
                 is String -> value
-                is Set<*> -> value.filterNotNull().joinToString(" ") { of(it)!! }
+                is Iterable<*> -> value.filterNotNull().joinToString(" ") { of(it)!! }
                 true -> ""
                 false, null -> null
                 else -> value.toString()

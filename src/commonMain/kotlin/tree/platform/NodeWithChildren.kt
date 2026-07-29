@@ -86,15 +86,15 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
         when (child) {
             is AttributeNode<*> -> {
                 testAttribute()
-                val insertAfterChild = ((index - 1) downTo 0).lastOrNull { children[it] is AttributeNode<*> } ?: -1
-                val newIndex = if(insertAfterChild >= 0) children[insertAfterChild].index.index else 0
+                val insertAfterChild = ((index - 1) downTo 0).firstOrNull { children[it] is AttributeNode<*> } ?: -1
+                val newIndex = if(insertAfterChild >= 0) attributeIndices.indexOf((children[insertAfterChild] as AttributeNode<*>).parser) + 1 else 0
                 real.attributeSet.add(RealAttribute(child.name, child.value?.let { AttributeValue.of(it) }))
                 attributeIndices.add(newIndex, child.parser)
             }
 
             is ComposeNodeWithReal<*> -> {
-                val insertAfterChild = ((index - 1) downTo 0).lastOrNull { children[it] is ElementNode } ?: -1
-                val newIndex = if(insertAfterChild >= 0) children[insertAfterChild].index.index else 0
+                val insertAfterChild = ((index - 1) downTo 0).firstOrNull { children[it] is ElementNode } ?: -1
+                val newIndex = if(insertAfterChild >= 0) childIndices.indexOf(children[insertAfterChild].index) + 1 else 0
                 real.children.add(newIndex, child.real)
                 childIndices.add(newIndex, child.index)
             }

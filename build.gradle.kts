@@ -3,17 +3,24 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.kotlin.plugin.compose)
-    alias(libs.plugins.kotlin.plugin.serialization)
-    alias(libs.plugins.sassBase)
+    id("net.derfruhling.serenity.resources")
+    id("net.derfruhling.serenity.stylist-sass")
     alias(libs.plugins.stabilityAnalyzer)
+    `maven-publish`
 }
 
 allprojects {
     group = "net.derfruhling.serenity"
 
     apply(from = rootProject.file("common.gradle.kts"))
+}
+
+publishing {
+    repositories {
+        maven(rootProject.layout.buildDirectory.dir("local-publish")) {
+            name = "LocalDirectory"
+        }
+    }
 }
 
 kotlin {
@@ -68,6 +75,10 @@ kotlin {
                     group("linux") {
                         withLinuxX64()
                         withLinuxArm64()
+                    }
+
+                    group("macos") {
+                        withMacosArm64()
                     }
                 }
             }
@@ -127,37 +138,4 @@ kotlin {
             }
         }
     }
-}
-
-val resourcesDir = fileTree("src/commonMain/resources/style")
-val sassOutDir = layout.buildDirectory.dir("sass")
-
-val compileSass = tasks.register<SassCompile>("compileSass") {
-    description = "Compiles stylesheets"
-
-    source(resourcesDir)
-    destinationDir.set(sassOutDir)
-    group = BasePlugin.BUILD_GROUP
-}
-
-val resourcesOutPath = layout.buildDirectory.dir("resources")
-val resourcesIn = kotlin.sourceSets.commonMain.map { it.resources }
-
-val processResources = tasks.register<ProcessResources>("processResources") {
-    dependsOn(compileSass)
-
-    into(resourcesOutPath)
-
-    from(resourcesIn) {
-        exclude("style/**")
-    }
-
-    into("style") {
-        from(sassOutDir)
-    }
-}
-
-tasks.named<Test>("jvmTest") {
-    useJUnitPlatform()
-    enableAssertions = true
 }

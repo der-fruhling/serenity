@@ -1,5 +1,6 @@
 package net.derfruhling.serenity.gradle.web
 
+import net.derfruhling.serenity.gradle.SerenityApplicationPlugin
 import net.derfruhling.serenity.gradle.SerenityBasePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -12,6 +13,7 @@ class SerenityWebPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         val base = target.plugins.apply(SerenityBasePlugin::class)
+        target.plugins.apply(SerenityApplicationPlugin::class)
         webExtension = base.extension.extensions.create("web", SerenityWebExtension::class, base.extension)
     }
 }

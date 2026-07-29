@@ -2,12 +2,12 @@ package net.derfruhling.serenity.tree
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ControlledComposition
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.snapshots.MutableSnapshot
 import androidx.compose.runtime.snapshots.Snapshot
-import androidx.compose.runtime.withCompositionLocal
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.SerialSavedData
 import net.derfruhling.serenity.annotations.HtmlComposable
@@ -51,7 +51,7 @@ class RehydratingHtmlTree<Node: RootNode> internal constructor(
 
     inline fun setContent(crossinline fn: @Composable @HtmlComposable () -> Unit) {
         actuallySetContent {
-            withCompositionLocal(LocalSaveableStateRegistry provides saveableRegistry) {
+            CompositionLocalProvider(LocalSaveableStateRegistry provides saveableRegistry) {
                 fn()
             }
         }

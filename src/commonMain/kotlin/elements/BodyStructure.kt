@@ -7,102 +7,57 @@ import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.HtmlComposable
 
-object Div : GeneralStructure<Div>(), ElementContext<Div.Attr> {
-    override val attributes: Attr
-        get() = Attr
-
-    object Attr : GeneralStructure.Attr()
+@Composable
+fun Div(fn: @Composable () -> Unit) {
+    Element("div") { fn() }
 }
 
 @Composable
-fun Div(fn: @Composable Div.() -> Unit) {
-    Element("div") { Div.fn() }
-}
-
-@Composable
-fun Div(vararg classes: String, fn: @Composable Div.() -> Unit = {}) {
-    Element("div") {
-        with(Div) {
-            attributes.classes(*classes)
-
-            fn()
-        }
+fun Div(vararg classes: String, fn: @Composable () -> Unit = {}) {
+    Element(name = "div", update = {
+        set(classes) { this.classes.addAll(it) }
+    }) {
+        fn()
     }
 }
 
-object Span : GeneralStructure<Span>(), ElementContext<Span.Attr> {
-    override val attributes: Attr
-        get() = Attr
-
-    object Attr : GeneralStructure.Attr()
+@Composable
+fun Span(fn: @Composable () -> Unit) {
+    Element("span") { fn() }
 }
 
 @Composable
-fun Span(fn: @Composable Span.() -> Unit) {
-    Element("span") { Span.fn() }
-}
-
-@Composable
-fun Span(vararg classes: String, fn: @Composable Span.() -> Unit = {}) {
-    Element("span") {
-        with(Span) {
-            attributes.classes(*classes)
-
-            fn()
-        }
+fun Span(vararg classes: String, fn: @Composable () -> Unit = {}) {
+    Element(name = "span", update = {
+        set(classes) { this.classes.addAll(it) }
+    }) {
+        fn()
     }
 }
 
-object Paragraph : GeneralStructure<Paragraph>(), ElementContext<Paragraph.Attr> {
-    override val attributes: Attr
-        get() = Attr
-
-    object Attr : GeneralStructure.Attr()
-}
-
-@Composable
-fun Paragraph(fn: @Composable Paragraph.() -> Unit) {
-    Element("p") { Paragraph.fn() }
-}
-
-@Suppress("NOTHING_TO_INLINE")
 @Composable
 fun Paragraph(string: String) {
-    Paragraph { Text(string.reflow) }
-}
-
-object Bold : GeneralStructure<Bold>(), ElementContext<Bold.Attr> {
-    override val attributes: Attr
-        get() = Attr
-
-    object Attr : GeneralStructure.Attr()
+    Element("p") { Text(string.reflow) }
 }
 
 @Composable
-fun Bold(fn: @Composable Bold.() -> Unit) {
-    Element("b") { Bold.fn() }
+fun Bold(fn: @Composable () -> Unit) {
+    Element("b") { fn() }
 }
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-fun Bold(string: String) {
+inline fun Bold(string: String) {
     Bold { Text(string.reflow) }
 }
 
-object Italic : GeneralStructure<Italic>(), ElementContext<Italic.Attr> {
-    override val attributes: Attr
-        get() = Attr
-
-    object Attr : GeneralStructure.Attr()
-}
-
 @Composable
-fun Italic(fn: @Composable Italic.() -> Unit) {
-    Element("b") { Italic.fn() }
+fun Italic(fn: @Composable () -> Unit) {
+    Element("b") { fn() }
 }
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-fun Italic(string: String) {
+inline fun Italic(string: String) {
     Italic { Text(string.reflow) }
 }

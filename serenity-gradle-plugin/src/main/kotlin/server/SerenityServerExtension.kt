@@ -17,7 +17,9 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Compression
 import org.gradle.api.tasks.bundling.Tar
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
+import org.gradle.language.jvm.tasks.ProcessResources
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
@@ -52,14 +54,17 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
             into(distDir)
 
             from(
+                project.layout.buildDirectory.dir("resources/unpacked$dirSuffix"),
                 project.layout.buildDirectory.dir("resources/common$dirSuffix"),
                 project.layout.buildDirectory.dir("resources/server$dirSuffix")
             )
             dependsOn(
+                "unpackResources$suffix",
                 "processCommonResources$suffix",
                 "processServerResources$suffix"
             )
 
+            inputs.dir(project.layout.buildDirectory.dir("resources/unpacked$dirSuffix"))
             inputs.dir(project.layout.buildDirectory.dir("resources/common$dirSuffix"))
             inputs.dir(project.layout.buildDirectory.dir("resources/server$dirSuffix"))
             outputs.dir(distDir)
@@ -76,13 +81,46 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
     fun jvm() {
         base.mpp.jvmToolchain(base.javaVersion.get())
         base.mpp.jvm { configureTarget() }
+
+        configureJvmProcessResources()
     }
 
     fun jvm(configure: Action<KotlinJvmTarget>) {
         base.mpp.jvmToolchain(base.javaVersion.get())
         base.mpp.jvm {
             configureTarget()
+
             configure.execute(this)
+        }
+
+        configureJvmProcessResources()
+    }
+
+    private fun configureJvmProcessResources() {
+        project.tasks.named("jvmProcessResources", ProcessResources::class) {
+            val isProduction = project.providers.gradleProperty("net.derfruhling.serenity.jvm-production").orElse("false")
+            inputs.property("net.derfruhling.serenity.jvm-production", isProduction)
+
+            val (resourceTask, applicationManifestTask) = if (isProduction.get() == "true") {
+                project.tasks.named(resourceTask.get()) to composeApplicationManifestTask
+            } else {
+                project.tasks.named(debugResourceTask.get()) to composeApplicationManifestDebugTask
+            }
+
+            dependsOn(resourceTask)
+            inputs.files(resourceTask)
+
+            if (applicationManifestTask.isPresent) {
+                val task = project.tasks.named(applicationManifestTask.get())
+                dependsOn(task)
+                from(task)
+            }
+
+            into("_static") {
+                from(resourceTask) {
+                    exclude("resource-index.json")
+                }
+            }
         }
     }
 

@@ -1,9 +1,7 @@
 plugins {
     kotlin("jvm")
+    id("published-jvm")
 }
-
-group = "net.derfruhling"
-version = "unspecified"
 
 repositories {
     mavenCentral()

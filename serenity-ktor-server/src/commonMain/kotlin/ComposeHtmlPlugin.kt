@@ -11,13 +11,21 @@ import io.ktor.server.http.link
 import io.ktor.server.plugins.conditionalheaders.ConditionalHeaders
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
 import io.ktor.util.*
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import net.derfruhling.serenity.Name
+import kotlinx.io.buffered
+import kotlinx.io.files.Path
+import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readString
 import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.annotations.HtmlComposable
 import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.manifest.Manifest
+import net.derfruhling.serenity.manifest.Preload
+import net.derfruhling.serenity.manifest.preloadSetLocal
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
 import net.derfruhling.serenity.tree.encodeToString
@@ -30,52 +38,10 @@ import net.derfruhling.serenity.tree.platform.head
 private val logger = KotlinLogging.logger {}
 
 interface ComposeHtmlConfig {
+    var manifestPath: Path
+    var manifestAlwaysInFileSystem: Boolean
+
     fun registerTransformation(fn: Transformer)
-
-    fun useScript(uri: String, async: Boolean = false, defer: Boolean = false, preload: Boolean = uri.startsWith('/')) {
-        registerTransformation {
-            if(preload) {
-                response.link(LinkHeader(uri, listOf(
-                    HeaderValueParam("rel", "preload"),
-                    HeaderValueParam("as", "script")
-                )))
-
-                val titleIndex = it.head!!.findImmediateElementIndexNamed(Name.of("title"))
-                if(titleIndex != -1) {
-                    it.head!!.insert(titleIndex + 1, ElementNode("link").apply {
-                        attribute(Attributes.rel, "preload")
-                        attribute(Attributes.`as`, "script")
-                        attribute(Attributes.href, uri)
-                    })
-                }
-            }
-
-            it.head!!.add(ElementNode("script").apply {
-                if(async) attribute(Attributes.async, null)
-                if(defer) attribute(Attributes.defer, null)
-                attribute(Attributes.src, uri)
-            })
-
-            it
-        }
-    }
-
-    fun useEntrypoint(projectName: String) {
-        registerTransformation {
-            val hash = attributes[pageFunctionName]
-
-            it.head!!.add(ElementNode("script").apply element@ {
-                //language=javascript
-                add(TextNode("""
-                    const entryFn = window["$projectName"]["$hash"];
-                    if(entryFn) entryFn();
-                    else console.warn("Entry function for", "$hash", "not found");
-                """.trimIndent()))
-            })
-
-            it
-        }
-    }
 }
 
 fun interface Transformer {
@@ -84,6 +50,8 @@ fun interface Transformer {
 }
 
 private class ComposeHtmlConfigImpl : ComposeHtmlConfig {
+    override var manifestPath: Path = Path("application-manifest.json")
+    override var manifestAlwaysInFileSystem: Boolean = false
     val transformations = mutableListOf<Transformer>()
 
     override fun registerTransformation(fn: Transformer) {
@@ -91,6 +59,8 @@ private class ComposeHtmlConfigImpl : ComposeHtmlConfig {
         logger.info { "Registered transformation: $fn" }
     }
 }
+
+expect fun ComposeHtmlConfig.readManifest(): String
 
 class KtorHtmlCompositionContext(
     recomposer: Recomposer,
@@ -117,10 +87,14 @@ inline val currentCall: ApplicationCall
     inline get() = applicationCallLocal.current
 
 private val contextKey = AttributeKey<KtorHtmlCompositionContext>("htmlCompositionContext")
+private val manifestKey = AttributeKey<Manifest>("serenityManifest")
 internal val staticFilePath = AttributeKey<String>("staticFilePath")
 
 val ApplicationCall.compositionContext: KtorHtmlCompositionContext
     get() = attributes[contextKey]
+
+val ApplicationCall.currentManifest: Manifest
+    get() = attributes[manifestKey]
 
 val ComposeHtml = createApplicationPlugin(
     "ComposeHtml",
@@ -129,27 +103,53 @@ val ComposeHtml = createApplicationPlugin(
     val impl = pluginConfig as ComposeHtmlConfigImpl
     val context = KtorHtmlCompositionContext(Recomposer(application.coroutineContext), impl.transformations.toImmutableList())
 
+    val manifestText = impl.readManifest()
+    val manifest = SerialRegistry.decode<Manifest>(manifestText)
+
     on(CallSetup) {
         it.attributes[contextKey] = context
+        it.attributes[manifestKey] = manifest
     }
 
     application.install(ConditionalHeaders)
 
-    logger.info { "ComposeHTML initialized" }
+    val serializedManifest by lazy { SerialRegistry.encode(manifest) }
+
+    application.routing {
+        get("/_/application-manifest.json") {
+            call.respondText(ContentType.Application.Json, HttpStatusCode.OK) {
+                serializedManifest
+            }
+        }
+    }
+
+    logger.info { "Serenity framework initialized" }
 }
 
 suspend inline fun ApplicationCall.respondCompose(crossinline fn: @Composable @HtmlComposable () -> Unit) {
     val context = compositionContext
     val tree = RehydratingHtmlTree(context.compositionContext, request.uri, ::PlatformApplier)
+    val preloadSet = mutableSetOf<Preload>()
 
     tree.setContent {
         val call = remember { this }
+        val manifest = remember { call.currentManifest }
 
-        CompositionLocalProvider(
-            applicationCallLocal provides call
-        ) {
-            fn()
+        CompositionLocalProvider(*manifest.provide) {
+            CompositionLocalProvider(
+                applicationCallLocal provides call,
+                preloadSetLocal provides preloadSet
+            ) {
+                fn()
+            }
         }
+    }
+
+    for((href, `as`) in preloadSet) {
+        response.link(LinkHeader(href, listOf(
+            HeaderValueParam("rel", "preload"),
+            HeaderValueParam("as", `as`)
+        )))
     }
 
     val doc = context.transform(this, tree.root) { /* TODO */ }

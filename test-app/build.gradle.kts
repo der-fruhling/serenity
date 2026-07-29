@@ -1,12 +1,14 @@
-import io.freefair.gradle.plugins.sass.SassCompile
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     id("net.derfruhling.serenity")
     id("net.derfruhling.serenity.stylist-sass")
     id("net.derfruhling.serenity.convention")
-    id("net.derfruhling.serenity.vendor-resources")
-    id("com.google.devtools.ksp") version "2.3.10"
+    id("net.derfruhling.serenity.resources")
+}
+
+dependencies {
+    resources(project(":"))
 }
 
 serenity {
@@ -14,7 +16,7 @@ serenity {
     disableDefaultDependencies = true
 
     dependencies {
-        implementation(rootProject)
+        implementation(project(":"))
         implementation(libs.androidx.compose.runtime)
         implementation(libs.androidx.compose.runtime.saveable)
         implementation(libs.oshai.kotlinLogging)
