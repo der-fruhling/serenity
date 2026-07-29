@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-    resources(project(":"))
+    resources(project(":serenity-core"))
 }
 
 serenity {
@@ -16,7 +16,7 @@ serenity {
     disableDefaultDependencies = true
 
     dependencies {
-        implementation(project(":"))
+        implementation(project(":serenity-core"))
         implementation(libs.androidx.compose.runtime)
         implementation(libs.androidx.compose.runtime.saveable)
         implementation(libs.oshai.kotlinLogging)

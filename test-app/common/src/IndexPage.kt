@@ -5,6 +5,7 @@ import androidx.compose.runtime.saveable.rememberSerializable
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.Client
+import net.derfruhling.serenity.annotations.RegisterPage
 import net.derfruhling.serenity.elements.Button
 import net.derfruhling.serenity.elements.Content
 import net.derfruhling.serenity.elements.FlexColumn
@@ -18,7 +19,7 @@ import net.derfruhling.serenity.elements.UnorderedList
 private val logger = KotlinLogging.logger {}
 
 @Composable
-@Page("/")
+@RegisterPage("/")
 fun IndexPage() = PageLayout("Hello, world!") {
     Header {
         Text("Header")
@@ -37,7 +38,7 @@ fun IndexPage() = PageLayout("Hello, world!") {
 }
 
 @Composable
-@Page("/buttons")
+@RegisterPage("/buttons")
 fun ButtonsPage() = Page("Buttons") {
     var count by remember { mutableIntStateOf(0) }
 
@@ -48,7 +49,7 @@ fun ButtonsPage() = Page("Buttons") {
 }
 
 @Composable
-@Page("/save-data")
+@RegisterPage("/save-data")
 fun SaveDataPage() = Page("Buttons") {
     var count by rememberSerializable { mutableIntStateOf(0) }
 

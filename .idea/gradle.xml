@@ -12,10 +12,10 @@
                   <project path="$PROJECT_DIR$/buildSrc" />
                 </projects>
               </build>
-              <build path="$PROJECT_DIR$/serenity-gradle-plugin" name="serenity-gradle-plugin">
+              <build path="$PROJECT_DIR$/gradle-plugin" name="serenity-gradle-plugin">
                 <projects>
-                  <project path="$PROJECT_DIR$/serenity-gradle-plugin" />
-                  <project path="$PROJECT_DIR$/serenity-gradle-plugin/serenity-sass-gradle-plugin" />
+                  <project path="$PROJECT_DIR$/gradle-plugin" />
+                  <project path="$PROJECT_DIR$/gradle-plugin/sass-plugin" />
                 </projects>
               </build>
             </builds>
@@ -28,13 +28,15 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/serenity-collector-lib" />
-            <option value="$PROJECT_DIR$/serenity-common-collector" />
-            <option value="$PROJECT_DIR$/serenity-gradle-plugin" />
-            <option value="$PROJECT_DIR$/serenity-gradle-plugin/serenity-sass-gradle-plugin" />
-            <option value="$PROJECT_DIR$/serenity-ktor-collector" />
-            <option value="$PROJECT_DIR$/serenity-ktor-server" />
-            <option value="$PROJECT_DIR$/serenity-web-collector" />
+            <option value="$PROJECT_DIR$/gradle-plugin" />
+            <option value="$PROJECT_DIR$/gradle-plugin/sass-plugin" />
+            <option value="$PROJECT_DIR$/modules/annotations" />
+            <option value="$PROJECT_DIR$/modules/collectors/common" />
+            <option value="$PROJECT_DIR$/modules/collectors/ktor" />
+            <option value="$PROJECT_DIR$/modules/collectors/lib" />
+            <option value="$PROJECT_DIR$/modules/collectors/web" />
+            <option value="$PROJECT_DIR$/modules/core" />
+            <option value="$PROJECT_DIR$/modules/ktor-server" />
             <option value="$PROJECT_DIR$/test-app" />
           </set>
         </option>

@@ -4,7 +4,7 @@
 // https://docs.gradle.org/current/userguide/settings_file_basics.html
 
 pluginManagement {
-    includeBuild("serenity-gradle-plugin")
+    includeBuild("gradle-plugin")
 }
 
 plugins {
@@ -15,14 +15,23 @@ plugins {
 
 rootProject.name = "serenity"
 
-include("serenity-ktor-server")
-include("serenity-collector-lib")
-include("serenity-common-collector")
-include("serenity-ktor-collector")
-include("serenity-web-collector")
+fun module(name: String, dirName: String = name) {
+    include("serenity-$name")
+    project(":serenity-$name").projectDir = file("modules").resolve(dirName)
+}
+
+fun collector(name: String, dirName: String = name) {
+    include("serenity-$name")
+    project(":serenity-$name").projectDir = file("modules").resolve("collectors").resolve(dirName)
+}
+
+module("annotations")
+module("core")
+module("ktor-server")
+
+collector("collector-lib", "lib")
+collector("common-collector", "common")
+collector("ktor-collector", "ktor")
+collector("web-collector", "web")
 
 include("test-app")
-
-develocity {
-    server
-}
