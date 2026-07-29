@@ -2,14 +2,8 @@ package net.derfruhling.serenity.tree
 
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.attribute.Attribute
-import net.derfruhling.serenity.attribute.AttributeMap
 import net.derfruhling.serenity.attribute.Attributes
-import net.derfruhling.serenity.tree.platform.AttributeNode
-import net.derfruhling.serenity.tree.platform.ComposeNode
-import net.derfruhling.serenity.tree.platform.Document
-import net.derfruhling.serenity.tree.platform.ElementNode
-import net.derfruhling.serenity.tree.platform.NodeWithChildren
-import net.derfruhling.serenity.tree.platform.TextNode
+import net.derfruhling.serenity.tree.platform.*
 import kotlin.jvm.JvmInline
 
 @JvmInline
@@ -36,10 +30,7 @@ value class Builder<N : ComposeNode>(val node: N) {
 
     fun <T : Any> attribute(name: Attribute<T>, value: T?) {
         require(node is ElementNode)
-        val newNode = AttributeNode<T>()
-        newNode.parser = name
-        newNode.value = value
-        node.insert(node.children.size, newNode)
+        node.attribute(name, value)
     }
 
     inline fun page(title: String, lang: String = "en", head: Builder<ElementNode>.() -> Unit = {}, body: Builder<ElementNode>.() -> Unit): ElementNode =

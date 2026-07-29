@@ -167,6 +167,7 @@ open class ElementNode : NodeWithChildren<RealElement>, ChildNode<NodeWithChildr
         return real.attributeSet.find { it.name == name.name }?.let { name.parser(it.value) }
     }
 
+    @Deprecated("Avoid if possible")
     fun <T : Any> attributeNode(name: Attribute<T>): AttributeNode<*>? =
         this.children.find { it is AttributeNode<*> && it.parser == name } as AttributeNode<*>?
 
