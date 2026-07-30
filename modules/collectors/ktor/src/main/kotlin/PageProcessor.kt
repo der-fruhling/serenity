@@ -49,6 +49,7 @@ class PageProcessor(
                 out.appendLine("import net.derfruhling.serenity.ktor.server.pageFunctionName")
                 out.appendLine("import net.derfruhling.serenity.ktor.server.currentCall")
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
+                out.appendLine("import net.derfruhling.serenity.PageDetails")
                 out.appendLine("import net.derfruhling.serenity.annotations.HtmlComposable")
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.SerialName")
@@ -56,7 +57,7 @@ class PageProcessor(
                 out.appendLine()
                 out.appendLine("@Serializable")
                 out.appendLine("@SerialName(\"${hashFunctionName(function.qualifiedName!!.asString())}\")")
-                out.appendLine("actual object ${function.simpleName.asString()} : PageHolder {")
+                out.appendLine("actual data object ${function.simpleName.asString()} : PageHolder {")
 
                 if (!function.annotations.any { it.annotationType.resolve().declaration.qualifiedName!!.asString() == "androidx.compose.runtime.Composable" }) {
                     logger.error("Pages must be composable", function)
@@ -65,8 +66,9 @@ class PageProcessor(
                 val annotation = function.getAnnotationsByType(RegisterPage::class).single()
 
                 out.appendLine("""
-                    actual override val id: String = "$hashFunctionName";
-                    actual override val path: String = "${annotation.path}";
+                    actual override val id: String = "$hashFunctionName"
+                    actual override val path: String = "${annotation.path}"
+                    actual override val details: PageDetails = ${generatePageDetails(annotation)}
                 """.trimIndent().prependIndent("    "))
 
                 out.appendLine(

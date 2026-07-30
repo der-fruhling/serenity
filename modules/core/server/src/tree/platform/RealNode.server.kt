@@ -7,6 +7,7 @@ import com.fleeksoft.ksoup.nodes.Attribute
 import com.fleeksoft.ksoup.nodes.Attributes
 import com.fleeksoft.ksoup.nodes.Comment
 import com.fleeksoft.ksoup.nodes.Document
+import com.fleeksoft.ksoup.nodes.DocumentType
 import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.nodes.Node
 import com.fleeksoft.ksoup.nodes.TextNode
@@ -21,6 +22,7 @@ actual fun RealNode(base: UnderlyingBase): RealNode? {
         is Attribute -> RealAttribute(base)
         is TextNode -> RealText(base)
         is Comment -> RealComment(base)
+        is DocumentType -> RealDocumentType(base)
         else -> null
     }
 }
@@ -43,6 +45,17 @@ actual class RealComment actual constructor(actual override val node: Underlying
         }
 
     actual constructor() : this(Comment(""))
+}
+
+actual class RealDocumentType actual constructor(actual override val node: UnderlyingDocType) : RealNode {
+    actual val type: String = node.name()
+    actual val public: String = node.publicId()
+    actual val system: String = node.systemId()
+
+    actual constructor(from: RealDocumentType)
+            : this(from.type, from.public, from.system)
+    actual constructor(type: String, public: String, system: String)
+            : this(DocumentType(type, public, system))
 }
 
 actual sealed class RealElementLike : RealNode {
@@ -179,6 +192,8 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
             }
         }
 
+        override fun clear() {}
+
         override val size: Int
             get() = 0
     }
@@ -189,8 +204,8 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
         get() = UnsupportedAttributeSet
 
     actual fun applyFragment(realDocumentFragment: RealDocumentFragment) {
-        for(child in realDocumentFragment.children) {
-            val base = when(val node = child.node) {
+        for (child in realDocumentFragment.children) {
+            val base = when (val node = child.node) {
                 is Node -> node.clone() as UnderlyingBase
                 is Attribute -> node.clone() as UnderlyingBase
                 else -> error("whut")

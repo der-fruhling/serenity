@@ -7,9 +7,9 @@ import net.derfruhling.serenity.tree.HtmlApplier
 expect sealed interface RootNode
 
 val RootNode.head: ElementNode?
-    get() = (this as NodeWithChildren<*>).findDescendentNamed(Name.of("head"), 3)
+    get() = (this as NodeWithChildren<*, *>).findDescendentNamed(Name.of("head"), 3)
 val RootNode.body: ElementNode?
-    get() = (this as NodeWithChildren<*>).findDescendentNamed(Name.of("body"), 3)
+    get() = (this as NodeWithChildren<*, *>).findDescendentNamed(Name.of("body"), 3)
 
 expect open class PlatformApplier(document: RootNode) : Applier<ComposeNode>, HtmlApplier {
     final override var current: ComposeNode private set
@@ -21,4 +21,5 @@ expect open class PlatformApplier(document: RootNode) : Applier<ComposeNode>, Ht
     override fun remove(index: Int, count: Int)
     override fun move(from: Int, to: Int, count: Int)
     override fun clear()
+    override fun reuse()
 }

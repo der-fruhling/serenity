@@ -14,7 +14,6 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.androidx.compose.runtime)
                 api(libs.kotlinx.datetime)
             }
         }

@@ -58,20 +58,6 @@ fun FlexRow(
 }
 
 @Composable
-fun PageLayout(
-    title: String,
-    lang: String = "en",
-    head: @Composable HeadContext.() -> Unit = {},
-    fn: @Composable () -> Unit
-) {
-    Page(title, lang, head, updateBody = {
-        init { classes.add(StyleClasses.PageLayout) }
-    }) {
-        fn()
-    }
-}
-
-@Composable
 fun Header(fn: @Composable () -> Unit) {
     Element("header") { fn() }
 }

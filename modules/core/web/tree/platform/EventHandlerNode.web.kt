@@ -10,9 +10,9 @@ actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>(), ComposeNodeLif
     actual var type: EventType<T> by Delegates.notNull()
     actual var fn: (T) -> Unit by Delegates.notNull()
     actual override val index: Index<EventHandlerNode<T>> = Index(this)
-    actual override var parent: NodeWithChildren<*>? = null
+    actual override var parent: NodeWithChildren<*, *>? = null
 
-    actual override fun reparent(newParent: NodeWithChildren<*>) {
+    actual override fun reparent(newParent: NodeWithChildren<*, *>) {
         parent = newParent
     }
 

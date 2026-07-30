@@ -10,11 +10,11 @@ import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventTarget
 import net.derfruhling.serenity.event.EventType
 
-open class ElementNode : NodeWithChildren<RealElement>, ChildNode<NodeWithChildren<*>>, ComposeNodeLifecycleCallback, EventTarget {
-    override var parent: NodeWithChildren<*>? = null
+open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<NodeWithChildren<*, *>>, ComposeNodeLifecycleCallback, EventTarget {
+    override var parent: NodeWithChildren<*, *>? = null
     override val index: Index<ElementNode> = Index(this)
 
-    override fun reparent(newParent: NodeWithChildren<*>) {
+    override fun reparent(newParent: NodeWithChildren<*, *>) {
         parent = newParent
     }
 
@@ -35,6 +35,13 @@ open class ElementNode : NodeWithChildren<RealElement>, ChildNode<NodeWithChildr
         _name = real.name
         byUnderlyingItem[real.node] = this
         super.updateReal()
+    }
+
+    override fun existingFrom(child: RealNode): ChildNode<in ElementNode>? {
+        return when(child) {
+            is RealText -> TextNode(child)
+            else -> simpleExisting(child)
+        }
     }
 
     constructor() : super()

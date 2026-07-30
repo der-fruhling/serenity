@@ -3,7 +3,7 @@ package net.derfruhling.serenity.tree.platform
 import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.event.EventType
 
-abstract class AbstractEventHandlerNode<T> : ComposeNode, ChildNode<NodeWithChildren<*>>, DisallowReuse
+abstract class AbstractEventHandlerNode<T> : ComposeNode, ChildNode<NodeWithChildren<*, *>>, DisallowReuse
 
 expect class EventHandlerNode<T> : AbstractEventHandlerNode<T> {
     var type: EventType<T>
@@ -11,8 +11,8 @@ expect class EventHandlerNode<T> : AbstractEventHandlerNode<T> {
 
     override val index: Index<EventHandlerNode<T>>
 
-    override var parent: NodeWithChildren<*>?
-    override fun reparent(newParent: NodeWithChildren<*>)
+    override var parent: NodeWithChildren<*, *>?
+    override fun reparent(newParent: NodeWithChildren<*, *>)
 
     override fun format(fmt: Formatter)
 }

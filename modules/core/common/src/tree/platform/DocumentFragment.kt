@@ -2,9 +2,9 @@ package net.derfruhling.serenity.tree.platform
 
 import net.derfruhling.serenity.Formatter
 
-open class DocumentFragment(node: RealDocumentFragment) : NodeWithChildren<RealDocumentFragment>(node), RootNode {
+open class DocumentFragment(node: RealDocumentFragment) : DocumentLike<DocumentFragment, RealDocumentFragment>(node), RootNode {
     @set:Deprecated("Document cannot have a parent", level = DeprecationLevel.ERROR)
-    override var parent: NodeWithChildren<RealDocumentFragment>?
+    override var parent: NodeWithChildren<*, *>?
         get() = null
         set(_) {
             throw UnsupportedOperationException("cannot set parent of document")
@@ -18,6 +18,13 @@ open class DocumentFragment(node: RealDocumentFragment) : NodeWithChildren<RealD
     @Deprecated("Document cannot have a parent", level = DeprecationLevel.ERROR)
     override fun testAttribute() {
         throw UnsupportedOperationException("cannot insert attributes into document root")
+    }
+
+    override fun existingFrom(child: RealNode): ChildNode<in DocumentFragment>? {
+        return when(child) {
+            is RealDocumentType -> DocumentTypeNode(child)
+            else -> simpleExisting(child)
+        }
     }
 
     override fun format(fmt: Formatter) {

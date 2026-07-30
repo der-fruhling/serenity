@@ -8,6 +8,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":serenity-annotations"))
     testImplementation(kotlin("test"))
 }
 

@@ -32,6 +32,7 @@ class ExpectProcessor(
                 if (function.packageName.asString().isNotEmpty()) out.append("package ${function.packageName.asString()}\n\n")
                 out.appendLine("import androidx.compose.runtime.Composable")
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
+                out.appendLine("import net.derfruhling.serenity.PageDetails")
                 out.appendLine("import net.derfruhling.serenity.annotations.HtmlComposable")
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.SerialName")
@@ -43,6 +44,7 @@ class ExpectProcessor(
                     expect object ${function.simpleName.asString()} : PageHolder {
                         override val id: String
                         override val path: String
+                        override val details: PageDetails
 
                         @Composable
                         @HtmlComposable

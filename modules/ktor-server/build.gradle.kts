@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
-    id("multiplatform-compose")
+    id("multiplatform-server-compose")
     id("net.derfruhling.serenity.convention")
     id("published")
 }
@@ -12,31 +12,6 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(25)
-    jvm()
-
-    macosArm64()
-    linuxArm64()
-    linuxX64()
-
-    compilerOptions {
-        freeCompilerArgs.add("-Xexpect-actual-classes")
-    }
-
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    applyHierarchyTemplate {
-        common {
-            withJvm()
-
-            group("native") {
-                group("linux") {
-                    withLinuxX64()
-                    withLinuxArm64()
-                }
-            }
-        }
-    }
-
     sourceSets {
         commonMain {
             dependencies {

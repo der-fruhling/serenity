@@ -1,9 +1,9 @@
 package net.derfruhling.serenity.tree
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Composition
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ControlledComposition
+import androidx.compose.runtime.ReusableComposition
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.snapshots.MutableSnapshot
@@ -18,7 +18,7 @@ import net.derfruhling.serenity.tree.platform.RootNode
 class RehydratingHtmlTree<Node: RootNode> internal constructor(
     val root: Node,
     val applier: HtmlApplier,
-    val composition: Composition,
+    val composition: ReusableComposition,
     val saveableRegistry: SaveableStateRegistry
 ) : AutoCloseable {
     companion object {
@@ -26,7 +26,7 @@ class RehydratingHtmlTree<Node: RootNode> internal constructor(
     }
 
     val rootElement: ElementNode
-        get() = (root as NodeWithChildren<*>).children.first { it is ElementNode } as ElementNode
+        get() = (root as NodeWithChildren<*, *>).children.first { it is ElementNode } as ElementNode
 
     private lateinit var composable: @Composable @HtmlComposable () -> Unit
 
@@ -42,7 +42,7 @@ class RehydratingHtmlTree<Node: RootNode> internal constructor(
     @PublishedApi
     internal fun actuallySetContent(fn: @Composable @HtmlComposable () -> Unit) {
         composable = fn
-        composition.setContent {
+        composition.setContentWithReuse {
             snapshot.enter {
                 fn()
             }

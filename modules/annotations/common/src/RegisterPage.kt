@@ -4,5 +4,6 @@ package net.derfruhling.serenity.annotations
 @Retention(AnnotationRetention.BINARY)
 @MustBeDocumented
 annotation class RegisterPage(
-    val path: String
+    val path: String,
+    val title: String = ""
 )

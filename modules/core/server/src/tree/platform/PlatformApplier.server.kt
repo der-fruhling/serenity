@@ -29,9 +29,9 @@ actual open class PlatformApplier actual constructor(document: RootNode) :
 
     actual override fun insertTopDown(index: Int, instance: ComposeNode) {}
 
-    private inline fun <R> withChildren(f: (NodeWithChildren<*>) -> R): R {
+    private inline fun <R> withChildren(f: (NodeWithChildren<*, *>) -> R): R {
         val value = current
-        require(value is NodeWithChildren<*>) { "The current node cannot have children" }
+        require(value is NodeWithChildren<*, *>) { "The current node cannot have children" }
         return f(value)
     }
 
@@ -53,5 +53,9 @@ actual open class PlatformApplier actual constructor(document: RootNode) :
 
     actual override fun clear() {
         withChildren { it.clear() }
+    }
+
+    actual override fun reuse() {
+        current.reuse()
     }
 }

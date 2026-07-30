@@ -50,6 +50,7 @@ class WebCollector(
                 out.appendLine("import androidx.compose.runtime.SideEffect")
                 out.appendLine("import net.derfruhling.serenity.annotations.HtmlComposable")
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
+                out.appendLine("import net.derfruhling.serenity.PageDetails")
                 out.appendLine("import net.derfruhling.serenity.InternalPageEntryPoint")
                 out.appendLine("import net.derfruhling.serenity.invokeCommonEntryPoint")
                 out.appendLine("import kotlinx.serialization.Serializable")
@@ -58,7 +59,7 @@ class WebCollector(
                 out.appendLine()
                 out.appendLine("@Serializable")
                 out.appendLine("@SerialName(\"${hashFunctionName(function.qualifiedName!!.asString())}\")")
-                out.appendLine("actual object ${function.simpleName.asString()} : PageHolder {")
+                out.appendLine("actual data object ${function.simpleName.asString()} : PageHolder {")
 
                 if (!function.annotations.any { it.annotationType.resolve().declaration.qualifiedName!!.asString() == "androidx.compose.runtime.Composable" }) {
                     logger.error("Pages must be composable", function)
@@ -67,8 +68,9 @@ class WebCollector(
                 val annotation = function.getAnnotationsByType(RegisterPage::class).single()
 
                 out.appendLine("""
-                    actual override val id: String = "$hashFunctionName";
-                    actual override val path: String = "${annotation.path}";
+                    actual override val id: String = "$hashFunctionName"
+                    actual override val path: String = "${annotation.path}"
+                    actual override val details: PageDetails = ${generatePageDetails(annotation)}
                 """.trimIndent().prependIndent("    "))
 
                 out.appendLine(

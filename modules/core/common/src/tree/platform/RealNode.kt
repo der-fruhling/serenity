@@ -33,6 +33,17 @@ expect class RealComment(node: UnderlyingComment) : RealNode {
     var commentContent: String
 }
 
+expect class RealDocumentType(node: UnderlyingDocType) : RealNode {
+    override val node: UnderlyingDocType
+
+    constructor(from: RealDocumentType)
+    constructor(type: String, public: String = "", system: String = "")
+
+    val type: String
+    val public: String
+    val system: String
+}
+
 expect sealed class RealElementLike : RealNode {
     abstract val attributeSet: MutableSet<RealAttribute>
     val children: MutableList<RealNode>

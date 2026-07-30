@@ -11,13 +11,15 @@ import io.ktor.util.AttributeKey
 import kotlinx.serialization.KSerializer
 import net.derfruhling.serenity.PageHolder
 import net.derfruhling.serenity.PageRegistry
+import net.derfruhling.serenity.PageTemplate
+import net.derfruhling.serenity.TemplateBuilder
 import net.derfruhling.serenity.elements.HeadContext
 import net.derfruhling.serenity.elements.currentPageLocal
-import net.derfruhling.serenity.elements.headBuilderLocal
+import net.derfruhling.serenity.elements.pageTemplateLocal
 import kotlin.reflect.KClass
 
 val pageFunctionName = AttributeKey<String>("pageFunctionName")
-private var headBuilder: (@Composable HeadContext.() -> Unit)? by mutableStateOf(null)
+private var pageTemplate: PageTemplate? by mutableStateOf(null)
 
 @Deprecated("Use registerServerPages() instead", ReplaceWith("registerServerPages { TODO() }"))
 fun Route.register(page: PageHolder) {
@@ -28,10 +30,9 @@ private fun Route.commonRegister(page: PageHolder) {
     get(page.path) {
         call.respondCompose {
             CompositionLocalProvider(
-                headBuilderLocal provides headBuilder,
-                currentPageLocal provides page
+                pageTemplateLocal provides pageTemplate
             ) {
-                page.Main()
+                pageTemplate?.BuildPage(mutableStateOf(page))
             }
         }
     }
@@ -39,8 +40,8 @@ private fun Route.commonRegister(page: PageHolder) {
 
 fun Route.registerServerPages(fn: PageRegistry.() -> Unit) {
     (object : PageRegistry() {
-        override fun head(fn: @Composable HeadContext.() -> Unit) {
-            headBuilder = fn
+        override fun template(fn: @Composable TemplateBuilder.() -> Unit) {
+            pageTemplate = PageTemplate(fn)
         }
 
         override fun <T : PageHolder> register(kClass: KClass<T>, kSerializer: KSerializer<T>, page: T) {

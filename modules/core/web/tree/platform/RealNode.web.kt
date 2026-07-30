@@ -6,6 +6,7 @@ import js.array.asList
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventType
+import web.dom.DocumentType
 import web.dom.Node
 import web.dom.ParentNode
 import web.dom.document
@@ -17,12 +18,13 @@ private const val HTML_NS = "http://www.w3.org/1999/xhtml"
 actual fun RealNode(base: UnderlyingBase): RealNode? {
     // No, kotlin. This when is not exhaustive
     @Suppress("REDUNDANT_ELSE_IN_WHEN")
-    return when(base.nodeType) {
+    return when (base.nodeType) {
         Node.DOCUMENT_NODE -> RealDocument(base as UnderlyingDocument)
         Node.ELEMENT_NODE -> RealElement(base as UnderlyingElement)
         Node.TEXT_NODE -> RealText(base as UnderlyingText)
         Node.COMMENT_NODE -> RealComment(base as UnderlyingComment)
         Node.ATTRIBUTE_NODE -> RealAttribute(base as UnderlyingAttribute)
+        Node.DOCUMENT_TYPE_NODE -> RealDocumentType(base as UnderlyingDocType)
         else -> null
     }
 }
@@ -47,6 +49,17 @@ actual class RealComment actual constructor(actual override val node: Underlying
     actual constructor() : this(document.createComment(""))
 }
 
+actual class RealDocumentType actual constructor(actual override val node: UnderlyingDocType) : RealNode {
+    actual val type: String = node.name
+    actual val public: String = node.publicId
+    actual val system: String = node.systemId
+
+    actual constructor(from: RealDocumentType)
+            : this(from.type, from.public, from.system)
+    actual constructor(type: String, public: String, system: String)
+            : this(document.implementation.createDocumentType(type, public, system))
+}
+
 actual sealed class RealElementLike : RealNode {
     internal abstract val parent: ParentNode
 
@@ -54,7 +67,7 @@ actual sealed class RealElementLike : RealNode {
 
     private inner class ChildList : AbstractMutableList<RealNode>() {
         override fun add(index: Int, element: RealNode) {
-            when(index) {
+            when (index) {
                 0 -> parent.prepend(element.node)
                 size -> parent.append(element.node)
                 else -> parent.childNodes[index].before(element.node)
@@ -122,10 +135,14 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
 
         override fun add(element: RealAttribute): Boolean {
             map[element.name] = element
-            if(element.name.namespaceUrl != null) {
-                node.setAttributeNS(element.name.namespace, (element.name.namespace?.let { "$it:" } ?: "") + element.name.localName, element.value ?: "")
+            if (element.name.namespaceUrl != null) {
+                node.setAttributeNS(
+                    element.name.namespace,
+                    (element.name.namespace?.let { "$it:" } ?: "") + element.name.localName,
+                    element.value ?: "")
             } else {
-                node.setAttribute((element.name.namespace?.let { "$it:" } ?: "") + element.name.localName, element.value ?: "")
+                node.setAttribute((element.name.namespace?.let { "$it:" } ?: "") + element.name.localName,
+                    element.value ?: "")
             }
             return true
         }
@@ -138,10 +155,13 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
                 override fun remove() {
                     iterator.remove()
 
-                    if(current.name.namespaceUrl != null) {
-                        node.attributes.removeNamedItemNS(current.name.namespaceUrl, (current.name.namespace?.let { "$it:" } ?: "") + current.name.localName)
+                    if (current.name.namespaceUrl != null) {
+                        node.attributes.removeNamedItemNS(
+                            current.name.namespaceUrl,
+                            (current.name.namespace?.let { "$it:" } ?: "") + current.name.localName)
                     } else {
-                        node.attributes.removeNamedItem((current.name.namespace?.let { "$it:" } ?: "") + current.name.localName)
+                        node.attributes.removeNamedItem((current.name.namespace?.let { "$it:" }
+                            ?: "") + current.name.localName)
                     }
                 }
 
@@ -197,6 +217,8 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
             }
         }
 
+        override fun clear() {}
+
         override val size: Int
             get() = 0
     }
@@ -208,9 +230,13 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
 
     override val children: MutableList<RealNode> = object : AbstractMutableList<RealNode>() {
         override fun add(index: Int, element: RealNode) {
-            if(element is RealElement) {
+            if (element is RealElement) {
                 val newIndex = _children.indexOfFirst { it is RealElement }
-                if(newIndex >= 0) this[newIndex] = element
+                if (newIndex >= 0) this[newIndex] = element
+                else _children.add(index, element)
+            } else if (element is RealDocumentType) {
+                val newIndex = _children.indexOfFirst { it is RealDocumentType }
+                if (newIndex >= 0) this[newIndex] = element
                 else _children.add(index, element)
             } else _children.add(index, element)
         }
@@ -223,18 +249,33 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
             index: Int,
             element: RealNode
         ): RealNode {
-            if(element is RealElement) {
-                node.documentElement.replaceChildren(*element.children.mapNotNull { (it as? RealElement)?.node }.toTypedArray())
+            when (element) {
+                is RealElement -> {
+                    node.documentElement.replaceChildren(*element.children.mapNotNull { (it as? RealElement)?.node }
+                        .toTypedArray())
 
-                for(attr in element.attributeSet) {
-                    node.documentElement.attributes.setNamedItemNS(attr.node)
+                    for (attr in element.attributeSet) {
+                        node.documentElement.attributes.setNamedItemNS(attr.node)
+                    }
+
+                    element.node = node.documentElement
+
+                    return element
                 }
 
-                element.node = node.documentElement
+                is RealDocumentType -> {
+                    if (node.doctype != null) {
+                        node.doctype?.replaceWith(element.node)
+                    } else {
+                        node.prepend(element.node)
+                    }
 
-                return element
-            } else {
-                return _children.set(index, element)
+                    return element
+                }
+
+                else -> {
+                    return _children.set(index, element)
+                }
             }
         }
 
@@ -291,7 +332,9 @@ actual class RealAttribute actual constructor(actual override val node: Underlyi
 
     actual var value: String?
         get() = node.value
-        set(value) { node.value = value ?: "" }
+        set(value) {
+            node.value = value ?: ""
+        }
 }
 
 actual class RealDocumentFragment actual constructor(actual override val node: UnderlyingDocumentFragment) :

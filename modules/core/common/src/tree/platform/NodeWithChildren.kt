@@ -5,7 +5,7 @@ import net.derfruhling.serenity.attribute.AttributeValue
 import net.derfruhling.serenity.attribute.UntypedAttribute
 import net.derfruhling.serenity.tree.Apply
 
-sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, Apply<ChildNode<*>, NodeWithChildren<*>> {
+sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLike> : ComposeNodeWithReal<U>, Apply<ChildNode<*>, NodeWithChildren<*, *>> {
     override fun updateReal() {
         attributeIndices.clear()
         childIndices.clear()
@@ -16,15 +16,20 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
         }
 
         for(child in real.children) {
-            addExisting(when(child) {
-                is RealText -> TextNode(child)
-                is RealComment -> CommentNode(child)
-                is RealElement -> ElementRegistry.derive(child)
-                RealUnknown -> continue
-                else -> error("invalid node: $child")
-            })
+            addExisting(existingFrom(child) ?: continue)
         }
     }
+
+    internal fun simpleExisting(child: RealNode): ChildNode<NodeWithChildren<*, *>>? {
+        return when(child) {
+            is RealComment -> CommentNode(child)
+            is RealElement -> ElementRegistry.derive(child)
+            RealUnknown -> null
+            else -> error("invalid node: $child")
+        }
+    }
+
+    internal abstract fun existingFrom(child: RealNode): ChildNode<in This>?
 
     constructor() : super()
     constructor(from: U) : super(from)
@@ -37,6 +42,7 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
     internal open fun testAttribute() {}
 
     override fun add(child: ChildNode<*>) {
+        child.realize()
         child.index.index = children.size
         children.add(child)
         when(child) {
@@ -79,6 +85,7 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
     }
 
     override fun insert(index: Int, child: ChildNode<*>) {
+        child.realize()
         child.index.index = index
         children.add(index, child)
         ((index + 1)..<children.size).forEach { i -> children[i].index.index = i }
@@ -93,7 +100,7 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
             }
 
             is ComposeNodeWithReal<*> -> {
-                val insertAfterChild = ((index - 1) downTo 0).firstOrNull { children[it] is ElementNode } ?: -1
+                val insertAfterChild = ((index - 1) downTo 0).firstOrNull { children[it] !is AttributeNode<*> } ?: -1
                 val newIndex = if(insertAfterChild >= 0) childIndices.indexOf(children[insertAfterChild].index) + 1 else 0
                 real.children.add(newIndex, child.real)
                 childIndices.add(newIndex, child.index)
@@ -160,7 +167,7 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
             for(node in children) {
                 yield(node)
 
-                if(node is NodeWithChildren<*>) {
+                if(node is NodeWithChildren<*, *>) {
                     yieldAll(node.descendents)
                 }
             }
@@ -188,7 +195,7 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
 
                 if(maxDepth > 0) {
                     for(node in children) {
-                        if(node is NodeWithChildren<*>) {
+                        if(node is NodeWithChildren<*, *>) {
                             yieldAll(node.descendentsMaxDepth(maxDepth - 1))
                         }
                     }
@@ -203,5 +210,14 @@ sealed class NodeWithChildren<U : RealElementLike> : ComposeNodeWithReal<U>, App
 
     fun findDescendentNamed(name: Name, maxDepth: Int): ElementNode? {
         return descendentsMaxDepth(maxDepth).find { it is ElementNode && it.name == name } as ElementNode?
+    }
+
+    override fun reuse() {
+        attributeIndices.clear()
+        childIndices.clear()
+        children.clear()
+
+        real.attributeSet.clear()
+        real.children.clear()
     }
 }

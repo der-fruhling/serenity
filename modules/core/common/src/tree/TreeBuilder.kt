@@ -10,7 +10,7 @@ import kotlin.jvm.JvmInline
 @BuilderDsl
 value class Builder<N : ComposeNode>(val node: N) {
     inline fun element(fn: Builder<ElementNode>.() -> Unit): ElementNode {
-        require(node is NodeWithChildren<*>)
+        require(node is NodeWithChildren<*, *>)
         val element = ElementNode()
         Builder(element).fn()
         node.insert(node.children.size, element)
@@ -23,7 +23,7 @@ value class Builder<N : ComposeNode>(val node: N) {
         element(Name.of(name), fn)
 
     fun text(content: String): TextNode = TextNode().apply {
-        require(node is NodeWithChildren<*>)
+        require(node is NodeWithChildren<*, *>)
         textContent = content
         node.insert(node.children.size, this)
     }

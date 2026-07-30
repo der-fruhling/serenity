@@ -13,14 +13,12 @@ import net.derfruhling.serenity.elements.Footer
 import net.derfruhling.serenity.elements.Header
 import net.derfruhling.serenity.elements.Link
 import net.derfruhling.serenity.elements.Page
-import net.derfruhling.serenity.elements.PageLayout
-import net.derfruhling.serenity.elements.UnorderedList
 
 private val logger = KotlinLogging.logger {}
 
 @Composable
-@RegisterPage("/")
-fun IndexPage() = PageLayout("Hello, world!") {
+@RegisterPage("/", title = "Hello, world!")
+fun IndexPage() {
     Header {
         Text("Header")
     }
@@ -38,8 +36,8 @@ fun IndexPage() = PageLayout("Hello, world!") {
 }
 
 @Composable
-@RegisterPage("/buttons")
-fun ButtonsPage() = Page("Buttons") {
+@RegisterPage("/buttons", title = "Buttons")
+fun ButtonsPage() {
     var count by remember { mutableIntStateOf(0) }
 
     Button("Click count: $count", onClick = @Client {
@@ -49,8 +47,8 @@ fun ButtonsPage() = Page("Buttons") {
 }
 
 @Composable
-@RegisterPage("/save-data")
-fun SaveDataPage() = Page("Buttons") {
+@RegisterPage("/save-data", title = "Buttons")
+fun SaveDataPage() {
     var count by rememberSerializable { mutableIntStateOf(0) }
 
     Button("Click count: $count", onClick = @Client {

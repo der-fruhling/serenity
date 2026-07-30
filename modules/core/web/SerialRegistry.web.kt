@@ -24,12 +24,12 @@ inline fun <reified T> SerialRegistry.decodeFromObject(obj: JsAny): T {
     return decode(jsonStringify(obj))
 }
 
-internal var headBuilder by mutableStateOf(null as (@Composable HeadContext.() -> Unit)?)
+internal var pageTemplate by mutableStateOf(null as PageTemplate?)
 
 fun SerialRegistry.registerClientPages(fn: PageRegistry.() -> Unit) {
     (object : PageRegistry() {
-        override fun head(fn: @Composable (HeadContext.() -> Unit)) {
-            headBuilder = fn
+        override fun template(fn: @Composable (TemplateBuilder.() -> Unit)) {
+            pageTemplate = PageTemplate(fn)
         }
 
         override fun <T : PageHolder> register(kClass: KClass<T>, kSerializer: KSerializer<T>, page: T) {

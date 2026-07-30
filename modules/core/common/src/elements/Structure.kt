@@ -1,14 +1,16 @@
 package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisallowComposableCalls
+import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.ReusableContent
 import androidx.compose.runtime.Updater
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
+import net.derfruhling.serenity.DocumentType
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.PageHolder
+import net.derfruhling.serenity.PageTemplate
 import net.derfruhling.serenity.Text
-import net.derfruhling.serenity.annotations.RegisterPage
 import net.derfruhling.serenity.attribute.Attributes
 import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.ResourceResolver
@@ -105,34 +107,50 @@ object HtmlContext {
 }
 
 @Composable
-fun html(lang: String = "en", content: @Composable HtmlContext.() -> Unit) =
+fun html(lang: String = "en", content: @Composable HtmlContext.() -> Unit) {
+    DocumentType()
+
     Element(name = "html", update = {
         set(lang) { attribute(Attributes.lang, it) }
     }) { HtmlContext.content() }
+}
 
-val headBuilderLocal = compositionLocalOf { null as (@Composable HeadContext.() -> Unit)? }
+val pageTemplateLocal = compositionLocalOf { null as PageTemplate? }
 val currentPageLocal = compositionLocalOf<PageHolder> { throw IllegalStateException() }
 
+object PageContext {
+    @Composable
+    @NonRestartableComposable
+    fun Head(fn: @Composable HeadContext.() -> Unit)  {
+        HtmlContext.head {
+            fn()
+        }
+    }
+
+    @Composable
+    inline fun Body(noinline updateBody: Updater<ElementNode>.() -> Unit = {}, crossinline fn: @Composable () -> Unit)  {
+        HtmlContext.body(updateBody) {
+            fn()
+        }
+    }
+
+    @Composable
+    @NonRestartableComposable
+    inline fun Layout(crossinline updateBody: Updater<ElementNode>.() -> Unit = {}, crossinline fn: @Composable () -> Unit) {
+        Body(updateBody = {
+            init { classes.add(StyleClasses.PageLayout) }
+            updateBody()
+        }) { fn() }
+    }
+}
+
+@Suppress("NOTHING_TO_INLINE")
 @Composable
 fun Page(
-    title: String,
     lang: String = "en",
-    head: @Composable HeadContext.() -> Unit = {},
-    updateBody: @DisallowComposableCalls Updater<ElementNode>.() -> Unit = {},
-    body: @Composable () -> Unit
-) {
+    body: @Composable PageContext.() -> Unit
+) = ReusableContent(lang) {
     html(lang) {
-        head {
-            title(title)
-
-            val headBuilder = headBuilderLocal.current
-            if(headBuilder != null) {
-                headBuilder()
-            }
-
-            head()
-        }
-
-        body(updateBody) { body() }
+        PageContext.body()
     }
 }

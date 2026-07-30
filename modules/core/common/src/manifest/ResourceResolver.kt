@@ -1,6 +1,6 @@
 package net.derfruhling.serenity.manifest
 
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.compositionLocalOf
 
 interface ResourceResolver {
     fun getTargetUrl(sourceUrl: String): String
@@ -17,6 +17,6 @@ interface ResourceResolver {
     }
 
     companion object {
-        val local = staticCompositionLocalOf<ResourceResolver> { Default }
+        val local = compositionLocalOf<ResourceResolver> { Default }
     }
 }

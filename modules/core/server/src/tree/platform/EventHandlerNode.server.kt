@@ -10,9 +10,9 @@ actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>() {
         get() = {}
         set(value) {}
     actual override val index: Index<EventHandlerNode<T>> = Index(this)
-    actual override var parent: NodeWithChildren<*>? = null
+    actual override var parent: NodeWithChildren<*, *>? = null
 
-    actual override fun reparent(newParent: NodeWithChildren<*>) {
+    actual override fun reparent(newParent: NodeWithChildren<*, *>) {
         parent = newParent
     }
 

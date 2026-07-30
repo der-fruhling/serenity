@@ -9,7 +9,7 @@ import net.derfruhling.serenity.attribute.AttributeValue
 class AttributeNode<T : Any> : ComposeNodeWithReal<RealAttribute>, ChildNode<ElementNode> {
     override var parent: ElementNode? = null
 
-    override fun reparent(newParent: NodeWithChildren<*>) {
+    override fun reparent(newParent: NodeWithChildren<*, *>) {
         require(newParent is ElementNode) { "Attributes only valid on elements" }
         parent = newParent
     }

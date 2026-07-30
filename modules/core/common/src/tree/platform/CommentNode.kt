@@ -2,13 +2,13 @@ package net.derfruhling.serenity.tree.platform
 
 import net.derfruhling.serenity.Formatter
 
-class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real), ChildNode<NodeWithChildren<*>> {
+class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real), ChildNode<NodeWithChildren<*, *>> {
     constructor() : this(RealComment())
 
     override val index: Index<CommentNode> = Index(this)
-    override var parent: NodeWithChildren<*>? = null
+    override var parent: NodeWithChildren<*, *>? = null
 
-    override fun reparent(newParent: NodeWithChildren<*>) {
+    override fun reparent(newParent: NodeWithChildren<*, *>) {
         parent = newParent
     }
 
@@ -20,5 +20,9 @@ class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real), C
                 write(commentContent)
             }
         }
+    }
+
+    override fun reuse() {
+        commentContent = ""
     }
 }

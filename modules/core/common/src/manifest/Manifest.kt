@@ -71,6 +71,6 @@ data class Manifest(
         get() = entries.values.flatMap { it.provide.toList() }.toTypedArray()
 
     companion object {
-        val local = staticCompositionLocalOf<Manifest> { throw IllegalStateException("No manifest provided") }
+        val local = compositionLocalOf<Manifest> { throw IllegalStateException("No manifest provided") }
     }
 }

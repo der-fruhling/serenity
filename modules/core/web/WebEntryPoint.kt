@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import net.derfruhling.serenity.elements.currentPageLocal
-import net.derfruhling.serenity.elements.headBuilderLocal
+import net.derfruhling.serenity.elements.pageTemplateLocal
 import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
@@ -24,7 +24,6 @@ import web.events.EventHandler
 import web.history.PopStateEvent
 import web.history.history
 import web.http.fetchAsync
-import web.location.location
 import web.prompts.alert
 import web.time.DOMHighResTimeStamp
 import web.window.window
@@ -79,7 +78,8 @@ internal class WebEntryPoint private constructor() {
     private lateinit var manifest: Manifest
     private var first: Boolean = true
     private var clientMode by mutableStateOf(false)
-    private var page: PageHolder? by mutableStateOf(null)
+    private val mutableStatePage = mutableStateOf<PageHolder?>(null)
+    private var page: PageHolder? by mutableStatePage
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock)
 
@@ -142,10 +142,10 @@ internal class WebEntryPoint private constructor() {
                     CompositionLocalProvider(
                         Manifest.local provides manifest,
                         isClientLocal provides clientMode,
-                        headBuilderLocal provides headBuilder,
-                        currentPageLocal provides page!!
+                        pageTemplateLocal provides pageTemplate
                     ) {
-                        page!!.Main()
+                        pageTemplateLocal.current?.BuildPage(mutableStatePage)
+                            ?: PageContent()
                     }
                 }
             }
@@ -153,6 +153,13 @@ internal class WebEntryPoint private constructor() {
             e.printStackTrace()
             alert("An error occurred: ${e::class.simpleName}\n${e.message}")
             throw e
+        }
+    }
+
+    @Composable
+    private fun PageContent() {
+        CompositionLocalProvider(currentPageLocal provides page!!) {
+            page!!.Main()
         }
     }
 
@@ -260,7 +267,7 @@ private object LoggingCompositionObserver : CompositionObserver {
     }
 
     override fun onReadInScope(scope: RecomposeScope, value: Any) {
-        console.debug("onReadInScope($scope, $value)")
+        console.debug("onReadInScope($scope, ${value::class.simpleName} :> $value)")
     }
 
     override fun onScopeExit(scope: RecomposeScope) {
@@ -272,7 +279,7 @@ private object LoggingCompositionObserver : CompositionObserver {
     }
 
     override fun onScopeInvalidated(scope: RecomposeScope, value: Any?) {
-        console.debug("onScopeInvalidated($scope, $value)")
+        console.debug("onScopeInvalidated($scope, ${value?.let { value::class.simpleName }} :> $value)")
     }
 
     override fun onScopeDisposed(scope: RecomposeScope) {
