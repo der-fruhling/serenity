@@ -6,15 +6,41 @@ import net.derfruhling.serenity.annotations.LimitedAvailability
 import net.derfruhling.serenity.annotations.Since
 import net.derfruhling.serenity.annotations.UnsupportedOnSafari
 import net.derfruhling.serenity.annotations.WidelyAvailable
+import net.derfruhling.serenity.dom.Window
+import net.derfruhling.serenity.tree.platform.Document
 import net.derfruhling.serenity.tree.platform.ElementNode
 
 @Serializable
 expect sealed interface BuiltinEventType
 
 @Serializable
+expect sealed interface BuiltinPlainWindowEvent : BuiltinEventType
+
+@Serializable
+expect sealed interface BuiltinPlainDocumentEvent : BuiltinEventType
+
+@Serializable
 expect sealed interface BuiltinPointerEvent : BuiltinEventType
 
+@Serializable
+expect sealed interface BuiltinPageTransitionEvent : BuiltinEventType
+
 typealias ElementPointerEvent = PointerEvent<ElementNode>
+
+expect fun testSupportedDocumentEvent(name: String): Boolean
+expect fun testSupportedWindowEvent(name: String): Boolean
+
+@Serializable
+data object BeforeUnloadEvent : EventType<Event<Window>>("beforeunload"), BuiltinPlainWindowEvent
+
+@Serializable
+@WidelyAvailable(Since(year = 2021, month = Month.APRIL))
+data object VisibilityChangeEvent : EventType<Event<Document>>("visibilitychange"), BuiltinPlainDocumentEvent {
+    override val isSupported: Boolean by lazy { testSupportedDocumentEvent(name) }
+}
+
+@Serializable
+data object PageHideEvent : EventType<PageTransitionEvent>("visibilitychange"), BuiltinPageTransitionEvent
 
 @Serializable
 data object ClickEvent : EventType<ElementPointerEvent>("click"), BuiltinPointerEvent {

@@ -8,10 +8,7 @@ import js.numbers.JsNumbers.toKotlinDouble
 import js.objects.Object
 import js.objects.TypedPropertyDescriptor
 import js.promise.await
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.*
 import net.derfruhling.serenity.elements.currentPageLocal
 import net.derfruhling.serenity.elements.pageTemplateLocal
 import net.derfruhling.serenity.manifest.Manifest
@@ -38,6 +35,7 @@ annotation class InternalPageEntryPoint
 
 lateinit var htmlContext: HtmlCompositionContext private set
 lateinit var currentPage: PageHolder internal set
+internal var compositionCompletionHandler: (() -> Unit)? = null
 
 private val htmlContextStartHandlers = mutableListOf<(HtmlCompositionContext) -> Unit>()
 
@@ -77,14 +75,16 @@ internal class WebEntryPoint private constructor() {
 
     private lateinit var manifest: Manifest
     private var first: Boolean = true
+    private var initialized: Boolean = false
     private var clientMode by mutableStateOf(false)
     private val mutableStatePage = mutableStateOf<PageHolder?>(null)
     private var page: PageHolder? by mutableStatePage
 
-    private val scope = CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock)
+    private lateinit var scope: CoroutineScope
 
     @OptIn(InternalPageEntryPoint::class)
     private fun initialize() {
+        scope = CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock)
         scope.launch {
             console.log(Formatter.formatString(Document.CURRENT::format))
 
@@ -97,6 +97,7 @@ internal class WebEntryPoint private constructor() {
                 htmlComposer.composition.setObserver(LoggingCompositionObserver)
             } else {
                 htmlComposer = RehydratingHtmlTree(htmlContext.compositionContext)
+                htmlComposer.composition.setObserver(CompletionObserver)
             }
 
             launch {
@@ -106,6 +107,8 @@ internal class WebEntryPoint private constructor() {
                         htmlContext.compositionContext.runRecomposeAndApplyChanges()
                     }
                     console.warn("Composition loop exited normally???")
+                } catch (_: CancellationException) {
+
                 } catch (e: Exception) {
                     console.error("Recomposition loop stopped\n${e.stackTraceToString()}")
                     alert("An error has occurred: ${e::class.simpleName}\n${e.message}")
@@ -122,6 +125,7 @@ internal class WebEntryPoint private constructor() {
                 Manifest(mutableMapOf())
             }
 
+            initialized = true
             // first apply what should be the server's version
             setPageContent()
 
@@ -131,6 +135,8 @@ internal class WebEntryPoint private constructor() {
             // then, update the tree with the client's version
             htmlComposer.snapshot.enter { clientMode = true }
         }
+
+        first = false
     }
 
     @OptIn(InternalPageEntryPoint::class)
@@ -174,8 +180,14 @@ internal class WebEntryPoint private constructor() {
 
         if(first) {
             initialize()
-            first = false
         }
+    }
+
+    @OptIn(InternalPageEntryPoint::class)
+    fun tearDown() {
+        first = true
+        htmlComposer.close()
+        scope.cancel()
     }
 
     companion object {
@@ -257,32 +269,60 @@ private class DebuggingHtmlApplier(root: RootNode) : PlatformApplier(root) {
 }
 
 @OptIn(ExperimentalComposeRuntimeApi::class)
-private object LoggingCompositionObserver : CompositionObserver {
+private abstract class AbstractCompletionObserver : CompositionObserver {
+    override fun onBeginComposition(composition: ObservableComposition) {}
+
+    override fun onEndComposition(composition: ObservableComposition) {
+        compositionCompletionHandler?.invoke()
+    }
+
+    override fun onReadInScope(scope: RecomposeScope, value: Any) {}
+
+    override fun onScopeDisposed(scope: RecomposeScope) {}
+
+    override fun onScopeEnter(scope: RecomposeScope) {}
+
+    override fun onScopeExit(scope: RecomposeScope) {}
+
+    override fun onScopeInvalidated(scope: RecomposeScope, value: Any?) {}
+}
+
+private object CompletionObserver : AbstractCompletionObserver()
+
+@OptIn(ExperimentalComposeRuntimeApi::class)
+private object LoggingCompositionObserver : AbstractCompletionObserver() {
     override fun onBeginComposition(composition: ObservableComposition) {
         console.groupCollapsed("onBeginComposition($composition)")
+        super.onBeginComposition(composition)
     }
 
     override fun onScopeEnter(scope: RecomposeScope) {
         console.group("onScopeEnter($scope)")
+        super.onScopeEnter(scope)
     }
 
     override fun onReadInScope(scope: RecomposeScope, value: Any) {
         console.debug("onReadInScope($scope, ${value::class.simpleName} :> $value)")
+        super.onReadInScope(scope, value)
     }
 
     override fun onScopeExit(scope: RecomposeScope) {
         console.groupEnd()
+        super.onScopeExit(scope)
     }
 
     override fun onEndComposition(composition: ObservableComposition) {
         console.groupEnd()
+        super.onEndComposition(composition)
     }
 
     override fun onScopeInvalidated(scope: RecomposeScope, value: Any?) {
         console.debug("onScopeInvalidated($scope, ${value?.let { value::class.simpleName }} :> $value)")
+        super.onScopeInvalidated(scope, value)
     }
 
     override fun onScopeDisposed(scope: RecomposeScope) {
         console.debug("onScopeDisposed($scope)")
+        super.onScopeDisposed(scope)
     }
 }

@@ -4,8 +4,10 @@ package net.derfruhling.serenity
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.ReusableContent
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
@@ -51,9 +53,21 @@ class PageTemplate(val builder: @Composable TemplateBuilder.() -> Unit) {
             @Composable
             override fun SlotBody() {
                 val page = state.value!!
-                CompositionLocalProvider(currentPageLocal provides page) {
+                val saveDataManager = remember(page) { SaveDataManager(page) }
+
+                DisposableEffect(saveDataManager) {
+                    onDispose {
+                        saveDataManager.save()
+                    }
+                }
+
+                saveDataManager.enter {
                     ReusableContent(page) {
-                        page.Main()
+                        CompositionLocalProvider(
+                            currentPageLocal provides page
+                        ) {
+                            page.Main()
+                        }
                     }
                 }
             }
@@ -61,4 +75,11 @@ class PageTemplate(val builder: @Composable TemplateBuilder.() -> Unit) {
 
         builder.builder()
     }
+}
+
+expect class SaveDataManager(page: PageHolder) {
+    fun save()
+
+    @Composable
+    fun enter(fn: @Composable () -> Unit)
 }

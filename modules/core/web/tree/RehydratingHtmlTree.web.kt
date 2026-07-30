@@ -15,28 +15,13 @@ import net.derfruhling.serenity.tree.platform.textContent
 fun RehydratingHtmlTree(
     parent: CompositionContext,
     document: Document,
-    applier: (Document) -> HtmlApplier,
-    restoreValues: SerialSavedData?
+    applier: (Document) -> HtmlApplier
 ): RehydratingHtmlTree<Document> {
     val applier = applier(document)
     return RehydratingHtmlTree(
         root = document,
         applier = applier,
-        composition = ReusableComposition(applier, parent),
-        saveableRegistry = SaveableStateRegistry(restoreValues?.items()) { true }
-    )
-}
-
-fun RehydratingHtmlTree(
-    parent: CompositionContext,
-    applier: (Document) -> HtmlApplier,
-    restoreValues: SerialSavedData?
-): RehydratingHtmlTree<Document> {
-    return RehydratingHtmlTree(
-        parent,
-        Document.CURRENT,
-        applier,
-        restoreValues
+        composition = ReusableComposition(applier, parent)
     )
 }
 
@@ -44,19 +29,10 @@ fun RehydratingHtmlTree(
     parent: CompositionContext,
     applier: (Document) -> HtmlApplier
 ): RehydratingHtmlTree<Document> {
-    val doc = Document.CURRENT
-    val restoreValues = doc.findImmediateElementNamed(Name.of("head"))
-        ?.findImmediateElementNamed(Name.of("script")) {
-            it.attribute(Attributes.type) == "application/json+x-compose-shared"
-        }
-        ?.textContent
-        ?.let { SerialRegistry.decode<SerialSavedData>(it) }
-
     return RehydratingHtmlTree(
         parent,
-        doc,
-        applier,
-        restoreValues
+        Document.CURRENT,
+        applier
     )
 }
 

@@ -150,14 +150,6 @@ suspend inline fun ApplicationCall.respondCompose(crossinline fn: @Composable @H
     }
 
     val doc = context.transform(this, tree.root) { /* TODO */ }
-    val save = tree.save()
-
-    if(!save.isEmpty) {
-        doc.head!!.add(ElementNode("script").apply {
-            attribute(Attributes.type, "application/json+x-compose-shared")
-            add(TextNode(SerialRegistry.encode(save).replace("<", "\\u003e")))
-        })
-    }
 
     respondText(ContentType.Text.Html) { doc.encodeToString() }
 }

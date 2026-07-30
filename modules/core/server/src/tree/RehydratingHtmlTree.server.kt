@@ -9,29 +9,25 @@ import net.derfruhling.serenity.tree.platform.Document
 fun RehydratingHtmlTree(
     parent: CompositionContext,
     createDocument: () -> Document,
-    applier: (Document) -> HtmlApplier,
-    restoreValues: SerialSavedData? = null
+    applier: (Document) -> HtmlApplier
 ): RehydratingHtmlTree<Document> {
     val doc = createDocument()
     val applier = applier(doc)
     return RehydratingHtmlTree(
         root = doc,
         applier = applier,
-        composition = ReusableComposition(applier, parent),
-        saveableRegistry = SaveableStateRegistry(restoreValues?.items()) { true }
+        composition = ReusableComposition(applier, parent)
     )
 }
 
 fun RehydratingHtmlTree(
     parent: CompositionContext,
     baseUri: String,
-    applier: (Document) -> HtmlApplier,
-    restoreValues: SerialSavedData? = null
+    applier: (Document) -> HtmlApplier
 ): RehydratingHtmlTree<Document> {
     return RehydratingHtmlTree(
         parent,
         createDocument = { Document(baseUri) },
-        applier,
-        restoreValues
+        applier
     )
 }

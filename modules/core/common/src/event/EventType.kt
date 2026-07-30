@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 expect abstract class EventType<T> {
     val name: String
+    open val isSupported: Boolean
 
     constructor(name: String)
 }

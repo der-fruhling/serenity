@@ -18,13 +18,8 @@ import net.derfruhling.serenity.tree.platform.RootNode
 class RehydratingHtmlTree<Node: RootNode> internal constructor(
     val root: Node,
     val applier: HtmlApplier,
-    val composition: ReusableComposition,
-    val saveableRegistry: SaveableStateRegistry
+    val composition: ReusableComposition
 ) : AutoCloseable {
-    companion object {
-        private val logger = KotlinLogging.logger {}
-    }
-
     val rootElement: ElementNode
         get() = (root as NodeWithChildren<*, *>).children.first { it is ElementNode } as ElementNode
 
@@ -39,8 +34,7 @@ class RehydratingHtmlTree<Node: RootNode> internal constructor(
         }
     )
 
-    @PublishedApi
-    internal fun actuallySetContent(fn: @Composable @HtmlComposable () -> Unit) {
+    fun setContent(fn: @Composable @HtmlComposable () -> Unit) {
         composable = fn
         composition.setContentWithReuse {
             snapshot.enter {
@@ -49,20 +43,8 @@ class RehydratingHtmlTree<Node: RootNode> internal constructor(
         }
     }
 
-    inline fun setContent(crossinline fn: @Composable @HtmlComposable () -> Unit) {
-        actuallySetContent {
-            CompositionLocalProvider(LocalSaveableStateRegistry provides saveableRegistry) {
-                fn()
-            }
-        }
-    }
-
     override fun close() {
         composition.dispose()
-    }
-
-    fun save(): SerialSavedData {
-        return SerialSavedData.of(saveableRegistry.performSave())
     }
 }
 

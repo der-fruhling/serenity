@@ -3,6 +3,7 @@ package net.derfruhling.serenity.tree.platform
 import androidx.compose.runtime.Applier
 import net.derfruhling.serenity.Stack
 import net.derfruhling.serenity.tree.HtmlApplier
+import web.dom.document
 
 actual sealed interface RootNode
 
@@ -50,7 +51,9 @@ actual open class PlatformApplier actual constructor(document: RootNode) :
     }
 
     actual override fun clear() {
-        withChildren { it.clear() }
+        if(!document.hidden) {
+            withChildren { it.clear() }
+        }
     }
 
     actual override fun reuse() {

@@ -7,4 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Polymorphic
 @Immutable
-actual abstract class EventType<T> actual constructor(actual val name: String)
+actual abstract class EventType<T> actual constructor(actual val name: String) {
+    actual open val isSupported: Boolean
+        get() = false
+}

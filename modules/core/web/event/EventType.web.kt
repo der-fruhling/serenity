@@ -12,4 +12,7 @@ sealed interface GenerateFromDomEvent<T> {
 @Serializable
 @Polymorphic
 @Immutable
-actual abstract class EventType<T> actual constructor(actual val name: String) : GenerateFromDomEvent<T>
+actual abstract class EventType<T> actual constructor(actual val name: String) : GenerateFromDomEvent<T> {
+    actual open val isSupported: Boolean
+        get() = true
+}
