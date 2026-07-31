@@ -5,7 +5,7 @@ interface AttributeValue {
 
     companion object {
         fun of(value: Any?): String? =
-            when(value) {
+            when (value) {
                 Unit -> ""
                 is AttributeValue -> value.asValue
                 is String -> value

@@ -4,7 +4,7 @@ import kotlinx.datetime.Month
 import net.derfruhling.serenity.annotations.*
 
 @WidelyAvailable(Since(year = 2020, month = Month.JULY))
-interface PointerEvent<T: EventTarget> : MouseEvent<T> {
+interface PointerEvent<T : EventTarget> : MouseEvent<T> {
     @NewWebApi
     @NewlyAvailable(Since(year = 2024, month = Month.DECEMBER))
     val altitudeAngle: Float?

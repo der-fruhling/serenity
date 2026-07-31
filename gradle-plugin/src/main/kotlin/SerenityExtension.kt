@@ -4,18 +4,13 @@ import org.gradle.api.DomainObjectSet
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionConstraint
-import org.gradle.api.internal.artifacts.dependencies.DefaultImmutableVersionConstraint
 import org.gradle.api.internal.artifacts.dependencies.DefaultMutableVersionConstraint
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Internal
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.findByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
-import java.io.Serializable
-import java.util.jar.Manifest
 import javax.inject.Inject
 
 @SerenityGradleDsl
@@ -55,13 +50,19 @@ abstract class SerenityExtension(internal val mpp: KotlinMultiplatformExtension)
 
     fun dependencies(fn: SerenityDependencyHandler.() -> Unit) {
         mpp.sourceSets.named("commonMain") {
-            dependencies { object : SerenityDependencyHandler, KotlinDependencyHandler by this {}.fn() }
+            dependencies {
+                object : SerenityDependencyHandler,
+                         KotlinDependencyHandler by this {}.fn()
+            }
         }
     }
 
     fun testDependencies(fn: SerenityDependencyHandler.() -> Unit) {
         mpp.sourceSets.named("commonTest") {
-            dependencies { object : SerenityDependencyHandler, KotlinDependencyHandler by this {}.fn() }
+            dependencies {
+                object : SerenityDependencyHandler,
+                         KotlinDependencyHandler by this {}.fn()
+            }
         }
     }
 }

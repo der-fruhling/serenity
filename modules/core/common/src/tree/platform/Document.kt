@@ -3,7 +3,9 @@ package net.derfruhling.serenity.tree.platform
 import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.event.EventTarget
 
-open class Document(node: RealDocument) : DocumentLike<Document, RealDocument>(node), RootNode, EventTarget {
+open class Document(node: RealDocument) : DocumentLike<Document, RealDocument>(node),
+                                          RootNode,
+                                          EventTarget {
     init {
         updateReal()
     }
@@ -26,7 +28,7 @@ open class Document(node: RealDocument) : DocumentLike<Document, RealDocument>(n
     }
 
     override fun existingFrom(child: RealNode): ChildNode<in Document>? {
-        return when(child) {
+        return when (child) {
             is RealDocumentType -> DocumentTypeNode(child)
             else -> simpleExisting(child)
         }
@@ -34,7 +36,7 @@ open class Document(node: RealDocument) : DocumentLike<Document, RealDocument>(n
 
     override fun format(fmt: Formatter) {
         fmt.enter(Formatter.Begin.DOCUMENT, "Document") {
-            for(child in children) {
+            for (child in children) {
                 child.format(fmt)
             }
         }

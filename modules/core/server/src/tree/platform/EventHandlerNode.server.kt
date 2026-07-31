@@ -17,7 +17,7 @@ actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>() {
     }
 
     actual override fun format(fmt: Formatter) {
-        if(fmt.deepIntrospect) {
+        if (fmt.deepIntrospect) {
             fmt.enter(Formatter.Begin.DEBUG, "EventHandler") {
                 write(type.name)
             }

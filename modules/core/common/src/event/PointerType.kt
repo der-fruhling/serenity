@@ -16,7 +16,7 @@ sealed class PointerType(private val text: String) {
     }
 
     companion object {
-        fun fromString(string: String) = when(string) {
+        fun fromString(string: String) = when (string) {
             "mouse" -> Mouse
             "pen" -> Pen
             "touch" -> Touch

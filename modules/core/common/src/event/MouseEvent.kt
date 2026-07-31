@@ -10,8 +10,10 @@ interface MouseEvent<T : EventTarget> : UIEvent<T> {
     val clientY: Int
     val ctrlKey: Boolean
     val metaKey: Boolean
+
     @NewWebApi
     val movementX: Double?
+
     @NewWebApi
     val movementY: Double?
     val offsetX: Double

@@ -16,7 +16,7 @@ abstract class AttributeMap {
     abstract fun remove(attribute: UntypedAttribute): Any?
 
     protected open fun <T : Any> AttributeMap.defaultValueOf(attribute: Attribute<T>): T? =
-        when(val default = attribute.defaultValue) {
+        when (val default = attribute.defaultValue) {
             null -> null
             else -> attribute.kClass.safeCast(default()).also {
                 explicitSet(attribute, it)
@@ -31,11 +31,13 @@ abstract class AttributeMap {
             ?: defaultValueOf(attribute)
 
     fun <T : Any> put(attribute: Attribute<T>, value: T?): T? {
-        if(!attribute.permitExplicitSet) error("Attribute $attribute does not permit explicit set operations")
-        return attribute.kClass.safeCast(when(value) {
-            null -> remove(attribute)
-            else -> put(attribute as UntypedAttribute, value)
-        } ?: defaultValueOf(attribute))
+        if (!attribute.permitExplicitSet) error("Attribute $attribute does not permit explicit set operations")
+        return attribute.kClass.safeCast(
+            when (value) {
+                null -> remove(attribute)
+                else -> put(attribute as UntypedAttribute, value)
+            } ?: defaultValueOf(attribute)
+        )
     }
 
     operator fun <T : Any> set(attribute: Attribute<T>, value: T?) {
@@ -43,10 +45,12 @@ abstract class AttributeMap {
     }
 
     fun <T : Any> remove(attribute: Attribute<T>): T? {
-        return attribute.kClass.safeCast(when(val default = attribute.defaultValue) {
-            null -> remove(attribute as UntypedAttribute)
-            else -> put(attribute as UntypedAttribute, default())
-        } ?: defaultValueOf(attribute))
+        return attribute.kClass.safeCast(
+            when (val default = attribute.defaultValue) {
+                null -> remove(attribute as UntypedAttribute)
+                else -> put(attribute as UntypedAttribute, default())
+            } ?: defaultValueOf(attribute)
+        )
     }
 
     inline fun <T : Any, R> update(attribute: Attribute<T>, fn: (T) -> R): R {

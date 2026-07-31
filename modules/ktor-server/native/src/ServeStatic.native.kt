@@ -1,29 +1,18 @@
 package net.derfruhling.serenity.ktor.server
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ktor.http.CacheControl
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.EntityTagVersion
-import io.ktor.http.content.VersionCheckResult
-import io.ktor.http.defaultForFilePath
+import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.server.plugins.*
-import io.ktor.server.request.header
-import io.ktor.server.response.cacheControl
-import io.ktor.server.response.etag
-import io.ktor.server.response.respond
-import io.ktor.server.response.respondSource
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.sha1
+import io.ktor.util.*
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.io.Buffer
@@ -37,7 +26,6 @@ import platform.posix.stat
 import platform.posix.strerror
 import kotlin.io.encoding.Base64
 import kotlin.time.Instant
-import kotlin.to
 
 val staticPath = runCatching { SystemFileSystem.resolve(Path("_static")) }.getOrNull()
 
@@ -123,7 +111,7 @@ private suspend fun loadResource(path: Path): Pair<FileMetadata, Buffer> = memSc
 actual fun Route.serveStatic(remotePath: String) {
     val logger = KotlinLogging.logger {}
 
-    if(staticPath != null) {
+    if (staticPath != null) {
         logger.info { "Serving static resources from: $staticPath" }
         route(remotePath) {
             get("{path...}") {
@@ -135,11 +123,20 @@ actual fun Route.serveStatic(remotePath: String) {
                 val (meta, buffer) = loadResource(path)
                 val etag = Base64.UrlSafe.encode(sha1(buffer.peek().readByteArray()))
 
-                call.response.cacheControl(CacheControl.MaxAge(maxAgeSeconds = 1800, visibility = CacheControl.Visibility.Public))
+                call.response.cacheControl(
+                    CacheControl.MaxAge(
+                        maxAgeSeconds = 1800,
+                        visibility = CacheControl.Visibility.Public
+                    )
+                )
                 call.response.etag(etag)
 
                 call.request.header("If-None-Match")?.let {
-                    if(EntityTagVersion(etag, weak = false).noneMatch(EntityTagVersion.parse(it)) == VersionCheckResult.NOT_MODIFIED) {
+                    if (EntityTagVersion(
+                            etag,
+                            weak = false
+                        ).noneMatch(EntityTagVersion.parse(it)) == VersionCheckResult.NOT_MODIFIED
+                    ) {
                         return@get call.respond(HttpStatusCode.NotModified)
                     }
                 }

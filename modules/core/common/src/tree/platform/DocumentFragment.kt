@@ -2,7 +2,10 @@ package net.derfruhling.serenity.tree.platform
 
 import net.derfruhling.serenity.Formatter
 
-open class DocumentFragment(node: RealDocumentFragment) : DocumentLike<DocumentFragment, RealDocumentFragment>(node), RootNode {
+open class DocumentFragment(node: RealDocumentFragment) : DocumentLike<DocumentFragment, RealDocumentFragment>(
+    node
+),
+                                                          RootNode {
     @set:Deprecated("Document cannot have a parent", level = DeprecationLevel.ERROR)
     override var parent: NodeWithChildren<*, *>?
         get() = null
@@ -21,7 +24,7 @@ open class DocumentFragment(node: RealDocumentFragment) : DocumentLike<DocumentF
     }
 
     override fun existingFrom(child: RealNode): ChildNode<in DocumentFragment>? {
-        return when(child) {
+        return when (child) {
             is RealDocumentType -> DocumentTypeNode(child)
             else -> simpleExisting(child)
         }
@@ -29,7 +32,7 @@ open class DocumentFragment(node: RealDocumentFragment) : DocumentLike<DocumentF
 
     override fun format(fmt: Formatter) {
         fmt.enter(Formatter.Begin.DOCUMENT, "DocumentFragment") {
-            for(child in children) {
+            for (child in children) {
                 child.format(fmt)
             }
         }

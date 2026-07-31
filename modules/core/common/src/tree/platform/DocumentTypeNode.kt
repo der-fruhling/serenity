@@ -10,7 +10,7 @@ class DocumentTypeNode : ComposeNodeWithReal<RealDocumentType>, ChildNode<Docume
     @Retention(AnnotationRetention.BINARY)
     @RequiresOptIn(
         "Document type nodes cannot be updated after they're applied, ensure you're not " +
-                "trying to do so. Modification after realization will fail with IllegalStateException."
+            "trying to do so. Modification after realization will fail with IllegalStateException."
     )
     @MustBeDocumented
     annotation class RequiresRealizationCheck
@@ -50,7 +50,7 @@ class DocumentTypeNode : ComposeNodeWithReal<RealDocumentType>, ChildNode<Docume
 
     override fun format(fmt: Formatter) {
         fmt.enter(Formatter.Begin.VALUE) {
-            if(isRealized) {
+            if (isRealized) {
                 write(
                     "<!DOCTYPE ${
                         arrayOf(

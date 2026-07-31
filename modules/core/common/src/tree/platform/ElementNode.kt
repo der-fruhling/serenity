@@ -5,12 +5,14 @@ import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.attribute.Attribute
 import net.derfruhling.serenity.attribute.AttributeValue
-import net.derfruhling.serenity.attribute.Attributes
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventTarget
 import net.derfruhling.serenity.event.EventType
 
-open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<NodeWithChildren<*, *>>, ComposeNodeLifecycleCallback, EventTarget {
+open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
+                         ChildNode<NodeWithChildren<*, *>>,
+                         ComposeNodeLifecycleCallback,
+                         EventTarget {
     override var parent: NodeWithChildren<*, *>? = null
     override val index: Index<ElementNode> = Index(this)
 
@@ -23,7 +25,7 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<N
     var name: Name
         get() = _name
         set(value) {
-            if(!isRealInitialized) {
+            if (!isRealInitialized) {
                 real = RealElement(value)
                 _name = value
             } else if (value != _name) {
@@ -38,7 +40,7 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<N
     }
 
     override fun existingFrom(child: RealNode): ChildNode<in ElementNode>? {
-        return when(child) {
+        return when (child) {
             is RealText -> TextNode(child)
             else -> simpleExisting(child)
         }
@@ -57,11 +59,15 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<N
         private val name = Name.of("class")
         private var value: String
             get() = real.attributeSet.find { it.name == name }?.value ?: ""
-            set(value) { real.attributeSet.add(RealAttribute(name, value)) }
+            set(value) {
+                real.attributeSet.add(RealAttribute(name, value))
+            }
 
         private var contents: Set<String>
             get() = value.split(' ').filter { it.isNotBlank() }.toSet()
-            set(value) { this.value = value.joinToString(" ") }
+            set(value) {
+                this.value = value.joinToString(" ")
+            }
 
         override val size: Int
             get() = contents.size
@@ -87,7 +93,7 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<N
         }
 
         override fun add(element: String): Boolean {
-            if(element in contents) {
+            if (element in contents) {
                 return false
             } else {
                 contents += element
@@ -98,70 +104,71 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<N
 
     interface ClassMapKey
 
-    val classMap: MutableMap<ClassMapKey, String?> = object : AbstractMutableMap<ClassMapKey, String?>() {
-        inner class Entry(
-            override val key: ClassMapKey,
-            value: String?
-        ) : MutableMap.MutableEntry<ClassMapKey, String?> {
-            init {
-                value?.let { classes.add(value) }
-            }
-
-            override var value = value
-                private set
-
-            override fun setValue(newValue: String?): String? {
-                value?.let { classes.remove(it) }
-                newValue?.let { classes.add(newValue) }
-                return value.also { value = newValue }
-            }
-        }
-
-        private val _entries = mutableMapOf<ClassMapKey, Entry>()
-
-        override val entries: MutableSet<MutableMap.MutableEntry<ClassMapKey, String?>> =
-            object : AbstractMutableSet<MutableMap.MutableEntry<ClassMapKey, String?>>() {
-                override fun add(element: MutableMap.MutableEntry<ClassMapKey, String?>): Boolean {
-                    return put(element.key, element.value) != element.value
+    val classMap: MutableMap<ClassMapKey, String?> =
+        object : AbstractMutableMap<ClassMapKey, String?>() {
+            inner class Entry(
+                override val key: ClassMapKey,
+                value: String?
+            ) : MutableMap.MutableEntry<ClassMapKey, String?> {
+                init {
+                    value?.let { classes.add(value) }
                 }
 
-                override fun iterator(): MutableIterator<MutableMap.MutableEntry<ClassMapKey, String?>> {
-                    return object : MutableIterator<MutableMap.MutableEntry<ClassMapKey, String?>> {
-                        private var iterator = _entries.values.iterator()
-                        private lateinit var current: Entry
+                override var value = value
+                    private set
 
-                        override fun remove() {
-                            classes.remove(current.value)
-                            iterator.remove()
-                        }
+                override fun setValue(newValue: String?): String? {
+                    value?.let { classes.remove(it) }
+                    newValue?.let { classes.add(newValue) }
+                    return value.also { value = newValue }
+                }
+            }
 
-                        override fun hasNext(): Boolean {
-                            return iterator.hasNext()
-                        }
+            private val _entries = mutableMapOf<ClassMapKey, Entry>()
 
-                        override fun next(): MutableMap.MutableEntry<ClassMapKey, String?> {
-                            return iterator.next().also { current = it }
+            override val entries: MutableSet<MutableMap.MutableEntry<ClassMapKey, String?>> =
+                object : AbstractMutableSet<MutableMap.MutableEntry<ClassMapKey, String?>>() {
+                    override fun add(element: MutableMap.MutableEntry<ClassMapKey, String?>): Boolean {
+                        return put(element.key, element.value) != element.value
+                    }
+
+                    override fun iterator(): MutableIterator<MutableMap.MutableEntry<ClassMapKey, String?>> {
+                        return object : MutableIterator<MutableMap.MutableEntry<ClassMapKey, String?>> {
+                            private var iterator = _entries.values.iterator()
+                            private lateinit var current: Entry
+
+                            override fun remove() {
+                                classes.remove(current.value)
+                                iterator.remove()
+                            }
+
+                            override fun hasNext(): Boolean {
+                                return iterator.hasNext()
+                            }
+
+                            override fun next(): MutableMap.MutableEntry<ClassMapKey, String?> {
+                                return iterator.next().also { current = it }
+                            }
                         }
                     }
+
+                    override val size: Int
+                        get() = _entries.size
                 }
 
-                override val size: Int
-                    get() = _entries.size
-            }
-
-        override fun put(
-            key: ClassMapKey,
-            value: String?
-        ): String? {
-            return _entries[key]?.setValue(value) ?: run {
-                _entries[key] = Entry(key, value)
-                null
+            override fun put(
+                key: ClassMapKey,
+                value: String?
+            ): String? {
+                return _entries[key]?.setValue(value) ?: run {
+                    _entries[key] = Entry(key, value)
+                    null
+                }
             }
         }
-    }
 
     fun setClass(name: String, enabled: Boolean) {
-        if(enabled) {
+        if (enabled) {
             classes.add(name)
         } else {
             classes.remove(name)
@@ -183,20 +190,23 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<N
     }
 
     fun attribute(name: Attribute<Boolean>, value: Boolean) {
-        if(value) {
+        if (value) {
             real.attributeSet.add(RealAttribute(name.name, null))
         } else {
             real.attributeSet.removeAll { it.name == name.name }
         }
     }
 
-    inline fun <T> subscribe(eventType: EventType<T>, crossinline fn: (T) -> Unit): EventSubscriptionHandle {
+    inline fun <T> subscribe(
+        eventType: EventType<T>,
+        crossinline fn: (T) -> Unit
+    ): EventSubscriptionHandle {
         return real.subscribe(eventType, fn)
     }
 
     override fun format(fmt: Formatter) {
         fmt.enter(Formatter.Begin.ELEMENT, "Element") {
-            for(child in children) {
+            for (child in children) {
                 child.format(fmt)
             }
         }
@@ -213,7 +223,7 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>, ChildNode<N
     }
 
     override fun toString(): String {
-        return "Element ${if(this::_name.isInitialized) _name else "<uninitialized>"}"
+        return "Element ${if (this::_name.isInitialized) _name else "<uninitialized>"}"
     }
 
     companion object {

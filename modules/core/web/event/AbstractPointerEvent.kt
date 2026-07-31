@@ -9,12 +9,21 @@ import net.derfruhling.serenity.takeIfPresent
 import net.derfruhling.serenity.tree.platform.ElementNode
 import web.pointer.PointerEvent as DomPointerEvent
 
-abstract class AbstractPointerEvent<T: EventTarget>(dom: DomPointerEvent) : AbstractMouseEvent<T>(dom), PointerEvent<T> {
+abstract class AbstractPointerEvent<T : EventTarget>(dom: DomPointerEvent) : AbstractMouseEvent<T>(
+    dom
+),
+                                                                             PointerEvent<T> {
     @NewWebApi
-    override val altitudeAngle: Float? by lazy { dom.takeIfPresent(DomPointerEvent::altitudeAngle)?.toFloat() }
+    override val altitudeAngle: Float? by lazy {
+        dom.takeIfPresent(DomPointerEvent::altitudeAngle)
+            ?.toFloat()
+    }
 
     @NewWebApi
-    override val azimuthAngle: Float? by lazy { dom.takeIfPresent(DomPointerEvent::azimuthAngle)?.toFloat() }
+    override val azimuthAngle: Float? by lazy {
+        dom.takeIfPresent(DomPointerEvent::azimuthAngle)
+            ?.toFloat()
+    }
     override val width: Double by dom::width
     override val height: Double by dom::height
     override val isPrimary: Boolean by dom::isPrimary
@@ -29,7 +38,9 @@ abstract class AbstractPointerEvent<T: EventTarget>(dom: DomPointerEvent) : Abst
     override val tiltY: Int by dom::tiltY
     override val twist: Int by dom::twist
 
-    internal class ElementImpl(override val dom: DomPointerEvent) : AbstractPointerEvent<ElementNode>(dom) {
+    internal class ElementImpl(override val dom: DomPointerEvent) : AbstractPointerEvent<ElementNode>(
+        dom
+    ) {
         override fun eventTargetFromDom(eventTarget: web.events.EventTarget?): ElementNode {
             return elementFromDom(eventTarget!!)
         }

@@ -28,12 +28,15 @@ fun generatePageDetails(annotation: RegisterPage): String = buildString {
     append(")")
 }
 
-private inline fun RegisterPage.takeIfNotEmpty(fn: RegisterPage.() -> String, value: (String) -> Unit) {
+private inline fun RegisterPage.takeIfNotEmpty(
+    fn: RegisterPage.() -> String,
+    value: (String) -> Unit
+) {
     val v = try {
         fn()
     } catch (e: NoSuchElementException) {
         return
     }
 
-    if(v.isNotEmpty()) value(v)
+    if (v.isNotEmpty()) value(v)
 }

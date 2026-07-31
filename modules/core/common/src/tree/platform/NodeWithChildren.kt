@@ -5,23 +5,25 @@ import net.derfruhling.serenity.attribute.AttributeValue
 import net.derfruhling.serenity.attribute.UntypedAttribute
 import net.derfruhling.serenity.tree.Apply
 
-sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLike> : ComposeNodeWithReal<U>, Apply<ChildNode<*>, NodeWithChildren<*, *>> {
+sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementLike> :
+    ComposeNodeWithReal<U>,
+    Apply<ChildNode<*>, NodeWithChildren<*, *>> {
     override fun updateReal() {
         attributeIndices.clear()
         childIndices.clear()
         children.clear()
 
-        for(attr in real.attributeSet) {
+        for (attr in real.attributeSet) {
             addExisting(AttributeNode<Any>(attr))
         }
 
-        for(child in real.children) {
+        for (child in real.children) {
             addExisting(existingFrom(child) ?: continue)
         }
     }
 
     internal fun simpleExisting(child: RealNode): ChildNode<NodeWithChildren<*, *>>? {
-        return when(child) {
+        return when (child) {
             is RealComment -> CommentNode(child)
             is RealElement -> ElementRegistry.derive(child)
             RealUnknown -> null
@@ -45,10 +47,14 @@ sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLi
         child.realize()
         child.index.index = children.size
         children.add(child)
-        when(child) {
+        when (child) {
             is AttributeNode<*> -> {
                 testAttribute()
-                real.attributeSet.add(RealAttribute(child.name, child.value?.let { AttributeValue.of(it) }))
+                real.attributeSet.add(
+                    RealAttribute(
+                        child.name,
+                        child.value?.let { AttributeValue.of(it) })
+                )
                 attributeIndices.add(child.parser)
             }
 
@@ -67,7 +73,7 @@ sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLi
     private fun addExisting(child: ChildNode<*>) {
         child.index.index = children.size
         children.add(child)
-        when(child) {
+        when (child) {
             is AttributeNode<*> -> {
                 testAttribute()
                 attributeIndices.add(child.parser)
@@ -93,15 +99,23 @@ sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLi
         when (child) {
             is AttributeNode<*> -> {
                 testAttribute()
-                val insertAfterChild = ((index - 1) downTo 0).firstOrNull { children[it] is AttributeNode<*> } ?: -1
-                val newIndex = if(insertAfterChild >= 0) attributeIndices.indexOf((children[insertAfterChild] as AttributeNode<*>).parser) + 1 else 0
-                real.attributeSet.add(RealAttribute(child.name, child.value?.let { AttributeValue.of(it) }))
+                val insertAfterChild =
+                    ((index - 1) downTo 0).firstOrNull { children[it] is AttributeNode<*> } ?: -1
+                val newIndex =
+                    if (insertAfterChild >= 0) attributeIndices.indexOf((children[insertAfterChild] as AttributeNode<*>).parser) + 1 else 0
+                real.attributeSet.add(
+                    RealAttribute(
+                        child.name,
+                        child.value?.let { AttributeValue.of(it) })
+                )
                 attributeIndices.add(newIndex, child.parser)
             }
 
             is ComposeNodeWithReal<*> -> {
-                val insertAfterChild = ((index - 1) downTo 0).firstOrNull { children[it] !is AttributeNode<*> } ?: -1
-                val newIndex = if(insertAfterChild >= 0) childIndices.indexOf(children[insertAfterChild].index) + 1 else 0
+                val insertAfterChild =
+                    ((index - 1) downTo 0).firstOrNull { children[it] !is AttributeNode<*> } ?: -1
+                val newIndex =
+                    if (insertAfterChild >= 0) childIndices.indexOf(children[insertAfterChild].index) + 1 else 0
                 real.children.add(newIndex, child.real)
                 childIndices.add(newIndex, child.index)
             }
@@ -116,7 +130,7 @@ sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLi
     override fun move(fromIndex: Int, toIndex: Int, count: Int) {
         val values = take(fromIndex, count)
 
-        for((i, child) in ((toIndex - count)..<toIndex).zip(values)) {
+        for ((i, child) in ((toIndex - count)..<toIndex).zip(values)) {
             insert(i, child)
         }
     }
@@ -131,7 +145,7 @@ sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLi
             list.forEach {
                 it.index.index = -1
 
-                when(it) {
+                when (it) {
                     is AttributeNode<*> -> {
                         val index = attributeIndices.indexOf(it.parser)
                         real.attributeSet.remove(it.real)
@@ -146,8 +160,8 @@ sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLi
                 }
             }
 
-            if(children.size >= fromIndex) {
-                for(i in fromIndex..<children.size) {
+            if (children.size >= fromIndex) {
+                for (i in fromIndex..<children.size) {
                     children[i].index.index -= count
                 }
             }
@@ -164,10 +178,10 @@ sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLi
 
     val descendents: Iterable<ChildNode<*>> = Iterable {
         iterator {
-            for(node in children) {
+            for (node in children) {
                 yield(node)
 
-                if(node is NodeWithChildren<*, *>) {
+                if (node is NodeWithChildren<*, *>) {
                     yieldAll(node.descendents)
                 }
             }
@@ -182,20 +196,23 @@ sealed class NodeWithChildren<This: NodeWithChildren<This, U>, U : RealElementLi
         return children.indexOfFirst { it is ElementNode && it.name == name }
     }
 
-    inline fun findImmediateElementNamed(name: Name, filter: (ElementNode) -> Boolean): ElementNode? {
+    inline fun findImmediateElementNamed(
+        name: Name,
+        filter: (ElementNode) -> Boolean
+    ): ElementNode? {
         return children.find { it is ElementNode && it.name == name && filter(it) } as ElementNode?
     }
 
     fun descendentsMaxDepth(maxDepth: Int): Iterable<ChildNode<*>> {
         return Iterable {
             iterator {
-                for(node in children) {
+                for (node in children) {
                     yield(node)
                 }
 
-                if(maxDepth > 0) {
-                    for(node in children) {
-                        if(node is NodeWithChildren<*, *>) {
+                if (maxDepth > 0) {
+                    for (node in children) {
+                        if (node is NodeWithChildren<*, *>) {
                             yieldAll(node.descendentsMaxDepth(maxDepth - 1))
                         }
                     }

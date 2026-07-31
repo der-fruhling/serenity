@@ -2,7 +2,6 @@
 
 package net.derfruhling.serenity.tree.platform
 
-import androidx.compose.runtime.Composable
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventType
@@ -58,11 +57,15 @@ expect class RealElement(node: UnderlyingElement) : RealElementLike {
         internal set
     override val attributeSet: MutableSet<RealAttribute>
 
-    inline fun <T> subscribe(type: EventType<T>, crossinline handler: (T) -> Unit): EventSubscriptionHandle
+    inline fun <T> subscribe(
+        type: EventType<T>,
+        crossinline handler: (T) -> Unit
+    ): EventSubscriptionHandle
 }
 
 expect class RealDocument(node: UnderlyingDocument) : RealElementLike {
     override val node: UnderlyingDocument
+
     @Deprecated("Attributes not supported on document objects", level = DeprecationLevel.ERROR)
     override val attributeSet: MutableSet<RealAttribute>
 
@@ -71,6 +74,7 @@ expect class RealDocument(node: UnderlyingDocument) : RealElementLike {
 
 expect class RealDocumentFragment(node: UnderlyingDocumentFragment) : RealElementLike {
     override val node: UnderlyingDocumentFragment
+
     @Deprecated("Attributes not supported on document objects", level = DeprecationLevel.ERROR)
     override val attributeSet: MutableSet<RealAttribute>
 

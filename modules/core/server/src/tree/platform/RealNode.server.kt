@@ -2,14 +2,8 @@
 
 package net.derfruhling.serenity.tree.platform
 
-import androidx.compose.runtime.Composable
-import com.fleeksoft.ksoup.nodes.Attribute
-import com.fleeksoft.ksoup.nodes.Attributes
-import com.fleeksoft.ksoup.nodes.Comment
+import com.fleeksoft.ksoup.nodes.*
 import com.fleeksoft.ksoup.nodes.Document
-import com.fleeksoft.ksoup.nodes.DocumentType
-import com.fleeksoft.ksoup.nodes.Element
-import com.fleeksoft.ksoup.nodes.Node
 import com.fleeksoft.ksoup.nodes.TextNode
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.event.EventSubscriptionHandle
@@ -47,15 +41,17 @@ actual class RealComment actual constructor(actual override val node: Underlying
     actual constructor() : this(Comment(""))
 }
 
-actual class RealDocumentType actual constructor(actual override val node: UnderlyingDocType) : RealNode {
+actual class RealDocumentType actual constructor(actual override val node: UnderlyingDocType) :
+    RealNode {
     actual val type: String = node.name()
     actual val public: String = node.publicId()
     actual val system: String = node.systemId()
 
     actual constructor(from: RealDocumentType)
-            : this(from.type, from.public, from.system)
+        : this(from.type, from.public, from.system)
+
     actual constructor(type: String, public: String, system: String)
-            : this(DocumentType(type, public, system))
+        : this(DocumentType(type, public, system))
 }
 
 actual sealed class RealElementLike : RealNode {
@@ -122,7 +118,8 @@ actual class RealElement actual constructor(node: UnderlyingElement) :
 
         override fun add(element: RealAttribute): Boolean {
             map[element.name] = element
-            node.attr((element.name.namespace?.let { "$it:" } ?: "") + element.name.localName, element.value)
+            node.attr((element.name.namespace?.let { "$it:" } ?: "") + element.name.localName,
+                      element.value)
             return true
         }
 
@@ -133,7 +130,9 @@ actual class RealElement actual constructor(node: UnderlyingElement) :
 
                 override fun remove() {
                     iterator.remove()
-                    node.attributes().remove((current.name.namespace?.let { "$it:" } ?: "") + current.name.localName)
+                    node.attributes()
+                        .remove((current.name.namespace?.let { "$it:" }
+                            ?: "") + current.name.localName)
                 }
 
                 override fun hasNext(): Boolean {
@@ -162,12 +161,16 @@ actual class RealElement actual constructor(node: UnderlyingElement) :
             Element((name.namespace?.let { "$it:" } ?: "") + name.localName)
         })
 
-    actual inline fun <T> subscribe(type: EventType<T>, crossinline handler: (T) -> Unit): EventSubscriptionHandle {
+    actual inline fun <T> subscribe(
+        type: EventType<T>,
+        crossinline handler: (T) -> Unit
+    ): EventSubscriptionHandle {
         return EventSubscriptionHandle.NoOp
     }
 }
 
-actual class RealDocument actual constructor(actual override val node: UnderlyingDocument) : RealElementLike() {
+actual class RealDocument actual constructor(actual override val node: UnderlyingDocument) :
+    RealElementLike() {
     override val element: Element
         get() = node
 
@@ -199,7 +202,10 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
     }
 
     @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated(message = "Attributes not supported on document objects", level = DeprecationLevel.ERROR)
+    @Deprecated(
+        message = "Attributes not supported on document objects",
+        level = DeprecationLevel.ERROR
+    )
     actual override val attributeSet: MutableSet<RealAttribute>
         get() = UnsupportedAttributeSet
 
@@ -218,7 +224,8 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
 }
 
 @Deprecated("Avoid if possible")
-actual class RealAttribute actual constructor(actual override val node: UnderlyingAttribute) : RealNode {
+actual class RealAttribute actual constructor(actual override val node: UnderlyingAttribute) :
+    RealNode {
     actual val name: Name
         get() = if (node.prefix() != "") {
             when (node.namespace()) {
@@ -238,7 +245,8 @@ actual class RealAttribute actual constructor(actual override val node: Underlyi
             node.setValue(value)
         }
 
-    actual constructor(name: Name) : this(Attribute((name.namespace?.let { "$it:" } ?: "") + name.localName, null))
+    actual constructor(name: Name) : this(Attribute((name.namespace?.let { "$it:" }
+        ?: "") + name.localName, null))
 
     actual constructor(name: Name, value: String?) : this(name) {
         this.value = value
@@ -251,7 +259,10 @@ actual class RealDocumentFragment actual constructor(actual override val node: U
         get() = node
 
     @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated(message = "Attributes not supported on document objects", level = DeprecationLevel.ERROR)
+    @Deprecated(
+        message = "Attributes not supported on document objects",
+        level = DeprecationLevel.ERROR
+    )
     actual override val attributeSet: MutableSet<RealAttribute>
         get() = RealDocument.UnsupportedAttributeSet
 

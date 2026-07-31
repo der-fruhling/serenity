@@ -7,8 +7,8 @@ import net.derfruhling.serenity.hasField
 import net.derfruhling.serenity.takeIfPresent
 import web.mouse.*
 import web.mouse.MouseButton as DomMouseButton
-import web.mouse.MouseEvent as DomMouseEvent
 import web.mouse.MouseButtons as DomMouseButtons
+import web.mouse.MouseEvent as DomMouseEvent
 
 private fun mouseButtonFromDom(dom: DomMouseButton): MouseButton = when (dom) {
     DomMouseButton.MAIN -> MouseButton.PRIMARY
@@ -27,10 +27,17 @@ private external interface DomMouseEventExt {
     val screenY: Double
 }
 
-abstract class AbstractMouseEvent<T: EventTarget>(dom: DomMouseEvent) : AbstractUIEvent<T>(dom), MouseEvent<T> {
+abstract class AbstractMouseEvent<T : EventTarget>(dom: DomMouseEvent) : AbstractUIEvent<T>(dom),
+                                                                         MouseEvent<T> {
     override val altKey: Boolean by dom::altKey
     override val button: MouseButton by lazy { mouseButtonFromDom(dom.button) }
-    override val buttons: MouseButtons? by lazy { dom.takeIfPresent("buttons") { mouseButtonsFromDom(dom.buttons) } }
+    override val buttons: MouseButtons? by lazy {
+        dom.takeIfPresent("buttons") {
+            mouseButtonsFromDom(
+                dom.buttons
+            )
+        }
+    }
     override val clientX: Int by dom::clientX
     override val clientY: Int by dom::clientY
     override val ctrlKey: Boolean by dom::ctrlKey

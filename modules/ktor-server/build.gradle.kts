@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-
 plugins {
     id("multiplatform-server-compose")
     id("net.derfruhling.serenity.convention")

@@ -17,28 +17,32 @@ actual fun testSupportedDocumentEvent(name: String): Boolean = js("('on' + name)
 actual fun testSupportedWindowEvent(name: String): Boolean = js("('on' + name) in window")
 
 @Serializable
-actual sealed interface BuiltinPointerEvent : BuiltinEventType, GenerateFromDomEvent<PointerEvent<ElementNode>> {
+actual sealed interface BuiltinPointerEvent : BuiltinEventType,
+                                              GenerateFromDomEvent<PointerEvent<ElementNode>> {
     override fun generate(event: DomEvent): PointerEvent<ElementNode> {
         return (event as DomPointerEvent).asComposeEvent()
     }
 }
 
 @Serializable
-actual sealed interface BuiltinPlainWindowEvent : BuiltinEventType, GenerateFromDomEvent<Event<Window>> {
+actual sealed interface BuiltinPlainWindowEvent : BuiltinEventType,
+                                                  GenerateFromDomEvent<Event<Window>> {
     override fun generate(event: DomEvent): Event<Window> {
         return event.asWindowComposeEvent()
     }
 }
 
 @Serializable
-actual sealed interface BuiltinPlainDocumentEvent : BuiltinEventType, GenerateFromDomEvent<Event<Document>> {
+actual sealed interface BuiltinPlainDocumentEvent : BuiltinEventType,
+                                                    GenerateFromDomEvent<Event<Document>> {
     override fun generate(event: DomEvent): Event<Document> {
         return event.asDocumentComposeEvent()
     }
 }
 
 @Serializable
-actual sealed interface BuiltinPageTransitionEvent : BuiltinEventType, GenerateFromDomEvent<PageTransitionEvent> {
+actual sealed interface BuiltinPageTransitionEvent : BuiltinEventType,
+                                                     GenerateFromDomEvent<PageTransitionEvent> {
     override fun generate(event: DomEvent): PageTransitionEvent {
         return (event as DomPageTransitionEvent).asWindowComposeEvent()
     }

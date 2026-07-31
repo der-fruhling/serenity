@@ -23,8 +23,11 @@ private fun createSaveableStateRegistry(page: PageHolder): SaveableStateRegistry
 
 private fun keyOf(page: PageHolder): String = "saved-" + page.id
 
-actual class SaveDataManager(private val page: PageHolder, private val base: SaveableStateRegistry)
-    : SaveableStateRegistry by base, RememberObserver {
+actual class SaveDataManager(
+    private val page: PageHolder,
+    private val base: SaveableStateRegistry
+) :
+    SaveableStateRegistry by base, RememberObserver {
     actual constructor(page: PageHolder) : this(page, createSaveableStateRegistry(page))
 
     actual fun save() {

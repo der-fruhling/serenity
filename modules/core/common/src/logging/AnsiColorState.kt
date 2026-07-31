@@ -10,10 +10,10 @@ data class AnsiColorState(
         buildString {
             append("\u001b[")
             append(buildList {
-                if(fg != null) add(fg.fg)
-                if(bold) add(BOLD)
-                if(underline) add(UNDERLINE)
-                if(bg != null) add(bg.bg)
+                if (fg != null) add(fg.fg)
+                if (bold) add(BOLD)
+                if (underline) add(UNDERLINE)
+                if (bg != null) add(bg.bg)
             }.joinToString(";"))
             append('m')
         }

@@ -21,19 +21,20 @@ private fun staticOnInterrupt(signal: Int) {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-actual fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> EmbeddedServer<E, C>.startAwait(): Unit = runBlocking {
-    val log = KotlinLogging.logger {}
-    start(wait = false)
+actual fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> EmbeddedServer<E, C>.startAwait(): Unit =
+    runBlocking {
+        val log = KotlinLogging.logger {}
+        start(wait = false)
 
-    signal(SIGINT, staticCFunction(::staticOnInterrupt))
-    signal(SIGTERM, staticCFunction(::staticOnInterrupt))
-    signal(SIGHUP, staticCFunction(::staticOnInterrupt))
+        signal(SIGINT, staticCFunction(::staticOnInterrupt))
+        signal(SIGTERM, staticCFunction(::staticOnInterrupt))
+        signal(SIGHUP, staticCFunction(::staticOnInterrupt))
 
-    val signal = closeMutex.filterNotNull().first()
-    log.info { "Received ${strsignal(signal)?.toKString()}, stopping server" }
-    stopSuspend()
-    log.info { "Stopped server" }
-}
+        val signal = closeMutex.filterNotNull().first()
+        log.info { "Received ${strsignal(signal)?.toKString()}, stopping server" }
+        stopSuspend()
+        log.info { "Stopped server" }
+    }
 
 actual fun ComposeHtmlConfig.readManifest(): String {
     return SystemFileSystem.source(manifestPath).use {

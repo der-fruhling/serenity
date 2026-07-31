@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.Text
 
-abstract class GenericList<T: GenericList<T>> {
+abstract class GenericList<T : GenericList<T>> {
     @Composable
     fun Entry(fn: @Composable () -> Unit) {
         Element("li", fn)

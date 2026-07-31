@@ -16,7 +16,7 @@ sealed interface ComposeNode {
     fun format(fmt: Formatter)
 }
 
-sealed class ComposeNodeWithReal<R: RealNode> : ComposeNode {
+sealed class ComposeNodeWithReal<R : RealNode> : ComposeNode {
     private lateinit var _real: R
 
     val dom: UnderlyingBase
@@ -42,8 +42,10 @@ sealed class ComposeNodeWithReal<R: RealNode> : ComposeNode {
 }
 
 val ComposeNode.textContent: String
-    get() = when(this) {
+    get() = when (this) {
         is TextNode -> textContent
-        is NodeWithChildren<*, *> -> children.mapNotNull { it.textContent.takeIf { s -> s.isNotBlank() } }.joinToString(" ")
+        is NodeWithChildren<*, *> -> children.mapNotNull { it.textContent.takeIf { s -> s.isNotBlank() } }
+            .joinToString(" ")
+
         else -> ""
     }

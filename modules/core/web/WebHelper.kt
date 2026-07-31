@@ -17,15 +17,17 @@ private fun checkField(of: JsAny, name: String): Boolean = js("name in of")
 fun <T : JsAny> T.hasField(name: String): Boolean = checkField(this, name)
 
 @ExperimentalWasmJsInterop
-inline fun <T : JsAny, R> T.takeIfPresent(name: String, fn: (T) -> R): R? = if(this.hasField(name)) {
-    fn(this)
-} else {
-    null
-}
+inline fun <T : JsAny, R> T.takeIfPresent(name: String, fn: (T) -> R): R? =
+    if (this.hasField(name)) {
+        fn(this)
+    } else {
+        null
+    }
 
 @ExperimentalWasmJsInterop
-fun <T : JsAny, R> T.takeIfPresent(property: KProperty1<T, R>): R? = if(this.hasField(property.name)) {
-    property.get(this)
-} else {
-    null
-}
+fun <T : JsAny, R> T.takeIfPresent(property: KProperty1<T, R>): R? =
+    if (this.hasField(property.name)) {
+        property.get(this)
+    } else {
+        null
+    }

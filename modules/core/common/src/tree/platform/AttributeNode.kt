@@ -48,7 +48,7 @@ class AttributeNode<T : Any> : ComposeNodeWithReal<RealAttribute>, ChildNode<Ele
     var name: Name
         get() = _name
         set(value) {
-            if(!isRealInitialized) {
+            if (!isRealInitialized) {
                 real = RealAttribute(value)
             } else {
                 throw UnsupportedOperationException("cannot set name after initialization")
@@ -58,10 +58,10 @@ class AttributeNode<T : Any> : ComposeNodeWithReal<RealAttribute>, ChildNode<Ele
     var parser: Attribute<T>
         get() = _parser
         set(value) {
-            if(this::_name.isInitialized) {
+            if (this::_name.isInitialized) {
                 require(value.name == this._name)
             } else {
-                if(!this::_parser.isInitialized) {
+                if (!this::_parser.isInitialized) {
                     name = value.name
                 } else {
                     throw UnsupportedOperationException("cannot set name after initialization")
@@ -73,17 +73,19 @@ class AttributeNode<T : Any> : ComposeNodeWithReal<RealAttribute>, ChildNode<Ele
 
     var value: T?
         get() = real.value.let { parser.parser(it) }
-        set(value) { real.value = value.let { AttributeValue.of(it) } }
+        set(value) {
+            real.value = value.let { AttributeValue.of(it) }
+        }
 
     override val index: Index<AttributeNode<*>> = Index(this)
 
     override fun format(fmt: Formatter) {
         fmt.enter(Formatter.Begin.ATTRIBUTE) {
-            write(if(this@AttributeNode::_name.isInitialized) name.toString() else "<uninitialized>")
+            write(if (this@AttributeNode::_name.isInitialized) name.toString() else "<uninitialized>")
             write(" = ")
 
             enter(Formatter.Begin.VALUE) {
-                if(isRealInitialized) {
+                if (isRealInitialized) {
                     write(value.toString())
                 } else {
                     write("<???>")

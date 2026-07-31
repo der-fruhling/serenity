@@ -51,7 +51,8 @@ dependencies {
 }
 
 val generateVersionResource = tasks.register("generateVersionResource") {
-    val outFile = project.layout.buildDirectory.file("generated-resources/net/derfruhling/serenity/gradle/VERSION")
+    val outFile =
+        project.layout.buildDirectory.file("generated-resources/net/derfruhling/serenity/gradle/VERSION")
     val version = project.provider { version.toString() }
 
     outputs.file(outFile)

@@ -3,7 +3,9 @@ package net.derfruhling.serenity.tree.platform
 import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.event.EventType
 
-abstract class AbstractEventHandlerNode<T> : ComposeNode, ChildNode<NodeWithChildren<*, *>>, DisallowReuse
+abstract class AbstractEventHandlerNode<T> : ComposeNode,
+                                             ChildNode<NodeWithChildren<*, *>>,
+                                             DisallowReuse
 
 expect class EventHandlerNode<T> : AbstractEventHandlerNode<T> {
     var type: EventType<T>

@@ -4,8 +4,8 @@ import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.KotlinLoggingConfiguration
 import io.github.oshai.kotlinlogging.Level
-import io.ktor.server.application.Application
-import io.ktor.util.logging.LogLevel
+import io.ktor.server.application.*
+import io.ktor.util.logging.*
 import io.ktor.util.logging.Logger as KtorLogger
 
 var ktorLogger: KLogger = KotlinLogging.logger(Application::class.qualifiedName!!)

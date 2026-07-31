@@ -12,7 +12,7 @@ actual open class PlatformApplier actual constructor(document: RootNode) :
     HtmlApplier {
     private val stack = Stack<ComposeNode>()
 
-    actual final override var current: ComposeNode = when(document) {
+    actual final override var current: ComposeNode = when (document) {
         is Document -> document
         is DocumentFragment -> document
     }
@@ -51,7 +51,7 @@ actual open class PlatformApplier actual constructor(document: RootNode) :
     }
 
     actual override fun clear() {
-        if(!document.hidden) {
+        if (!document.hidden) {
             withChildren { it.clear() }
         }
     }

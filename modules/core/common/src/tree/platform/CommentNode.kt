@@ -2,7 +2,8 @@ package net.derfruhling.serenity.tree.platform
 
 import net.derfruhling.serenity.Formatter
 
-class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real), ChildNode<NodeWithChildren<*, *>> {
+class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real),
+                                       ChildNode<NodeWithChildren<*, *>> {
     constructor() : this(RealComment())
 
     override val index: Index<CommentNode> = Index(this)
@@ -15,7 +16,7 @@ class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real), C
     var commentContent: String by real::commentContent
 
     override fun format(fmt: Formatter) {
-        if(fmt.deepIntrospect) {
+        if (fmt.deepIntrospect) {
             fmt.enter(Formatter.Begin.DEBUG, "Comment") {
                 write(commentContent)
             }

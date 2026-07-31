@@ -1,8 +1,8 @@
 package net.derfruhling.serenity.gradle.web
 
 import net.derfruhling.serenity.gradle.SerenityDependencyHandler
-import net.derfruhling.serenity.gradle.SerenityGradleDsl
 import net.derfruhling.serenity.gradle.SerenityExtension
+import net.derfruhling.serenity.gradle.SerenityGradleDsl
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
@@ -65,7 +65,7 @@ abstract class SerenityWebExtension(internal val base: SerenityExtension) : Exte
 
         browser {
             webpackTask {
-                if(mode == KotlinWebpackConfig.Mode.PRODUCTION) {
+                if (mode == KotlinWebpackConfig.Mode.PRODUCTION) {
                     sourceMaps = includeSourceMapsInProductionBuilds.get()
                 }
                 mainOutputFileName.set("page.js")
@@ -81,13 +81,19 @@ abstract class SerenityWebExtension(internal val base: SerenityExtension) : Exte
 
     fun dependencies(fn: SerenityDependencyHandler.() -> Unit) {
         base.mpp.sourceSets.named("webMain") {
-            dependencies { object : SerenityDependencyHandler, KotlinDependencyHandler by this {}.fn() }
+            dependencies {
+                object : SerenityDependencyHandler,
+                         KotlinDependencyHandler by this {}.fn()
+            }
         }
     }
 
     fun testDependencies(fn: SerenityDependencyHandler.() -> Unit) {
         base.mpp.sourceSets.named("webTest") {
-            dependencies { object : SerenityDependencyHandler, KotlinDependencyHandler by this {}.fn() }
+            dependencies {
+                object : SerenityDependencyHandler,
+                         KotlinDependencyHandler by this {}.fn()
+            }
         }
     }
 }

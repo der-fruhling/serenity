@@ -8,7 +8,8 @@ import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 data class Wrapped<T>(val value: T) {
-    class Serializer<T>(val type: KSerializer<T>, val name: String = type.descriptor.serialName) : KSerializer<T> {
+    class Serializer<T>(val type: KSerializer<T>, val name: String = type.descriptor.serialName) :
+        KSerializer<T> {
         val serializer = serializer(type)
         override val descriptor: SerialDescriptor = SerialDescriptor(name, serializer.descriptor)
 

@@ -7,5 +7,6 @@ actual class SaveDataManager actual constructor(page: PageHolder) {
     actual inline fun save() {}
 
     @Composable
-    actual fun enter(fn: @Composable (() -> Unit)) {}
+    actual fun enter(fn: @Composable (() -> Unit)) {
+    }
 }

@@ -1,16 +1,11 @@
 package net.derfruhling.serenity.gradle.resources
 
-import kotlinx.serialization.json.Json
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.file.RelativePath
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.services.ServiceReference
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.Sync
+import org.gradle.api.tasks.*
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import kotlin.io.encoding.Base64

@@ -13,7 +13,7 @@ import web.events.Event as DomEvent
 import web.events.EventTarget as DomEventTarget
 import web.window.Window as DomWindow
 
-abstract class AbstractEvent<T: EventTarget>(dom: DomEvent) : Event<T> {
+abstract class AbstractEvent<T : EventTarget>(dom: DomEvent) : Event<T> {
     abstract val dom: DomEvent
 
     override val target: T by lazy { eventTargetFromDom(dom.target) }
@@ -56,5 +56,6 @@ abstract class AbstractEvent<T: EventTarget>(dom: DomEvent) : Event<T> {
 
 fun DomEvent.asWindowComposeEvent(): Event<Window> =
     AbstractEvent.WindowImpl(this)
+
 fun DomEvent.asDocumentComposeEvent(): Event<Document> =
     AbstractEvent.DocumentImpl(this)

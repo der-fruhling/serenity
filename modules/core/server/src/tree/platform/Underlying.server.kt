@@ -1,10 +1,7 @@
 package net.derfruhling.serenity.tree.platform
 
-import com.fleeksoft.ksoup.nodes.Attribute
-import com.fleeksoft.ksoup.nodes.Comment
+import com.fleeksoft.ksoup.nodes.*
 import com.fleeksoft.ksoup.nodes.Document
-import com.fleeksoft.ksoup.nodes.DocumentType
-import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.nodes.TextNode
 import com.fleeksoft.ksoup.parser.Parser
 

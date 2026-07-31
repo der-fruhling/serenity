@@ -6,7 +6,8 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
 
-class SnapshotContext(val snapshot: Snapshot) : AbstractCoroutineContextElement(SnapshotContext), ContinuationInterceptor {
+class SnapshotContext(val snapshot: Snapshot) : AbstractCoroutineContextElement(SnapshotContext),
+                                                ContinuationInterceptor {
     override fun <T> interceptContinuation(continuation: Continuation<T>): Continuation<T> {
         return Continuation(continuation.context) {
             snapshot.enter {

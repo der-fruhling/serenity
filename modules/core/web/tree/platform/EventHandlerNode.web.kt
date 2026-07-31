@@ -30,13 +30,15 @@ actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>(), ComposeNodeLif
     override fun onReuse() {}
 
     actual override fun format(fmt: Formatter) {
-        if(fmt.deepIntrospect) {
+        if (fmt.deepIntrospect) {
             fmt.enter(Formatter.Begin.DEBUG, "EventHandler") {
-                write(try {
-                    type.name
-                } catch(_: IllegalStateException) {
-                    "<???>"
-                })
+                write(
+                    try {
+                        type.name
+                    } catch (_: IllegalStateException) {
+                        "<???>"
+                    }
+                )
             }
         }
     }

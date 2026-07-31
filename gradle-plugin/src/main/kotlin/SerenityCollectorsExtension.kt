@@ -27,10 +27,15 @@ abstract class SerenityCollectorsExtension(val base: SerenityExtension) {
     }
 
     fun useCommon() {
-        useCommon(DefaultMinimalDependency(
-            DefaultModuleIdentifier.newId("net.derfruhling.serenity", "serenity-common-collector"),
-            base.serenityVersion.get() as MutableVersionConstraint
-        ))
+        useCommon(
+            DefaultMinimalDependency(
+                DefaultModuleIdentifier.newId(
+                    "net.derfruhling.serenity",
+                    "serenity-common-collector"
+                ),
+                base.serenityVersion.get() as MutableVersionConstraint
+            )
+        )
     }
 
     fun useCommon(collector: Any) {
@@ -38,10 +43,15 @@ abstract class SerenityCollectorsExtension(val base: SerenityExtension) {
     }
 
     fun useServerKtor() {
-        useServer(DefaultMinimalDependency(
-            DefaultModuleIdentifier.newId("net.derfruhling.serenity", "serenity-ktor-collector"),
-            base.serenityVersion.get() as MutableVersionConstraint
-        ))
+        useServer(
+            DefaultMinimalDependency(
+                DefaultModuleIdentifier.newId(
+                    "net.derfruhling.serenity",
+                    "serenity-ktor-collector"
+                ),
+                base.serenityVersion.get() as MutableVersionConstraint
+            )
+        )
     }
 
     fun useServer(collector: Any) {
@@ -51,10 +61,12 @@ abstract class SerenityCollectorsExtension(val base: SerenityExtension) {
     }
 
     fun useWeb() {
-        useWeb(DefaultMinimalDependency(
-            DefaultModuleIdentifier.newId("net.derfruhling.serenity", "serenity-web-collector"),
-            base.serenityVersion.get() as MutableVersionConstraint
-        ))
+        useWeb(
+            DefaultMinimalDependency(
+                DefaultModuleIdentifier.newId("net.derfruhling.serenity", "serenity-web-collector"),
+                base.serenityVersion.get() as MutableVersionConstraint
+            )
+        )
     }
 
     fun useWeb(collector: Any) {

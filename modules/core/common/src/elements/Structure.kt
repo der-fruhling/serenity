@@ -1,16 +1,7 @@
 package net.derfruhling.serenity.elements
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.NonRestartableComposable
-import androidx.compose.runtime.ReusableContent
-import androidx.compose.runtime.Updater
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.remember
-import net.derfruhling.serenity.DocumentType
-import net.derfruhling.serenity.Element
-import net.derfruhling.serenity.PageHolder
-import net.derfruhling.serenity.PageTemplate
-import net.derfruhling.serenity.Text
+import androidx.compose.runtime.*
+import net.derfruhling.serenity.*
 import net.derfruhling.serenity.attribute.Attributes
 import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.ResourceResolver
@@ -41,11 +32,16 @@ object HeadContext {
         })
 
     @Composable
-    fun useScript(uri: String, async: Boolean = false, defer: Boolean = false, preload: Boolean = uri.startsWith('/')) {
+    fun useScript(
+        uri: String,
+        async: Boolean = false,
+        defer: Boolean = false,
+        preload: Boolean = uri.startsWith('/')
+    ) {
         val resolver = ResourceResolver.local.current
         val resolvedUrl = remember(resolver, uri) { resolver.getTargetUrl(uri) }
 
-        if(preload) {
+        if (preload) {
             preloadSetLocal.current?.add(Preload(resolvedUrl, "script"))
         }
 
@@ -69,7 +65,7 @@ object HeadContext {
         val resolver = ResourceResolver.local.current
         val resolvedUrl = remember(resolver, uri) { resolver.getTargetUrl(uri) }
 
-        if(preload) {
+        if (preload) {
             preloadSetLocal.current?.add(Preload(resolvedUrl, "style"))
         }
 
@@ -121,14 +117,17 @@ val currentPageLocal = compositionLocalOf<PageHolder> { throw IllegalStateExcept
 object PageContext {
     @Composable
     @NonRestartableComposable
-    fun Head(fn: @Composable HeadContext.() -> Unit)  {
+    fun Head(fn: @Composable HeadContext.() -> Unit) {
         HtmlContext.head {
             fn()
         }
     }
 
     @Composable
-    inline fun Body(noinline updateBody: Updater<ElementNode>.() -> Unit = {}, crossinline fn: @Composable () -> Unit)  {
+    inline fun Body(
+        noinline updateBody: Updater<ElementNode>.() -> Unit = {},
+        crossinline fn: @Composable () -> Unit
+    ) {
         HtmlContext.body(updateBody) {
             fn()
         }
@@ -136,7 +135,10 @@ object PageContext {
 
     @Composable
     @NonRestartableComposable
-    inline fun Layout(crossinline updateBody: Updater<ElementNode>.() -> Unit = {}, crossinline fn: @Composable () -> Unit) {
+    inline fun Layout(
+        crossinline updateBody: Updater<ElementNode>.() -> Unit = {},
+        crossinline fn: @Composable () -> Unit
+    ) {
         Body(updateBody = {
             init { classes.add(StyleClasses.PageLayout) }
             updateBody()

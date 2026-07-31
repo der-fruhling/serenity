@@ -10,7 +10,7 @@ fun interface Formatter {
     fun open() = write(" ")
     fun close() = write(" ")
 
-    fun open(atEnd: Formatter.() -> Unit = {},  fn: Formatter.() -> Unit) {
+    fun open(atEnd: Formatter.() -> Unit = {}, fn: Formatter.() -> Unit) {
         open()
         try {
             fn()
@@ -47,7 +47,7 @@ fun interface Formatter {
         write("$name =")
         open()
         try {
-            when(val returnValue = fn()) {
+            when (val returnValue = fn()) {
                 is Unit -> {}
                 else -> write(returnValue.toString())
             }
@@ -70,7 +70,8 @@ fun interface Formatter {
         DEBUG
     }
 
-    open class StringFormatter(private val stringBuilder: StringBuilder = StringBuilder()) : Formatter {
+    open class StringFormatter(private val stringBuilder: StringBuilder = StringBuilder()) :
+        Formatter {
         override fun write(string: String) {
             stringBuilder.append(string)
         }
@@ -78,7 +79,8 @@ fun interface Formatter {
         fun done() = stringBuilder.toString()
     }
 
-    open class StringFormatterDebug(stringBuilder: StringBuilder = StringBuilder()) : StringFormatter(stringBuilder) {
+    open class StringFormatterDebug(stringBuilder: StringBuilder = StringBuilder()) :
+        StringFormatter(stringBuilder) {
         override val deepIntrospect: Boolean
             get() = true
     }

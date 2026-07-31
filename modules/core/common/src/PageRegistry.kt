@@ -11,9 +11,9 @@ import kotlin.reflect.KClass
 abstract class PageRegistry {
     abstract fun template(fn: @Composable TemplateBuilder.() -> Unit)
 
-    abstract fun <T: PageHolder> register(kClass: KClass<T>, kSerializer: KSerializer<T>, page: T)
+    abstract fun <T : PageHolder> register(kClass: KClass<T>, kSerializer: KSerializer<T>, page: T)
 
-    inline fun <reified T: PageHolder> register(page: T) {
+    inline fun <reified T : PageHolder> register(page: T) {
         register(T::class, serializer<T>(), page)
     }
 }

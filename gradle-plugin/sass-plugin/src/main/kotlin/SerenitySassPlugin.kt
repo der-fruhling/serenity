@@ -29,23 +29,28 @@ class SerenitySassPlugin : Plugin<Project> {
         target.configure<KotlinMultiplatformExtension> {
             sourceSets.configureEach {
                 fun configureCompileSass(set: String, dir: String) {
-                    val debugCompile = target.tasks.register("compile${set}SassDebug", SassCompile::class) {
-                        source(resources)
-                        resources.srcDirs.forEach { inputs.dir(it) }
-                        destinationDir.set(target.layout.buildDirectory.dir("sass-out/$dir-debug"))
-                        sourceMapEnabled.set(true)
-                        outputStyle.set(OutputStyle.EXPANDED)
-                    }
+                    val debugCompile =
+                        target.tasks.register("compile${set}SassDebug", SassCompile::class) {
+                            source(resources)
+                            resources.srcDirs.forEach { inputs.dir(it) }
+                            destinationDir.set(target.layout.buildDirectory.dir("sass-out/$dir-debug"))
+                            sourceMapEnabled.set(true)
+                            outputStyle.set(OutputStyle.EXPANDED)
+                        }
 
-                    val releaseCompile = target.tasks.register("compile${set}SassRelease", SassCompile::class) {
-                        source(resources)
-                        resources.srcDirs.forEach { inputs.dir(it) }
-                        destinationDir.set(target.layout.buildDirectory.dir("sass-out/$dir"))
-                        sourceMapEnabled.set(ext.sourceMapsInProduction)
-                        outputStyle.set(ext.prettyCssInProduction.map { if(it) OutputStyle.EXPANDED else OutputStyle.COMPRESSED })
-                    }
+                    val releaseCompile =
+                        target.tasks.register("compile${set}SassRelease", SassCompile::class) {
+                            source(resources)
+                            resources.srcDirs.forEach { inputs.dir(it) }
+                            destinationDir.set(target.layout.buildDirectory.dir("sass-out/$dir"))
+                            sourceMapEnabled.set(ext.sourceMapsInProduction)
+                            outputStyle.set(ext.prettyCssInProduction.map { if (it) OutputStyle.EXPANDED else OutputStyle.COMPRESSED })
+                        }
 
-                    target.tasks.named("process${set}ResourcesDebug", SerenityProcessResources::class) {
+                    target.tasks.named(
+                        "process${set}ResourcesDebug",
+                        SerenityProcessResources::class
+                    ) {
                         from(debugCompile)
                     }
 

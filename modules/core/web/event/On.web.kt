@@ -11,11 +11,12 @@ import net.derfruhling.serenity.htmlComposer
 import net.derfruhling.serenity.ifClient
 import net.derfruhling.serenity.tree.HtmlApplier
 import net.derfruhling.serenity.tree.platform.EventHandlerNode
-import web.function.async
-import kotlin.coroutines.AbstractCoroutineContextElement
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
+
+actual class EventContext internal constructor(snapshot: Snapshot) : CoroutineScope {
+    actual override val coroutineContext: CoroutineContext =
+        Dispatchers.Default + SnapshotContext(snapshot)
+}
 
 @OptIn(InternalPageEntryPoint::class)
 @Composable
@@ -32,8 +33,4 @@ actual fun <T> On(type: EventType<T>, fn: EventContext.(T) -> Unit) {
             set(lambda) { this.fn = lambda }
         })
     }
-}
-
-actual class EventContext internal constructor(snapshot: Snapshot) : CoroutineScope {
-    actual override val coroutineContext: CoroutineContext = Dispatchers.Default + SnapshotContext(snapshot)
 }

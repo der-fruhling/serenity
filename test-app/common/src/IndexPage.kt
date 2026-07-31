@@ -6,13 +6,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.Client
 import net.derfruhling.serenity.annotations.RegisterPage
-import net.derfruhling.serenity.elements.Button
-import net.derfruhling.serenity.elements.Content
-import net.derfruhling.serenity.elements.FlexColumn
-import net.derfruhling.serenity.elements.Footer
-import net.derfruhling.serenity.elements.Header
-import net.derfruhling.serenity.elements.Link
-import net.derfruhling.serenity.elements.Page
+import net.derfruhling.serenity.elements.*
 
 private val logger = KotlinLogging.logger {}
 

@@ -10,7 +10,11 @@ object Attributes {
 
     private inline fun <reified T : Any> name(name: String): Lazy<Attribute<T>> =
         register(name, lazy { Attribute<T>(name) })
-    private inline fun <reified T : Any> name(name: String, crossinline fn: AttributeBuilder<T>.() -> Unit): Lazy<Attribute<T>> =
+
+    private inline fun <reified T : Any> name(
+        name: String,
+        crossinline fn: AttributeBuilder<T>.() -> Unit
+    ): Lazy<Attribute<T>> =
         register(name, lazy { Attribute<T>(name, fn) })
 
     private fun AttributeBuilder<MutableSet<String>>.stringSet() {

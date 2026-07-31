@@ -2,7 +2,6 @@
 
 package net.derfruhling.serenity.gradle
 
-import com.google.devtools.ksp.gradle.KspGradleSubplugin
 import net.derfruhling.serenity.gradle.resources.SerenityProcessResources
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -66,7 +65,13 @@ class SerenityBasePlugin : Plugin<Project> {
                 into(target.layout.buildDirectory.dir("resources/common"))
                 from(commonResources)
 
-                sourceRoots.set(commonResources.map { it.srcDirs.map { f -> f.toRelativeString(projectDir.asFile) } })
+                sourceRoots.set(commonResources.map {
+                    it.srcDirs.map { f ->
+                        f.toRelativeString(
+                            projectDir.asFile
+                        )
+                    }
+                })
 
                 duplicatesStrategy = DuplicatesStrategy.INCLUDE
             }
@@ -75,7 +80,13 @@ class SerenityBasePlugin : Plugin<Project> {
                 into(target.layout.buildDirectory.dir("resources/common-debug"))
                 from(commonResources)
 
-                sourceRoots.set(commonResources.map { it.srcDirs.map { f -> f.toRelativeString(projectDir.asFile) } })
+                sourceRoots.set(commonResources.map {
+                    it.srcDirs.map { f ->
+                        f.toRelativeString(
+                            projectDir.asFile
+                        )
+                    }
+                })
 
                 duplicatesStrategy = DuplicatesStrategy.INCLUDE
             }

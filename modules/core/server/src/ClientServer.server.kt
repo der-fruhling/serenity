@@ -11,7 +11,8 @@ actual inline val isClient: Boolean
 // does nothing
 // the hope is that this is enough to get the compiler to eliminate this code block
 @Composable
-actual inline fun ifClient(fn: @Composable (() -> Unit)) {}
+actual inline fun ifClient(fn: @Composable (() -> Unit)) {
+}
 
 @Composable
 actual inline fun <T> alternative(

@@ -20,8 +20,20 @@ data class ResourceIndex(
     fun reinstateTargetUrl(fragment: String): String =
         targetBaseUrl?.let { it + fragment } ?: fragment
 
-    private val fromSourceUrl by lazy { contents.entries.associate { (src, tgt) -> reinstateSourceUrl(src) to reinstateTargetUrl(tgt) } }
-    private val fromTargetUrl by lazy { contents.entries.associate { (src, tgt) -> reinstateTargetUrl(tgt) to reinstateSourceUrl(src) } }
+    private val fromSourceUrl by lazy {
+        contents.entries.associate { (src, tgt) ->
+            reinstateSourceUrl(src) to reinstateTargetUrl(
+                tgt
+            )
+        }
+    }
+    private val fromTargetUrl by lazy {
+        contents.entries.associate { (src, tgt) ->
+            reinstateTargetUrl(tgt) to reinstateSourceUrl(
+                src
+            )
+        }
+    }
 
     override fun getTargetUrl(sourceUrl: String) = fromSourceUrl[sourceUrl] ?: sourceUrl
     override fun getSourceUrl(targetUrl: String) = fromTargetUrl[targetUrl] ?: targetUrl

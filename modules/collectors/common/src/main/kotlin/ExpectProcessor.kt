@@ -29,7 +29,9 @@ class ExpectProcessor(
                 function.packageName.asString(),
                 function.simpleName.asString() + ".expect"
             ).bufferedWriter().use { out ->
-                if (function.packageName.asString().isNotEmpty()) out.append("package ${function.packageName.asString()}\n\n")
+                if (function.packageName.asString()
+                        .isNotEmpty()
+                ) out.append("package ${function.packageName.asString()}\n\n")
                 out.appendLine("import androidx.compose.runtime.Composable")
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
                 out.appendLine("import net.derfruhling.serenity.PageDetails")
@@ -38,7 +40,8 @@ class ExpectProcessor(
                 out.appendLine("import kotlinx.serialization.SerialName")
 
                 out.appendLine()
-                out.appendLine("""
+                out.appendLine(
+                    """
                     @Serializable
                     @SerialName("${hashFunctionName(function.qualifiedName!!.asString())}")
                     expect object ${function.simpleName.asString()} : PageHolder {
@@ -50,14 +53,19 @@ class ExpectProcessor(
                         @HtmlComposable
                         override fun Main()
                     }
-                """.trimIndent())
+                """.trimIndent()
+                )
             }
         }
     }
 
     class Provider : SymbolProcessorProvider {
         override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-            return ExpectProcessor(environment.codeGenerator, environment.logger, environment.options)
+            return ExpectProcessor(
+                environment.codeGenerator,
+                environment.logger,
+                environment.options
+            )
         }
     }
 }

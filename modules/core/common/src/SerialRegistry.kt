@@ -1,15 +1,12 @@
 package net.derfruhling.serenity
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlinx.serialization.serializer
-import net.derfruhling.serenity.event.EventType
 import kotlin.reflect.KClass
 
 object SerialRegistry {
@@ -26,14 +23,17 @@ object SerialRegistry {
         return Wrapped.Serializer(fn())
     }
 
-    private inline fun <reified T> wrap(name: String, fn: () -> KSerializer<T> = { serializer<T>() }): KSerializer<T> {
+    private inline fun <reified T> wrap(
+        name: String,
+        fn: () -> KSerializer<T> = { serializer<T>() }
+    ): KSerializer<T> {
         return Wrapped.Serializer(fn(), name)
     }
 
     private fun buildSerializersModule() = SerializersModule {
         polymorphic(PageHolder::class) {
             @Suppress("DestructuringDeclaration")
-            for(page in pages.values) {
+            for (page in pages.values) {
                 subclass(page.kClass, page.kSerializer)
             }
         }
@@ -57,7 +57,7 @@ object SerialRegistry {
             subclass(LongArray::class, wrap($$"$long[]"))
 
             @Suppress("DestructuringDeclaration")
-            for(subClass in subclasses.values) {
+            for (subClass in subclasses.values) {
                 subclass(subClass.kClass, subClass.kSerializer)
             }
         }
@@ -65,15 +65,17 @@ object SerialRegistry {
         composedModules.forEach { include(it) }
     }
 
-    val serializersModule: SerializersModule get() {
-        return _serializersModule ?: buildSerializersModule().also { _serializersModule = it }
-    }
-
-    val json: Json get() {
-        return _json ?: Json {
-            this.serializersModule = this@SerialRegistry.serializersModule
+    val serializersModule: SerializersModule
+        get() {
+            return _serializersModule ?: buildSerializersModule().also { _serializersModule = it }
         }
-    }
+
+    val json: Json
+        get() {
+            return _json ?: Json {
+                this.serializersModule = this@SerialRegistry.serializersModule
+            }
+        }
 
     fun <T : Any> register(kClass: KClass<T>, kSerializer: KSerializer<T>) {
         subclasses[kClass] = SerialEntry(kClass, kSerializer)

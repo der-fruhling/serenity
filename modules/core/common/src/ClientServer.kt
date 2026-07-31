@@ -22,7 +22,7 @@ expect fun ifClient(fn: @Composable () -> Unit)
 @Composable
 fun ifServer(fn: @Composable () -> Unit) {
     key(isServer) {
-        if(isServer) {
+        if (isServer) {
             fn()
         }
     }

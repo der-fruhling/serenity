@@ -35,12 +35,14 @@ data object BeforeUnloadEvent : EventType<Event<Window>>("beforeunload"), Builti
 
 @Serializable
 @WidelyAvailable(Since(year = 2021, month = Month.APRIL))
-data object VisibilityChangeEvent : EventType<Event<Document>>("visibilitychange"), BuiltinPlainDocumentEvent {
+data object VisibilityChangeEvent : EventType<Event<Document>>("visibilitychange"),
+                                    BuiltinPlainDocumentEvent {
     override val isSupported: Boolean by lazy { testSupportedDocumentEvent(name) }
 }
 
 @Serializable
-data object PageHideEvent : EventType<PageTransitionEvent>("visibilitychange"), BuiltinPageTransitionEvent
+data object PageHideEvent : EventType<PageTransitionEvent>("visibilitychange"),
+                            BuiltinPageTransitionEvent
 
 @Serializable
 data object ClickEvent : EventType<ElementPointerEvent>("click"), BuiltinPointerEvent {
@@ -75,10 +77,12 @@ object PointerEvents {
     data object Leave : EventType<ElementPointerEvent>("pointerleave"), BuiltinPointerEvent
 
     @Serializable
-    data object GotCapture : EventType<ElementPointerEvent>("gotpointercapture"), BuiltinPointerEvent
+    data object GotCapture : EventType<ElementPointerEvent>("gotpointercapture"),
+                             BuiltinPointerEvent
 
     @Serializable
-    data object LostCapture : EventType<ElementPointerEvent>("lostpointercapture"), BuiltinPointerEvent
+    data object LostCapture : EventType<ElementPointerEvent>("lostpointercapture"),
+                              BuiltinPointerEvent
 
     @LimitedAvailability
     @UnsupportedOnSafari

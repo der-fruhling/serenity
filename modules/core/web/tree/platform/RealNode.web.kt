@@ -6,7 +6,6 @@ import js.array.asList
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventType
-import web.dom.DocumentType
 import web.dom.Node
 import web.dom.ParentNode
 import web.dom.document
@@ -49,15 +48,17 @@ actual class RealComment actual constructor(actual override val node: Underlying
     actual constructor() : this(document.createComment(""))
 }
 
-actual class RealDocumentType actual constructor(actual override val node: UnderlyingDocType) : RealNode {
+actual class RealDocumentType actual constructor(actual override val node: UnderlyingDocType) :
+    RealNode {
     actual val type: String = node.name
     actual val public: String = node.publicId
     actual val system: String = node.systemId
 
     actual constructor(from: RealDocumentType)
-            : this(from.type, from.public, from.system)
+        : this(from.type, from.public, from.system)
+
     actual constructor(type: String, public: String, system: String)
-            : this(document.implementation.createDocumentType(type, public, system))
+        : this(document.implementation.createDocumentType(type, public, system))
 }
 
 actual sealed class RealElementLike : RealNode {
@@ -141,8 +142,9 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
                     (element.name.namespace?.let { "$it:" } ?: "") + element.name.localName,
                     element.value ?: "")
             } else {
-                node.setAttribute((element.name.namespace?.let { "$it:" } ?: "") + element.name.localName,
-                    element.value ?: "")
+                node.setAttribute((element.name.namespace?.let { "$it:" }
+                    ?: "") + element.name.localName,
+                                  element.value ?: "")
             }
             return true
         }
@@ -181,7 +183,10 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
 
     actual override val attributeSet: MutableSet<RealAttribute> by lazy { AttributeSet() }
 
-    actual inline fun <T> subscribe(type: EventType<T>, crossinline handler: (T) -> Unit): EventSubscriptionHandle {
+    actual inline fun <T> subscribe(
+        type: EventType<T>,
+        crossinline handler: (T) -> Unit
+    ): EventSubscriptionHandle {
         val closure: EventHandler<Event, EventTarget, EventTarget> = EventHandler { e: Event ->
             handler(type.generate(e))
         }
@@ -195,7 +200,8 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
     }
 }
 
-actual class RealDocument actual constructor(actual override val node: UnderlyingDocument) : RealElementLike() {
+actual class RealDocument actual constructor(actual override val node: UnderlyingDocument) :
+    RealElementLike() {
     object UnsupportedAttributeSet : AbstractMutableSet<RealAttribute>() {
         override fun add(element: RealAttribute): Boolean {
             throw UnsupportedOperationException()
@@ -302,7 +308,8 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
 }
 
 @Deprecated("Avoid if possible")
-actual class RealAttribute actual constructor(actual override val node: UnderlyingAttribute) : RealNode {
+actual class RealAttribute actual constructor(actual override val node: UnderlyingAttribute) :
+    RealNode {
     actual constructor(name: Name) : this(
         document.createAttributeNS(
             name.namespaceUrl ?: HTML_NS,
@@ -343,7 +350,10 @@ actual class RealDocumentFragment actual constructor(actual override val node: U
         get() = node
 
     @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated(message = "Attributes not supported on document objects", level = DeprecationLevel.ERROR)
+    @Deprecated(
+        message = "Attributes not supported on document objects",
+        level = DeprecationLevel.ERROR
+    )
     actual override val attributeSet: MutableSet<RealAttribute>
         get() = RealDocument.UnsupportedAttributeSet
 

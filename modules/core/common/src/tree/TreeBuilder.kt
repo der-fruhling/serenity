@@ -19,6 +19,7 @@ value class Builder<N : ComposeNode>(val node: N) {
 
     inline fun element(name: Name, fn: Builder<ElementNode>.() -> Unit): ElementNode =
         element { node.name = name; fn() }
+
     inline fun element(name: String, fn: Builder<ElementNode>.() -> Unit): ElementNode =
         element(Name.of(name), fn)
 
@@ -33,7 +34,12 @@ value class Builder<N : ComposeNode>(val node: N) {
         node.attribute(name, value)
     }
 
-    inline fun page(title: String, lang: String = "en", head: Builder<ElementNode>.() -> Unit = {}, body: Builder<ElementNode>.() -> Unit): ElementNode =
+    inline fun page(
+        title: String,
+        lang: String = "en",
+        head: Builder<ElementNode>.() -> Unit = {},
+        body: Builder<ElementNode>.() -> Unit
+    ): ElementNode =
         element("html") {
             attribute(Attributes.lang, lang)
 

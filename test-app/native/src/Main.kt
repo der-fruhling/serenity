@@ -1,10 +1,6 @@
 package net.derfruhling.serenity.testapp
 
-import io.github.oshai.kotlinlogging.Appender
-import io.github.oshai.kotlinlogging.DirectLoggerFactory
-import io.github.oshai.kotlinlogging.KLoggingEvent
-import io.github.oshai.kotlinlogging.KotlinLoggingConfiguration
-import io.github.oshai.kotlinlogging.Level
+import io.github.oshai.kotlinlogging.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
 import kotlinx.io.files.Path
@@ -30,10 +26,10 @@ fun main() {
         embeddedServer(CIO, applicationEnvironment {
             log = createKtorLogger()
         }, {
-            connector {
-                host = "127.0.0.1"
-                port = 8080
-            }
-        }) { configure() }.startAwait()
+                           connector {
+                               host = "127.0.0.1"
+                               port = 8080
+                           }
+                       }) { configure() }.startAwait()
     }
 }

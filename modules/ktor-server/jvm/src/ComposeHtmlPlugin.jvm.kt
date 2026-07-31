@@ -1,8 +1,7 @@
 package net.derfruhling.serenity.ktor.server
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ktor.server.engine.ApplicationEngine
-import io.ktor.server.engine.EmbeddedServer
+import io.ktor.server.engine.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.buffered
@@ -14,7 +13,7 @@ actual fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> Embedded
     runBlocking {
         val log = KotlinLogging.logger {}
 
-        for(name in arrayOf("INT", "TERM", "HUP")) {
+        for (name in arrayOf("INT", "TERM", "HUP")) {
             Signal.handle(Signal(name)) {
                 launch {
                     log.info { "Received ${it.name}, stopping" }
@@ -28,7 +27,7 @@ actual fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> Embedded
     }
 
 actual fun ComposeHtmlConfig.readManifest(): String {
-    return if(manifestAlwaysInFileSystem) {
+    return if (manifestAlwaysInFileSystem) {
         SystemFileSystem.source(manifestPath).use {
             it.buffered().readString()
         }

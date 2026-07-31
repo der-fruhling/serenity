@@ -17,11 +17,15 @@ abstract class SourceMapFixerService : BuildService<BuildServiceParameters.None>
     private val sourceMapRegex = Regex("""/\*#\s*sourceMappingURL=([^\s*]+)\s*\*/""")
     private val dataRegex = Regex("""data:application/json;base64,([a-zA-Z0-9-_]+=*)""")
 
-    fun fixSourceMaps(sourceRootsIter: Iterable<File>, destinationRoot: File, outputs: FileCollection) {
+    fun fixSourceMaps(
+        sourceRootsIter: Iterable<File>,
+        destinationRoot: File,
+        outputs: FileCollection
+    ) {
         val sourceRoots = sourceRootsIter.map { it.absoluteFile }
         for (possibleMap in outputs) {
-            if(!possibleMap.isFile) continue
-            if(possibleMap.extension == "map") {
+            if (!possibleMap.isFile) continue
+            if (possibleMap.extension == "map") {
                 val sourceMap = Json.decodeFromString<SourceMap>(possibleMap.readText())
                 val fixed = fixSourceMap(sourceRoots, destinationRoot, possibleMap, sourceMap)
                 possibleMap.writeText(Json.encodeToString(fixed))
@@ -29,8 +33,12 @@ abstract class SourceMapFixerService : BuildService<BuildServiceParameters.None>
                 val text = possibleMap.readText()
                 val fixedText = text.replace(sourceMapRegex) { match ->
                     val sourceMapUrl = match.groups[1]!!
-                    val range = sourceMapUrl.range.let { (it.first - match.range.first)..(it.last - match.range.first) }
-                    match.value.replaceRange(range, fixUrl(sourceRoots, destinationRoot, possibleMap, sourceMapUrl.value))
+                    val range =
+                        sourceMapUrl.range.let { (it.first - match.range.first)..(it.last - match.range.first) }
+                    match.value.replaceRange(
+                        range,
+                        fixUrl(sourceRoots, destinationRoot, possibleMap, sourceMapUrl.value)
+                    )
                 }
 
                 possibleMap.writeText(fixedText)
@@ -38,13 +46,19 @@ abstract class SourceMapFixerService : BuildService<BuildServiceParameters.None>
         }
     }
 
-    fun fixUrl(sourceRoots: Iterable<File>, destinationRoot: File, mapFile: File, url: String): String {
-        return if(url.startsWith("file://")) {
+    fun fixUrl(
+        sourceRoots: Iterable<File>,
+        destinationRoot: File,
+        mapFile: File,
+        url: String
+    ): String {
+        return if (url.startsWith("file://")) {
             fixFileUrl(sourceRoots, destinationRoot, mapFile, url)
         } else if (url.startsWith("data:")) {
             val data = dataRegex.matchEntire(url)!!
             val b64 = data.groups[1]!!
-            val sourceMap = Json.decodeFromString<SourceMap>(Base64.UrlSafe.decode(b64.value).decodeToString())
+            val sourceMap =
+                Json.decodeFromString<SourceMap>(Base64.UrlSafe.decode(b64.value).decodeToString())
             val fixed = fixSourceMap(sourceRoots, destinationRoot, mapFile, sourceMap)
             url.replaceRange(b64.range, Base64.encode(Json.encodeToString(fixed).toByteArray()))
         } else {
@@ -52,13 +66,18 @@ abstract class SourceMapFixerService : BuildService<BuildServiceParameters.None>
         }
     }
 
-    fun fixFileUrl(sourceRoots: Iterable<File>, destinationRoot: File, mapFile: File, url: String): String {
+    fun fixFileUrl(
+        sourceRoots: Iterable<File>,
+        destinationRoot: File,
+        mapFile: File,
+        url: String
+    ): String {
         require(url.startsWith("file://"))
         val uri = URI.create(url)
         var filePath = uri.toPath().toFile()
 
-        for(root in sourceRoots) {
-            if(filePath.startsWith(root)) {
+        for (root in sourceRoots) {
+            if (filePath.startsWith(root)) {
                 filePath = destinationRoot.resolve(filePath.relativeTo(root))
                 break
             }
@@ -67,10 +86,15 @@ abstract class SourceMapFixerService : BuildService<BuildServiceParameters.None>
         return filePath.toRelativeString(mapFile.parentFile!!)
     }
 
-    fun fixSourceMap(sourceRoots: Iterable<File>, destinationRoot: File, mapFile: File, sourceMap: SourceMap): SourceMap {
+    fun fixSourceMap(
+        sourceRoots: Iterable<File>,
+        destinationRoot: File,
+        mapFile: File,
+        sourceMap: SourceMap
+    ): SourceMap {
         val newSources = MutableList(sourceMap.sources.size) { sourceMap.sources[it] }
-        for((i, url) in sourceMap.sources.withIndex()) {
-            if(sourceMap.sourcesContent != null && sourceMap.sourcesContent.size > i) {
+        for ((i, url) in sourceMap.sources.withIndex()) {
+            if (sourceMap.sourcesContent != null && sourceMap.sourcesContent.size > i) {
                 continue
             }
 
@@ -82,7 +106,10 @@ abstract class SourceMapFixerService : BuildService<BuildServiceParameters.None>
 
     companion object {
         fun registerIfAbsent(target: Project) {
-            target.gradle.sharedServices.registerIfAbsent("sourceMapFixer", SourceMapFixerService::class)
+            target.gradle.sharedServices.registerIfAbsent(
+                "sourceMapFixer",
+                SourceMapFixerService::class
+            )
         }
     }
 }

@@ -2,7 +2,6 @@ package net.derfruhling.serenity
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
 
 @Serializable
 @SerialName($$"$string")

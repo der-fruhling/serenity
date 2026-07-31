@@ -18,7 +18,7 @@ val linkBase = compositionLocalOf { "" }
 fun Link(to: String, fn: @Composable () -> Unit) {
     val linkBase = linkBase.current
     val actualLink = remember(to, linkBase) {
-        if(to.startsWith('/')) {
+        if (to.startsWith('/')) {
             linkBase + to
         } else {
             to

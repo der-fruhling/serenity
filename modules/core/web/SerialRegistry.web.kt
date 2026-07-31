@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.serialization.KSerializer
-import net.derfruhling.serenity.elements.HeadContext
 import kotlin.reflect.KClass
 
 @PublishedApi
@@ -32,7 +31,11 @@ fun SerialRegistry.registerClientPages(fn: PageRegistry.() -> Unit) {
             pageTemplate = PageTemplate(fn)
         }
 
-        override fun <T : PageHolder> register(kClass: KClass<T>, kSerializer: KSerializer<T>, page: T) {
+        override fun <T : PageHolder> register(
+            kClass: KClass<T>,
+            kSerializer: KSerializer<T>,
+            page: T
+        ) {
             registerPage(kClass, kSerializer)
         }
     }).fn()

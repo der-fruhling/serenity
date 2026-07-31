@@ -29,7 +29,10 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 @Retention(AnnotationRetention.BINARY)
-@RequiresOptIn(level = RequiresOptIn.Level.ERROR, message = "This is a page entry point API and should not be called directly (unless you know what you're getting into)")
+@RequiresOptIn(
+    level = RequiresOptIn.Level.ERROR,
+    message = "This is a page entry point API and should not be called directly (unless you know what you're getting into)"
+)
 @MustBeDocumented
 annotation class InternalPageEntryPoint
 
@@ -48,25 +51,31 @@ fun onHtmlContextStart(fn: (HtmlCompositionContext) -> Unit) {
 }
 
 @OptIn(ExperimentalWasmJsInterop::class)
-private fun createSerenityDebugProperty(get: () -> Boolean, set: (Boolean) -> Unit): TypedPropertyDescriptor<JsBoolean> = js("""
+private fun createSerenityDebugProperty(
+    get: () -> Boolean,
+    set: (Boolean) -> Unit
+): TypedPropertyDescriptor<JsBoolean> = js(
+    """
     {get, set}
-""")
+"""
+)
 
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class WebEntryPoint private constructor() {
     init {
         window.onpopstate = EventHandler { ev: PopStateEvent ->
             val state = ev.state
-            if(state != null) {
+            if (state != null) {
                 val page = SerialRegistry.decodeFromObject<PageHolder>(state)
                 navigateDirect(page)
             }
         }
 
-        Object.defineProperty(window, "serenityDebug", createSerenityDebugProperty(
-            { htmlContext.enableDebugMode },
-            { htmlContext.enableDebugMode = it }
-        ))
+        Object.defineProperty(
+            window, "serenityDebug", createSerenityDebugProperty(
+                { htmlContext.enableDebugMode },
+                { htmlContext.enableDebugMode = it }
+            ))
     }
 
     private val manifestRequest = fetchAsync("/_/application-manifest.json").flatThen {
@@ -92,8 +101,9 @@ internal class WebEntryPoint private constructor() {
             htmlContextStartHandlers.forEach { it(htmlContext) }
 
             @OptIn(ExperimentalComposeRuntimeApi::class)
-            if(htmlContext.enableDebugMode) {
-                htmlComposer = RehydratingHtmlTree(htmlContext.compositionContext, ::DebuggingHtmlApplier)
+            if (htmlContext.enableDebugMode) {
+                htmlComposer =
+                    RehydratingHtmlTree(htmlContext.compositionContext, ::DebuggingHtmlApplier)
                 htmlComposer.composition.setObserver(LoggingCompositionObserver)
             } else {
                 htmlComposer = RehydratingHtmlTree(htmlContext.compositionContext)
@@ -119,9 +129,11 @@ internal class WebEntryPoint private constructor() {
                 val manifestJson = manifestRequest.await()
                 SerialRegistry.decodeFromObject<Manifest>(manifestJson!!)
             } catch (e: Exception) {
-                alert("An error occurred trying to fetch the application manifest: ${e::class.simpleName}\n${e.message}\n\n" +
+                alert(
+                    "An error occurred trying to fetch the application manifest: ${e::class.simpleName}\n${e.message}\n\n" +
                         "If you're the developer of this site, this error is likely due to a misconfiguration. " +
-                        "Ensure you are service the application-manifest.json file from your server.")
+                        "Ensure you are service the application-manifest.json file from your server."
+                )
                 Manifest(mutableMapOf())
             }
 
@@ -178,7 +190,7 @@ internal class WebEntryPoint private constructor() {
         currentPage = page
         this.page = page
 
-        if(first) {
+        if (first) {
             initialize()
         }
     }

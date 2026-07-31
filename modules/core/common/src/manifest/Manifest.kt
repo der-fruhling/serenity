@@ -2,7 +2,6 @@ package net.derfruhling.serenity.manifest
 
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -20,7 +19,8 @@ data class Manifest(
     object Serializer : KSerializer<Manifest> {
         private val listSerializer = serializer<List<ManifestEntry>>()
 
-        override val descriptor: SerialDescriptor = SerialDescriptor($$"$manifest", listSerializer.descriptor)
+        override val descriptor: SerialDescriptor =
+            SerialDescriptor($$"$manifest", listSerializer.descriptor)
 
         override fun serialize(
             encoder: Encoder,
@@ -48,7 +48,10 @@ data class Manifest(
         entries[kClass] = value
     }
 
-    inline operator fun <reified T : ManifestEntry> getValue(self: Any?, property: KProperty<*>): T? {
+    inline operator fun <reified T : ManifestEntry> getValue(
+        self: Any?,
+        property: KProperty<*>
+    ): T? {
         return this[T::class]
     }
 
@@ -71,6 +74,7 @@ data class Manifest(
         get() = entries.values.flatMap { it.provide.toList() }.toTypedArray()
 
     companion object {
-        val local = compositionLocalOf<Manifest> { throw IllegalStateException("No manifest provided") }
+        val local =
+            compositionLocalOf<Manifest> { throw IllegalStateException("No manifest provided") }
     }
 }

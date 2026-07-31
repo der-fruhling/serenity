@@ -1,10 +1,6 @@
 package net.derfruhling.serenity.gradle.resources
 
-import net.derfruhling.serenity.gradle.Attributes
-import net.derfruhling.serenity.gradle.SerenityApplicationPlugin
-import net.derfruhling.serenity.gradle.SerenityBasePlugin
-import net.derfruhling.serenity.gradle.SerenityUsage
-import net.derfruhling.serenity.gradle.Status
+import net.derfruhling.serenity.gradle.*
 import net.derfruhling.serenity.gradle.server.SerenityServerPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,13 +11,7 @@ import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.internal.model.NamedObjectInstantiator
 import org.gradle.api.tasks.Sync
 import org.gradle.api.tasks.bundling.Zip
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.registerIfAbsent
-import org.gradle.kotlin.dsl.withType
+import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import javax.inject.Inject
@@ -31,7 +21,10 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     override fun apply(target: Project) {
         val base = target.plugins.apply(SerenityBasePlugin::class)
-        target.gradle.sharedServices.registerIfAbsent("resourceVendor", ResourceVendorService::class)
+        target.gradle.sharedServices.registerIfAbsent(
+            "resourceVendor",
+            ResourceVendorService::class
+        )
         SourceMapFixerService.registerIfAbsent(target)
 
         val ext = base.extension.extensions.create("resources", SerenityResourcesExtension::class)
@@ -41,8 +34,15 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
             isCanBeResolved = false
         }
 
-        val resourcesDebug = createResourcesConfiguration(resources, target, "resourcesDebug", Status.DEBUG)
-        val resourcesProduction = createResourcesConfiguration(resources, target, "resourcesProduction", Status.PRODUCTION)
+        val resourcesDebug =
+            createResourcesConfiguration(resources, target, "resourcesDebug", Status.DEBUG)
+        val resourcesProduction =
+            createResourcesConfiguration(
+                resources,
+                target,
+                "resourcesProduction",
+                Status.PRODUCTION
+            )
 
         target.dependencies.attributesSchema {
             attribute(Attributes.USAGE) {
@@ -54,14 +54,18 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
             }
         }
 
-        val resourceElements = createResourceElementsConfiguration(target, "resourceElements", Status.PRODUCTION)
-        val resourceElementsDebug = createResourceElementsConfiguration(target, "resourceElementsDebug", Status.DEBUG)
+        val resourceElements =
+            createResourceElementsConfiguration(target, "resourceElements", Status.PRODUCTION)
+        val resourceElementsDebug =
+            createResourceElementsConfiguration(target, "resourceElementsDebug", Status.DEBUG)
 
         createUnpackTask(target, "unpackResourcesDebug", "unpacked-debug", resourcesDebug)
         createUnpackTask(target, "unpackResources", "unpacked", resourcesProduction)
 
-        val processCommonResources = target.tasks.named("processCommonResources", SerenityProcessResources::class)
-        val processCommonResourcesDebug = target.tasks.named("processCommonResourcesDebug", SerenityProcessResources::class)
+        val processCommonResources =
+            target.tasks.named("processCommonResources", SerenityProcessResources::class)
+        val processCommonResourcesDebug =
+            target.tasks.named("processCommonResourcesDebug", SerenityProcessResources::class)
 
         target.configure<KotlinMultiplatformExtension> {
             publishing {
@@ -166,36 +170,46 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
         }
 
         target.plugins.withType(SerenityApplicationPlugin::class) {
-            val composeApplicationManifest = target.tasks.register("composeApplicationManifest", ComposeApplicationManifest::class) {
-                description = "Builds the final application-manifest.json file for release builds"
-                prettyJson.convention(ext.prettyJson)
-                outputManifest.set(target.layout.buildDirectory.file("resources/release-manifest/application-manifest.json"))
-            }
+            val composeApplicationManifest =
+                target.tasks.register(
+                    "composeApplicationManifest",
+                    ComposeApplicationManifest::class
+                ) {
+                    description =
+                        "Builds the final application-manifest.json file for release builds"
+                    prettyJson.convention(ext.prettyJson)
+                    outputManifest.set(target.layout.buildDirectory.file("resources/release-manifest/application-manifest.json"))
+                }
 
-            val composeApplicationManifestDebug = target.tasks.register("composeApplicationManifestDebug", ComposeApplicationManifest::class) {
-                description = "Builds the final application-manifest.json file for debug builds"
-                prettyJson.convention(ext.prettyJson)
-                outputManifest.set(target.layout.buildDirectory.file("resources/debug-manifest/application-manifest.json"))
-            }
+            val composeApplicationManifestDebug =
+                target.tasks.register(
+                    "composeApplicationManifestDebug",
+                    ComposeApplicationManifest::class
+                ) {
+                    description = "Builds the final application-manifest.json file for debug builds"
+                    prettyJson.convention(ext.prettyJson)
+                    outputManifest.set(target.layout.buildDirectory.file("resources/debug-manifest/application-manifest.json"))
+                }
 
             target.plugins.withType(SerenityServerPlugin::class) {
                 val processServerResources = target.tasks.named("syncServerResources")
 
                 val outDir = target.layout.buildDirectory.dir("resources/vendored")
-                val vendorServerResources = target.tasks.register("vendorServerResources", VendorResourcesTask::class) {
-                    dependsOn(processServerResources)
+                val vendorServerResources =
+                    target.tasks.register("vendorServerResources", VendorResourcesTask::class) {
+                        dependsOn(processServerResources)
 
-                    into(outDir)
-                    from(processServerResources)
+                        into(outDir)
+                        from(processServerResources)
 
-                    inputs.dir(target.layout.buildDirectory.dir("resources/all"))
-                    outputs.dir(outDir)
+                        inputs.dir(target.layout.buildDirectory.dir("resources/all"))
+                        outputs.dir(outDir)
 
-                    resourceIndexFile.convention(ext.resourceIndexFile)
-                    sourceBaseUrl.convention(ext.sourceBaseUrl)
-                    targetBaseUrl.convention(ext.targetBaseUrl)
-                    prettyJson.convention(ext.prettyJson)
-                }
+                        resourceIndexFile.convention(ext.resourceIndexFile)
+                        sourceBaseUrl.convention(ext.sourceBaseUrl)
+                        targetBaseUrl.convention(ext.targetBaseUrl)
+                        prettyJson.convention(ext.prettyJson)
+                    }
 
                 composeApplicationManifest.configure {
                     dependsOn(vendorServerResources)
@@ -211,19 +225,29 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
         }
     }
 
-    private fun createResourceElementsConfiguration(target: Project, name: String, status: Status): Configuration = target.configurations.create(name) {
-        isCanBeDeclared = false
-        isCanBeResolved = false
-        isCanBeConsumed = true
+    private fun createResourceElementsConfiguration(
+        target: Project,
+        name: String,
+        status: Status
+    ): Configuration =
+        target.configurations.create(name) {
+            isCanBeDeclared = false
+            isCanBeResolved = false
+            isCanBeConsumed = true
 
-        attributes {
-            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage::class.java, "serenity"))
-            attribute(Attributes.USAGE, SerenityUsage.RESOURCES_ZIP)
-            attribute(Attributes.STATUS, status)
+            attributes {
+                attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage::class.java, "serenity"))
+                attribute(Attributes.USAGE, SerenityUsage.RESOURCES_ZIP)
+                attribute(Attributes.STATUS, status)
+            }
         }
-    }
 
-    private fun createUnpackTask(target: Project, name: String, dirName: String, configuration: Configuration) {
+    private fun createUnpackTask(
+        target: Project,
+        name: String,
+        dirName: String,
+        configuration: Configuration
+    ) {
         val task = target.tasks.register(name, Sync::class) {
             val destDir = target.layout.buildDirectory.dir("resources/$dirName")
             outputs.dir(destDir)
@@ -248,7 +272,12 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
         }
     }
 
-    private fun createResourcesConfiguration(base: Configuration, target: Project, name: String, status: Status): Configuration =
+    private fun createResourcesConfiguration(
+        base: Configuration,
+        target: Project,
+        name: String,
+        status: Status
+    ): Configuration =
         target.configurations.create(name) {
             isCanBeResolved = true
             isCanBeConsumed = false
@@ -259,10 +288,12 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
                 attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage::class.java, "serenity"))
                 attribute(Attributes.USAGE, SerenityUsage.RESOURCES_DIR)
                 attribute(Attributes.STATUS, status)
-                attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, when(status) {
-                    Status.DEBUG -> "debug-resources"
-                    Status.PRODUCTION -> "resources"
-                })
+                attribute(
+                    ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, when (status) {
+                        Status.DEBUG -> "debug-resources"
+                        Status.PRODUCTION -> "resources"
+                    }
+                )
             }
         }
 }

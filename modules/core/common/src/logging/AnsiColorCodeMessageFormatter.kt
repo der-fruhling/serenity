@@ -8,13 +8,21 @@ class AnsiColorCodeMessageFormatter(
     val debugColor: AnsiColorState = AnsiColorState(AnsiColorCode.PURPLE),
     val infoColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_GREEN),
     val warnColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_YELLOW, underline = true),
-    val errorColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_RED, underline = true, bold = true),
-    val assertColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_WHITE, bg = AnsiColorCode.RED, underline = true),
+    val errorColor: AnsiColorState = AnsiColorState(
+        AnsiColorCode.BRIGHT_RED,
+        underline = true,
+        bold = true
+    ),
+    val assertColor: AnsiColorState = AnsiColorState(
+        AnsiColorCode.BRIGHT_WHITE,
+        bg = AnsiColorCode.RED,
+        underline = true
+    ),
     val tagColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_CYAN),
     val timeColor: AnsiColorState = AnsiColorState(AnsiColorCode.BRIGHT_PURPLE)
 ) : NeatMessageFormatter() {
     override fun formatLevel(level: Level): String {
-        return when(level) {
+        return when (level) {
             Level.TRACE -> traceColor
             Level.DEBUG -> debugColor
             Level.INFO -> infoColor

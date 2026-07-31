@@ -5,21 +5,18 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.application.hooks.*
-import io.ktor.server.engine.ApplicationEngine
-import io.ktor.server.engine.EmbeddedServer
-import io.ktor.server.http.link
-import io.ktor.server.plugins.conditionalheaders.ConditionalHeaders
+import io.ktor.server.engine.*
+import io.ktor.server.http.*
+import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import io.ktor.server.routing.get
-import io.ktor.server.routing.routing
+import io.ktor.server.routing.*
 import io.ktor.util.*
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.io.files.Path
 import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.annotations.HtmlComposable
-import net.derfruhling.serenity.attribute.Attributes
 import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.preloadSetLocal
@@ -27,10 +24,7 @@ import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
 import net.derfruhling.serenity.tree.encodeToString
 import net.derfruhling.serenity.tree.platform.Document
-import net.derfruhling.serenity.tree.platform.ElementNode
 import net.derfruhling.serenity.tree.platform.PlatformApplier
-import net.derfruhling.serenity.tree.platform.TextNode
-import net.derfruhling.serenity.tree.platform.head
 
 private val logger = KotlinLogging.logger {}
 
@@ -63,7 +57,11 @@ class KtorHtmlCompositionContext(
     recomposer: Recomposer,
     val transformations: ImmutableList<Transformer>
 ) : HtmlCompositionContext(recomposer) {
-    inline fun transform(call: ApplicationCall, tree: Document, cacheKeyAcceptor: (Int) -> Unit): Document {
+    inline fun transform(
+        call: ApplicationCall,
+        tree: Document,
+        cacheKeyAcceptor: (Int) -> Unit
+    ): Document {
         if (transformations.isEmpty()) return tree
 
         return transformations.fold(tree) { tree, t ->
@@ -98,7 +96,11 @@ val ComposeHtml = createApplicationPlugin(
     { ComposeHtmlConfigImpl() as ComposeHtmlConfig }
 ) {
     val impl = pluginConfig as ComposeHtmlConfigImpl
-    val context = KtorHtmlCompositionContext(Recomposer(application.coroutineContext), impl.transformations.toImmutableList())
+    val context =
+        KtorHtmlCompositionContext(
+            Recomposer(application.coroutineContext),
+            impl.transformations.toImmutableList()
+        )
 
     val manifestText = impl.readManifest()
     val manifest = SerialRegistry.decode<Manifest>(manifestText)
@@ -142,11 +144,15 @@ suspend inline fun ApplicationCall.respondCompose(crossinline fn: @Composable @H
         }
     }
 
-    for((href, `as`) in preloadSet) {
-        response.link(LinkHeader(href, listOf(
-            HeaderValueParam("rel", "preload"),
-            HeaderValueParam("as", `as`)
-        )))
+    for ((href, `as`) in preloadSet) {
+        response.link(
+            LinkHeader(
+                href, listOf(
+                    HeaderValueParam("rel", "preload"),
+                    HeaderValueParam("as", `as`)
+                )
+            )
+        )
     }
 
     val doc = context.transform(this, tree.root) { /* TODO */ }
@@ -154,4 +160,4 @@ suspend inline fun ApplicationCall.respondCompose(crossinline fn: @Composable @H
     respondText(ContentType.Text.Html) { doc.encodeToString() }
 }
 
-expect fun <E : ApplicationEngine, C: ApplicationEngine.Configuration> EmbeddedServer<E, C>.startAwait()
+expect fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> EmbeddedServer<E, C>.startAwait()

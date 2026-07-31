@@ -50,25 +50,26 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
         createDistTasks.convention(true)
 
         val distDir = project.layout.buildDirectory.dir("resources/all")
-        fun syncServerResourcesTask(suffix: String, dirSuffix: String): TaskProvider<Sync> = project.tasks.register("syncServerResources$suffix", Sync::class) {
-            into(distDir)
+        fun syncServerResourcesTask(suffix: String, dirSuffix: String): TaskProvider<Sync> =
+            project.tasks.register("syncServerResources$suffix", Sync::class) {
+                into(distDir)
 
-            from(
-                project.layout.buildDirectory.dir("resources/unpacked$dirSuffix"),
-                project.layout.buildDirectory.dir("resources/common$dirSuffix"),
-                project.layout.buildDirectory.dir("resources/server$dirSuffix")
-            )
-            dependsOn(
-                "unpackResources$suffix",
-                "processCommonResources$suffix",
-                "processServerResources$suffix"
-            )
+                from(
+                    project.layout.buildDirectory.dir("resources/unpacked$dirSuffix"),
+                    project.layout.buildDirectory.dir("resources/common$dirSuffix"),
+                    project.layout.buildDirectory.dir("resources/server$dirSuffix")
+                )
+                dependsOn(
+                    "unpackResources$suffix",
+                    "processCommonResources$suffix",
+                    "processServerResources$suffix"
+                )
 
-            inputs.dir(project.layout.buildDirectory.dir("resources/unpacked$dirSuffix"))
-            inputs.dir(project.layout.buildDirectory.dir("resources/common$dirSuffix"))
-            inputs.dir(project.layout.buildDirectory.dir("resources/server$dirSuffix"))
-            outputs.dir(distDir)
-        }
+                inputs.dir(project.layout.buildDirectory.dir("resources/unpacked$dirSuffix"))
+                inputs.dir(project.layout.buildDirectory.dir("resources/common$dirSuffix"))
+                inputs.dir(project.layout.buildDirectory.dir("resources/server$dirSuffix"))
+                outputs.dir(distDir)
+            }
 
         debugResourceTask.convention(syncServerResourcesTask("Debug", "-debug").name)
         resourceTask.convention(syncServerResourcesTask("", "").name)
@@ -98,7 +99,9 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
 
     private fun configureJvmProcessResources() {
         project.tasks.named("jvmProcessResources", ProcessResources::class) {
-            val isProduction = project.providers.gradleProperty("net.derfruhling.serenity.jvm-production").orElse("false")
+            val isProduction =
+                project.providers.gradleProperty("net.derfruhling.serenity.jvm-production")
+                    .orElse("false")
             inputs.property("net.derfruhling.serenity.jvm-production", isProduction)
 
             val (resourceTask, applicationManifestTask) = if (isProduction.get() == "true") {
@@ -127,19 +130,21 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
     private fun KotlinNativeTarget.configureNativeTarget() {
         configureTarget()
 
-        if(createDefaultBinaries.get()) {
+        if (createDefaultBinaries.get()) {
             binaries {
                 executable {
-                    entryPoint(this@SerenityServerExtension.nativeEntryPoint.orNull
-                        ?: throw InvalidUserCodeException("If createDefaultBinaries is not explicitly disabled, you must set entryPoint"))
+                    entryPoint(
+                        this@SerenityServerExtension.nativeEntryPoint.orNull
+                            ?: throw InvalidUserCodeException("If createDefaultBinaries is not explicitly disabled, you must set entryPoint")
+                    )
                 }
             }
         }
 
-        if(createDistTasks.get()) {
+        if (createDistTasks.get()) {
             val releaseBinary = binaries.findExecutable(NativeBuildType.RELEASE)
 
-            if(releaseBinary != null) {
+            if (releaseBinary != null) {
                 val distDir = project.layout.buildDirectory.dir("dist/${name}")
                 val targetName = name
 
@@ -150,7 +155,7 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
                     into(distDir)
                     from(releaseBinary.linkTaskProvider)
 
-                    if(composeApplicationManifestTask.isPresent) {
+                    if (composeApplicationManifestTask.isPresent) {
                         val task = project.tasks.named(composeApplicationManifestTask.get())
                         dependsOn(task)
                         from(task)
@@ -171,7 +176,7 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
 
                 val debugBinary = binaries.findExecutable(NativeBuildType.DEBUG)
 
-                if(debugBinary != null) {
+                if (debugBinary != null) {
                     val runDir = project.layout.buildDirectory.dir("run/${name}")
                     val prepareDebug = project.tasks.register("${name}PrepareDebug", Sync::class) {
                         description = "Prepares the $targetName debug-mode server for execution"
@@ -180,8 +185,9 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
                         into(runDir)
                         from(debugBinary.linkTaskProvider)
 
-                        if(composeApplicationManifestDebugTask.isPresent) {
-                            val task = project.tasks.named(composeApplicationManifestDebugTask.get())
+                        if (composeApplicationManifestDebugTask.isPresent) {
+                            val task =
+                                project.tasks.named(composeApplicationManifestDebugTask.get())
                             dependsOn(task)
                             from(task)
                         }

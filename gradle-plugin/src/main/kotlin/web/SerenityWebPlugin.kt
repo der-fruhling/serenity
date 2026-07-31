@@ -14,6 +14,7 @@ class SerenityWebPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val base = target.plugins.apply(SerenityBasePlugin::class)
         target.plugins.apply(SerenityApplicationPlugin::class)
-        webExtension = base.extension.extensions.create("web", SerenityWebExtension::class, base.extension)
+        webExtension =
+            base.extension.extensions.create("web", SerenityWebExtension::class, base.extension)
     }
 }

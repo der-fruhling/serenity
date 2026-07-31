@@ -8,24 +8,26 @@ object StyleClasses {
 
     private fun hyphenate(name: String) = name.replace(regex) { '-' + it.value.lowercase() }
 
-    private val lazyClass get() = object : ReadOnlyProperty<Any?, String> {
-        private var value: String? = null
-
-        override fun getValue(thisRef: Any?, property: KProperty<*>): String {
-            if (value == null) value = "s-${property.name}"
-            return value!!
-        }
-    }
-
-    abstract class Augment(val prefix: String) {
-        protected val lazyAugment get() = object : ReadOnlyProperty<Any?, String> {
+    private val lazyClass
+        get() = object : ReadOnlyProperty<Any?, String> {
             private var value: String? = null
 
             override fun getValue(thisRef: Any?, property: KProperty<*>): String {
-                if(value == null) value = prefix + '-' + hyphenate(property.name)
+                if (value == null) value = "s-${property.name}"
                 return value!!
             }
         }
+
+    abstract class Augment(val prefix: String) {
+        protected val lazyAugment
+            get() = object : ReadOnlyProperty<Any?, String> {
+                private var value: String? = null
+
+                override fun getValue(thisRef: Any?, property: KProperty<*>): String {
+                    if (value == null) value = prefix + '-' + hyphenate(property.name)
+                    return value!!
+                }
+            }
     }
 
     val FlexColumn by lazyClass

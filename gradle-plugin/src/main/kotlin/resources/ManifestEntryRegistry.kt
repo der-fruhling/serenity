@@ -9,15 +9,21 @@ import org.gradle.internal.extensions.stdlib.uncheckedCast
 import kotlin.reflect.KClass
 
 object ManifestEntryRegistry {
-    private data class Entry<T : ManifestEntry>(val kClass: KClass<T>, val kSerializer: KSerializer<T>)
+    private data class Entry<T : ManifestEntry>(
+        val kClass: KClass<T>,
+        val kSerializer: KSerializer<T>
+    )
 
     private val entries = mutableListOf<Entry<*>>()
 
     internal val serializersModule by lazy {
         SerializersModule {
             polymorphic(ManifestEntry::class) {
-                for((kClass, kSerializer) in entries) {
-                    subclass(kClass.uncheckedCast<KClass<ManifestEntry>>(), kSerializer.uncheckedCast())
+                for ((kClass, kSerializer) in entries) {
+                    subclass(
+                        kClass.uncheckedCast<KClass<ManifestEntry>>(),
+                        kSerializer.uncheckedCast()
+                    )
                 }
             }
         }
@@ -30,7 +36,14 @@ object ManifestEntryRegistry {
     @OptIn(ExperimentalSerializationApi::class)
     @Suppress("UNCHECKED_CAST")
     @JvmOverloads
-    fun <T : ManifestEntry> registerEntry(clazz: Class<T>, kSerializer: KSerializer<T> = serializer(clazz.kotlin, emptyList(), false) as KSerializer<T>) {
+    fun <T : ManifestEntry> registerEntry(
+        clazz: Class<T>,
+        kSerializer: KSerializer<T> = serializer(
+            clazz.kotlin,
+            emptyList(),
+            false
+        ) as KSerializer<T>
+    ) {
         registerEntry(clazz.kotlin, kSerializer)
     }
 

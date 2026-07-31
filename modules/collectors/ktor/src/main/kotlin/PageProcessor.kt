@@ -2,18 +2,8 @@ package net.derfruhling.serenity.processor
 
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
-import com.google.devtools.ksp.processing.CodeGenerator
-import com.google.devtools.ksp.processing.Dependencies
-import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.processing.Resolver
-import com.google.devtools.ksp.processing.SymbolProcessor
-import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
-import com.google.devtools.ksp.processing.SymbolProcessorProvider
-import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSFunctionDeclaration
-import com.google.devtools.ksp.symbol.KSTypeReference
-import com.google.devtools.ksp.symbol.KSVisitorVoid
-import com.google.devtools.ksp.symbol.Variance
+import com.google.devtools.ksp.processing.*
+import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
 import net.derfruhling.serenity.annotations.RegisterPage
 
@@ -40,7 +30,9 @@ class PageProcessor(
                 function.packageName.asString(),
                 function.simpleName.asString() + ".generated"
             ).bufferedWriter().use { out ->
-                if (function.packageName.asString().isNotEmpty()) out.append("package ${function.packageName.asString()}\n\n")
+                if (function.packageName.asString()
+                        .isNotEmpty()
+                ) out.append("package ${function.packageName.asString()}\n\n")
                 out.appendLine("import androidx.compose.runtime.Composable")
                 out.appendLine("import androidx.compose.runtime.key")
                 out.appendLine("import androidx.compose.runtime.SideEffect")
@@ -65,11 +57,13 @@ class PageProcessor(
                 val hashFunctionName = hashFunctionName(function.qualifiedName!!.asString())
                 val annotation = function.getAnnotationsByType(RegisterPage::class).single()
 
-                out.appendLine("""
+                out.appendLine(
+                    """
                     actual override val id: String = "$hashFunctionName"
                     actual override val path: String = "${annotation.path}"
                     actual override val details: PageDetails = ${generatePageDetails(annotation)}
-                """.trimIndent().prependIndent("    "))
+                """.trimIndent().prependIndent("    ")
+                )
 
                 out.appendLine(
                     """
