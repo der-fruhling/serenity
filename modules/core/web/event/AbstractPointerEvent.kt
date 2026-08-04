@@ -5,8 +5,8 @@ package net.derfruhling.serenity.event
 import js.array.toList
 import net.derfruhling.serenity.annotations.NewWebApi
 import net.derfruhling.serenity.annotations.UnsupportedOnSafari
+import net.derfruhling.serenity.dom.Element
 import net.derfruhling.serenity.takeIfPresent
-import net.derfruhling.serenity.tree.platform.ElementNode
 import web.pointer.PointerEvent as DomPointerEvent
 
 abstract class AbstractPointerEvent<T : EventTarget>(dom: DomPointerEvent) : AbstractMouseEvent<T>(
@@ -38,21 +38,21 @@ abstract class AbstractPointerEvent<T : EventTarget>(dom: DomPointerEvent) : Abs
     override val tiltY: Int by dom::tiltY
     override val twist: Int by dom::twist
 
-    internal class ElementImpl(override val dom: DomPointerEvent) : AbstractPointerEvent<ElementNode>(
+    internal class ElementImpl(override val dom: DomPointerEvent) : AbstractPointerEvent<Element>(
         dom
     ) {
-        override fun eventTargetFromDom(eventTarget: web.events.EventTarget?): ElementNode {
-            return elementFromDom(eventTarget!!)
+        override fun eventTargetFromDom(eventTarget: web.events.EventTarget?): Element {
+            return eventTarget!! as Element
         }
 
-        override fun getCoalescedEvents(): List<PointerEvent<ElementNode>> {
+        override fun getCoalescedEvents(): List<PointerEvent<Element>> {
             return dom.takeIfPresent("getCoalescedEvents") {
                 dom.getCoalescedEvents().toList().map { ElementImpl(it) }
             } ?: emptyList()
         }
 
         @NewWebApi
-        override fun getPredictedEvents(): List<PointerEvent<ElementNode>> {
+        override fun getPredictedEvents(): List<PointerEvent<Element>> {
             return dom.takeIfPresent("getPredictedEvents") {
                 dom.getPredictedEvents().toList().map { ElementImpl(it) }
             } ?: emptyList()
@@ -60,5 +60,5 @@ abstract class AbstractPointerEvent<T : EventTarget>(dom: DomPointerEvent) : Abs
     }
 }
 
-fun DomPointerEvent.asComposeEvent(): PointerEvent<ElementNode> =
+fun DomPointerEvent.asComposeEvent(): PointerEvent<Element> =
     AbstractPointerEvent.ElementImpl(this)

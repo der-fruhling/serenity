@@ -11,8 +11,7 @@ import net.derfruhling.serenity.event.EventType
 
 open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
                          ChildNode<NodeWithChildren<*, *>>,
-                         ComposeNodeLifecycleCallback,
-                         EventTarget {
+                         ComposeNodeLifecycleCallback {
     override var parent: NodeWithChildren<*, *>? = null
     override val index: Index<ElementNode> = Index(this)
 

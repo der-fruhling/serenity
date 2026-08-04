@@ -1,3 +1,3 @@
 package net.derfruhling.serenity.event
 
-expect interface EventTarget
+expect open class EventTarget

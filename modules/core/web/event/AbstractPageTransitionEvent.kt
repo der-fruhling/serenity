@@ -9,9 +9,7 @@ import web.window.Window as DomWindow
 abstract class AbstractPageTransitionEvent(dom: Event) : AbstractEvent<Window>(dom),
                                                          PageTransitionEvent {
     override fun eventTargetFromDom(eventTarget: EventTarget?): Window {
-        return object : Window {
-            override val dom: DomWindow = eventTarget as DomWindow
-        }
+        return eventTarget as DomWindow
     }
 
     class WindowImpl(override val dom: DomPageTransitionEvent) : AbstractPageTransitionEvent(dom) {

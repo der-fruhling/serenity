@@ -3,9 +3,9 @@
 package net.derfruhling.serenity.event
 
 import kotlinx.serialization.Serializable
+import net.derfruhling.serenity.dom.Element
 import net.derfruhling.serenity.dom.Window
-import net.derfruhling.serenity.tree.platform.Document
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.dom.Document
 import web.events.Event as DomEvent
 import web.history.PageTransitionEvent as DomPageTransitionEvent
 import web.pointer.PointerEvent as DomPointerEvent
@@ -18,8 +18,8 @@ actual fun testSupportedWindowEvent(name: String): Boolean = js("('on' + name) i
 
 @Serializable
 actual sealed interface BuiltinPointerEvent : BuiltinEventType,
-                                              GenerateFromDomEvent<PointerEvent<ElementNode>> {
-    override fun generate(event: DomEvent): PointerEvent<ElementNode> {
+                                              GenerateFromDomEvent<PointerEvent<Element>> {
+    override fun generate(event: DomEvent): PointerEvent<Element> {
         return (event as DomPointerEvent).asComposeEvent()
     }
 }

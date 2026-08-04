@@ -5,9 +5,7 @@ package net.derfruhling.serenity.event
 import js.numbers.JsNumbers.toKotlinDouble
 import js.string.JsStrings.toKotlinString
 import net.derfruhling.serenity.dom.Window
-import net.derfruhling.serenity.tree.platform.CURRENT
-import net.derfruhling.serenity.tree.platform.Document
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.dom.Document
 import web.dom.Element as DomElement
 import web.events.Event as DomEvent
 import web.events.EventTarget as DomEventTarget
@@ -32,24 +30,15 @@ abstract class AbstractEvent<T : EventTarget>(dom: DomEvent) : Event<T> {
 
     abstract fun eventTargetFromDom(eventTarget: DomEventTarget?): T
 
-    companion object {
-        fun elementFromDom(eventTarget: DomEventTarget): ElementNode =
-            ElementNode.tryGet(eventTarget as DomElement)
-    }
-
     class WindowImpl(override val dom: DomEvent) : AbstractEvent<Window>(dom) {
         override fun eventTargetFromDom(eventTarget: DomEventTarget?): Window {
-            return object : Window {
-                override val dom: DomWindow
-                    get() = eventTarget as DomWindow
-
-            }
+            return eventTarget as DomWindow
         }
     }
 
     class DocumentImpl(override val dom: DomEvent) : AbstractEvent<Document>(dom) {
         override fun eventTargetFromDom(eventTarget: DomEventTarget?): Document {
-            return Document.CURRENT
+            return eventTarget!! as Document
         }
     }
 }

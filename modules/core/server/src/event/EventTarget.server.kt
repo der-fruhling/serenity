@@ -1,3 +1,3 @@
 package net.derfruhling.serenity.event
 
-actual interface EventTarget
+actual open class EventTarget

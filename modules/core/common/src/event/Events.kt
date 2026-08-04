@@ -7,8 +7,8 @@ import net.derfruhling.serenity.annotations.Since
 import net.derfruhling.serenity.annotations.UnsupportedOnSafari
 import net.derfruhling.serenity.annotations.WidelyAvailable
 import net.derfruhling.serenity.dom.Window
-import net.derfruhling.serenity.tree.platform.Document
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.dom.Document
+import net.derfruhling.serenity.dom.Element
 
 @Serializable
 expect sealed interface BuiltinEventType
@@ -25,7 +25,7 @@ expect sealed interface BuiltinPointerEvent : BuiltinEventType
 @Serializable
 expect sealed interface BuiltinPageTransitionEvent : BuiltinEventType
 
-typealias ElementPointerEvent = PointerEvent<ElementNode>
+typealias ElementPointerEvent = PointerEvent<Element>
 
 expect fun testSupportedDocumentEvent(name: String): Boolean
 expect fun testSupportedWindowEvent(name: String): Boolean
