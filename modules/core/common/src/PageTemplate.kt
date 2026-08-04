@@ -13,7 +13,7 @@ interface TemplateBuilder {
     fun HeadContext.SlotHead()
 
     @Composable
-    fun WithPage(fn: @Composable (PageHolder) -> Unit)
+    fun WithPage(fn: @Composable (PageHolder<*>) -> Unit)
 
     @Composable
     fun SlotBody()
@@ -22,7 +22,7 @@ interface TemplateBuilder {
 @Stable
 class PageTemplate(val builder: @Composable TemplateBuilder.() -> Unit) {
     @Composable
-    fun BuildPage(state: State<PageHolder?>) {
+    fun BuildPage(state: State<PageHolder<*>?>) {
         val builder = object : TemplateBuilder {
             @Composable
             override fun HeadContext.SlotHead() {
@@ -33,7 +33,7 @@ class PageTemplate(val builder: @Composable TemplateBuilder.() -> Unit) {
             }
 
             @Composable
-            override fun WithPage(fn: @Composable ((PageHolder) -> Unit)) {
+            override fun WithPage(fn: @Composable ((PageHolder<*>) -> Unit)) {
                 val page = state.value!!
                 CompositionLocalProvider(currentPageLocal provides page) {
                     ReusableContent(page) {
@@ -69,7 +69,7 @@ class PageTemplate(val builder: @Composable TemplateBuilder.() -> Unit) {
     }
 }
 
-expect class SaveDataManager(page: PageHolder) {
+expect class SaveDataManager(page: PageHolder<*>) {
     fun save()
 
     @Composable

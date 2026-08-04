@@ -8,7 +8,7 @@ import androidx.compose.runtime.saveable.SaveableStateRegistry
 import io.github.oshai.kotlinlogging.KotlinLogging
 import web.storage.localStorage
 
-private fun createSaveableStateRegistry(page: PageHolder): SaveableStateRegistry {
+private fun createSaveableStateRegistry(page: PageHolder<*>): SaveableStateRegistry {
     val logger = KotlinLogging.logger {}
     val key = keyOf(page)
     return SaveableStateRegistry(localStorage.getItem(key)?.let {
@@ -21,14 +21,14 @@ private fun createSaveableStateRegistry(page: PageHolder): SaveableStateRegistry
     }) { true }
 }
 
-private fun keyOf(page: PageHolder): String = "saved-" + page.id
+private fun keyOf(page: PageHolder<*>): String = "saved-" + page.id
 
 actual class SaveDataManager(
-    private val page: PageHolder,
+    private val page: PageHolder<*>,
     private val base: SaveableStateRegistry
 ) :
     SaveableStateRegistry by base, RememberObserver {
-    actual constructor(page: PageHolder) : this(page, createSaveableStateRegistry(page))
+    actual constructor(page: PageHolder<*>) : this(page, createSaveableStateRegistry(page))
 
     actual fun save() {
         localStorage.setItem(keyOf(page), SerialRegistry.encode(SerialSavedData.of(performSave())))

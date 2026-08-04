@@ -14,7 +14,7 @@ object SerialRegistry {
 
     private val composedModules = mutableListOf<SerializersModule>()
     private val subclasses = mutableMapOf<KClass<*>, SerialEntry<*>>()
-    private val pages = mutableMapOf<KClass<out PageHolder>, SerialEntry<out PageHolder>>()
+    private val pages = mutableMapOf<KClass<out SerialPageHolder>, SerialEntry<out SerialPageHolder>>()
 
     private var _serializersModule: SerializersModule? = null
     private var _json: Json? = null
@@ -31,7 +31,7 @@ object SerialRegistry {
     }
 
     private fun buildSerializersModule() = SerializersModule {
-        polymorphic(PageHolder::class) {
+        polymorphic(SerialPageHolder::class) {
             @Suppress("DestructuringDeclaration")
             for (page in pages.values) {
                 subclass(page.kClass, page.kSerializer)
@@ -70,19 +70,24 @@ object SerialRegistry {
             return _serializersModule ?: buildSerializersModule().also { _serializersModule = it }
         }
 
+    @Suppress("JSON_FORMAT_REDUNDANT")
     val json: Json
         get() {
             return _json ?: Json {
                 this.serializersModule = this@SerialRegistry.serializersModule
-            }
+            }.also { _json = it }
         }
 
     fun <T : Any> register(kClass: KClass<T>, kSerializer: KSerializer<T>) {
         subclasses[kClass] = SerialEntry(kClass, kSerializer)
+        _json = null
+        _serializersModule = null
     }
 
-    fun <T : PageHolder> registerPage(kClass: KClass<T>, kSerializer: KSerializer<T>) {
+    fun <T : PageHolder<*>> registerPage(kClass: KClass<T>, kSerializer: KSerializer<T>) {
         pages[kClass] = SerialEntry(kClass, kSerializer)
+        _json = null
+        _serializersModule = null
     }
 
     inline fun <reified T : Any> register() {

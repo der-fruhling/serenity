@@ -74,16 +74,19 @@ object HeadContext {
 
     @Composable
     fun useEntrypoint(projectName: String) {
-        val hash = currentPageLocal.current.id
+        val page = currentPageLocal.current
+        val content = SerialRegistry.encode<SerialPageHolder>(page)
+        val hash = page.id
 
-        val sourceCode = remember(projectName, hash) {
+        val sourceCode = remember(projectName, content) {
             //language=javascript
             """
                 if(!("ready" in self)) {
-                    const entryFn = window["$projectName"]["$hash"];
+                    const {type: hash, ...content} = $content;
+                    const entryFn = window["$projectName"][hash];
                     self.ready = true;
-                    if(entryFn) entryFn();
-                    else console.warn("Entry function for", "$hash", "not found");
+                    if(entryFn) entryFn(content);
+                    else console.warn("Entry function for", hash, "not found", content);
                 }
             """.trimIndent()
         }
@@ -112,7 +115,7 @@ fun html(lang: String = "en", content: @Composable HtmlContext.() -> Unit) {
 }
 
 val pageTemplateLocal = compositionLocalOf { null as PageTemplate? }
-val currentPageLocal = compositionLocalOf<PageHolder> { throw IllegalStateException() }
+val currentPageLocal = compositionLocalOf<PageHolder<*>> { throw IllegalStateException() }
 
 object PageContext {
     @Composable

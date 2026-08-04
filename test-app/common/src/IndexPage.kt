@@ -19,7 +19,7 @@ fun IndexPage() {
 
     Content {
         FlexColumn {
-            Link("Buttons", ButtonsPage)
+            Link("Buttons", ButtonsPage.of(start = 0))
             Link("Save data", SaveDataPage)
         }
     }
@@ -30,9 +30,9 @@ fun IndexPage() {
 }
 
 @Composable
-@RegisterPage("/buttons", title = "Buttons")
-fun ButtonsPage() {
-    var count by remember { mutableIntStateOf(0) }
+@RegisterPage("/buttons/{start}", title = "Buttons")
+fun ButtonsPage(start: Int) {
+    var count by remember { mutableIntStateOf(start) }
 
     Button("Click count: $count", onClick = @Client {
         count++

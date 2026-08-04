@@ -32,10 +32,28 @@ fun Link(to: String, fn: @Composable () -> Unit) {
     }
 }
 
+expect fun PageHolder<*>.constructActualAddress(linkBase: String): String
+
+private val regex: Regex = Regex("""[^a-zA-Z0-9-._~/]""")
+private val pathRegex: Regex = Regex("""[^a-zA-Z0-9-._~]""")
+private val hexFormat = HexFormat {
+    bytes {
+        bytePrefix = "%"
+    }
+}
+
+internal fun urlEncode(text: String) = text.replace(regex) {
+    it.value.encodeToByteArray().toHexString(hexFormat)
+}
+
+internal fun urlEncodePath(text: String) = text.replace(pathRegex) {
+    it.value.encodeToByteArray().toHexString(hexFormat)
+}
+
 @Composable
-fun Link(to: PageHolder, fn: @Composable () -> Unit) {
+fun Link(to: PageHolder<*>, fn: @Composable () -> Unit) {
     val linkBase = linkBase.current
-    val actualLink = remember(to, linkBase) { linkBase + to.path }
+    val actualLink = remember(to, linkBase) { to.constructActualAddress(linkBase) }
 
     Element(name = "a", update = {
         set(actualLink) { attribute(Attributes.href, it) }
@@ -65,14 +83,14 @@ fun Link(text: String, to: String, fn: @Composable () -> Unit) {
 }
 
 @Composable
-fun Link(text: String, to: PageHolder) {
+fun Link(text: String, to: PageHolder<*>) {
     Link(to) {
         Text(text)
     }
 }
 
 @Composable
-fun Link(text: String, to: PageHolder, fn: @Composable () -> Unit) {
+fun Link(text: String, to: PageHolder<*>, fn: @Composable () -> Unit) {
     Link(to) {
         Text(text)
         fn()

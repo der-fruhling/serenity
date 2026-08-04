@@ -1,12 +1,15 @@
 package net.derfruhling.serenity.ktor.server
 
 import androidx.compose.runtime.*
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.routing.*
 import io.ktor.util.*
 import kotlinx.serialization.KSerializer
 import net.derfruhling.serenity.PageHolder
+import net.derfruhling.serenity.PageHolderFactory
 import net.derfruhling.serenity.PageRegistry
 import net.derfruhling.serenity.PageTemplate
+import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.TemplateBuilder
 import net.derfruhling.serenity.elements.pageTemplateLocal
 import kotlin.reflect.KClass
@@ -14,14 +17,10 @@ import kotlin.reflect.KClass
 val pageFunctionName = AttributeKey<String>("pageFunctionName")
 private var pageTemplate: PageTemplate? by mutableStateOf(null)
 
-@Deprecated("Use registerServerPages() instead", ReplaceWith("registerServerPages { TODO() }"))
-fun Route.register(page: PageHolder) {
-    commonRegister(page)
-}
-
-private fun Route.commonRegister(page: PageHolder) {
+private fun Route.commonRegister(page: PageHolderFactory<ApplicationCall, *>) {
     get(page.path) {
         call.respondCompose {
+            val page = remember { page.create(call) }
             CompositionLocalProvider(
                 pageTemplateLocal provides pageTemplate
             ) {
@@ -31,17 +30,18 @@ private fun Route.commonRegister(page: PageHolder) {
     }
 }
 
-fun Route.registerServerPages(fn: PageRegistry.() -> Unit) {
-    (object : PageRegistry() {
+fun Route.registerServerPages(fn: PageRegistry<ApplicationCall>.() -> Unit) {
+    (object : PageRegistry<ApplicationCall>() {
         override fun template(fn: @Composable TemplateBuilder.() -> Unit) {
             pageTemplate = PageTemplate(fn)
         }
 
-        override fun <T : PageHolder> register(
-            kClass: KClass<T>,
-            kSerializer: KSerializer<T>,
+        override fun <R : PageHolder<R>, T : PageHolderFactory<ApplicationCall, R>> register(
+            kClass: KClass<R>,
+            kSerializer: KSerializer<R>,
             page: T
         ) {
+            SerialRegistry.registerPage(kClass, kSerializer)
             commonRegister(page)
         }
     }).fn()

@@ -9,6 +9,7 @@ repositories {
 
 dependencies {
     implementation(project(":serenity-annotations"))
+    implementation(libs.ksp.symbolProcessingApi)
     testImplementation(kotlin("test"))
 }
 

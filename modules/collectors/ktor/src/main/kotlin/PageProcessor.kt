@@ -3,7 +3,9 @@ package net.derfruhling.serenity.processor
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.processing.*
-import com.google.devtools.ksp.symbol.*
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.validate
 import net.derfruhling.serenity.annotations.RegisterPage
 
@@ -42,14 +44,29 @@ class PageProcessor(
                 out.appendLine("import net.derfruhling.serenity.ktor.server.currentCall")
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
                 out.appendLine("import net.derfruhling.serenity.PageDetails")
+                out.appendLine("import net.derfruhling.serenity.PageHolderFactory")
                 out.appendLine("import net.derfruhling.serenity.annotations.HtmlComposable")
                 out.appendLine("import kotlinx.serialization.Serializable")
+                out.appendLine("import kotlinx.serialization.Transient")
                 out.appendLine("import kotlinx.serialization.SerialName")
 
                 out.appendLine()
                 out.appendLine("@Serializable")
                 out.appendLine("@SerialName(\"${hashFunctionName(function.qualifiedName!!.asString())}\")")
-                out.appendLine("actual data object ${function.simpleName.asString()} : PageHolder {")
+
+                val parameters by lazy { PageParameters(function, logger) }
+                val isClass = function.parameters.isNotEmpty()
+                if (isClass) {
+                    val props = parameters.params.joinToString(",\n") {
+                        "@SerialName(\"${it.serialName}\") " +
+                            "actual val ${it.propertyName}: " +
+                            printType(it.typeRef)
+                    }.prependIndent("    ")
+
+                    out.appendLine("actual class ${function.simpleName.asString()} private constructor(\n    @Transient private val __serenity_generated: Unit = Unit,\n$props\n) : PageHolder<${function.simpleName.asString()}> {")
+                } else {
+                    out.appendLine("actual data object ${function.simpleName.asString()} : PageHolder<${function.simpleName.asString()}> {")
+                }
 
                 if (!function.annotations.any { it.annotationType.resolve().declaration.qualifiedName!!.asString() == "androidx.compose.runtime.Composable" }) {
                     logger.error("Pages must be composable", function)
@@ -60,7 +77,11 @@ class PageProcessor(
                 out.appendLine(
                     """
                     actual override val id: String = "$hashFunctionName"
-                    actual override val path: String = "${annotation.path}"
+                    actual override val path: String = "${
+                        if (isClass) parameters.pathExpression(
+                            annotation.path
+                        ) else annotation.path
+                    }"
                     actual override val details: PageDetails = ${generatePageDetails(annotation)}
                 """.trimIndent().prependIndent("    ")
                 )
@@ -76,50 +97,63 @@ class PageProcessor(
 
                 out.appendLine("        SideEffect { _call.attributes[pageFunctionName] = \"$hashFunctionName\" }")
 
-                if (function.parameters.isNotEmpty()) {
-                    for (it in function.parameters) {
-                        out.appendLine("val _${it.name!!.asString()}: ${printType(it.type)} by _call.pathParameters")
-                        out.appendLine("val ${it.name!!.asString()}: ${printType(it.type)} = rememberSerializable { _${it.name!!.asString()} }")
-                    }
-
-                    val paramNames = function.parameters.joinToString { it.name!!.asString() }
+                if (isClass) {
+                    val paramNames = function.parameters.mapNotNull { it.name?.getShortName() }
+                        .joinToString { "_$it" }
+                    val receiver = function.parameters.find { it.name == null }
+                        ?.let { "_serenity_receiver." } ?: ""
                     out.appendLine(
                         """ 
                         key($paramNames) {
-                            ${function.qualifiedName!!.asString()}($paramNames)
+                            $receiver${function.qualifiedName!!.asString()}($paramNames)
                         }
                     """.trimIndent().prependIndent("        ")
                     )
                 } else {
-                    out.appendLine(
-                        """
-                        ${function.qualifiedName!!.asString()}()
-                    """.trimIndent().prependIndent("        ")
-                    )
+                    out.appendLine("        ${function.qualifiedName!!.asString()}()")
                 }
 
                 out.appendLine("    }")
+
+                if (isClass) {
+                    val parseParams = parameters.params.joinToString(",\n") {
+                        buildString {
+                            append("${it.serialName} = ctx.parameters[\"${it.serialName}\"]?.let { ${it.parseExpr} }")
+
+                            if(!it.type.isMarkedNullable) {
+                                append(" ?: error(\"No value provided for parameter '${it.serialName}'\")")
+                            }
+                        }
+                    }.prependIndent("            ")
+
+                    out.appendLine(
+                        """
+                        actual companion object Factory : PageHolderFactory<ApplicationCall, ${function.simpleName.getShortName()}> {
+                            actual override val id: String = "$hashFunctionName"
+                            actual override val path: String = "${annotation.path}"
+                            actual override fun create(ctx: ApplicationCall): ${function.simpleName.getShortName()} {
+                                return of(
+                        $parseParams
+                                )
+                            }
+                            
+                            actual fun of(${
+                                parameters.params.joinToString {
+                                    "${it.serialName}: ${printType(it.typeRef)}"
+                                }
+                            }): ${function.simpleName.getShortName()} {
+                                return ${function.simpleName.getShortName()}(__serenity_generated = Unit, ${
+                                parameters.params.joinToString {
+                                    "${it.propertyName} = ${it.serialName}"
+                                }
+                            })
+                            }
+                        }
+                    """.trimIndent().prependIndent("    ")
+                    )
+                }
+
                 out.appendLine('}')
-            }
-        }
-    }
-
-    private fun printType(typeReference: KSTypeReference): String = buildString {
-        val element = typeReference.element
-        if (element != null) {
-            val type = typeReference.resolve()
-            append(type.declaration.qualifiedName!!.asString())
-
-            element.typeArguments.joinToString {
-                when (it.variance) {
-                    Variance.STAR -> {
-                        return@joinToString "*"
-                    }
-
-                    Variance.INVARIANT -> ""
-                    Variance.COVARIANT -> "in "
-                    Variance.CONTRAVARIANT -> "out "
-                } + printType(it.type!!)
             }
         }
     }

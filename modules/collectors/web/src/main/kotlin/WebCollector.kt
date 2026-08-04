@@ -48,21 +48,43 @@ class WebCollector(
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.SerialName")
 
+                val hashFunctionName = hashFunctionName(function.qualifiedName!!.asString())
+                val parameters by lazy { PageParameters(function, logger) }
+                val isClass = function.parameters.isNotEmpty()
+
+                if(isClass) {
+                    out.appendLine("import kotlinx.serialization.Transient")
+                    out.appendLine("import net.derfruhling.serenity.PageHolderFactory")
+                    out.appendLine("import net.derfruhling.serenity.SerialRegistry")
+                    out.appendLine("import net.derfruhling.serenity.WebContext")
+                    out.appendLine("import net.derfruhling.serenity.decodeFromObject")
+                }
+
                 out.appendLine()
                 out.appendLine("@Serializable")
-                out.appendLine("@SerialName(\"${hashFunctionName(function.qualifiedName!!.asString())}\")")
-                out.appendLine("actual data object ${function.simpleName.asString()} : PageHolder {")
+                out.appendLine("@SerialName(\"$hashFunctionName\")")
+                if (isClass) {
+                    val props = parameters.params.joinToString(",\n") {
+                        "@SerialName(\"${it.serialName}\") " +
+                            "actual val ${it.propertyName}: " +
+                            printType(it.typeRef)
+                    }.prependIndent("    ")
+
+                    out.appendLine("actual class ${function.simpleName.asString()} private constructor(\n    @Transient private val __serenity_generated: Unit = Unit,\n$props\n) : PageHolder<${function.simpleName.asString()}> {")
+                } else {
+                    out.appendLine("actual data object ${function.simpleName.asString()} : PageHolder<${function.simpleName.asString()}> {")
+                }
 
                 if (!function.annotations.any { it.annotationType.resolve().declaration.qualifiedName!!.asString() == "androidx.compose.runtime.Composable" }) {
                     logger.error("Pages must be composable", function)
                 }
-                val hashFunctionName = hashFunctionName(function.qualifiedName!!.asString())
+
                 val annotation = function.getAnnotationsByType(RegisterPage::class).single()
 
                 out.appendLine(
                     """
                     actual override val id: String = "$hashFunctionName"
-                    actual override val path: String = "${annotation.path}"
+                    actual override val path: String = "${if(isClass) parameters.pathExpression(annotation.path) else annotation.path}"
                     actual override val details: PageDetails = ${generatePageDetails(annotation)}
                 """.trimIndent().prependIndent("    ")
                 )
@@ -75,60 +97,91 @@ class WebCollector(
                 """.trimIndent().prependIndent("    ")
                 )
 
-                if (function.parameters.isNotEmpty()) {
-                    for (it in function.parameters) {
-                        out.appendLine("val ${it.name!!.asString()}: ${printType(it.type)} = rememberSerializable { error(\"Parameter '${it.name!!.asString()}' not provided\") }")
-                    }
-
-                    val paramNames = function.parameters.joinToString { it.name!!.asString() }
+                if (isClass) {
+                    val paramNames = function.parameters.mapNotNull { it.name?.getShortName() }
+                        .joinToString { "_$it" }
+                    val receiver = function.parameters.find { it.name == null }
+                        ?.let { "_serenity_receiver." } ?: ""
                     out.appendLine(
                         """ 
                         key($paramNames) {
-                            ${function.qualifiedName!!.asString()}($paramNames)
+                            $receiver${function.qualifiedName!!.asString()}($paramNames)
                         }
                     """.trimIndent().prependIndent("        ")
                     )
                 } else {
-                    out.appendLine(
-                        """
-                        ${function.qualifiedName!!.asString()}()
-                    """.trimIndent().prependIndent("        ")
-                    )
+                    out.appendLine("        ${function.qualifiedName!!.asString()}()")
                 }
 
                 out.appendLine("    }")
+
+                if (isClass) {
+                    val parseParams = parameters.params.joinToString(",\n") {
+                        buildString {
+                            append("${it.serialName} = parameters[\"${it.serialName}\"]?.let { ${it.parseExpr} }")
+
+                            if(!it.type.isMarkedNullable) {
+                                append(" ?: error(\"No value provided for parameter '${it.serialName}'\")")
+                            }
+                        }
+                    }.prependIndent("            ")
+
+                    out.appendLine(
+                        """
+                        actual companion object Factory : PageHolderFactory<WebContext, ${function.simpleName.getShortName()}> {
+                            actual override val id: String = "$hashFunctionName"
+                            actual override val path: String = "${annotation.path}"
+                            
+                            actual override fun create(ctx: WebContext): ${function.simpleName.getShortName()} {
+                                val parameters = ctx.parseParameters(path)
+                                return of(
+                        $parseParams
+                                )
+                            }
+                            
+                            actual fun of(${
+                            parameters.params.joinToString {
+                                "${it.serialName}: ${printType(it.typeRef)}"
+                            }
+                        }): ${function.simpleName.getShortName()} {
+                                return ${function.simpleName.getShortName()}(__serenity_generated = Unit, ${
+                            parameters.params.joinToString {
+                                "${it.propertyName} = ${it.serialName}"
+                            }
+                        })
+                            }
+                        }
+                    """.trimIndent().prependIndent("    ")
+                    )
+                }
+
                 out.appendLine('}')
                 out.appendLine()
-                out.appendLine(
-                    """
-                    @JsExport
-                    @JsName("$hashFunctionName")
-                    @InternalPageEntryPoint
-                    fun page${function.simpleName.asString()}ClientBehavior() {
-                        invokeCommonEntryPoint(${function.simpleName.asString()})
-                    }
-                """.trimIndent()
-                )
-            }
-        }
-    }
 
-    private fun printType(typeReference: KSTypeReference): String = buildString {
-        val element = typeReference.element
-        if (element != null) {
-            val type = typeReference.resolve()
-            append(type.declaration.qualifiedName!!.asString())
-
-            element.typeArguments.joinToString {
-                when (it.variance) {
-                    Variance.STAR -> {
-                        return@joinToString "*"
-                    }
-
-                    Variance.INVARIANT -> ""
-                    Variance.COVARIANT -> "in "
-                    Variance.CONTRAVARIANT -> "out "
-                } + printType(it.type!!)
+                if(function.parameters.isNotEmpty()) {
+                    out.appendLine(
+                        """
+                        @JsExport
+                        @JsName("$hashFunctionName")
+                        @InternalPageEntryPoint
+                        @OptIn(ExperimentalWasmJsInterop::class)
+                        fun page${function.simpleName.asString()}ClientBehavior(obj: JsAny) {
+                            invokeCommonEntryPoint(SerialRegistry.decodeFromObject<${function.simpleName.asString()}>(obj))
+                        }
+                    """.trimIndent()
+                    )
+                } else {
+                    out.appendLine(
+                        """
+                        @JsExport
+                        @JsName("$hashFunctionName")
+                        @InternalPageEntryPoint
+                        fun page${function.simpleName.asString()}ClientBehavior() {
+                            invokeCommonEntryPoint(${function.simpleName.asString()})
+                        }
+                    """.trimIndent()
+                    )
+                }
             }
         }
     }

@@ -8,6 +8,7 @@ import js.numbers.JsNumbers.toKotlinDouble
 import js.objects.Object
 import js.objects.TypedPropertyDescriptor
 import js.promise.await
+import js.string.JsStrings.toKotlinString
 import kotlinx.coroutines.*
 import net.derfruhling.serenity.elements.currentPageLocal
 import net.derfruhling.serenity.elements.pageTemplateLocal
@@ -21,8 +22,10 @@ import web.events.EventHandler
 import web.history.PopStateEvent
 import web.history.history
 import web.http.fetchAsync
+import web.location.location
 import web.prompts.alert
 import web.time.DOMHighResTimeStamp
+import web.url.URLSearchParams
 import web.window.window
 import kotlin.coroutines.resume
 import kotlin.time.DurationUnit
@@ -37,7 +40,7 @@ import kotlin.time.toDuration
 annotation class InternalPageEntryPoint
 
 lateinit var htmlContext: HtmlCompositionContext private set
-lateinit var currentPage: PageHolder internal set
+lateinit var currentPage: PageHolder<*> internal set
 internal var compositionCompletionHandler: (() -> Unit)? = null
 
 private val htmlContextStartHandlers = mutableListOf<(HtmlCompositionContext) -> Unit>()
@@ -66,8 +69,8 @@ internal class WebEntryPoint private constructor() {
         window.onpopstate = EventHandler { ev: PopStateEvent ->
             val state = ev.state
             if (state != null) {
-                val page = SerialRegistry.decodeFromObject<PageHolder>(state)
-                navigateDirect(page)
+                val page = SerialRegistry.decodeFromObject<SerialPageHolder>(state)
+                navigateDirect(page as PageHolder<*>)
             }
         }
 
@@ -86,8 +89,8 @@ internal class WebEntryPoint private constructor() {
     private var first: Boolean = true
     private var initialized: Boolean = false
     private var clientMode by mutableStateOf(false)
-    private val mutableStatePage = mutableStateOf<PageHolder?>(null)
-    private var page: PageHolder? by mutableStatePage
+    private val mutableStatePage = mutableStateOf<PageHolder<*>?>(null)
+    private var page: PageHolder<*>? by mutableStatePage
 
     private lateinit var scope: CoroutineScope
 
@@ -99,6 +102,13 @@ internal class WebEntryPoint private constructor() {
 
             htmlContext = HtmlCompositionContext(Recomposer(coroutineContext))
             htmlContextStartHandlers.forEach { it(htmlContext) }
+            if(location.hash.isNotEmpty()) {
+                val properties = URLSearchParams(location.hash)
+                when(properties.get("debug".toJsString())?.toKotlinString()) {
+                    "", "yes", "true" -> htmlContext.enableDebugMode = true
+                    "no", "false" -> htmlContext.enableDebugMode = false
+                }
+            }
 
             @OptIn(ExperimentalComposeRuntimeApi::class)
             if (htmlContext.enableDebugMode) {
@@ -181,12 +191,12 @@ internal class WebEntryPoint private constructor() {
         }
     }
 
-    internal fun setPage(page: PageHolder) {
+    internal fun setPage(page: PageHolder<*>) {
         setPageDirect(page)
-        history.pushState(SerialRegistry.encodeToObject(page), "", page.path)
+        history.pushState(SerialRegistry.encodeToObject<SerialPageHolder>(page), "", page.path)
     }
 
-    internal fun setPageDirect(page: PageHolder) {
+    internal fun setPageDirect(page: PageHolder<*>) {
         currentPage = page
         this.page = page
 
@@ -208,7 +218,7 @@ internal class WebEntryPoint private constructor() {
 }
 
 @InternalPageEntryPoint
-fun invokeCommonEntryPoint(page: PageHolder) {
+fun invokeCommonEntryPoint(page: PageHolder<*>) {
     WebEntryPoint.current.setPage(page)
 }
 

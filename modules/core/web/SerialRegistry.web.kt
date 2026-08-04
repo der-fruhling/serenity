@@ -25,15 +25,19 @@ inline fun <reified T> SerialRegistry.decodeFromObject(obj: JsAny): T {
 
 internal var pageTemplate by mutableStateOf(null as PageTemplate?)
 
-fun SerialRegistry.registerClientPages(fn: PageRegistry.() -> Unit) {
-    (object : PageRegistry() {
+interface WebContext {
+    fun parseParameters(path: String): Map<String, String>
+}
+
+fun SerialRegistry.registerClientPages(fn: PageRegistry<WebContext>.() -> Unit) {
+    (object : PageRegistry<WebContext>() {
         override fun template(fn: @Composable (TemplateBuilder.() -> Unit)) {
             pageTemplate = PageTemplate(fn)
         }
 
-        override fun <T : PageHolder> register(
-            kClass: KClass<T>,
-            kSerializer: KSerializer<T>,
+        override fun <R : PageHolder<R>, T : PageHolderFactory<WebContext, R>> register(
+            kClass: KClass<R>,
+            kSerializer: KSerializer<R>,
             page: T
         ) {
             registerPage(kClass, kSerializer)
