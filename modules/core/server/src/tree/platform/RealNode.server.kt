@@ -6,6 +6,7 @@ import com.fleeksoft.ksoup.nodes.*
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.TextNode
 import com.fleeksoft.ksoup.nodes.DataNode
+import com.fleeksoft.ksoup.parser.Parser
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventType
@@ -278,7 +279,11 @@ actual class RealDocumentFragment actual constructor(actual override val node: U
     actual override val attributeSet: MutableSet<RealAttribute>
         get() = RealDocument.UnsupportedAttributeSet
 
-    actual constructor() : this(DocumentFragmentElement())
+    actual constructor() : this(Element("#fragment", Parser.NamespaceHtml))
+
+    actual fun deepCopy(): RealDocumentFragment {
+        return RealDocumentFragment(node.clone())
+    }
 }
 
 actual data object RealUnknown : RealNode {

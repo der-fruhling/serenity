@@ -87,6 +87,8 @@ expect class RealDocumentFragment(node: UnderlyingDocumentFragment) : RealElemen
     override val attributeSet: MutableSet<RealAttribute>
 
     constructor()
+
+    fun deepCopy(): RealDocumentFragment
 }
 
 object RealElementNamer : Registry.Namer<RealElement> {

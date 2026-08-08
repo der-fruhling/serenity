@@ -43,6 +43,7 @@
             <option value="$PROJECT_DIR$/modules/collectors/web" />
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/ktor-server" />
+            <option value="$PROJECT_DIR$/modules/test" />
             <option value="$PROJECT_DIR$/test-app" />
           </set>
         </option>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="serenity-test-wasm-js-0.1.0-SNAPSHOT">
+    <output-path>$PROJECT_DIR$/modules/test/build/libs</output-path>
+    <root id="archive" name="serenity-test-wasm-js-0.1.0-SNAPSHOT.jar">
+      <element id="module-output" name="serenity.serenity-test.wasmJsMain" />
+    </root>
+  </artifact>
+</component>

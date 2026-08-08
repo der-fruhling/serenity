@@ -57,7 +57,7 @@ abstract class Name {
 
         if (namespaceUrl != other.namespaceUrl) return false
         if (namespace != other.namespace) return false
-        if (localName != other.localName) return false
+        if (!localName.equals(other.localName, ignoreCase = true)) return false
 
         return true
     }
@@ -65,7 +65,7 @@ abstract class Name {
     override fun hashCode(): Int {
         var result = namespaceUrl.hashCode()
         result = 31 * result + namespace.hashCode()
-        result = 31 * result + localName.hashCode()
+        result = 31 * result + localName.lowercase().hashCode()
         return result
     }
 }

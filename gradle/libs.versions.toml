@@ -7,6 +7,7 @@ kotlin = "2.4.10"
 androidx-compose = "1.11.4"
 junit-jupiter = "6.1.1"
 kotlinx-serialization = "1.11.0"
+kotlinx-coroutines = "1.11.0"
 kotlinx-collections = "0.5.1"
 kotlinx-io = "0.9.1"
 kotlinx-datetime = "0.8.0"
@@ -21,6 +22,8 @@ serenity = { module = "net.derfruhling.serenity:serenity", version.ref = "sereni
 
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
 kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
@@ -51,7 +54,10 @@ ksp-symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-
 openhft-zeroAllocationHashing = { module = "net.openhft:zero-allocation-hashing", version = "2026.0" }
 jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
 
-chicory-wasm = { module = "com.dylibso.chicory:wasm", version = "1.7.5" }
+kotest-engine = { module = "io.kotest:kotest-framework-engine", version = "6.2.3" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version = "6.2.3" }
+kotest-property = { module = "io.kotest:kotest-property", version = "6.2.3" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version = "6.2.3" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -62,3 +68,4 @@ sassBase = { id = "io.freefair.sass-base", version = "9.5.0" }
 stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.12.0" }
 javaModularity = { id = "org.javamodularity.moduleplugin", version = "2.0.0" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version = "2.3.10" }
+kotest = { id = "io.kotest", version = "6.2.3" }

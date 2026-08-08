@@ -10,7 +10,6 @@ import net.derfruhling.serenity.event.EventType
 import web.dom.Node
 import web.dom.ParentNode
 import web.dom.document
-import web.errors.DOMException
 import web.events.*
 import web.events.EventType as WebEventType
 
@@ -118,17 +117,17 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
         get() = node
 
     actual val name: Name by lazy {
-        val tagName = node.tagName
-        if (':' in tagName) {
-            val (ns, name) = tagName.split(':')
+        val localName = node.localName
+        val prefix = node.prefix
+        if (prefix != null) {
             when (val nsUri = node.namespaceURI) {
-                null -> Name.qualified(ns, name)
-                else -> Name.qualified(ns, nsUri, name)
+                null -> Name.qualified(prefix, localName)
+                else -> Name.qualified(prefix, nsUri, localName)
             }
         } else {
             when (val nsUri = node.namespaceURI) {
-                null -> Name.of(tagName)
-                else -> Name.qualified(nsUri, tagName)
+                null -> Name.of(localName)
+                else -> Name.of(nsUri, localName)
             }
         }
     }
@@ -355,6 +354,10 @@ actual class RealDocumentFragment actual constructor(actual override val node: U
         get() = RealDocument.UnsupportedAttributeSet
 
     actual constructor() : this(document.createDocumentFragment())
+
+    actual fun deepCopy(): RealDocumentFragment {
+        return RealDocumentFragment(node.cloneNode(subtree = true) as UnderlyingDocumentFragment)
+    }
 }
 
 actual data object RealUnknown : RealNode {

@@ -5,7 +5,7 @@ import net.derfruhling.serenity.Formatter
 open class DocumentFragment(node: RealDocumentFragment) : DocumentLike<DocumentFragment, RealDocumentFragment>(
     node
 ),
-                                                          RootNode {
+    RootNode {
     @set:Deprecated("Document cannot have a parent", level = DeprecationLevel.ERROR)
     override var parent: NodeWithChildren<*, *>?
         get() = null
@@ -39,4 +39,6 @@ open class DocumentFragment(node: RealDocumentFragment) : DocumentLike<DocumentF
     }
 
     constructor() : this(RealDocumentFragment())
+
+    fun deepCopy() = DocumentFragment(real.deepCopy()).also { it.updateReal() }
 }

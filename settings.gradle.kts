@@ -4,6 +4,11 @@
 // https://docs.gradle.org/current/userguide/settings_file_basics.html
 
 pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+
     includeBuild("gradle-plugin")
 }
 
@@ -32,6 +37,7 @@ fun collector(name: String, dirName: String = name) {
 
 module("annotations")
 module("core")
+module("test")
 module("ktor-server")
 
 collector("collector-lib", "lib")

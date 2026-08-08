@@ -229,7 +229,7 @@ private external fun windowCancelAnimationFrame(id: Int)
 
 @Suppress("UnnecessaryOptInAnnotation")
 @OptIn(ExperimentalWasmJsInterop::class)
-private object AnimationFrameClock : MonotonicFrameClock {
+object AnimationFrameClock : MonotonicFrameClock {
     override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R {
         return suspendCancellableCoroutine { continuation ->
             val id = windowRequestAnimationFrame {

@@ -16,9 +16,11 @@ fun composeHtmlOnce(fn: @Composable @HtmlComposable () -> Unit): DocumentFragmen
 
     logger.trace { "Begin compose: $fn" }
     val composition = ReusableComposition(applier, html.compositionContext)
-    composition.setContentWithReuse(fn)
-    composition.dispose()
-    logger.trace { "Composition complete: $fn" }
-
-    return tree
+    try {
+        composition.setContentWithReuse(fn)
+        logger.trace { "Composition complete: $fn" }
+        return tree.deepCopy()
+    } finally {
+        composition.dispose()
+    }
 }

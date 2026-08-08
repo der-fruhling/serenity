@@ -3,6 +3,8 @@ plugins {
     id("net.derfruhling.serenity.convention")
     id("net.derfruhling.serenity.resources")
     id("net.derfruhling.serenity.stylist-sass")
+    id("com.google.devtools.ksp")
+    id("io.kotest")
     id("published")
 }
 
@@ -17,6 +19,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":serenity-annotations"))
+                api(libs.kotlinx.coroutines.core)
                 api(libs.androidx.compose.runtime)
                 api(libs.androidx.compose.runtime.saveable)
                 api(libs.androidx.collections)
@@ -31,6 +34,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
 

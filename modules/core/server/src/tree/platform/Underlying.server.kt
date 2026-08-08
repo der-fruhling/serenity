@@ -14,6 +14,4 @@ actual typealias UnderlyingData = DataNode
 actual typealias UnderlyingDocType = DocumentType
 actual typealias UnderlyingComment = Comment
 actual typealias UnderlyingDocument = Document
-actual typealias UnderlyingDocumentFragment = DocumentFragmentElement
-
-class DocumentFragmentElement : Element("#fragment", Parser.NamespaceHtml)
+actual typealias UnderlyingDocumentFragment = Element
