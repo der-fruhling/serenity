@@ -5,6 +5,7 @@ package net.derfruhling.serenity.tree.platform
 import com.fleeksoft.ksoup.nodes.*
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.TextNode
+import com.fleeksoft.ksoup.nodes.DataNode
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventType
@@ -15,6 +16,7 @@ actual fun RealNode(base: UnderlyingBase): RealNode? {
         is Element -> RealElement(base)
         is Attribute -> RealAttribute(base)
         is TextNode -> RealText(base)
+        is DataNode -> RealData(base)
         is Comment -> RealComment(base)
         is DocumentType -> RealDocumentType(base)
         else -> null
@@ -29,6 +31,16 @@ actual class RealText actual constructor(actual override val node: UnderlyingTex
         }
 
     actual constructor() : this(TextNode(""))
+}
+
+actual class RealData actual constructor(actual override val node: UnderlyingData) : RealNode {
+    actual var textContent: String
+        get() = node.getWholeData()
+        set(value) {
+            node.setWholeData(value)
+        }
+
+    actual constructor() : this(DataNode(""))
 }
 
 actual class RealComment actual constructor(actual override val node: UnderlyingComment) : RealNode {

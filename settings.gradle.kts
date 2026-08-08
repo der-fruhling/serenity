@@ -20,6 +20,11 @@ fun module(name: String, dirName: String = name) {
     project(":serenity-$name").projectDir = file("modules").resolve(dirName)
 }
 
+fun library(name: String, dirName: String = name) {
+    include(name)
+    project(":$name").projectDir = file("modules").resolve(dirName)
+}
+
 fun collector(name: String, dirName: String = name) {
     include("serenity-$name")
     project(":serenity-$name").projectDir = file("modules").resolve("collectors").resolve(dirName)

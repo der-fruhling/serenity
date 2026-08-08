@@ -53,5 +53,6 @@ object ManifestEntryRegistry {
 
     init {
         registerEntry<ResourceIndexBuilder>()
+        registerEntry<ScriptLocation>()
     }
 }

@@ -24,6 +24,14 @@ expect class RealText(node: UnderlyingText) : RealNode {
     var textContent: String
 }
 
+expect class RealData(node: UnderlyingData) : RealNode {
+    override val node: UnderlyingData
+
+    constructor()
+
+    var textContent: String
+}
+
 expect class RealComment(node: UnderlyingComment) : RealNode {
     override val node: UnderlyingComment
 

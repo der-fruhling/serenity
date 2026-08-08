@@ -144,12 +144,13 @@ suspend inline fun ApplicationCall.respondCompose(crossinline fn: @Composable @H
         }
     }
 
-    for ((href, `as`) in preloadSet) {
+    for ((href, `as`, crossorigin) in preloadSet) {
         response.link(
             LinkHeader(
-                href, listOf(
+                href, listOfNotNull(
                     HeaderValueParam("rel", "preload"),
-                    HeaderValueParam("as", `as`)
+                    HeaderValueParam("as", `as`),
+                    if (crossorigin) HeaderValueParam("crossorigin", "") else null
                 )
             )
         )

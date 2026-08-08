@@ -54,14 +54,11 @@ fun onHtmlContextStart(fn: (HtmlCompositionContext) -> Unit) {
 }
 
 @OptIn(ExperimentalWasmJsInterop::class)
-private fun createSerenityDebugProperty(
+@JsFun("(get, set) => ({get, set})")
+private external fun createSerenityDebugProperty(
     get: () -> Boolean,
     set: (Boolean) -> Unit
-): TypedPropertyDescriptor<JsBoolean> = js(
-    """
-    {get, set}
-"""
-)
+): TypedPropertyDescriptor<JsBoolean>
 
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class WebEntryPoint private constructor() {
@@ -142,7 +139,7 @@ internal class WebEntryPoint private constructor() {
                 alert(
                     "An error occurred trying to fetch the application manifest: ${e::class.simpleName}\n${e.message}\n\n" +
                         "If you're the developer of this site, this error is likely due to a misconfiguration. " +
-                        "Ensure you are service the application-manifest.json file from your server."
+                        "Ensure you are serving the application-manifest.json file from your server."
                 )
                 Manifest(mutableMapOf())
             }

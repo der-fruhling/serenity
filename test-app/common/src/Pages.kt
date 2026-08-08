@@ -9,7 +9,6 @@ fun PageRegistry<PlatformContext>.registerPages() {
             Head {
                 SlotHead()
 
-                useScript("/_/js/page.js")
                 useStylesheet("/_/style.css")
                 useStylesheet("/_/net.derfruhling.serenity/serenity-core/builtin/serenity.css")
 

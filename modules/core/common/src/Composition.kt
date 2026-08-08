@@ -7,60 +7,41 @@ import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.ReusableComposeNode
 import androidx.compose.runtime.Updater
 import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.annotations.UnescapedTextDanger
 import net.derfruhling.serenity.tree.HtmlApplier
+import net.derfruhling.serenity.tree.platform.DataNode
 import net.derfruhling.serenity.tree.platform.DocumentTypeNode
 import net.derfruhling.serenity.tree.platform.ElementNode
 import net.derfruhling.serenity.tree.platform.TextNode
 
-@Suppress("NOTHING_TO_INLINE")
-@Composable
-inline fun Element(
-    name: Name,
-) {
-    ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
-        set(name) { this.name = it }
-    })
-}
+internal val defaultFn = @Composable {}
 
 @Composable
-inline fun Element(
+fun Element(
     name: Name,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit = defaultFn
 ) {
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
         set(name) { this.name = it }
     }, content)
 }
 
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-inline fun Element(
+fun Element(
     name: String,
-) = Element(Name.of(name))
-
-@Composable
-inline fun Element(
-    name: String,
-    content: @Composable () -> Unit
-) = Element(Name.of(name), content = content)
-
-@Suppress("NOTHING_TO_INLINE")
-@Composable
-inline fun Element(
-    update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
-    name: Name,
+    content: @Composable () -> Unit = defaultFn
 ) {
+    val name = Name.of(name)
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
         set(name) { this.name = it }
-        update()
-    })
+    }, content)
 }
 
 @Composable
-inline fun Element(
+fun Element(
     update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
     name: Name,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit = defaultFn
 ) {
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
         set(name) { this.name = it }
@@ -68,19 +49,18 @@ inline fun Element(
     }, content)
 }
 
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-inline fun Element(
+fun Element(
     update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
     name: String,
-) = Element(update, Name.of(name))
-
-@Composable
-inline fun Element(
-    update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
-    name: String,
-    content: @Composable () -> Unit
-) = Element(update, Name.of(name), content = content)
+    content: @Composable () -> Unit = defaultFn
+) {
+    val name = Name.of(name)
+    ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
+        set(name) { this.name = it }
+        update()
+    }, content)
+}
 
 @Composable
 fun DocumentType() {
@@ -96,6 +76,14 @@ fun DocumentType() {
 @Composable
 fun Text(content: String) {
     ReusableComposeNode<TextNode, HtmlApplier>(::TextNode, update = {
+        set(content) { this.textContent = it }
+    })
+}
+
+@Composable
+@UnescapedTextDanger
+fun Data(content: String) {
+    ReusableComposeNode<DataNode, HtmlApplier>(::DataNode, update = {
         set(content) { this.textContent = it }
     })
 }

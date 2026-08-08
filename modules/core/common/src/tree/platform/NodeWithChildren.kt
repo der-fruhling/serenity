@@ -230,11 +230,11 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
     }
 
     override fun reuse() {
-        attributeIndices.clear()
+        /*attributeIndices.clear()
         childIndices.clear()
         children.clear()
 
         real.attributeSet.clear()
-        real.children.clear()
+        real.children.clear()*/
     }
 }

@@ -9,6 +9,7 @@ import org.gradle.api.artifacts.type.ArtifactTypeDefinition
 import org.gradle.api.attributes.Usage
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.internal.model.NamedObjectInstantiator
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Sync
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.*
@@ -17,7 +18,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import javax.inject.Inject
 
 @Suppress("UnstableApiUsage")
-class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstantiator) : Plugin<Project> {
+class SerenityResourcesPlugin @Inject constructor(
+    val objects: NamedObjectInstantiator
+) : Plugin<Project> {
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     override fun apply(target: Project) {
         val base = target.plugins.apply(SerenityBasePlugin::class)
@@ -193,6 +196,7 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
 
             target.plugins.withType(SerenityServerPlugin::class) {
                 val processServerResources = target.tasks.named("syncServerResources")
+                val processServerResourcesDebug = target.tasks.named("syncServerResourcesDebug", Sync::class)
 
                 val outDir = target.layout.buildDirectory.dir("resources/vendored")
                 val vendorServerResources =
@@ -211,9 +215,41 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
                         prettyJson.convention(ext.prettyJson)
                     }
 
-                composeApplicationManifest.configure {
+                val locatePageScript = target.tasks.register(
+                    "locatePageScript",
+                    LocatePageScriptFromIndex::class
+                ) {
                     dependsOn(vendorServerResources)
-                    sourceFragments.from(vendorServerResources.get().resourceIndexFile)
+
+                    indexFile.set(vendorServerResources.get().resourceIndexFile)
+                    outputFile.set(ext.pageScriptFile)
+                    prettyJson.convention(ext.prettyJson)
+                }
+
+                val locatePageScriptDebug = target.tasks.register(
+                    "locatePageScriptDebug",
+                    LocatePageScriptFromDirectory::class
+                ) {
+                    dependsOn(processServerResourcesDebug)
+
+                    sourceDir.set(target.layout.dir(processServerResourcesDebug.map { it.destinationDir }))
+                    outputFile.set(ext.pageScriptDebugFile)
+                    prettyJson.convention(ext.prettyJson)
+                }
+
+                composeApplicationManifest.configure {
+                    dependsOn(vendorServerResources, locatePageScript)
+                    sourceFragments.from(
+                        vendorServerResources.get().resourceIndexFile,
+                        locatePageScript.get().outputFile
+                    )
+                }
+
+                composeApplicationManifestDebug.configure {
+                    dependsOn(locatePageScriptDebug)
+                    sourceFragments.from(
+                        locatePageScriptDebug.get().outputFile
+                    )
                 }
 
                 this.serverExtension.apply {
@@ -262,7 +298,7 @@ class SerenityResourcesPlugin @Inject constructor(val objects: NamedObjectInstan
         target.afterEvaluate {
             task.configure {
                 from(configuration.incoming.artifacts.map {
-                    if (it.file.isDirectory) {
+                    if (it.file.extension != "zip") {
                         target.fileTree(it.file)
                     } else {
                         target.zipTree(it.file)

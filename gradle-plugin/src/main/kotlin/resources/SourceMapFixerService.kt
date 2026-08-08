@@ -1,6 +1,7 @@
 package net.derfruhling.serenity.gradle.resources
 
 import kotlinx.serialization.json.Json
+import net.derfruhling.serenity.gradle.web.SourceMap
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.gradle.api.services.BuildService

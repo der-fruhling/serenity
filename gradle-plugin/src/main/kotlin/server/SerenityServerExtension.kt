@@ -49,9 +49,9 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
         createDefaultBinaries.convention(true)
         createDistTasks.convention(true)
 
-        val distDir = project.layout.buildDirectory.dir("resources/all")
-        fun syncServerResourcesTask(suffix: String, dirSuffix: String): TaskProvider<Sync> =
-            project.tasks.register("syncServerResources$suffix", Sync::class) {
+        fun syncServerResourcesTask(suffix: String, dirSuffix: String): TaskProvider<Sync> {
+            val distDir = project.layout.buildDirectory.dir("resources/all$dirSuffix")
+            return project.tasks.register("syncServerResources$suffix", Sync::class) {
                 into(distDir)
 
                 from(
@@ -70,6 +70,7 @@ abstract class SerenityServerExtension(internal val base: SerenityExtension) : E
                 inputs.dir(project.layout.buildDirectory.dir("resources/server$dirSuffix"))
                 outputs.dir(distDir)
             }
+        }
 
         debugResourceTask.convention(syncServerResourcesTask("Debug", "-debug").name)
         resourceTask.convention(syncServerResourcesTask("", "").name)

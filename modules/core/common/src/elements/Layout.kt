@@ -1,6 +1,7 @@
 package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.Composable
+import com.skydoves.compose.stability.runtime.TraceRecomposition
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.tree.platform.ElementNode
 
@@ -28,7 +29,7 @@ private inline fun Flex(
     styleClass: String,
     crossAxis: CrossAxis?,
     mainAxis: MainAxis?,
-    fn: @Composable () -> Unit
+    crossinline fn: @Composable () -> Unit
 ) {
     Element(name = "div", update = {
         set(styleClass) { classes.add(styleClass) }
@@ -63,13 +64,6 @@ fun Header(fn: @Composable () -> Unit) {
 }
 
 @Composable
-fun Header(vararg classes: String, fn: @Composable () -> Unit) {
-    Element(name = "header", update = {
-        set(classes) { this.classes.addAll(classes) }
-    }) { fn() }
-}
-
-@Composable
 fun Content(fn: @Composable () -> Unit) {
     Element(name = "div", update = {
         init { classes.add(StyleClasses.PageContent) }
@@ -81,11 +75,4 @@ fun Content(fn: @Composable () -> Unit) {
 @Composable
 fun Footer(fn: @Composable () -> Unit) {
     Element("footer") { fn() }
-}
-
-@Composable
-fun Footer(vararg classes: String, fn: @Composable () -> Unit = {}) {
-    Element(name = "footer", update = {
-        set(classes) { this.classes.addAll(classes) }
-    }) { fn() }
 }

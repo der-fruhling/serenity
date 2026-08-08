@@ -8,6 +8,7 @@ import net.derfruhling.serenity.PageHolder
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.Client
 import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.defaultFn
 import net.derfruhling.serenity.event.ClickEvent
 import net.derfruhling.serenity.event.On
 import net.derfruhling.serenity.navigate
@@ -15,7 +16,15 @@ import net.derfruhling.serenity.navigate
 val linkBase = compositionLocalOf { "" }
 
 @Composable
-fun Link(to: String, fn: @Composable () -> Unit) {
+fun Link(to: String, fn: @Composable () -> Unit = defaultFn) {
+    LinkAnchor(to, fn)
+}
+
+@Composable
+private fun LinkAnchor(
+    to: String,
+    fn: @Composable (() -> Unit)
+) {
     val linkBase = linkBase.current
     val actualLink = remember(to, linkBase) {
         if (to.startsWith('/')) {
@@ -51,7 +60,15 @@ internal fun urlEncodePath(text: String) = text.replace(pathRegex) {
 }
 
 @Composable
-fun Link(to: PageHolder<*>, fn: @Composable () -> Unit) {
+fun Link(to: PageHolder<*>, fn: @Composable () -> Unit = defaultFn) {
+    LinkAnchor(to, fn)
+}
+
+@Composable
+private fun LinkAnchor(
+    to: PageHolder<*>,
+    fn: @Composable (() -> Unit)
+) {
     val linkBase = linkBase.current
     val actualLink = remember(to, linkBase) { to.constructActualAddress(linkBase) }
 
@@ -68,30 +85,16 @@ fun Link(to: PageHolder<*>, fn: @Composable () -> Unit) {
 }
 
 @Composable
-fun Link(text: String, to: String) {
-    Link(to) {
-        Text(text)
-    }
-}
-
-@Composable
-fun Link(text: String, to: String, fn: @Composable () -> Unit) {
-    Link(to) {
+fun Link(text: String, to: String, fn: @Composable () -> Unit = defaultFn) {
+    LinkAnchor(to) {
         Text(text)
         fn()
     }
 }
 
 @Composable
-fun Link(text: String, to: PageHolder<*>) {
-    Link(to) {
-        Text(text)
-    }
-}
-
-@Composable
-fun Link(text: String, to: PageHolder<*>, fn: @Composable () -> Unit) {
-    Link(to) {
+fun Link(text: String, to: PageHolder<*>, fn: @Composable () -> Unit = defaultFn) {
+    LinkAnchor(to) {
         Text(text)
         fn()
     }

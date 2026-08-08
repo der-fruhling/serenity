@@ -6,7 +6,7 @@ import kotlin.io.encoding.Base64
 
 fun hashFunctionName(string: String): String {
     val digest = MessageDigest.getInstance("MD5")
-    return Base64.Mime.encode(digest.digest(string.toByteArray()))
+    return Base64.UrlSafe.withPadding(Base64.PaddingOption.ABSENT).encode(digest.digest(string.toByteArray()))
 }
 
 fun generatePageDetails(annotation: RegisterPage): String = buildString {

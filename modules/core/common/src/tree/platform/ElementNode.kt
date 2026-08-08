@@ -10,8 +10,7 @@ import net.derfruhling.serenity.event.EventTarget
 import net.derfruhling.serenity.event.EventType
 
 open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
-                         ChildNode<NodeWithChildren<*, *>>,
-                         ComposeNodeLifecycleCallback {
+                         ChildNode<NodeWithChildren<*, *>> {
     override var parent: NodeWithChildren<*, *>? = null
     override val index: Index<ElementNode> = Index(this)
 
@@ -211,13 +210,13 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
         }
     }
 
-    override fun onDeactivate() {
+    override fun removed() {
         byUnderlyingItem.remove(real.node)
+        super<ChildNode>.removed()
     }
 
-    override fun onRelease() {}
-
-    override fun onReuse() {
+    override fun reuse() {
+        super<NodeWithChildren>.reuse()
         byUnderlyingItem[real.node] = this
     }
 

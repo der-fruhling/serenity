@@ -4,11 +4,13 @@ package net.derfruhling.serenity.tree.platform
 
 import js.array.asList
 import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.catch
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventType
 import web.dom.Node
 import web.dom.ParentNode
 import web.dom.document
+import web.errors.DOMException
 import web.events.*
 import web.events.EventType as WebEventType
 
@@ -30,19 +32,21 @@ actual fun RealNode(base: UnderlyingBase): RealNode? {
 
 actual class RealText actual constructor(actual override val node: UnderlyingText) : RealNode {
     actual var textContent: String
-        get() = node.textContent ?: ""
+        get() = node.data
         set(value) {
-            node.textContent = value
+            node.data = value
         }
 
     actual constructor() : this(document.createTextNode(""))
 }
 
+actual typealias RealData = RealText
+
 actual class RealComment actual constructor(actual override val node: UnderlyingComment) : RealNode {
     actual var commentContent: String
-        get() = node.textContent ?: ""
+        get() = node.data
         set(value) {
-            node.textContent = value
+            node.data = value
         }
 
     actual constructor() : this(document.createComment(""))
@@ -157,14 +161,7 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
                 override fun remove() {
                     iterator.remove()
 
-                    if (current.name.namespaceUrl != null) {
-                        node.attributes.removeNamedItemNS(
-                            current.name.namespaceUrl,
-                            (current.name.namespace?.let { "$it:" } ?: "") + current.name.localName)
-                    } else {
-                        node.attributes.removeNamedItem((current.name.namespace?.let { "$it:" }
-                            ?: "") + current.name.localName)
-                    }
+                    catch { node.removeAttributeNode(current.node) }
                 }
 
                 override fun hasNext(): Boolean {

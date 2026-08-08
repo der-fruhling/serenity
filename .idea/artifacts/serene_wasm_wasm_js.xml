@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="serene-wasm-wasm-js">
+    <output-path>$PROJECT_DIR$/modules/serene-wasm/build/libs</output-path>
+    <root id="archive" name="serene-wasm-wasm-js.jar">
+      <element id="module-output" name="serenity.serene-wasm.wasmJsMain" />
+    </root>
+  </artifact>
+</component>

@@ -51,6 +51,8 @@ ksp-symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-
 openhft-zeroAllocationHashing = { module = "net.openhft:zero-allocation-hashing", version = "2026.0" }
 jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
 
+chicory-wasm = { module = "com.dylibso.chicory:wasm", version = "1.7.5" }
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

@@ -2,6 +2,7 @@ package net.derfruhling.serenity.processor
 
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
+import com.google.devtools.ksp.getClassDeclarationByName
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
@@ -30,6 +31,8 @@ class WebCollector(
                 function.packageName.asString(),
                 function.simpleName.asString() + ".generated"
             ).bufferedWriter().use { out ->
+                val hashFunctionName = hashFunctionName(function.qualifiedName!!.asString())
+
                 out.appendLine("@file:OptIn(ExperimentalJsExport::class)")
                 out.appendLine("@file:Suppress(\"NON_CONSUMABLE_EXPORTED_IDENTIFIER\")")
                 out.appendLine()
@@ -48,7 +51,6 @@ class WebCollector(
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.SerialName")
 
-                val hashFunctionName = hashFunctionName(function.qualifiedName!!.asString())
                 val parameters by lazy { PageParameters(function, logger) }
                 val isClass = function.parameters.isNotEmpty()
 

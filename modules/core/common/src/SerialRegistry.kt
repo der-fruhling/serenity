@@ -7,6 +7,10 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlinx.serialization.serializer
+import net.derfruhling.serenity.manifest.Manifest
+import net.derfruhling.serenity.manifest.ManifestEntry
+import net.derfruhling.serenity.manifest.ResourceIndex
+import net.derfruhling.serenity.manifest.ScriptLocation
 import kotlin.reflect.KClass
 
 object SerialRegistry {
@@ -15,6 +19,7 @@ object SerialRegistry {
     private val composedModules = mutableListOf<SerializersModule>()
     private val subclasses = mutableMapOf<KClass<*>, SerialEntry<*>>()
     private val pages = mutableMapOf<KClass<out SerialPageHolder>, SerialEntry<out SerialPageHolder>>()
+    private val manifestEntries = mutableMapOf<KClass<out ManifestEntry>, SerialEntry<out ManifestEntry>>()
 
     private var _serializersModule: SerializersModule? = null
     private var _json: Json? = null
@@ -38,6 +43,13 @@ object SerialRegistry {
             }
         }
 
+        polymorphic(ManifestEntry::class) {
+            @Suppress("DestructuringDeclaration")
+            for (entry in manifestEntries.values) {
+                subclass(entry.kClass, entry.kSerializer)
+            }
+        }
+
         polymorphic(Any::class) {
             subclass(SerialSavedData::class)
             subclass(SerialSavedState::class)
@@ -55,6 +67,7 @@ object SerialRegistry {
             subclass(FloatArray::class, wrap($$"$float[]"))
             subclass(IntArray::class, wrap($$"$int[]"))
             subclass(LongArray::class, wrap($$"$long[]"))
+            subclass(Manifest::class, wrap($$"$manifest"))
 
             @Suppress("DestructuringDeclaration")
             for (subClass in subclasses.values) {
@@ -90,8 +103,18 @@ object SerialRegistry {
         _serializersModule = null
     }
 
+    fun <T : ManifestEntry> registerManifestEntry(kClass: KClass<T>, kSerializer: KSerializer<T>) {
+        manifestEntries[kClass] = SerialEntry(kClass, kSerializer)
+        _json = null
+        _serializersModule = null
+    }
+
     inline fun <reified T : Any> register() {
         register(T::class, serializer<T>())
+    }
+
+    inline fun <reified T : ManifestEntry> registerManifestEntry() {
+        registerManifestEntry(T::class, serializer<T>())
     }
 
     inline fun <reified T> decode(value: String): T {
@@ -100,5 +123,10 @@ object SerialRegistry {
 
     inline fun <reified T> encode(value: T): String {
         return json.encodeToString(value)
+    }
+
+    init {
+        registerManifestEntry<ResourceIndex>()
+        registerManifestEntry<ScriptLocation>()
     }
 }

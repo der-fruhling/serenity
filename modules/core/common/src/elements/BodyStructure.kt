@@ -13,26 +13,8 @@ fun Div(fn: @Composable () -> Unit) {
 }
 
 @Composable
-fun Div(vararg classes: String, fn: @Composable () -> Unit = {}) {
-    Element(name = "div", update = {
-        set(classes) { this.classes.addAll(it) }
-    }) {
-        fn()
-    }
-}
-
-@Composable
 fun Span(fn: @Composable () -> Unit) {
     Element("span") { fn() }
-}
-
-@Composable
-fun Span(vararg classes: String, fn: @Composable () -> Unit = {}) {
-    Element(name = "span", update = {
-        set(classes) { this.classes.addAll(it) }
-    }) {
-        fn()
-    }
 }
 
 @Composable
