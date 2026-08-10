@@ -20,7 +20,8 @@ actual fun RealNode(base: UnderlyingBase): RealNode? {
         is DataNode -> RealData(base)
         is Comment -> RealComment(base)
         is DocumentType -> RealDocumentType(base)
-        else -> null
+        is Node -> null
+        else -> throw IllegalArgumentException("Not a node")
     }
 }
 

@@ -7,6 +7,7 @@ import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.catch
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventType
+import web.dom.ChildNode
 import web.dom.Node
 import web.dom.ParentNode
 import web.dom.document
@@ -15,6 +16,7 @@ import web.events.EventType as WebEventType
 
 private const val HTML_NS = "http://www.w3.org/1999/xhtml"
 
+@OptIn(ExperimentalWasmJsInterop::class)
 actual fun RealNode(base: UnderlyingBase): RealNode? {
     // No, kotlin. This when is not exhaustive
     @Suppress("REDUNDANT_ELSE_IN_WHEN")
@@ -25,7 +27,14 @@ actual fun RealNode(base: UnderlyingBase): RealNode? {
         Node.COMMENT_NODE -> RealComment(base as UnderlyingComment)
         Node.ATTRIBUTE_NODE -> RealAttribute(base as UnderlyingAttribute)
         Node.DOCUMENT_TYPE_NODE -> RealDocumentType(base as UnderlyingDocType)
-        else -> null
+        else -> {
+            @Suppress("USELESS_IS_CHECK")
+            if((base as JsAny) is Node) {
+                null
+            } else {
+                throw IllegalArgumentException("Not a node: $base")
+            }
+        }
     }
 }
 
@@ -79,7 +88,8 @@ actual sealed class RealElementLike : RealNode {
         }
 
         override fun removeAt(index: Int): RealNode {
-            return RealNode(parent.childNodes[index].also { it.remove() }) ?: RealUnknown
+            return RealNode((parent.childNodes[index] as ChildNode?).also { it?.remove() }
+                ?: return RealUnknown) ?: RealUnknown
         }
 
         override fun set(
@@ -147,7 +157,7 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
             } else {
                 node.setAttribute((element.name.namespace?.let { "$it:" }
                     ?: "") + element.name.localName,
-                                  element.value ?: "")
+                    element.value ?: "")
             }
             return true
         }

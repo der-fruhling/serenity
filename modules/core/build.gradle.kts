@@ -1,11 +1,9 @@
 plugins {
     id("multiplatform-compose")
     id("net.derfruhling.serenity.convention")
+    id("published")
     id("net.derfruhling.serenity.resources")
     id("net.derfruhling.serenity.stylist-sass")
-    id("com.google.devtools.ksp")
-    id("io.kotest")
-    id("published")
 }
 
 allprojects {
@@ -33,6 +31,7 @@ kotlin {
 
         commonTest {
             dependencies {
+                implementation(project(":serenity-test"))
                 implementation(kotlin("test"))
                 implementation(libs.kotlinx.coroutines.test)
             }
@@ -66,4 +65,8 @@ kotlin {
             }
         }
     }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }

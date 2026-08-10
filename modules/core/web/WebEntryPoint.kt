@@ -7,6 +7,7 @@ import androidx.compose.runtime.tooling.setObserver
 import js.numbers.JsNumbers.toKotlinDouble
 import js.objects.Object
 import js.objects.TypedPropertyDescriptor
+import js.promise.Promise
 import js.promise.await
 import js.string.JsStrings.toKotlinString
 import kotlinx.coroutines.*
@@ -49,6 +50,13 @@ private val htmlContextStartHandlers = mutableListOf<(HtmlCompositionContext) ->
 lateinit var htmlComposer: RehydratingHtmlTree<Document>
     private set
 
+@InternalPageEntryPoint
+@TestOnly
+fun setHtmlComposerForTesting(ctx: HtmlCompositionContext, tree: RehydratingHtmlTree<Document>) {
+    htmlContext = ctx
+    htmlComposer = tree
+}
+
 fun onHtmlContextStart(fn: (HtmlCompositionContext) -> Unit) {
     htmlContextStartHandlers.add(fn)
 }
@@ -59,6 +67,10 @@ private external fun createSerenityDebugProperty(
     get: () -> Boolean,
     set: (Boolean) -> Unit
 ): TypedPropertyDescriptor<JsBoolean>
+
+@OptIn(ExperimentalWasmJsInterop::class)
+@JsFun("() => ({})")
+private external fun emptyObject(): JsAny
 
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class WebEntryPoint private constructor() {
@@ -78,10 +90,6 @@ internal class WebEntryPoint private constructor() {
             ))
     }
 
-    private val manifestRequest = fetchAsync("/_/application-manifest.json").flatThen {
-        it.jsonAsync()
-    }
-
     private lateinit var manifest: Manifest
     private var first: Boolean = true
     private var initialized: Boolean = false
@@ -99,6 +107,14 @@ internal class WebEntryPoint private constructor() {
 
             htmlContext = HtmlCompositionContext(Recomposer(coroutineContext))
             htmlContextStartHandlers.forEach { it(htmlContext) }
+            val manifestRequest: Promise<JsAny?> = if(htmlContext.enableTestMode) {
+                Promise.resolve(emptyObject())
+            } else {
+                fetchAsync("/_/application-manifest.json").flatThen {
+                    it.jsonAsync()
+                }
+            }
+
             if(location.hash.isNotEmpty()) {
                 val properties = URLSearchParams(location.hash)
                 when(properties.get("debug".toJsString())?.toKotlinString()) {
@@ -145,14 +161,20 @@ internal class WebEntryPoint private constructor() {
             }
 
             initialized = true
-            // first apply what should be the server's version
-            setPageContent()
+            if(!htmlContext.enableTestMode) {
+                // first apply what should be the server's version
+                setPageContent()
 
-            console.debug(htmlComposer.rootElement.dom)
-            document.replaceChild(htmlComposer.rootElement.dom, document.documentElement)
+                console.debug(htmlComposer.rootElement.dom)
+                document.replaceChild(htmlComposer.rootElement.dom, document.documentElement)
 
-            // then, update the tree with the client's version
-            htmlComposer.snapshot.enter { clientMode = true }
+                // then, update the tree with the client's version
+                htmlComposer.snapshot.enter { clientMode = true }
+            } else {
+                // content is undefined in test mode
+                htmlComposer.snapshot.enter { clientMode = true }
+                setPageContent()
+            }
         }
 
         first = false

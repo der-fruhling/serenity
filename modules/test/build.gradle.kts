@@ -1,8 +1,6 @@
 plugins {
     id("multiplatform-compose")
     id("net.derfruhling.serenity.convention")
-    id("com.google.devtools.ksp")
-    id("io.kotest")
     id("published")
 }
 
@@ -19,15 +17,12 @@ kotlin {
                 api(project(":serenity-core"))
                 api(libs.kotlinx.coroutines.core)
                 api(libs.kotlinx.coroutines.test)
-                api(libs.kotest.engine)
-                api(libs.kotest.assertions)
-                api(libs.kotest.property)
             }
         }
 
-        jvmMain {
+        commonTest {
             dependencies {
-                api(libs.kotest.runner.junit5)
+                implementation(kotlin("test"))
             }
         }
     }
