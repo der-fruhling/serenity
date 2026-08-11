@@ -5,6 +5,7 @@ package net.derfruhling.serenity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.key
+import net.derfruhling.serenity.annotations.Client
 import net.derfruhling.serenity.annotations.HtmlComposable
 
 @get:Composable
@@ -29,4 +30,4 @@ fun ifServer(fn: @Composable () -> Unit) {
 }
 
 @Composable
-expect fun <T> alternative(onServer: @Composable () -> T, onClient: @Composable () -> T)
+expect fun <T> alternative(onServer: @Composable () -> T, onClient: @Composable @Client () -> T)
