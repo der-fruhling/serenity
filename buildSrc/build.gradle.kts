@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    kotlin("plugin.serialization") version embeddedKotlinVersion
 }
 
 repositories {
@@ -7,6 +8,7 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
     api(plugin(libs.plugins.kotlin.multiplatform))
     api(plugin(libs.plugins.kotlin.jvm))
     api(plugin(libs.plugins.kotlin.plugin.serialization))

@@ -8,4 +8,6 @@ class Stack<T> {
     }
 
     fun pop(): T = list.removeLast()
+
+    fun clear() = list.clear()
 }

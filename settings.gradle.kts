@@ -37,6 +37,7 @@ fun collector(name: String, dirName: String = name) {
 
 module("annotations")
 module("core")
+module("inline-style")
 module("test")
 module("ktor-server")
 

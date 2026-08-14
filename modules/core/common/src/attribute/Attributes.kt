@@ -35,6 +35,7 @@ object Attributes {
     val target by name<String>("target")
     val id by name<String>("id")
     val `class` by name<MutableSet<String>>("class") { stringSet() }
+    val style by name<String>("style")
 
     val serenityKeepIfRemoved by name<Boolean>("data-keep-if-removed")
 

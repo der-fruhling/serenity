@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?import net.derfruhling.serenity.style.notations.notation?>
+<?import androidx.compose.runtime.Composable?>
+<rules>
+  <type id="number" kt="Int Long Float"/>
+  <type id="integer" kt="Int Long"/>
+  <type id="length" kt="$notations.Length"/>
+  <type id="percentage" kt="$notations.Percentage"/>
+  <type id="length-percentage" union="length percentage"/>
+  <type id="display-mode" kt="$enums.DisplayMode"/>
+
+  <group name="DisplayRules">
+    <?import @display-mode?>
+    <rule name="display" type="display-mode"/>
+  </group>
+
+  <group name="SizeRules">
+    <?import @length-percentage?>
+    <rule name="width" type="length-percentage"/>
+    <rule name="height" type="length-percentage"/>
+  </group>
+</rules>

@@ -63,7 +63,7 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
                 childIndices.add(child.index)
             }
 
-            is AbstractEventHandlerNode<*> -> {}
+            else -> {}
         }
 
         child.reparent(this)
@@ -83,7 +83,7 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
                 childIndices.add(child.index)
             }
 
-            is AbstractEventHandlerNode<*> -> {}
+            else -> {}
         }
 
         child.reparent(this)
@@ -120,7 +120,7 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
                 childIndices.add(newIndex, child.index)
             }
 
-            is AbstractEventHandlerNode<*> -> {}
+            else -> {}
         }
 
         child.reparent(this)
