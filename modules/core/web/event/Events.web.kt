@@ -25,6 +25,13 @@ actual sealed interface BuiltinPointerEvent : BuiltinEventType,
 }
 
 @Serializable
+actual sealed interface BuiltinPlainElementEvent : BuiltinEventType, GenerateFromDomEvent<Event<Element>> {
+    override fun generate(event: DomEvent): Event<Element> {
+        return event.asElementComposeEvent()
+    }
+}
+
+@Serializable
 actual sealed interface BuiltinPlainWindowEvent : BuiltinEventType,
                                                   GenerateFromDomEvent<Event<Window>> {
     override fun generate(event: DomEvent): Event<Window> {

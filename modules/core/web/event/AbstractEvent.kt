@@ -6,6 +6,7 @@ import js.numbers.JsNumbers.toKotlinDouble
 import js.string.JsStrings.toKotlinString
 import net.derfruhling.serenity.dom.Window
 import net.derfruhling.serenity.dom.Document
+import net.derfruhling.serenity.dom.Element
 import web.dom.Element as DomElement
 import web.events.Event as DomEvent
 import web.events.EventTarget as DomEventTarget
@@ -30,6 +31,12 @@ abstract class AbstractEvent<T : EventTarget>(dom: DomEvent) : Event<T> {
 
     abstract fun eventTargetFromDom(eventTarget: DomEventTarget?): T
 
+    class ElementImpl(override val dom: DomEvent) : AbstractEvent<Element>(dom) {
+        override fun eventTargetFromDom(eventTarget: DomEventTarget?): Element {
+            return eventTarget as DomElement
+        }
+    }
+
     class WindowImpl(override val dom: DomEvent) : AbstractEvent<Window>(dom) {
         override fun eventTargetFromDom(eventTarget: DomEventTarget?): Window {
             return eventTarget as DomWindow
@@ -42,6 +49,9 @@ abstract class AbstractEvent<T : EventTarget>(dom: DomEvent) : Event<T> {
         }
     }
 }
+
+fun DomEvent.asElementComposeEvent(): Event<Element> =
+    AbstractEvent.ElementImpl(this)
 
 fun DomEvent.asWindowComposeEvent(): Event<Window> =
     AbstractEvent.WindowImpl(this)

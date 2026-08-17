@@ -9,6 +9,9 @@ actual sealed interface BuiltinEventType
 actual sealed interface BuiltinPointerEvent : BuiltinEventType
 
 @Serializable
+actual sealed interface BuiltinPlainElementEvent : BuiltinEventType
+
+@Serializable
 actual sealed interface BuiltinPlainWindowEvent : BuiltinEventType
 
 @Serializable

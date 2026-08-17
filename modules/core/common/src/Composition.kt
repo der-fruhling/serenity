@@ -8,6 +8,7 @@ import androidx.compose.runtime.ReusableComposeNode
 import androidx.compose.runtime.Updater
 import net.derfruhling.serenity.annotations.HtmlComposable
 import net.derfruhling.serenity.annotations.UnescapedTextDanger
+import net.derfruhling.serenity.attribute.Attribute
 import net.derfruhling.serenity.tree.HtmlApplier
 import net.derfruhling.serenity.tree.platform.DataNode
 import net.derfruhling.serenity.tree.platform.DocumentTypeNode
@@ -22,7 +23,7 @@ fun Element(
     content: @Composable () -> Unit = defaultFn
 ) {
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
-        set(name) { this.name = it }
+        init(name) { this.name = it }
     }, content)
 }
 
@@ -33,7 +34,7 @@ fun Element(
 ) {
     val name = Name.of(name)
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
-        set(name) { this.name = it }
+        init(name) { this.name = it }
     }, content)
 }
 
@@ -44,7 +45,7 @@ fun Element(
     content: @Composable () -> Unit = defaultFn
 ) {
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
-        set(name) { this.name = it }
+        init(name) { this.name = it }
         update()
     }, content)
 }
@@ -57,7 +58,7 @@ fun Element(
 ) {
     val name = Name.of(name)
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
-        set(name) { this.name = it }
+        init(name) { this.name = it }
         update()
     }, content)
 }
@@ -86,4 +87,12 @@ fun Data(content: String) {
     ReusableComposeNode<DataNode, HtmlApplier>(::DataNode, update = {
         set(content) { this.textContent = it }
     })
+}
+
+fun <T : Any> Updater<ElementNode>.attribute(attribute: Attribute<T>, value: T?) {
+    set(value) { attribute(attribute, it) }
+}
+
+fun Updater<ElementNode>.attribute(attribute: Attribute<Boolean>, value: Boolean) {
+    set(value) { attribute(attribute, it) }
 }

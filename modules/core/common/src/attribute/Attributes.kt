@@ -1,7 +1,11 @@
 package net.derfruhling.serenity.attribute
 
+import net.derfruhling.serenity.elements.FormEncoding
+import net.derfruhling.serenity.elements.FormMethod
+
 private val setParserRegex by lazy { Regex("\\s+") }
 
+@Suppress("ObjectPropertyName")
 object Attributes {
     private val map = mutableMapOf<String, Lazy<UntypedAttribute>>()
 
@@ -36,6 +40,20 @@ object Attributes {
     val id by name<String>("id")
     val `class` by name<MutableSet<String>>("class") { stringSet() }
     val style by name<String>("style")
+    val name by name<String>("name")
+    val label by name<String>("label")
+    val value by name<String>("value")
+    val multiple by name<Boolean>("multiple")
+    val autofocus by name<Boolean>("autofocus")
+    val disabled by name<Boolean>("disabled")
+    val form by name<String>("form")
+    val selected by name<Boolean>("selected")
+    val `accept-charset` by name<String>("accept-charset")
+    val action by name<String>("action")
+    val autocomplete by name<Boolean>("autocomplete")
+    val enctype by name<FormEncoding>("enctype")
+    val method by name<FormMethod>("method")
+    val novalidate by name<Boolean>("novalidate")
 
     val serenityKeepIfRemoved by name<Boolean>("data-keep-if-removed")
 

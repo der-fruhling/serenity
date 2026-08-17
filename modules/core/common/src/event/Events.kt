@@ -14,6 +14,9 @@ import net.derfruhling.serenity.dom.Element
 expect sealed interface BuiltinEventType
 
 @Serializable
+expect sealed interface BuiltinPlainElementEvent : BuiltinEventType
+
+@Serializable
 expect sealed interface BuiltinPlainWindowEvent : BuiltinEventType
 
 @Serializable
@@ -29,6 +32,9 @@ typealias ElementPointerEvent = PointerEvent<Element>
 
 expect fun testSupportedDocumentEvent(name: String): Boolean
 expect fun testSupportedWindowEvent(name: String): Boolean
+
+@Serializable
+data object SubmitEvent : EventType<Event<Element>>("submit"), BuiltinPlainElementEvent
 
 @Serializable
 data object BeforeUnloadEvent : EventType<Event<Window>>("beforeunload"), BuiltinPlainWindowEvent
