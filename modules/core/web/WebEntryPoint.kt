@@ -41,8 +41,10 @@ import kotlin.time.toDuration
 annotation class InternalPageEntryPoint
 
 lateinit var htmlContext: HtmlCompositionContext private set
-lateinit var currentPage: PageHolder<*> internal set
+private lateinit var actualCurrentPage: PageHolder<*>
 internal var compositionCompletionHandler: (() -> Unit)? = null
+
+actual val currentPage by ::actualCurrentPage
 
 private val htmlContextStartHandlers = mutableListOf<(HtmlCompositionContext) -> Unit>()
 
@@ -216,7 +218,7 @@ internal class WebEntryPoint private constructor() {
     }
 
     internal fun setPageDirect(page: PageHolder<*>) {
-        currentPage = page
+        actualCurrentPage = page
         this.page = page
 
         if (first) {

@@ -5,11 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import js.array.asList
 import kotlinx.coroutines.test.runTest
-import net.derfruhling.serenity.elements.Button
+import net.derfruhling.serenity.elements.form.Button
 import net.derfruhling.serenity.test.runDomComposeTest
 import web.html.HTMLButtonElement
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 

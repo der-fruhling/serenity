@@ -1,8 +1,8 @@
-package net.derfruhling.serenity.elements
+package net.derfruhling.serenity.elements.layout
 
 import androidx.compose.runtime.Composable
-import com.skydoves.compose.stability.runtime.TraceRecomposition
 import net.derfruhling.serenity.Element
+import net.derfruhling.serenity.elements.StyleClasses
 import net.derfruhling.serenity.tree.platform.ElementNode
 
 enum class CrossAxis(internal val augment: String) {
@@ -31,11 +31,14 @@ private inline fun Flex(
     mainAxis: MainAxis?,
     crossinline fn: @Composable () -> Unit
 ) {
-    Element(name = "div", update = {
-        set(styleClass) { classes.add(styleClass) }
-        set(crossAxis) { classMap[CrossAxis] = crossAxis?.augment }
-        set(mainAxis) { classMap[MainAxis] = mainAxis?.augment }
-    }) {
+    Element(
+        name = "div",
+        update = {
+            set(styleClass) { classes.add(styleClass) }
+            set(crossAxis) { classMap[CrossAxis] = crossAxis?.augment }
+            set(mainAxis) { classMap[MainAxis] = mainAxis?.augment }
+        }
+    ) {
         fn()
     }
 }
@@ -56,23 +59,4 @@ fun FlexRow(
     fn: @Composable () -> Unit
 ) {
     Flex(StyleClasses.FlexRow, crossAxis, mainAxis, fn)
-}
-
-@Composable
-fun Header(fn: @Composable () -> Unit) {
-    Element("header") { fn() }
-}
-
-@Composable
-fun Content(fn: @Composable () -> Unit) {
-    Element(name = "div", update = {
-        init { classes.add(StyleClasses.PageContent) }
-    }) {
-        fn()
-    }
-}
-
-@Composable
-fun Footer(fn: @Composable () -> Unit) {
-    Element("footer") { fn() }
 }

@@ -7,6 +7,11 @@ import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.Client
 import net.derfruhling.serenity.annotations.RegisterPage
 import net.derfruhling.serenity.elements.*
+import net.derfruhling.serenity.elements.form.Button
+import net.derfruhling.serenity.elements.layout.Content
+import net.derfruhling.serenity.elements.layout.FlexColumn
+import net.derfruhling.serenity.elements.layout.Footer
+import net.derfruhling.serenity.elements.layout.Header
 
 private val logger = KotlinLogging.logger {}
 
@@ -34,10 +39,13 @@ fun IndexPage() {
 fun ButtonsPage(start: Int) {
     var count by remember { mutableIntStateOf(start) }
 
-    Button("Click count: $count", onClick = @Client {
-        count++
-        logger.debug { "Clicked! $count" }
-    })
+    Button(
+        "Click count: $count",
+        onClick = @Client {
+            count++
+            logger.debug { "Clicked! $count" }
+        }
+    )
 }
 
 @Composable
@@ -45,8 +53,11 @@ fun ButtonsPage(start: Int) {
 fun SaveDataPage() {
     var count by rememberSerializable { mutableIntStateOf(0) }
 
-    Button("Click count: $count", onClick = @Client {
-        count++
-        logger.debug { "Clicked! $count" }
-    })
+    Button(
+        "Click count: $count",
+        onClick = @Client {
+            count++
+            logger.debug { "Clicked! $count" }
+        }
+    )
 }

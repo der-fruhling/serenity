@@ -1,6 +1,4 @@
-package net.derfruhling.serenity.elements
-
-import net.derfruhling.serenity.attribute.AttributeValue
+package net.derfruhling.serenity.attribute
 
 enum class Rel(override val asValue: String) : AttributeValue {
     EXTERNAL("external"),

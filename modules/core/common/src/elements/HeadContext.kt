@@ -1,14 +1,18 @@
 package net.derfruhling.serenity.elements
 
-import androidx.compose.runtime.*
-import net.derfruhling.serenity.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import net.derfruhling.serenity.Data
+import net.derfruhling.serenity.Element
+import net.derfruhling.serenity.SerialPageHolder
+import net.derfruhling.serenity.SerialRegistry
+import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.UnescapedTextDanger
 import net.derfruhling.serenity.attribute.Attributes
 import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.ResourceResolver
 import net.derfruhling.serenity.manifest.ScriptLocation
 import net.derfruhling.serenity.manifest.preloadSetLocal
-import net.derfruhling.serenity.tree.platform.ElementNode
 import kotlin.time.Duration.Companion.hours
 
 object HeadContext {
@@ -20,20 +24,26 @@ object HeadContext {
     @Composable
     @UnescapedTextDanger
     fun inlineScript(javascript: String, async: Boolean = false, defer: Boolean = false) =
-        Element(name = "script", update = {
-            set(async) { attribute(Attributes.async, it) }
-            set(defer) { attribute(Attributes.defer, it) }
-        }) {
+        Element(
+            name = "script",
+            update = {
+                set(async) { attribute(Attributes.async, it) }
+                set(defer) { attribute(Attributes.defer, it) }
+            }
+        ) {
             Data(javascript)
         }
 
     @Composable
     fun useScriptDirectly(uri: String, async: Boolean = false, defer: Boolean = false) =
-        Element(name = "script", update = {
-            set(uri) { attribute(Attributes.src, it) }
-            set(async) { attribute(Attributes.async, it) }
-            set(defer) { attribute(Attributes.defer, it) }
-        })
+        Element(
+            name = "script",
+            update = {
+                set(uri) { attribute(Attributes.src, it) }
+                set(async) { attribute(Attributes.async, it) }
+                set(defer) { attribute(Attributes.defer, it) }
+            }
+        )
 
     @Composable
     fun useScript(
@@ -54,10 +64,13 @@ object HeadContext {
 
     @Composable
     fun link(rel: String, href: String) {
-        Element(name = "link", update = {
-            set(rel) { attribute(Attributes.rel, it) }
-            set(href) { attribute(Attributes.href, it) }
-        })
+        Element(
+            name = "link",
+            update = {
+                set(rel) { attribute(Attributes.rel, it) }
+                set(href) { attribute(Attributes.href, it) }
+            }
+        )
     }
 
     @Composable
@@ -160,70 +173,5 @@ object HeadContext {
         // this code is trusted
         @OptIn(UnescapedTextDanger::class)
         inlineScript(sourceCode)
-    }
-}
-
-object HtmlContext {
-    @Composable
-    fun head(content: @Composable HeadContext.() -> Unit) =
-        Element(name = "head") { HeadContext.content() }
-
-    @Composable
-    fun body(updateBody: Updater<ElementNode>.() -> Unit = {}, content: @Composable () -> Unit) =
-        Element(updateBody, name = "body") { content() }
-}
-
-@Composable
-fun html(lang: String = "en", content: @Composable HtmlContext.() -> Unit) {
-    DocumentType()
-
-    Element(name = "html", update = {
-        set(lang) { attribute(Attributes.lang, it) }
-    }) { HtmlContext.content() }
-}
-
-val pageTemplateLocal = compositionLocalOf { null as PageTemplate? }
-val currentPageLocal = compositionLocalOf<PageHolder<*>> { throw IllegalStateException() }
-
-object PageContext {
-    @Composable
-    @NonRestartableComposable
-    fun Head(fn: @Composable HeadContext.() -> Unit) {
-        HtmlContext.head {
-            fn()
-        }
-    }
-
-    @Composable
-    inline fun Body(
-        noinline updateBody: Updater<ElementNode>.() -> Unit = {},
-        crossinline fn: @Composable () -> Unit
-    ) {
-        HtmlContext.body(updateBody) {
-            fn()
-        }
-    }
-
-    @Composable
-    @NonRestartableComposable
-    inline fun Layout(
-        crossinline updateBody: Updater<ElementNode>.() -> Unit = {},
-        crossinline fn: @Composable () -> Unit
-    ) {
-        Body(updateBody = {
-            init { classes.add(StyleClasses.PageLayout) }
-            updateBody()
-        }) { fn() }
-    }
-}
-
-@Suppress("NOTHING_TO_INLINE")
-@Composable
-fun Page(
-    lang: String = "en",
-    body: @Composable PageContext.() -> Unit
-) = ReusableContent(lang) {
-    html(lang) {
-        PageContext.body()
     }
 }

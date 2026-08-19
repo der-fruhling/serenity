@@ -1,7 +1,7 @@
 package net.derfruhling.serenity.attribute
 
-import net.derfruhling.serenity.elements.FormEncoding
-import net.derfruhling.serenity.elements.FormMethod
+import net.derfruhling.serenity.elements.form.FormEncoding
+import net.derfruhling.serenity.elements.form.FormMethod
 
 private val setParserRegex by lazy { Regex("\\s+") }
 
