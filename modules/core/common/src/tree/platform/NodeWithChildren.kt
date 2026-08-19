@@ -13,10 +13,6 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
         childIndices.clear()
         children.clear()
 
-        for (attr in real.attributeSet) {
-            addExisting(AttributeNode<Any>(attr))
-        }
-
         for (child in real.children) {
             addExisting(existingFrom(child) ?: continue)
         }
@@ -47,23 +43,10 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
         child.realize()
         child.index.index = children.size
         children.add(child)
-        when (child) {
-            is AttributeNode<*> -> {
-                testAttribute()
-                real.attributeSet.add(
-                    RealAttribute(
-                        child.name,
-                        child.value?.let { AttributeValue.of(it) })
-                )
-                attributeIndices.add(child.parser)
-            }
 
-            is ComposeNodeWithReal<*> -> {
-                real.children.add(child.real)
-                childIndices.add(child.index)
-            }
-
-            else -> {}
+        if (child is ComposeNodeWithReal<*>) {
+            real.children.add(child.real)
+            childIndices.add(child.index)
         }
 
         child.reparent(this)
@@ -73,17 +56,9 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
     private fun addExisting(child: ChildNode<*>) {
         child.index.index = children.size
         children.add(child)
-        when (child) {
-            is AttributeNode<*> -> {
-                testAttribute()
-                attributeIndices.add(child.parser)
-            }
 
-            is ComposeNodeWithReal<*> -> {
-                childIndices.add(child.index)
-            }
-
-            else -> {}
+        if (child is ComposeNodeWithReal<*>) {
+            childIndices.add(child.index)
         }
 
         child.reparent(this)
@@ -96,31 +71,13 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
         children.add(index, child)
         ((index + 1)..<children.size).forEach { i -> children[i].index.index = i }
 
-        when (child) {
-            is AttributeNode<*> -> {
-                testAttribute()
-                val insertAfterChild =
-                    ((index - 1) downTo 0).firstOrNull { children[it] is AttributeNode<*> } ?: -1
-                val newIndex =
-                    if (insertAfterChild >= 0) attributeIndices.indexOf((children[insertAfterChild] as AttributeNode<*>).parser) + 1 else 0
-                real.attributeSet.add(
-                    RealAttribute(
-                        child.name,
-                        child.value?.let { AttributeValue.of(it) })
-                )
-                attributeIndices.add(newIndex, child.parser)
-            }
-
-            is ComposeNodeWithReal<*> -> {
-                val insertAfterChild =
-                    ((index - 1) downTo 0).firstOrNull { children[it] !is AttributeNode<*> } ?: -1
-                val newIndex =
-                    if (insertAfterChild >= 0) childIndices.indexOf(children[insertAfterChild].index) + 1 else 0
-                real.children.add(newIndex, child.real)
-                childIndices.add(newIndex, child.index)
-            }
-
-            else -> {}
+        if (child is ComposeNodeWithReal<*>) {
+            val insertAfterChild =
+                ((index - 1) downTo 0).firstOrNull { children[it] is ComposeNodeWithReal<*> } ?: -1
+            val newIndex =
+                if (insertAfterChild >= 0) childIndices.indexOf(children[insertAfterChild].index) + 1 else 0
+            real.children.add(newIndex, child.real)
+            childIndices.add(newIndex, child.index)
         }
 
         child.reparent(this)
@@ -145,18 +102,10 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
             list.forEach {
                 it.index.index = -1
 
-                when (it) {
-                    is AttributeNode<*> -> {
-                        val index = attributeIndices.indexOf(it.parser)
-                        real.attributeSet.remove(it.real)
-                        attributeIndices.removeAt(index)
-                    }
-
-                    else -> {
-                        val index = childIndices.indexOf(it.index)
-                        real.children.removeAt(index)
-                        childIndices.removeAt(index)
-                    }
+                if(it is ComposeNodeWithReal<*>) {
+                    val index = childIndices.indexOf(it.index)
+                    real.children.removeAt(index)
+                    childIndices.removeAt(index)
                 }
             }
 
@@ -227,14 +176,5 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
 
     fun findDescendentNamed(name: Name, maxDepth: Int): ElementNode? {
         return descendentsMaxDepth(maxDepth).find { it is ElementNode && it.name == name } as ElementNode?
-    }
-
-    override fun reuse() {
-        /*attributeIndices.clear()
-        childIndices.clear()
-        children.clear()
-
-        real.attributeSet.clear()
-        real.children.clear()*/
     }
 }

@@ -97,7 +97,6 @@ object RealElementNamer : Registry.Namer<RealElement> {
     }
 }
 
-@Deprecated("Avoid if possible")
 expect class RealAttribute(node: UnderlyingAttribute) : RealNode {
     constructor(name: Name)
     constructor(name: Name, value: String?)
@@ -105,11 +104,4 @@ expect class RealAttribute(node: UnderlyingAttribute) : RealNode {
     override val node: UnderlyingAttribute
     val name: Name
     var value: String?
-}
-
-@Deprecated("Avoid if possible")
-object RealAttributeNamer : Registry.Namer<RealAttribute> {
-    override fun nameOf(value: RealAttribute): Name {
-        return value.name
-    }
 }

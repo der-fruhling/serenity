@@ -1,7 +1,6 @@
 package net.derfruhling.serenity.tree.platform
 
 import net.derfruhling.serenity.Name
-import net.derfruhling.serenity.attribute.Attribute
 
 abstract class Registry<in R, out T>(val namer: Namer<R>, val default: (R) -> T) {
     fun interface Namer<in R> {
@@ -33,10 +32,3 @@ abstract class Registry<in R, out T>(val namer: Namer<R>, val default: (R) -> T)
 }
 
 object ElementRegistry : Registry<RealElement, ElementNode>(RealElementNamer, ::ElementNode)
-
-@Suppress("DEPRECATION")
-@Deprecated("Avoid if possible")
-object AttributeRegistry :
-    Registry<RealAttribute, Attribute<*>>(
-        RealAttributeNamer,
-        { name -> Attribute<String>(name.name) })
