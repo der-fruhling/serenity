@@ -3,6 +3,7 @@
 package net.derfruhling.serenity.event
 
 import net.derfruhling.serenity.annotations.NewWebApi
+import net.derfruhling.serenity.dom.EventTarget
 import net.derfruhling.serenity.hasField
 import net.derfruhling.serenity.takeIfPresent
 import web.mouse.*

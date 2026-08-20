@@ -1,4 +1,4 @@
-import net.derfruhling.serenity.build.FetchableDataService
+import net.derfruhling.serenity.build.FetchBrowserCompatData
 import net.derfruhling.serenity.build.GenerateStyles
 
 plugins {
@@ -35,10 +35,20 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
+val fetchBrowserCompatData = tasks.register<FetchBrowserCompatData>("fetchBrowserCompatData") {
+    description = "Fetches the browser compat data repo using git"
+    group = "other"
+
+    targetDir = project.layout.buildDirectory.dir("fetch/browser-compat-data")
+}
+
 tasks.register<GenerateStyles>("generateStyleRules") {
     description = "Generates Kotlin sources for each rule defined in rules.xml"
     group = "build"
 
+    dependsOn(fetchBrowserCompatData)
+
     sourceRules = file("common/src/rules.xml")
     output = project.layout.buildDirectory.dir("rules")
+    browserCompatData = project.layout.buildDirectory.dir("fetch/browser-compat-data")
 }

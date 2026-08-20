@@ -4,14 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import net.derfruhling.serenity.Element
-import net.derfruhling.serenity.annotations.Client
 import net.derfruhling.serenity.attribute
 import net.derfruhling.serenity.attribute.AttributeValue
 import net.derfruhling.serenity.attribute.Attributes
-import net.derfruhling.serenity.dom.Element
 import net.derfruhling.serenity.attribute.Rel
-import net.derfruhling.serenity.event.Event
-import net.derfruhling.serenity.event.EventContext
+import net.derfruhling.serenity.event.ElementEvent
+import net.derfruhling.serenity.event.Handler
 import net.derfruhling.serenity.event.On
 import net.derfruhling.serenity.event.SubmitEvent
 
@@ -40,13 +38,14 @@ fun Form(
     novalidate: Boolean = false,
     rel: Rel? = null,
     target: String? = null,
-    onSubmit: (@Client EventContext.(Event<Element>) -> Unit)? = null,
+    onSubmit: Handler<ElementEvent>? = null,
     fn: @Composable () -> Unit
 ) {
     val shouldUseFn = onSubmit != null
     val fn: @Composable () -> Unit = remember(shouldUseFn, fn) {
         if (shouldUseFn) (@Composable {
             On(SubmitEvent, onSubmit)
+            fn()
         }) else fn
     }
 

@@ -8,12 +8,13 @@ import net.derfruhling.serenity.elements.reflow
 import net.derfruhling.serenity.event.ClickEvent
 import net.derfruhling.serenity.event.ElementPointerEvent
 import net.derfruhling.serenity.event.EventContext
+import net.derfruhling.serenity.event.Handler
 import net.derfruhling.serenity.event.On
 
 @Composable
 fun Button(
     label: String? = null,
-    onClick: (@Client EventContext.(ElementPointerEvent) -> Unit)? = null,
+    onClick: Handler<ElementPointerEvent>? = null,
     fn: @Composable () -> Unit = {}
 ) {
     Element("button") {

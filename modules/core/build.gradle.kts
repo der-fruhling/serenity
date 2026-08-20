@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.tasks.BaseKotlinCompile
+
 plugins {
     id("multiplatform-compose")
     id("net.derfruhling.serenity.convention")
     id("published")
     id("net.derfruhling.serenity.resources")
     id("net.derfruhling.serenity.stylist-sass")
+    id("com.google.devtools.ksp")
 }
 
 allprojects {
@@ -65,6 +68,13 @@ kotlin {
             }
         }
     }
+}
+
+dependencies {
+    add("kspJvm", project(":serenity-platform-collector"))
+    add("kspLinuxX64", project(":serenity-platform-collector"))
+    add("kspLinuxArm64", project(":serenity-platform-collector"))
+    add("kspMacosArm64", project(":serenity-platform-collector"))
 }
 
 tasks.withType<Test>().configureEach {

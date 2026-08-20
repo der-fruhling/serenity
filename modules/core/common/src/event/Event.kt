@@ -1,8 +1,13 @@
 package net.derfruhling.serenity.event
 
 import kotlinx.datetime.Month
+import net.derfruhling.serenity.annotations.Client
 import net.derfruhling.serenity.annotations.Since
 import net.derfruhling.serenity.annotations.WidelyAvailable
+import net.derfruhling.serenity.dom.Document
+import net.derfruhling.serenity.dom.Element
+import net.derfruhling.serenity.dom.EventTarget
+import net.derfruhling.serenity.dom.Window
 
 @WidelyAvailable
 interface Event<T : EventTarget> {
@@ -24,3 +29,9 @@ interface Event<T : EventTarget> {
     fun stopImmediatePropagation()
     fun stopPropagation()
 }
+
+typealias ElementEvent = Event<Element>
+typealias DocumentEvent = Event<Document>
+typealias WindowEvent = Event<Window>
+
+typealias Handler<T> = @Client EventContext.(T) -> Unit

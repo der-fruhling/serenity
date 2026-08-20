@@ -7,7 +7,9 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.services.ServiceReference
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.work.NormalizeLineEndings
@@ -26,14 +28,12 @@ abstract class GenerateStyles : DefaultTask() {
     @get:OutputDirectory
     abstract val output: DirectoryProperty
 
-    @get:ServiceReference("fetchData")
-    abstract val fetchData: Property<FetchableDataService>
+    @get:InputDirectory
+    abstract val browserCompatData: DirectoryProperty
 
     init {
         outputs.doNotCacheIf("testing") { true }
         outputs.upToDateWhen { false }
-
-        inputs.dir(fetchData.map { it.browserCompatData })
     }
 
     @TaskAction
@@ -253,11 +253,12 @@ abstract class GenerateStyles : DefaultTask() {
                     appendLine("[View MDN docs](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/$name)")
                 }.prependIndent(" * ")
 
+                file.appendLine("/**")
+                file.appendLine(docs)
+                file.appendLine(" */")
+
                 // language=kotlin
                 file.appendLine("""
-                    /**
-                    $docs
-                     */ 
                     @$composable
                     fun Style.$camelized(value: $short) =
                         Rule("$name", $short.notation, value)

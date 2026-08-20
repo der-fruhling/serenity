@@ -42,6 +42,7 @@ module("test")
 module("ktor-server")
 
 collector("collector-lib", "lib")
+collector("platform-collector", "platform")
 collector("common-collector", "common")
 collector("ktor-collector", "ktor")
 collector("web-collector", "web")

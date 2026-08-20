@@ -6,6 +6,7 @@ import js.array.toList
 import net.derfruhling.serenity.annotations.NewWebApi
 import net.derfruhling.serenity.annotations.UnsupportedOnSafari
 import net.derfruhling.serenity.dom.Element
+import net.derfruhling.serenity.dom.EventTarget
 import net.derfruhling.serenity.takeIfPresent
 import web.pointer.PointerEvent as DomPointerEvent
 

@@ -7,6 +7,7 @@ import js.string.JsStrings.toKotlinString
 import net.derfruhling.serenity.dom.Window
 import net.derfruhling.serenity.dom.Document
 import net.derfruhling.serenity.dom.Element
+import net.derfruhling.serenity.dom.EventTarget
 import web.dom.Element as DomElement
 import web.events.Event as DomEvent
 import web.events.EventTarget as DomEventTarget

@@ -1,12 +1,10 @@
 package net.derfruhling.serenity.tree.platform
 
-import androidx.compose.runtime.ComposeNodeLifecycleCallback
 import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.attribute.Attribute
 import net.derfruhling.serenity.attribute.AttributeValue
 import net.derfruhling.serenity.event.EventSubscriptionHandle
-import net.derfruhling.serenity.event.EventTarget
 import net.derfruhling.serenity.event.EventType
 
 open class ElementNode : NodeWithChildren<ElementNode, RealElement>,

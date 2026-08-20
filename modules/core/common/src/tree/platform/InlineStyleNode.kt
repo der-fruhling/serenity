@@ -7,10 +7,23 @@ class InlineStyleNode : ChildNode<ElementNode> {
     override val index: Index<InlineStyleNode> = Index(this)
     override var parent: ElementNode? = null
 
-    lateinit var style: StyleHolder
+    private lateinit var _style: StyleHolder
+
+    var style: StyleHolder
+        get() = _style
+        set(value) {
+            _style = value
+            value.setNotifyChanged(this::notifyChanged)
+        }
 
     override fun format(fmt: Formatter) {
-        TODO("Not yet implemented")
+        fmt.block("InlineStyle") {
+            if(::_style.isInitialized) {
+                write(style.makeStyle())
+            } else {
+                write("<null>")
+            }
+        }
     }
 
     override fun reparent(newParent: NodeWithChildren<*, *>) {

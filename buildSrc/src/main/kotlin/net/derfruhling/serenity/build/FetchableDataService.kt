@@ -23,21 +23,7 @@ abstract class FetchableDataService : BuildService<FetchableDataParameters> {
     val browserCompatData by lazy {
         val dir = parameters.dataLocation.dir("browser-compat-data").get()
 
-        if(!dir.asFile.exists()) {
-            execOps.exec {
-                commandLine(
-                    "git",
-                    "clone",
-                    "https://github.com/mdn/browser-compat-data.git",
-                    dir.asFile.absolutePath
-                )
-            }.rethrowFailure().assertNormalExitValue()
-        } else {
-            execOps.exec {
-                commandLine("git", "pull")
-                workingDir(dir)
-            }.rethrowFailure().assertNormalExitValue()
-        }
+
 
         dir
     }

@@ -1,7 +1,6 @@
 package net.derfruhling.serenity.tree.platform
 
 import net.derfruhling.serenity.Formatter
-import net.derfruhling.serenity.event.EventTarget
 
 open class Document(node: RealDocument) : DocumentLike<Document, RealDocument>(node),
                                           RootNode {

@@ -3,6 +3,7 @@ package net.derfruhling.serenity.event
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
 import net.derfruhling.serenity.annotations.Client
+import net.derfruhling.serenity.annotations.HtmlComposable
 import kotlin.coroutines.CoroutineContext
 
 actual class EventContext private constructor() : CoroutineScope {
@@ -11,5 +12,6 @@ actual class EventContext private constructor() : CoroutineScope {
 }
 
 @Composable
-actual inline fun <T> On(type: EventType<T>, crossinline fn: @Client EventContext.(T) -> Unit) {
+@HtmlComposable
+actual inline fun <T> On(type: EventType<T>, crossinline fn: @Client @HtmlComposable EventContext.(T) -> Unit) {
 }

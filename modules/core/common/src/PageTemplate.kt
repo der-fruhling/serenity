@@ -8,18 +8,6 @@ import net.derfruhling.serenity.elements.HeadContext
 import net.derfruhling.serenity.elements.currentPageLocal
 
 @Stable
-interface TemplateBuilder {
-    @Composable
-    fun HeadContext.SlotHead()
-
-    @Composable
-    fun WithPage(fn: @Composable (PageHolder<*>) -> Unit)
-
-    @Composable
-    fun SlotBody()
-}
-
-@Stable
 class PageTemplate(val builder: @Composable TemplateBuilder.() -> Unit) {
     @Composable
     fun BuildPage(state: State<PageHolder<*>?>) {
@@ -67,11 +55,4 @@ class PageTemplate(val builder: @Composable TemplateBuilder.() -> Unit) {
 
         builder.builder()
     }
-}
-
-expect class SaveDataManager(page: PageHolder<*>) {
-    fun save()
-
-    @Composable
-    fun enter(fn: @Composable () -> Unit)
 }

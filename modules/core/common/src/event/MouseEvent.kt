@@ -1,6 +1,7 @@
 package net.derfruhling.serenity.event
 
 import net.derfruhling.serenity.annotations.NewWebApi
+import net.derfruhling.serenity.dom.EventTarget
 
 interface MouseEvent<T : EventTarget> : UIEvent<T> {
     val altKey: Boolean

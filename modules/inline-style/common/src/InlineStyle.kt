@@ -1,14 +1,19 @@
 package net.derfruhling.serenity.style
 
 import net.derfruhling.serenity.tree.Apply
+import net.derfruhling.serenity.tree.platform.StyleHolder
 
-class InlineStyle : StylistTarget<RuleNode> {
+class InlineStyle : StylistTarget<RuleNode>, StyleHolder {
     val rules: List<RuleNode>
         field = mutableListOf()
 
     private var _notifyChanged: (() -> Unit)? = null
 
-    fun setNotifyChanged(fn: () -> Unit) {
+    override fun removed() {
+        _notifyChanged = null
+    }
+
+    override fun setNotifyChanged(fn: () -> Unit) {
         _notifyChanged = fn
         fn()
     }
@@ -77,5 +82,9 @@ class InlineStyle : StylistTarget<RuleNode> {
 
     override fun end() {
         notifyChanged()
+    }
+
+    override fun makeStyle(): String {
+        return rules.joinToString("; ") { "${it.ruleName}: ${it.ruleValue}" }
     }
 }
