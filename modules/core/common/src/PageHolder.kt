@@ -6,7 +6,6 @@ import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.derfruhling.serenity.annotations.HtmlComposable
 
 @Immutable
 @Polymorphic

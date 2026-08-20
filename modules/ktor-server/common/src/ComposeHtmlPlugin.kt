@@ -16,7 +16,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.io.files.Path
 import net.derfruhling.serenity.SerialRegistry
-import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.preloadSetLocal

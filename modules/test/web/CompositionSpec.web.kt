@@ -2,16 +2,14 @@ package net.derfruhling.serenity.test
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Recomposer
-import androidx.compose.runtime.snapshots.MutableSnapshot
 import androidx.compose.runtime.snapshots.Snapshot
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import net.derfruhling.serenity.*
-import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.elements.Page
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree

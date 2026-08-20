@@ -5,7 +5,6 @@ package net.derfruhling.serenity
 import androidx.compose.runtime.Composable
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer
-import net.derfruhling.serenity.annotations.HtmlComposable
 import kotlin.reflect.KClass
 
 abstract class PageRegistry<Ctx> {

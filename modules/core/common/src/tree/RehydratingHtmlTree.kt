@@ -5,7 +5,7 @@ import androidx.compose.runtime.ControlledComposition
 import androidx.compose.runtime.ReusableComposition
 import androidx.compose.runtime.snapshots.MutableSnapshot
 import androidx.compose.runtime.snapshots.Snapshot
-import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.tree.platform.ElementNode
 import net.derfruhling.serenity.tree.platform.NodeWithChildren
 import net.derfruhling.serenity.tree.platform.RootNode

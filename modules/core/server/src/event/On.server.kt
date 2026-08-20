@@ -3,7 +3,7 @@ package net.derfruhling.serenity.event
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
 import net.derfruhling.serenity.annotations.Client
-import net.derfruhling.serenity.annotations.HtmlComposable
+import net.derfruhling.serenity.HtmlComposable
 import kotlin.coroutines.CoroutineContext
 
 actual class EventContext private constructor() : CoroutineScope {

@@ -4,11 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.ReusableComposition
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCompositionContext
-import net.derfruhling.serenity.annotations.HtmlComposable
-import net.derfruhling.serenity.annotations.StyleComposable
+import net.derfruhling.serenity.HtmlComposable
 
 object Style {
     @Composable

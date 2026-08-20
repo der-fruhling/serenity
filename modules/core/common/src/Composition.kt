@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.ReusableComposeNode
 import androidx.compose.runtime.Updater
-import net.derfruhling.serenity.annotations.HtmlComposable
 import net.derfruhling.serenity.annotations.UnescapedTextDanger
 import net.derfruhling.serenity.attribute.Attribute
 import net.derfruhling.serenity.tree.HtmlApplier

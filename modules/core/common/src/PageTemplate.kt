@@ -3,7 +3,6 @@
 package net.derfruhling.serenity
 
 import androidx.compose.runtime.*
-import net.derfruhling.serenity.annotations.HtmlComposable
 import net.derfruhling.serenity.elements.HeadContext
 import net.derfruhling.serenity.elements.currentPageLocal
 

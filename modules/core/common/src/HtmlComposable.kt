@@ -1,4 +1,4 @@
-package net.derfruhling.serenity.annotations
+package net.derfruhling.serenity
 
 import androidx.compose.runtime.ComposableTargetMarker
 
@@ -10,5 +10,5 @@ import androidx.compose.runtime.ComposableTargetMarker
     AnnotationTarget.TYPE_PARAMETER,
 )
 @Retention(AnnotationRetention.BINARY)
-@ComposableTargetMarker("Style")
-annotation class StyleComposable
+@ComposableTargetMarker("HTML")
+annotation class HtmlComposable

@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.key
 import net.derfruhling.serenity.annotations.Client
-import net.derfruhling.serenity.annotations.HtmlComposable
 
 @get:Composable
 @get:ReadOnlyComposable
