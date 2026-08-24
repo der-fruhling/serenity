@@ -26,4 +26,5 @@ fun PageRegistry<PlatformContext>.registerPages() {
     register(IndexPage)
     register(ButtonsPage)
     register(SaveDataPage)
+    register(InputsPage)
 }

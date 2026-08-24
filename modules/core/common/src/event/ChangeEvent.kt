@@ -4,4 +4,7 @@ import kotlinx.serialization.Serializable
 import net.derfruhling.serenity.dom.Element
 
 @Serializable
-data object ChangeEvent : EventType<Event<Element>>("submit"), BuiltinPlainElementEvent
+data object ChangeEvent : EventType<Event<Element>>("change"), BuiltinPlainElementEvent
+
+@Serializable
+data object InputEvent : EventType<Event<Element>>("input"), BuiltinPlainElementEvent

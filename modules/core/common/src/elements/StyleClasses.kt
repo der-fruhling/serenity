@@ -34,6 +34,8 @@ object StyleClasses {
     val FlexRow by lazyClass
     val PageLayout by lazyClass
     val PageContent by lazyClass
+    val TextInput by lazyClass
+    val SearchInput by lazyClass
 
     abstract class Axis(prefix: String) : Augment(prefix) {
         val start by lazyAugment

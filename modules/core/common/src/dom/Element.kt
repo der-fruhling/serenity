@@ -40,4 +40,15 @@ expect open class HTMLSelectElement : Element, DomValidationTarget {
     fun setCustomValidity(error: String)
 }
 
+expect open class HTMLInputElement : Element, DomValidationTarget {
+    var value: String
+
+    override val validationMessage: String
+    override val validity: DomValidityState
+    override val willValidate: Boolean
+    override fun checkValidity(): Boolean
+    override fun reportValidity(): Boolean
+    fun setCustomValidity(error: String)
+}
+
 expect val Element.node: ElementNode

@@ -29,11 +29,13 @@ actual class EventContext internal constructor(val snapshot: Snapshot, val event
 @OptIn(InternalPageEntryPoint::class)
 @Composable
 @HtmlComposable
-actual fun <T> On(type: EventType<T>, fn: @Client @HtmlComposable EventContext.(T) -> Unit) {
+actual fun <T> On(type: EventType<T>, fn: Handler<T>) {
     val lambda = remember(type, fn) {
         { e: T ->
             htmlComposer.snapshot.enter {
-                EventContext(htmlComposer.snapshot, type).fn(e)
+                context(EventContext(htmlComposer.snapshot, type)) {
+                    e.fn()
+                }
             }
         }
     }

@@ -6,8 +6,11 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.Client
 import net.derfruhling.serenity.annotations.RegisterPage
-import net.derfruhling.serenity.elements.*
+import net.derfruhling.serenity.elements.Link
 import net.derfruhling.serenity.elements.form.Button
+import net.derfruhling.serenity.elements.form.Select
+import net.derfruhling.serenity.elements.form.TextInput
+import net.derfruhling.serenity.elements.form.TextInputType
 import net.derfruhling.serenity.elements.layout.Content
 import net.derfruhling.serenity.elements.layout.FlexColumn
 import net.derfruhling.serenity.elements.layout.Footer
@@ -60,4 +63,34 @@ fun SaveDataPage() {
             logger.debug { "Clicked! $count" }
         }
     )
+}
+
+@Composable
+@RegisterPage("/inputs")
+fun InputsPage() {
+    FlexColumn {
+        var plainText by remember { mutableStateOf("<hello!>") }
+        TextInput(placeholder = "Plain", onChange = { plainText = it })
+
+        Text(plainText)
+
+        var searchText by remember { mutableStateOf("<search!>") }
+        TextInput(
+            type = TextInputType.SEARCH,
+            placeholder = "Search the site...",
+            onChange = { searchText = it }
+        )
+
+        Text(searchText)
+
+        var selection by remember { mutableStateOf("nothing") }
+        Select(onChange = { selection = it }) {
+            Option("nothing", text = "Make a selection", selected = true, disabled = true)
+            Option("miaw", text = "Miaw")
+            Option("cat", text = "Cat")
+            Option("silly", text = "Silly")
+        }
+
+        Text("Current section: $selection")
+    }
 }

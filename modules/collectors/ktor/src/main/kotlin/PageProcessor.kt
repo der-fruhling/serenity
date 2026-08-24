@@ -45,7 +45,7 @@ class PageProcessor(
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
                 out.appendLine("import net.derfruhling.serenity.PageDetails")
                 out.appendLine("import net.derfruhling.serenity.PageHolderFactory")
-                out.appendLine("import net.derfruhling.serenity.annotations.HtmlComposable")
+                out.appendLine("import net.derfruhling.serenity.HtmlComposable")
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.Transient")
                 out.appendLine("import kotlinx.serialization.SerialName")

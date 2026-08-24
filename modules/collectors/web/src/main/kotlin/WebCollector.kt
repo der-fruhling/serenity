@@ -43,7 +43,7 @@ class WebCollector(
                 out.appendLine("import androidx.compose.runtime.Composable")
                 out.appendLine("import androidx.compose.runtime.key")
                 out.appendLine("import androidx.compose.runtime.SideEffect")
-                out.appendLine("import net.derfruhling.serenity.annotations.HtmlComposable")
+                out.appendLine("import net.derfruhling.serenity.HtmlComposable")
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
                 out.appendLine("import net.derfruhling.serenity.PageDetails")
                 out.appendLine("import net.derfruhling.serenity.InternalPageEntryPoint")

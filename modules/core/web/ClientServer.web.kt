@@ -33,3 +33,6 @@ actual fun <T> alternative(
         onServer()
     }
 }
+
+actual inline val isClientStatic: Boolean
+    inline get() = true

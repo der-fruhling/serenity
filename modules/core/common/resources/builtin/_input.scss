@@ -1,0 +1,36 @@
+
+
+%BaseUI {
+    border: 1px gray solid;
+    padding: 3px;
+    margin: 3px;
+    border-radius: 5px;
+}
+
+input.s-TextInput, select, button {
+    @extend %BaseUI;
+}
+
+span.s-TextInput {
+    position: relative;
+}
+
+.s-TextInput::after {
+    position: absolute;
+    right: 6px;
+    top: calc(50% - 12px);
+}
+
+.s-TextInput {
+    > input {
+        @extend %BaseUI;
+
+        width: calc(100% - 6px);
+    }
+
+    //&.s-SearchInput {
+    //    &::after {
+    //        content: "search";
+    //    }
+    //}
+}

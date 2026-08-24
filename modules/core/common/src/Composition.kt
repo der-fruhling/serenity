@@ -88,8 +88,8 @@ fun Data(content: String) {
     })
 }
 
-fun <T : Any> Updater<ElementNode>.attribute(attribute: Attribute<T>, value: T?) {
-    set(value) { attribute(attribute, it) }
+fun <T : Any> Updater<ElementNode>.attribute(attribute: Attribute<T>, value: T?, keepNulls: Boolean = attribute.keepNulls) {
+    set(value) { attribute(attribute, it, keepNulls) }
 }
 
 fun Updater<ElementNode>.attribute(attribute: Attribute<Boolean>, value: Boolean) {

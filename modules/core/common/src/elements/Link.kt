@@ -78,7 +78,7 @@ private fun LinkAnchor(
         fn()
 
         On(ClickEvent) @Client {
-            it.preventDefault()
+            preventDefault()
             navigate(to)
         }
     }

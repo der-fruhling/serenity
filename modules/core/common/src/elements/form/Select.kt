@@ -1,10 +1,13 @@
 package net.derfruhling.serenity.elements.form
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.attribute
 import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.dom.HTMLSelectElement
+import net.derfruhling.serenity.event.*
 
 sealed class SelectOptions {
     @Composable
@@ -38,7 +41,7 @@ sealed class SelectOptions {
         Element(
             update = {
                 attribute(Attributes.value, value)
-                attribute(Attributes.label, label)
+                attribute(Attributes.label, label, keepNulls = false)
                 attribute(Attributes.disabled, disabled)
                 attribute(Attributes.selected, selected)
             },
@@ -77,8 +80,23 @@ fun Select(
     autofocus: Boolean = false,
     disabled: Boolean = false,
     form: String? = null,
-    fn: @Composable SelectOptions.() -> Unit
+    onChange: Handler2<Event<HTMLSelectElement>, String>? = null,
+    fn: @Composable SelectOptionsRoot.() -> Unit
 ) {
+    val useBody = remember(onChange) { onChange != null }
+    val fn = remember(useBody) {
+        if (useBody) (@Composable {
+            if(onChange != null) {
+                On(ChangeEvent) {
+                    checkType<HTMLSelectElement>()
+                    onChange(target.value)
+                }
+            }
+
+            fn()
+        }) else fn
+    }
+
     Element(
         update = {
             attribute(Attributes.name, name)

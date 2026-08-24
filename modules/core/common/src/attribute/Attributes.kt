@@ -54,6 +54,7 @@ object Attributes {
     val enctype by name<FormEncoding>("enctype")
     val method by name<FormMethod>("method")
     val novalidate by name<Boolean>("novalidate")
+    val placeholder by name<String>("placeholder")
 
     val serenityKeepIfRemoved by name<Boolean>("data-keep-if-removed")
 

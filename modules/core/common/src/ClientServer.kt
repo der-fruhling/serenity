@@ -11,10 +11,15 @@ import net.derfruhling.serenity.annotations.Client
 @get:ReadOnlyComposable
 expect inline val isClient: Boolean
 
+expect inline val isClientStatic: Boolean
+
 inline val isServer: Boolean
     @Composable
     @ReadOnlyComposable
     inline get() = !isClient
+
+inline val isServerStatic: Boolean
+    inline get() = !isClientStatic
 
 @Composable
 expect fun ifClient(fn: @Composable () -> Unit)

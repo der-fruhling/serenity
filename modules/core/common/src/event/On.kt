@@ -12,4 +12,4 @@ expect class EventContext : CoroutineScope {
 
 @Composable
 @HtmlComposable
-expect fun <T> On(type: EventType<T>, fn: @Client @HtmlComposable EventContext.(T) -> Unit)
+expect fun <T> On(type: EventType<T>, fn: Handler<T>)

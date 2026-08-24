@@ -177,8 +177,16 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
         return real.attributeSet.find { it.name == name.name }?.let { name.parser(it.value) }
     }
 
-    fun <T : Any> attribute(name: Attribute<T>, value: T?) {
-        real.attributeSet.add(RealAttribute(name.name, AttributeValue.of(value)))
+    fun <T : Any> attribute(name: Attribute<T>, value: T?, keepNulls: Boolean = name.keepNulls) {
+        if(keepNulls) {
+            real.attributeSet.add(RealAttribute(name.name, AttributeValue.of(value)))
+        } else {
+            if(value == null) {
+                real.attributeSet.removeAll { it.name == name.name }
+            } else {
+                real.attributeSet.add(RealAttribute(name.name, AttributeValue.of(value)))
+            }
+        }
     }
 
     fun attribute(name: Attribute<Boolean>, value: Boolean) {

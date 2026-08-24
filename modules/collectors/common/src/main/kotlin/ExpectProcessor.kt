@@ -1,5 +1,7 @@
 package net.derfruhling.serenity.processor
 
+import com.google.devtools.ksp.KspExperimental
+import com.google.devtools.ksp.isAnnotationPresent
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSFile
@@ -16,10 +18,11 @@ class ExpectProcessor(
 ) : SymbolProcessor {
     private var platformDefs: String? = null
 
+    @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        resolver.getSymbolsWithAnnotation(PlatformDefinitions::class.qualifiedName!!)
+        resolver.getAllFiles()
+            .filter { it.isAnnotationPresent(PlatformDefinitions::class) }
             .filter { it.validate() }
-            .filterIsInstance<KSFile>()
             .toList()
             .forEach { it.accept(PlatformAcceptor(), Unit) }
 
@@ -51,7 +54,7 @@ class ExpectProcessor(
                 out.appendLine("import androidx.compose.runtime.Composable")
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
                 out.appendLine("import net.derfruhling.serenity.PageDetails")
-                out.appendLine("import net.derfruhling.serenity.annotations.HtmlComposable")
+                out.appendLine("import net.derfruhling.serenity.HtmlComposable")
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.SerialName")
 

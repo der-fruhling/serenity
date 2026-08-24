@@ -6,6 +6,7 @@ import kotlin.reflect.KClass
 abstract class Attribute<T : Any> : UntypedAttribute() {
     abstract override val parser: (String?) -> T?
     abstract val kClass: KClass<T>
+    override val keepNulls: Boolean by lazy { kClass == Boolean::class }
 }
 
 inline fun <reified T : Any> Attribute(

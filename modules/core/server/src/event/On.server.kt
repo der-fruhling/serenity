@@ -13,5 +13,5 @@ actual class EventContext private constructor() : CoroutineScope {
 
 @Composable
 @HtmlComposable
-actual inline fun <T> On(type: EventType<T>, crossinline fn: @Client @HtmlComposable EventContext.(T) -> Unit) {
+actual inline fun <T> On(type: EventType<T>, crossinline fn: Handler<T>) {
 }

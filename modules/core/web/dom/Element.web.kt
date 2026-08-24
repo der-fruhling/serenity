@@ -6,6 +6,7 @@ actual typealias Element = web.dom.Element
 actual typealias DomValidityState = web.validation.ValidityState
 actual typealias DomValidationTarget = web.validation.ValidationTarget
 actual typealias HTMLSelectElement = web.html.HTMLSelectElement
+actual typealias HTMLInputElement = web.html.HTMLInputElement
 
 actual val Element.node: ElementNode
     get() = ElementNode.tryGet(this)

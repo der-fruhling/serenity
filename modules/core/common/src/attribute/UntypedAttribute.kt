@@ -5,6 +5,7 @@ import net.derfruhling.serenity.Name
 abstract class UntypedAttribute {
     abstract val name: Name
     abstract val parser: (String) -> Any?
+    abstract val keepNulls: Boolean
     open val permitExplicitSet: Boolean get() = true
     open val defaultValue: (() -> Any?)? get() = null
 

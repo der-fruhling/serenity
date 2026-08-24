@@ -8,6 +8,8 @@ import net.derfruhling.serenity.dom.Document
 import net.derfruhling.serenity.dom.Element
 import net.derfruhling.serenity.dom.EventTarget
 import net.derfruhling.serenity.dom.Window
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 @WidelyAvailable
 interface Event<T : EventTarget> {
@@ -34,4 +36,17 @@ typealias ElementEvent = Event<Element>
 typealias DocumentEvent = Event<Document>
 typealias WindowEvent = Event<Window>
 
-typealias Handler<T> = @Client EventContext.(T) -> Unit
+@OptIn(ExperimentalContracts::class)
+inline fun <reified T : EventTarget> Event<*>.checkType(): Event<T> {
+    contract {
+        returns() implies (this@checkType is Event<T>)
+    }
+
+    check(target is T && currentTarget is T)
+
+    @Suppress("UNCHECKED_CAST")
+    return this as Event<T>
+}
+
+typealias Handler<T> = @Client context(EventContext) T.() -> Unit
+typealias Handler2<T, U> = @Client context(EventContext) T.(U) -> Unit
