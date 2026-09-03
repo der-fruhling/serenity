@@ -4,22 +4,23 @@
 
 [versions]
 kotlin = "2.4.10"
-androidx-compose = "1.11.4"
+androidx-compose = "1.12.0"
 junit-jupiter = "6.1.1"
 kotlinx-serialization = "1.11.0"
 kotlinx-coroutines = "1.11.0"
-kotlinx-collections = "0.5.1"
+kotlinx-collections = "0.5.2"
 kotlinx-io = "0.9.1"
 kotlinx-datetime = "0.8.0"
-serenity = "0.1.0-SNAPSHOT"
-kotlin-wrappers = "2026.7.2"
+kotlin-wrappers = "2026.9.0"
 kotlin-logging = "8.0.4"
-ktor = "3.5.1"
+ktor = "3.5.2"
 ksp-version = "2.3.10"
+node-gradle = "7.1.0"
+
+# https://github.com/gmazzo/gradle-buildconfig-plugin
+buildconfig = "6.0.10"
 
 [libraries]
-serenity = { module = "net.derfruhling.serenity:serenity", version.ref = "serenity" }
-
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -41,6 +42,17 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version = "2.+" }
 kotlin-wrappers-web = { module = "org.jetbrains.kotlin-wrappers:kotlin-web", version.ref = "kotlin-wrappers" }
 kotlin-wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser", version.ref = "kotlin-wrappers" }
 kotlin-wrappers-js = { module = "org.jetbrains.kotlin-wrappers:kotlin-js", version.ref = "kotlin-wrappers" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-stdlib-js = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-js", version.ref = "kotlin" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+kotlin-test-js = { group = "org.jetbrains.kotlin", name = "kotlin-test-js", version.ref = "kotlin" }
+kotlin-script-runtime = { group = "org.jetbrains.kotlin", name = "kotlin-script-runtime", version.ref = "kotlin" }
+kotlin-test-junit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
+kotlin-test-framework = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-internal-test-framework", version.ref = "kotlin" }
+kotlin-annotations-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-annotations-jvm", version.ref = "kotlin" }
+kotlin-compiler = { group = "org.jetbrains.kotlin", name = "kotlin-compiler", version.ref = "kotlin" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-conditionalHeaders = { module = "io.ktor:ktor-server-conditional-headers", version.ref = "ktor" }
@@ -52,12 +64,6 @@ logback-classic = { module = "ch.qos.logback:logback-classic", version = "1.5.38
 ksp-symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp-version" }
 
 openhft-zeroAllocationHashing = { module = "net.openhft:zero-allocation-hashing", version = "2026.0" }
-jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
-
-kotest-engine = { module = "io.kotest:kotest-framework-engine", version = "6.2.3" }
-kotest-assertions = { module = "io.kotest:kotest-assertions-core", version = "6.2.3" }
-kotest-property = { module = "io.kotest:kotest-property", version = "6.2.3" }
-kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version = "6.2.3" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -66,6 +72,6 @@ kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization"
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 sassBase = { id = "io.freefair.sass-base", version = "9.5.0" }
 stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.12.0" }
-javaModularity = { id = "org.javamodularity.moduleplugin", version = "2.0.0" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version = "2.3.10" }
-kotest = { id = "io.kotest", version = "6.2.3" }
+node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig"}

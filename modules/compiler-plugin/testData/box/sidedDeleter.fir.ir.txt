@@ -1,0 +1,13 @@
+FILE fqName:<root> fileName:/sidedDeleter.kt
+  FUN name:box visibility:public modality:FINAL returnType:kotlin.String
+    BLOCK_BODY
+      RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
+        CONST String type=kotlin.String value="OK"
+  FUN name:clientFn visibility:public modality:FINAL returnType:kotlin.Unit
+    annotations:
+      ClientOnly
+    BLOCK_BODY
+  FUN name:serverFn visibility:public modality:FINAL returnType:kotlin.Unit
+    annotations:
+      ServerOnly
+    BLOCK_BODY

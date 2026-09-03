@@ -33,6 +33,7 @@ gradlePlugin {
         }
 
         new("base", "SerenityBasePlugin")
+        new("compiler-plugin", "SerenityCompilerPlugin")
         new("server", "server.SerenityServerPlugin")
         new("web", "web.SerenityWebPlugin")
         new("convention", "SerenityConventionPlugin")

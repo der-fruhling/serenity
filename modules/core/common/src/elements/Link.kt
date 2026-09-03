@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.PageHolder
 import net.derfruhling.serenity.Text
-import net.derfruhling.serenity.annotations.Client
+import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.attribute.Attributes
 import net.derfruhling.serenity.defaultFn
 import net.derfruhling.serenity.event.ClickEvent
@@ -77,7 +77,7 @@ private fun LinkAnchor(
     }) {
         fn()
 
-        On(ClickEvent) @Client {
+        On(ClickEvent) @ClientOnly {
             preventDefault()
             navigate(to)
         }

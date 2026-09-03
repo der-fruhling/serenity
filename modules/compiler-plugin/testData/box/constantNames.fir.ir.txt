@@ -1,0 +1,7 @@
+FILE fqName:<root> fileName:/constantNames.kt
+  FUN name:box visibility:public modality:FINAL returnType:kotlin.String
+    BLOCK_BODY
+      VAR name:v type:kotlin.Long [val]
+        CONST Long type=kotlin.Long value=-881777603154417559
+      RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
+        CONST String type=kotlin.String value="OK"

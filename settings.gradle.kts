@@ -35,6 +35,7 @@ fun collector(name: String, dirName: String = name) {
     project(":serenity-$name").projectDir = file("modules").resolve("collectors").resolve(dirName)
 }
 
+module("compiler-plugin")
 module("annotations")
 module("core")
 module("inline-style")

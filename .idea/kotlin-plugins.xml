@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="KotlinPluginsSettings">
+    <option name="repositories">
+      <map>
+        <entry key="Local repository" value="$PROJECT_DIR$/build/local-publish;PATH" />
+      </map>
+    </option>
+    <option name="plugins">
+      <map>
+        <entry key="serenity" value="EXACT;true;false;net.derfruhling.serenity:serenity-compiler-plugin" />
+      </map>
+    </option>
+    <option name="pluginsRepos">
+      <map>
+        <entry key="serenity" value="Local repository" />
+      </map>
+    </option>
+  </component>
+</project>

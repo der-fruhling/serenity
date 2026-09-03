@@ -1,0 +1,8 @@
+FILE: sidedDeleter.kt
+    @R|net/derfruhling/serenity/annotations/ClientOnly|() public final fun clientFn(): R|kotlin/Unit| {
+    }
+    @R|net/derfruhling/serenity/annotations/ServerOnly|() public final fun serverFn(): R|kotlin/Unit| {
+    }
+    public final fun box(): R|kotlin/String| {
+        ^box String(OK)
+    }

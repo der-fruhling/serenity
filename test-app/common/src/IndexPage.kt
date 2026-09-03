@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSerializable
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.Text
-import net.derfruhling.serenity.annotations.Client
+import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.RegisterPage
 import net.derfruhling.serenity.elements.Link
 import net.derfruhling.serenity.elements.form.Button
@@ -44,7 +44,7 @@ fun ButtonsPage(start: Int) {
 
     Button(
         "Click count: $count",
-        onClick = @Client {
+        onClick = @ClientOnly {
             count++
             logger.debug { "Clicked! $count" }
         }
@@ -58,7 +58,7 @@ fun SaveDataPage() {
 
     Button(
         "Click count: $count",
-        onClick = @Client {
+        onClick = @ClientOnly {
             count++
             logger.debug { "Clicked! $count" }
         }

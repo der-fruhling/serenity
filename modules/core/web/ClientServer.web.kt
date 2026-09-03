@@ -3,7 +3,7 @@ package net.derfruhling.serenity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
-import net.derfruhling.serenity.annotations.Client
+import net.derfruhling.serenity.annotations.ClientOnly
 
 actual inline val isClient: Boolean
     @Composable
@@ -25,7 +25,7 @@ actual fun ifClient(fn: @Composable (() -> Unit)) {
 @Composable
 actual fun <T> alternative(
     onServer: @Composable () -> T,
-    onClient: @Composable @Client () -> T
+    onClient: @Composable @ClientOnly () -> T
 ) {
     if (isClient) {
         onClient()

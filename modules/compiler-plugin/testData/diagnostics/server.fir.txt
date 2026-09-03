@@ -1,0 +1,8 @@
+FILE: server.kt
+    package miaw
+
+    @R|net/derfruhling/serenity/annotations/ServerOnly|() public final fun test(): R|kotlin/Unit| {
+    }
+    @R|net/derfruhling/serenity/annotations/ClientOnly|() public final fun main(): R|kotlin/Unit| {
+        R|miaw/test|()
+    }

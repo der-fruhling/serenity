@@ -1,0 +1,5 @@
+FILE: constantNames.kt
+    public final fun box(): R|kotlin/String| {
+        lval v: R|kotlin/Long| = R|net/derfruhling/serenity/n|(String(Hello, world!))
+        ^box String(OK)
+    }

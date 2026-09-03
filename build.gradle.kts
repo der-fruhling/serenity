@@ -7,5 +7,11 @@ plugins {
     id("net.derfruhling.serenity") apply false
     id("net.derfruhling.serenity.resources") apply false
     alias(libs.plugins.kotlin.ksp) apply false
-    alias(libs.plugins.kotest) apply false
+    alias(libs.plugins.node.gradle) apply false
+}
+
+allprojects {
+    group = "net.derfruhling.serenity"
+
+    apply(from = rootProject.file("common.gradle.kts"))
 }

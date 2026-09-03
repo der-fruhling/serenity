@@ -12,9 +12,9 @@ package net.derfruhling.serenity.annotations
     AnnotationTarget.FIELD,
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.LOCAL_VARIABLE,
-    AnnotationTarget.TYPEALIAS
+    AnnotationTarget.TYPEALIAS,
+    AnnotationTarget.TYPE
 )
-@RequiresOptIn
 @MustBeDocumented
-@Client
+@ClientOnly
 annotation class ClientOnly

@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import net.derfruhling.serenity.InternalPageEntryPoint
 import net.derfruhling.serenity.SnapshotContext
-import net.derfruhling.serenity.annotations.Client
 import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.htmlComposer
 import net.derfruhling.serenity.ifClient

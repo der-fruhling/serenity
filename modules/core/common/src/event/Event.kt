@@ -1,7 +1,7 @@
 package net.derfruhling.serenity.event
 
 import kotlinx.datetime.Month
-import net.derfruhling.serenity.annotations.Client
+import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.Since
 import net.derfruhling.serenity.annotations.WidelyAvailable
 import net.derfruhling.serenity.dom.Document
@@ -48,5 +48,5 @@ inline fun <reified T : EventTarget> Event<*>.checkType(): Event<T> {
     return this as Event<T>
 }
 
-typealias Handler<T> = @Client context(EventContext) T.() -> Unit
-typealias Handler2<T, U> = @Client context(EventContext) T.(U) -> Unit
+typealias Handler<T> = @ClientOnly context(EventContext) T.() -> Unit
+typealias Handler2<T, U> = @ClientOnly context(EventContext) T.(U) -> Unit
