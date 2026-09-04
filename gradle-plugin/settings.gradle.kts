@@ -18,7 +18,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "serenity-gradle-plugin"
 
-includeBuild("serene-wasm")
-
 include("serenity-sass-gradle-plugin")
 project(":serenity-sass-gradle-plugin").projectDir = file("sass-plugin")

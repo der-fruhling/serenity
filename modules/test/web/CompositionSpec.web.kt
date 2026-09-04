@@ -13,12 +13,12 @@ import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.elements.Page
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
-import net.derfruhling.serenity.tree.platform.PlatformApplier
-import net.derfruhling.serenity.tree.platform.RealDocument
+import net.derfruhling.serenity.platform.PlatformApplier
+import net.derfruhling.serenity.platform.RealDocument
 import web.console.console
 import web.dom.Document
 import web.dom.document
-import net.derfruhling.serenity.tree.platform.Document as PlatformDocument
+import net.derfruhling.serenity.platform.Document as PlatformDocument
 
 internal actual suspend inline fun <T> withFrameClock(crossinline fn: suspend CoroutineScope.() -> T): T {
     return withContext(AnimationFrameClock) {

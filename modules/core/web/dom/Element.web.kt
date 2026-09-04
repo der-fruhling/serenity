@@ -1,6 +1,6 @@
 package net.derfruhling.serenity.dom
 
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.platform.ElementNode
 
 actual typealias Element = web.dom.Element
 actual typealias DomValidityState = web.validation.ValidityState

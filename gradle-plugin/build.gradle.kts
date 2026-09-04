@@ -3,6 +3,14 @@ plugins {
     `kotlin-dsl`
     kotlin("plugin.serialization") version embeddedKotlinVersion
     `maven-publish`
+    alias(libs.plugins.buildconfig)
+}
+
+buildConfig {
+    packageName("net.derfruhling.serenity.gradle")
+
+    buildConfigField("VERSION", provider { project.version.toString() })
+    buildConfigField("KOTLIN_VERSION", libs.versions.kotlin.asProvider())
 }
 
 allprojects {
@@ -12,6 +20,15 @@ allprojects {
 
     repositories {
         gradlePluginPortal()
+
+        maven("https://maven.pkg.github.com/der-fruhling/serene-wasm") {
+            name = "GitHubPackages"
+
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("GH_USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("GK_TOKEN")
+            }
+        }
     }
 }
 
@@ -47,29 +64,13 @@ dependencies {
     api(plugin(libs.plugins.kotlin.plugin.compose))
     api(plugin(libs.plugins.kotlin.plugin.serialization))
     api(plugin(libs.plugins.kotlin.ksp))
-    api(project(":serene-wasm"))
+    api(libs.serene.wasm)
     implementation(libs.openhft.zeroAllocationHashing)
     implementation(libs.kotlinx.serialization.json)
 }
 
-val generateVersionResource = tasks.register("generateVersionResource") {
-    val outFile =
-        project.layout.buildDirectory.file("generated-resources/net/derfruhling/serenity/gradle/VERSION")
-    val version = project.provider { version.toString() }
-
-    outputs.file(outFile)
-
-    doLast {
-        outFile.get().asFile.writeText(version.get())
-    }
-}
-
 sourceSets.main {
     resources.srcDir(project.layout.buildDirectory.dir("generated-resources"))
-}
-
-tasks.processResources {
-    dependsOn(generateVersionResource)
 }
 
 fun plugin(p: Provider<PluginDependency>): Provider<String> = p.map {

@@ -12,7 +12,7 @@ import net.derfruhling.serenity.event.InputEvent
 import net.derfruhling.serenity.event.On
 import net.derfruhling.serenity.event.checkType
 import net.derfruhling.serenity.isServerStatic
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.platform.ElementNode
 
 enum class TextInputType(val actual: String, val hasSpan: Boolean = false) {
     PLAIN("text"),

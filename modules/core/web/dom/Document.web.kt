@@ -2,11 +2,11 @@
 
 package net.derfruhling.serenity.dom
 
-import net.derfruhling.serenity.tree.platform.CURRENT
-import net.derfruhling.serenity.tree.platform.RealDocument
+import net.derfruhling.serenity.platform.CURRENT
+import net.derfruhling.serenity.platform.RealDocument
 import web.dom.Document
 import web.dom.document
-import net.derfruhling.serenity.tree.platform.Document as PlatformDocument
+import net.derfruhling.serenity.platform.Document as PlatformDocument
 
 actual typealias Document = Document
 

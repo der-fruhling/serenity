@@ -3,7 +3,7 @@ package net.derfruhling.serenity.elements
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Updater
 import net.derfruhling.serenity.Element
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.platform.ElementNode
 
 object HtmlContext {
     @Composable

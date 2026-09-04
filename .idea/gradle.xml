@@ -18,13 +18,6 @@
                   <project path="$PROJECT_DIR$/gradle-plugin/sass-plugin" />
                 </projects>
               </build>
-              <build path="$PROJECT_DIR$/gradle-plugin/serene-wasm" name="serene-wasm">
-                <projects>
-                  <project path="$PROJECT_DIR$/gradle-plugin/serene-wasm" />
-                  <project path="$PROJECT_DIR$/gradle-plugin/serene-wasm/annotations" />
-                  <project path="$PROJECT_DIR$/gradle-plugin/serene-wasm/ksp-generator" />
-                </projects>
-              </build>
             </builds>
           </compositeBuild>
         </compositeConfiguration>
@@ -37,9 +30,6 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/gradle-plugin" />
             <option value="$PROJECT_DIR$/gradle-plugin/sass-plugin" />
-            <option value="$PROJECT_DIR$/gradle-plugin/serene-wasm" />
-            <option value="$PROJECT_DIR$/gradle-plugin/serene-wasm/annotations" />
-            <option value="$PROJECT_DIR$/gradle-plugin/serene-wasm/ksp-generator" />
             <option value="$PROJECT_DIR$/modules/annotations" />
             <option value="$PROJECT_DIR$/modules/collectors/common" />
             <option value="$PROJECT_DIR$/modules/collectors/ktor" />
@@ -50,6 +40,7 @@
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/inline-style" />
             <option value="$PROJECT_DIR$/modules/ktor-server" />
+            <option value="$PROJECT_DIR$/modules/localization" />
             <option value="$PROJECT_DIR$/modules/test" />
             <option value="$PROJECT_DIR$/test-app" />
           </set>

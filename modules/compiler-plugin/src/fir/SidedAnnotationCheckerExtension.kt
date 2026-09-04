@@ -2,6 +2,8 @@ package net.derfruhling.serenity.compiler.fir
 
 import net.derfruhling.serenity.compiler.SerenityErrors
 import net.derfruhling.serenity.compiler.Side
+import net.derfruhling.serenity.compiler.clientClass
+import net.derfruhling.serenity.compiler.serverClass
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.FirAnnotationContainer
@@ -14,8 +16,10 @@ import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirBasicDeclaratio
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.ExpressionCheckers
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirCallChecker
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirPropertyAccessExpressionChecker
+import org.jetbrains.kotlin.fir.analysis.checkers.toClassLikeSymbol
 import org.jetbrains.kotlin.fir.analysis.checkers.type.TypeCheckers
 import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtension
+import org.jetbrains.kotlin.fir.declarations.FirClassLikeDeclaration
 import org.jetbrains.kotlin.fir.declarations.FirDeclaration
 import org.jetbrains.kotlin.fir.declarations.getTargetType
 import org.jetbrains.kotlin.fir.declarations.utils.classId
@@ -58,24 +62,18 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
         side
     }
 
-    context(
-        context: CheckerContext,
-        reporter: DiagnosticReporter
-    )
-    private fun checkAttrs(element: FirElement, type: ConeKotlinType, expectedSide: Side = this.expectedSide!!) {
-        val attrs = type.attributes
-        val side = attrs[TypeSideAttribute::class]?.side ?: return
-
-        if(side != expectedSide) reporter.reportOn(element.source, SerenityErrors.ILLEGAL_SIDE, side, expectedSide)
+    private fun FirAnnotation.getSide(): Side? {
+        val classLike = annotationTypeRef.firClassLike(session) ?: return null
+        getSideSimple(classLike)?.let { return it }
+        return classLike.annotations.firstNotNullOfOrNull { it.getSideSimple() }
     }
 
-    private fun FirAnnotation.getSide(): Side? {
-        when(annotationTypeRef.firClassLike(session)?.classId) {
-            clientClass -> return Side.CLIENT
-            serverClass -> return Side.SERVER
+    private fun FirAnnotation.getSideSimple(classLike: FirClassLikeDeclaration? = annotationTypeRef.firClassLike(session)): Side? {
+        return when (classLike?.classId) {
+            clientClass -> Side.CLIENT
+            serverClass -> Side.SERVER
+            else -> null
         }
-
-        return annotationTypeRef.coneType.attributes[TypeSideAttribute::class]?.side
     }
 
     private tailrec fun <D> FirBasedSymbol<D>.getSidedAnnotations(): List<Pair<Side, FirAnnotation>> where D : FirAnnotationContainer, D : FirDeclaration {
@@ -162,32 +160,10 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
                         it.annotations.firstNotNullOfOrNull { a -> a.getSide() }
                     } ?: expectedSide ?: return
 
-                    when (expression) {
-                        is FirDelegatedConstructorCall -> {
-                            checkAttrs(expression, expression.constructedTypeRef.coneType, contextSide)
+                    if(expression is FirExpression && expression !is FirAnnotationCall) {
+                        expression.toResolvedCallableSymbol(session)?.let { sym ->
+                            checkAttrs(expression, sym, contextSide)
                         }
-
-                        is FirEqualityOperatorCall -> {
-                            checkAttrs(expression, expression.resolvedType, contextSide)
-                        }
-
-                        is FirFunctionCall -> {
-                            checkAttrs(expression, expression.resolvedType, contextSide)
-                        }
-
-                        is FirGetClassCall -> {
-                            checkAttrs(expression, expression.getTargetType()!!, contextSide)
-                        }
-
-                        is FirTypeOperatorCall -> {
-                            checkAttrs(expression, expression.conversionTypeRef.coneType, contextSide)
-                        }
-
-                        else -> return
-                    }
-
-                    expression.toResolvedCallableSymbol(session)?.let { sym ->
-                        checkAttrs(expression, sym, contextSide)
                     }
                 }
             }
@@ -206,10 +182,6 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
 
                     expression.toResolvedCallableSymbol()?.let {
                         checkAttrs(expression, it, contextSide)
-                    }
-
-                    if(expression.hasResolvedType) {
-                        checkAttrs(expression, expression.resolvedType, contextSide)
                     }
                 }
             }

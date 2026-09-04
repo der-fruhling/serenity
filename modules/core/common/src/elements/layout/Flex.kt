@@ -3,7 +3,7 @@ package net.derfruhling.serenity.elements.layout
 import androidx.compose.runtime.Composable
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.elements.StyleClasses
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.platform.ElementNode
 
 enum class CrossAxis(internal val augment: String) {
     START(StyleClasses.CrossAxis.start),

@@ -1,8 +1,8 @@
 package net.derfruhling.serenity.compiler.ir
 
 import net.derfruhling.serenity.compiler.Side
-import net.derfruhling.serenity.compiler.fir.clientClass
-import net.derfruhling.serenity.compiler.fir.serverClass
+import net.derfruhling.serenity.compiler.clientClass
+import net.derfruhling.serenity.compiler.serverClass
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower.irThrow
 import org.jetbrains.kotlin.ir.IrStatement

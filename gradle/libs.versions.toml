@@ -65,6 +65,8 @@ ksp-symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-
 
 openhft-zeroAllocationHashing = { module = "net.openhft:zero-allocation-hashing", version = "2026.0" }
 
+serene-wasm = { module = "net.derfruhling.serenity:serene-wasm", version = "0.1.0-SNAPSHOT" }
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

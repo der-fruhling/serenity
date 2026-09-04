@@ -4,7 +4,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.tooling.CompositionObserver
 import androidx.compose.runtime.tooling.ObservableComposition
 import androidx.compose.runtime.tooling.setObserver
-import js.numbers.JsNumbers.toKotlinDouble
 import js.objects.Object
 import js.objects.TypedPropertyDescriptor
 import js.promise.Promise
@@ -14,9 +13,10 @@ import kotlinx.coroutines.*
 import net.derfruhling.serenity.elements.currentPageLocal
 import net.derfruhling.serenity.elements.pageTemplateLocal
 import net.derfruhling.serenity.manifest.Manifest
+import net.derfruhling.serenity.platform.ComposeNode
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
-import net.derfruhling.serenity.tree.platform.*
+import net.derfruhling.serenity.platform.*
 import web.console.console
 import web.dom.document
 import web.events.EventHandler
@@ -25,12 +25,8 @@ import web.history.history
 import web.http.fetchAsync
 import web.location.location
 import web.prompts.alert
-import web.time.DOMHighResTimeStamp
 import web.url.URLSearchParams
 import web.window.window
-import kotlin.coroutines.resume
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @Retention(AnnotationRetention.BINARY)
 @RequiresOptIn(

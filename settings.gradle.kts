@@ -1,3 +1,4 @@
+
 // The settings file is the entry point of every Gradle build.
 // Its primary purpose is to define the subprojects.
 // It is also used for some aspects of project-wide configuration, like managing plugins, dependencies, etc.
@@ -7,6 +8,24 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
+
+        maven("https://maven.pkg.github.com/der-fruhling/serene-wasm") {
+            name = "GitHubPackages"
+
+            credentials {
+                val props = java.util.Properties()
+                gradle.gradleUserHomeDir.resolve("gradle.properties").inputStream().use {
+                    props.load(it)
+                }
+
+                file("gradle.properties").inputStream().use {
+                    props.load(it)
+                }
+
+                username = props.getProperty("gpr.user") ?: System.getenv("GH_USERNAME")
+                password = props.getProperty("gpr.key") ?: System.getenv("GK_TOKEN")
+            }
+        }
     }
 
     includeBuild("gradle-plugin")
@@ -38,6 +57,7 @@ fun collector(name: String, dirName: String = name) {
 module("compiler-plugin")
 module("annotations")
 module("core")
+module("localization")
 module("inline-style")
 module("test")
 module("ktor-server")

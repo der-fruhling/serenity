@@ -1,6 +1,6 @@
 package net.derfruhling.serenity.style
 
-import net.derfruhling.serenity.tree.Apply
+import net.derfruhling.serenity.platform.Apply
 
 interface StylistTarget<T> : Apply<T, Nothing> {
     override val parent: Nothing?

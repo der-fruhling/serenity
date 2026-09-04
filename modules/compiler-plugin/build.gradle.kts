@@ -1,5 +1,7 @@
 @file:OptIn(ExperimentalWasmDsl::class)
 
+import org.gradle.api.publish.maven.internal.publication.DefaultMavenPublication
+import org.gradle.kotlin.dsl.support.serviceOf
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinUsages
@@ -14,16 +16,25 @@ plugins {
     id("published")
 }
 
+version = "${libs.versions.kotlin.asProvider().get()}-${rootProject.version}"
+
 project.plugins.apply(D8Plugin::class.java)
 
 val testDataDir = layout.projectDirectory.dir("testData")
 val testGenDirectory = layout.buildDirectory.dir("test-gen")
+
+repositories {
+    maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies") {
+        name = "IntelliJ Kotlin Compiler builds"
+    }
+}
 
 sourceSets {
     main {
         java.setSrcDirs(listOf("src"))
         resources.setSrcDirs(listOf("resources"))
     }
+
     testFixtures {
         java.setSrcDirs(listOf("test-fixtures"))
     }
@@ -32,6 +43,74 @@ sourceSets {
         resources.setSrcDirs(listOf(testDataDir))
     }
 }
+
+val include = configurations.create("include")
+
+configurations.implementation.configure {
+    extendsFrom(include)
+}
+
+fun kotlinVersionSourceSet(name: String, targetVersion: String) {
+    val sourceSet = sourceSets.create(name) {
+        java.setSrcDirs(listOf("src"))
+        resources.setSrcDirs(listOf("resources"))
+
+        configurations.named(compileOnlyConfigurationName) {
+            extendsFrom(configurations.getByName(sourceSets.main.get().compileClasspathConfigurationName))
+
+            resolutionStrategy {
+                dependencySubstitution {
+                    substitute(module("org.jetbrains.kotlin:kotlin-compiler:${libs.versions.kotlin}"))
+                        .using(module("org.jetbrains.kotlin:kotlin-compiler:${targetVersion}"))
+                }
+            }
+        }
+
+        configurations.named(apiConfigurationName) {
+            extendsFrom(configurations.getByName(sourceSets.main.get().apiConfigurationName))
+        }
+    }
+
+    val component = project.serviceOf<SoftwareComponentFactory>().adhoc("${name}Java")
+    components.add(component)
+
+    val baseAttributes = configurations.runtimeElements.get().attributes
+
+    val buildJar = tasks.register(sourceSet.jarTaskName, Jar::class) {
+        group = "build"
+        description = "Builds the $name variant"
+
+        archiveVersion = provider { "$targetVersion-${rootProject.version}" }
+
+        dependsOn(sourceSet.classesTaskName, sourceSet.processResourcesTaskName)
+        from(sourceSet.output, provider { include.resolve().map { zipTree(it) } })
+    }
+
+    val runtimeElements = configurations.create("${name}RuntimeElements") {
+        @Suppress("UnstableApiUsage")
+        attributes.addAllLater(baseAttributes)
+    }
+
+    artifacts.add(runtimeElements.name, buildJar)
+
+    component.addVariantsFromConfiguration(runtimeElements) {
+        mapToMavenScope("runtime")
+    }
+    publishing {
+        publications {
+            create(name, MavenPublication::class) {
+                version = "$targetVersion-${rootProject.version}"
+                from(component)
+
+                if(this is DefaultMavenPublication) {
+                    isAlias = true
+                }
+            }
+        }
+    }
+}
+
+kotlinVersionSourceSet("ij262_52", "2.4.20-ij262-52")
 
 idea {
     // This is needed until IDEA fixes IDEA-339729.
@@ -62,7 +141,7 @@ repositories {
 dependencies {
     compileOnly(libs.kotlin.compiler)
 
-    api(libs.openhft.zeroAllocationHashing)
+    include(libs.openhft.zeroAllocationHashing)
 
     testFixturesApi(libs.kotlin.test.junit5)
     testFixturesApi(libs.kotlin.test.framework)

@@ -13,7 +13,7 @@ import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.htmlComposer
 import net.derfruhling.serenity.ifClient
 import net.derfruhling.serenity.tree.HtmlApplier
-import net.derfruhling.serenity.tree.platform.EventHandlerNode
+import net.derfruhling.serenity.platform.EventHandlerNode
 import kotlin.coroutines.CoroutineContext
 
 actual class EventContext internal constructor(val snapshot: Snapshot, val eventType: EventType<*>) : CoroutineScope {

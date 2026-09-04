@@ -36,8 +36,7 @@ abstract class SerenityExtension(internal val mpp: KotlinMultiplatformExtension)
                 c.findVersion("serenity").orElse(null)?.let { return@lazy it }
             }
 
-            val specVersion = this.javaClass.getResource("VERSION")!!.readText()
-            DefaultMutableVersionConstraint(specVersion)
+            DefaultMutableVersionConstraint(BuildConfig.VERSION)
         }
 
         serenityVersion.convention(project.provider { defaultSerenityVersion })

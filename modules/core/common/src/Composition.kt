@@ -9,10 +9,10 @@ import androidx.compose.runtime.Updater
 import net.derfruhling.serenity.annotations.UnescapedTextDanger
 import net.derfruhling.serenity.attribute.Attribute
 import net.derfruhling.serenity.tree.HtmlApplier
-import net.derfruhling.serenity.tree.platform.DataNode
-import net.derfruhling.serenity.tree.platform.DocumentTypeNode
-import net.derfruhling.serenity.tree.platform.ElementNode
-import net.derfruhling.serenity.tree.platform.TextNode
+import net.derfruhling.serenity.platform.DataNode
+import net.derfruhling.serenity.platform.DocumentTypeNode
+import net.derfruhling.serenity.platform.ElementNode
+import net.derfruhling.serenity.platform.TextNode
 
 internal val defaultFn = @Composable {}
 

@@ -8,7 +8,7 @@ import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.ResourceResolver
 import net.derfruhling.serenity.manifest.ScriptLocation
 import net.derfruhling.serenity.manifest.preloadSetLocal
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.platform.ElementNode
 import kotlin.time.Duration.Companion.hours
 
 @Composable

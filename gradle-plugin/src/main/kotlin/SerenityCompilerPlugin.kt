@@ -25,7 +25,7 @@ class SerenityCompilerPlugin : KotlinCompilerPluginSupportPlugin {
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
         groupId = "net.derfruhling.serenity",
         artifactId = "serenity-compiler-plugin",
-        version = "0.1.0-SNAPSHOT"
+        version = "${BuildConfig.KOTLIN_VERSION}-${BuildConfig.VERSION}"
     )
 
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean = true

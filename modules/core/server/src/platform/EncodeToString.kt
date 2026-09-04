@@ -1,0 +1,11 @@
+package net.derfruhling.serenity.tree
+
+import com.fleeksoft.ksoup.nodes.DocumentType
+import net.derfruhling.serenity.platform.Document
+
+fun Document.encodeToString(): String {
+    if (real.node.documentType() == null) {
+        real.node.prependChild(DocumentType("html", "", ""))
+    }
+    return real.node.html()
+}

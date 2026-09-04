@@ -7,7 +7,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlinx.serialization.serializer
-import net.derfruhling.serenity.localization.AvailableLocalizations
 import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.manifest.ManifestEntry
 import net.derfruhling.serenity.manifest.ResourceIndex
@@ -129,6 +128,5 @@ object SerialRegistry {
     init {
         registerManifestEntry<ResourceIndex>()
         registerManifestEntry<ScriptLocation>()
-        registerManifestEntry<AvailableLocalizations>()
     }
 }

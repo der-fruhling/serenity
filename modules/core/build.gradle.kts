@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.BaseKotlinCompile
-
 plugins {
     id("multiplatform-compose")
     id("net.derfruhling.serenity.convention")
@@ -8,22 +6,6 @@ plugins {
     id("net.derfruhling.serenity.resources")
     id("net.derfruhling.serenity.stylist-sass")
     id("com.google.devtools.ksp")
-}
-
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven(rootProject.layout.buildDirectory.dir("local-publish")) {
-                name = "LocalDirectory"
-            }
-        }
-
-        filter {
-            includeModule("net.derfruhling.serenity", "serenity-annotations")
-            includeModule("net.derfruhling.serenity", "serenity-annotations-jvm")
-            includeModule("net.derfruhling.serenity", "serenity-compiler-plugin")
-        }
-    }
 }
 
 kotlin {

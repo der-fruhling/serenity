@@ -23,8 +23,8 @@ import net.derfruhling.serenity.manifest.preloadSetLocal
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
 import net.derfruhling.serenity.tree.encodeToString
-import net.derfruhling.serenity.tree.platform.Document
-import net.derfruhling.serenity.tree.platform.PlatformApplier
+import net.derfruhling.serenity.platform.Document
+import net.derfruhling.serenity.platform.PlatformApplier
 
 private val logger = KotlinLogging.logger {}
 

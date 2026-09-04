@@ -3,7 +3,7 @@
 package net.derfruhling.serenity.dom
 
 import net.derfruhling.serenity.annotations.GenerateServerStubs
-import net.derfruhling.serenity.tree.platform.ElementNode
+import net.derfruhling.serenity.platform.ElementNode
 
 expect open class Element : EventTarget
 

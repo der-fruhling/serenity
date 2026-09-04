@@ -1,7 +1,6 @@
 package net.derfruhling.serenity.style
 
-import net.derfruhling.serenity.tree.Apply
-import net.derfruhling.serenity.tree.platform.StyleHolder
+import net.derfruhling.serenity.platform.StyleHolder
 
 class InlineStyle : StylistTarget<RuleNode>, StyleHolder {
     val rules: List<RuleNode>
