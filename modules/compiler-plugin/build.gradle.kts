@@ -38,6 +38,7 @@ sourceSets {
     testFixtures {
         java.setSrcDirs(listOf("test-fixtures"))
     }
+
     test {
         java.setSrcDirs(listOf("test", testGenDirectory))
         resources.setSrcDirs(listOf(testDataDir))
@@ -49,6 +50,8 @@ val include = configurations.create("include")
 configurations.implementation.configure {
     extendsFrom(include)
 }
+
+val kotlinVersionAttribute = Attribute.of("net.derfruhling.kotlin-version", String::class.java)
 
 fun kotlinVersionSourceSet(name: String, targetVersion: String) {
     val sourceSet = sourceSets.create(name) {
@@ -87,8 +90,16 @@ fun kotlinVersionSourceSet(name: String, targetVersion: String) {
     }
 
     val runtimeElements = configurations.create("${name}RuntimeElements") {
-        @Suppress("UnstableApiUsage")
-        attributes.addAllLater(baseAttributes)
+        attributes {
+            @Suppress("UnstableApiUsage")
+            addAllLater(baseAttributes)
+
+            attribute(kotlinVersionAttribute, targetVersion)
+        }
+
+        outgoing {
+            capability("${project.group}:${project.name}:${targetVersion}-${rootProject.version}")
+        }
     }
 
     artifacts.add(runtimeElements.name, buildJar)
@@ -133,6 +144,17 @@ val annotationsJsRuntimeClasspath = configurations.resolvable("annotationsJsRunt
     }
 }
 
+configurations.configureEach {
+    resolutionStrategy.dependencySubstitution {
+        substitute(project(":serenity-compiler-plugin"))
+            .using(variant(project(":serenity-compiler-plugin")) {
+                capabilities {
+                    requireCapability("net.derfruhling.serenity:serenity-compiler-plugin:${project.version}")
+                }
+            })
+    }
+}
+
 repositories {
     mavenCentral()
     google()
@@ -151,6 +173,7 @@ dependencies {
 
     annotationsRuntimeClasspath(project(":serenity-annotations"))
     annotationsRuntimeClasspath(project(":serenity-core"))
+    annotationsRuntimeClasspath(project(":serenity-localization"))
 
     // Dependencies required to run the internal test framework.
     testArtifacts(libs.kotlin.stdlib)
@@ -196,6 +219,10 @@ tasks.test {
     systemProperty("javascript.engine.path.V8", d8EnvSpec.executable.get())
     systemProperty("javascript.engine.path.repl", "${layout.projectDirectory.file("repl.js").asFile}")
     systemProperty("kotlin.js.test.root.out.dir", "${layout.buildDirectory.get().asFile}/js-test-output")
+}
+
+tasks.jar {
+    from(provider { include.resolve().map { zipTree(it) } })
 }
 
 kotlin {

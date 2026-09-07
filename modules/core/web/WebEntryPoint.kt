@@ -13,6 +13,9 @@ import kotlinx.coroutines.*
 import net.derfruhling.serenity.elements.currentPageLocal
 import net.derfruhling.serenity.elements.pageTemplateLocal
 import net.derfruhling.serenity.manifest.Manifest
+import net.derfruhling.serenity.modularity.CommonContext
+import net.derfruhling.serenity.modularity.Modules
+import net.derfruhling.serenity.modularity.ProvideContext
 import net.derfruhling.serenity.platform.ComposeNode
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
@@ -71,7 +74,7 @@ private external fun createSerenityDebugProperty(
 private external fun emptyObject(): JsAny
 
 @OptIn(ExperimentalWasmJsInterop::class)
-internal class WebEntryPoint private constructor() {
+internal class WebEntryPoint private constructor() : CommonContext {
     init {
         window.onpopstate = EventHandler { ev: PopStateEvent ->
             val state = ev.state
@@ -88,14 +91,32 @@ internal class WebEntryPoint private constructor() {
             ))
     }
 
-    private lateinit var manifest: Manifest
+    private lateinit var _manifest: Manifest
+    override val manifest: Manifest by ::_manifest
     private var first: Boolean = true
     private var initialized: Boolean = false
     private var clientMode by mutableStateOf(false)
     private val mutableStatePage = mutableStateOf<PageHolder<*>?>(null)
     private var page: PageHolder<*>? by mutableStatePage
+    private var moduleProvidedState by mutableStateOf(emptyArray<ProvidedValue<*>>())
+
+    private inner class ProvideContextImpl : ProvideContext, CommonContext by this {
+        private val list = mutableListOf<ProvidedValue<*>>()
+
+        override suspend fun use(provide: ProvidedValue<*>) {
+            list.add(provide)
+        }
+
+        fun build() = list.toTypedArray()
+    }
 
     private lateinit var scope: CoroutineScope
+
+    suspend fun reinitialize() {
+        moduleProvidedState = ProvideContextImpl()
+            .also { Modules.createProvidedValues(it) }
+            .build()
+    }
 
     @OptIn(InternalPageEntryPoint::class)
     private fun initialize() {
@@ -146,7 +167,7 @@ internal class WebEntryPoint private constructor() {
                 }
             }
 
-            manifest = try {
+            _manifest = try {
                 val manifestJson = manifestRequest.await()
                 SerialRegistry.decodeFromObject<Manifest>(manifestJson!!)
             } catch (e: Exception) {
@@ -157,6 +178,12 @@ internal class WebEntryPoint private constructor() {
                 )
                 Manifest(mutableMapOf())
             }
+
+            Modules.onChanged.subscribe {
+                launch { reinitialize() }
+            }
+
+            reinitialize()
 
             initialized = true
             if(!htmlContext.enableTestMode) {
@@ -182,10 +209,10 @@ internal class WebEntryPoint private constructor() {
     private fun setPageContent() {
         try {
             htmlComposer.setContent {
-                val manifestServices = remember(manifest) { manifest.provide }
-                CompositionLocalProvider(*manifestServices) {
+                val manifestServices = remember(_manifest) { _manifest.provide }
+                CompositionLocalProvider(*manifestServices + moduleProvidedState) {
                     CompositionLocalProvider(
-                        Manifest.local provides manifest,
+                        Manifest.local provides _manifest,
                         isClientLocal provides clientMode,
                         pageTemplateLocal provides pageTemplate
                     ) {

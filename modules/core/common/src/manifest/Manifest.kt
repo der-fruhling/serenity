@@ -4,6 +4,7 @@ import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
@@ -40,8 +41,16 @@ data class Manifest(
         }
     }
 
+    @PublishedApi
+    @Transient
+    internal val publicEntries: Map<KClass<out ManifestEntry>, ManifestEntry> by ::entries
+
     operator fun <T : ManifestEntry> get(kClass: KClass<T>): T? {
         return entries[kClass]?.let { kClass.cast(it) }
+    }
+
+    inline fun <reified T> findOf(): T? {
+        return publicEntries.firstNotNullOfOrNull { it as? T }
     }
 
     operator fun <T : ManifestEntry> set(kClass: KClass<T>, value: T) {

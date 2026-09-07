@@ -5,8 +5,6 @@ plugins {
     id("net.derfruhling.serenity.convention")
     id("net.derfruhling.serenity.compiler-plugin")
     id("published")
-    id("net.derfruhling.serenity.resources")
-    id("net.derfruhling.serenity.stylist-sass")
     id("com.google.devtools.ksp")
 }
 
@@ -15,6 +13,8 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":serenity-core"))
+                api(project(":serenity-dynamic"))
+                api(libs.kotlinx.serialization.cbor)
             }
         }
 

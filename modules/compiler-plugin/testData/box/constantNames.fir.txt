@@ -1,5 +1,15 @@
 FILE: constantNames.kt
+    @R|kotlin/jvm/JvmInline|() public final value class TestValueClass : R|kotlin/Any| {
+        public constructor(long: R|kotlin/Long|): R|TestValueClass| {
+            super<R|kotlin/Any|>()
+        }
+
+        public final val long: R|kotlin/Long| = R|<local>/long|
+            public get(): R|kotlin/Long|
+
+    }
     public final fun box(): R|kotlin/String| {
-        lval v: R|kotlin/Long| = R|net/derfruhling/serenity/n|(String(Hello, world!))
+        lval v: R|net/derfruhling/serenity/localization/ConstantName| = R|net/derfruhling/serenity/localization/n|(String(test-app/hello))
+        lval t: R|TestValueClass| = R|/TestValueClass.TestValueClass|(Long(7))
         ^box String(OK)
     }

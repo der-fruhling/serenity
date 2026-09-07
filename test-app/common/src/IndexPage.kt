@@ -15,6 +15,8 @@ import net.derfruhling.serenity.elements.layout.Content
 import net.derfruhling.serenity.elements.layout.FlexColumn
 import net.derfruhling.serenity.elements.layout.Footer
 import net.derfruhling.serenity.elements.layout.Header
+import net.derfruhling.serenity.localization.TextOf
+import net.derfruhling.serenity.localization.n
 
 private val logger = KotlinLogging.logger {}
 
@@ -22,7 +24,7 @@ private val logger = KotlinLogging.logger {}
 @RegisterPage("/", title = "Hello, world!")
 fun IndexPage() {
     Header {
-        Text("Header")
+        TextOf(n("test-app/bold"))
     }
 
     Content {
@@ -43,12 +45,13 @@ fun ButtonsPage(start: Int) {
     var count by remember { mutableIntStateOf(start) }
 
     Button(
-        "Click count: $count",
         onClick = @ClientOnly {
             count++
             logger.debug { "Clicked! $count" }
         }
-    )
+    ) {
+        TextOf(n("test-app/buttons/clicks"), count.toString())
+    }
 }
 
 @Composable

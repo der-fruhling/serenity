@@ -20,6 +20,10 @@ import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.preloadSetLocal
+import net.derfruhling.serenity.modularity.CommonContext
+import net.derfruhling.serenity.modularity.Modules
+import net.derfruhling.serenity.modularity.ProvideContext
+import net.derfruhling.serenity.modularity.ServerContext
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
 import net.derfruhling.serenity.tree.encodeToString
@@ -125,16 +129,40 @@ val ComposeHtml = createApplicationPlugin(
     logger.info { "Serenity framework initialized" }
 }
 
+private abstract class CommonContextImpl(private val call: ApplicationCall) : CommonContext, ServerContext {
+    override val manifest: Manifest
+        get() = call.currentManifest
+
+    override fun getHeader(name: String): String? {
+        return call.request.header(name)
+    }
+}
+
+private class ProvideContextImpl(call: ApplicationCall) : CommonContextImpl(call), ProvideContext {
+    private val list = mutableListOf<ProvidedValue<*>>()
+
+    override suspend fun use(provide: ProvidedValue<*>) {
+        list.add(provide)
+    }
+
+    fun build(): Array<ProvidedValue<*>> = list.toTypedArray()
+}
+
+suspend fun ApplicationCall.createModuleProvidedValues(): Array<ProvidedValue<*>> {
+    return ProvideContextImpl(this).also { Modules.createProvidedValues(it) }.build()
+}
+
 suspend inline fun ApplicationCall.respondCompose(crossinline fn: @Composable @HtmlComposable () -> Unit) {
     val context = compositionContext
     val tree = RehydratingHtmlTree(context.compositionContext, request.uri, ::PlatformApplier)
     val preloadSet = mutableSetOf<Preload>()
+    val moduleProvidedState = createModuleProvidedValues()
 
     tree.setContent {
         val call = remember { this }
         val manifest = remember { call.currentManifest }
 
-        CompositionLocalProvider(*manifest.provide) {
+        CompositionLocalProvider(*manifest.provide + moduleProvidedState) {
             CompositionLocalProvider(
                 applicationCallLocal provides call,
                 preloadSetLocal provides preloadSet

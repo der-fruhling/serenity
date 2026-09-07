@@ -57,6 +57,7 @@ fun collector(name: String, dirName: String = name) {
 module("compiler-plugin")
 module("annotations")
 module("core")
+module("dynamic")
 module("localization")
 module("inline-style")
 module("test")
@@ -69,3 +70,11 @@ collector("ktor-collector", "ktor")
 collector("web-collector", "web")
 
 include("test-app")
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("serenityLibs") {
+            from(files("gradle/serenity.versions.toml"))
+        }
+    }
+}

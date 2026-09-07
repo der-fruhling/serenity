@@ -1,12 +1,16 @@
 package net.derfruhling.serenity.localization
 
+import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
 @JvmInline
-value class ConstantName private constructor(private val long: Long) {
+@Serializable
+value class ConstantName @PublishedApi internal constructor(val asLong: Long) {
     override fun toString(): String {
-        return "Name(${long.toULong().toHexString(hexFormat)}"
+        return "Name(${asLong.toULong().toHexString(hexFormat)})"
     }
+
+    internal constructor(text: String) : this(XXH3.digest(text.encodeToByteArray()))
 
     companion object {
         private val hexFormat = HexFormat {
@@ -19,5 +23,5 @@ value class ConstantName private constructor(private val long: Long) {
 }
 
 fun n(@Suppress("unused") name: String): ConstantName {
-    throw UnsupportedOperationException("Cannot invoke this function from reflection")
+    return ConstantName(name)
 }

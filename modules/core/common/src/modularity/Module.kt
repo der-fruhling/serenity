@@ -8,6 +8,8 @@ abstract class Module(
     protected abstract fun initialize()
     protected open fun moduleAdded(module: Module) {}
 
+    protected open suspend fun ProvideContext.provide() {}
+
     fun initialize(addedModules: Set<Module>) {
         if(!isInitialized) {
             initialize()
@@ -16,6 +18,12 @@ abstract class Module(
 
         for(added in addedModules) {
             moduleAdded(added)
+        }
+    }
+
+    suspend fun useProvide(context: ProvideContext) {
+        with(context) {
+            provide()
         }
     }
 }

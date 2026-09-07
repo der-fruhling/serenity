@@ -1,7 +1,79 @@
 FILE fqName:<root> fileName:/constantNames.kt
+  CLASS CLASS name:TestValueClass modality:FINAL visibility:public [value] superTypes:[kotlin.Any]
+    annotations:
+      JvmInline
+    thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.TestValueClass
+    PROPERTY name:long visibility:public modality:FINAL [val]
+      FIELD PROPERTY_BACKING_FIELD name:long type:kotlin.Long visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'long: kotlin.Long declared in <root>.TestValueClass.<init>' type=kotlin.Long origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-long> visibility:public modality:FINAL returnType:kotlin.Long
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.TestValueClass
+        correspondingProperty: PROPERTY name:long visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-long> (): kotlin.Long declared in <root>.TestValueClass'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:long type:kotlin.Long visibility:private [final]' type=kotlin.Long origin=null
+              receiver: GET_VAR '<this>: <root>.TestValueClass declared in <root>.TestValueClass.<get-long>' type=<root>.TestValueClass origin=null
+    CONSTRUCTOR visibility:public returnType:<root>.TestValueClass [primary]
+      VALUE_PARAMETER kind:Regular name:long index:0 type:kotlin.Long
+      BLOCK_BODY
+        DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS CLASS name:TestValueClass modality:FINAL visibility:public [value] superTypes:[kotlin.Any]' type=kotlin.Unit
+    FUN GENERATED_SINGLE_FIELD_VALUE_CLASS_MEMBER name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.TestValueClass
+      VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
+      overridden:
+        public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in kotlin.Any
+      BLOCK_BODY
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: TYPE_OP type=kotlin.Boolean origin=NOT_INSTANCEOF typeOperand=<root>.TestValueClass
+              GET_VAR 'other: kotlin.Any? declared in <root>.TestValueClass.equals' type=kotlin.Any? origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.TestValueClass'
+              CONST Boolean type=kotlin.Boolean value=false
+        VAR IR_TEMPORARY_VARIABLE name:tmp_0 type:<root>.TestValueClass [val]
+          TYPE_OP type=<root>.TestValueClass origin=IMPLICIT_CAST typeOperand=<root>.TestValueClass
+            GET_VAR 'other: kotlin.Any? declared in <root>.TestValueClass.equals' type=kotlin.Any? origin=null
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:long type:kotlin.Long visibility:private [final]' type=kotlin.Long origin=null
+                  receiver: GET_VAR '<this>: <root>.TestValueClass declared in <root>.TestValueClass.equals' type=<root>.TestValueClass origin=null
+                ARG arg1: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:long type:kotlin.Long visibility:private [final]' type=kotlin.Long origin=null
+                  receiver: GET_VAR 'val tmp_0: <root>.TestValueClass declared in <root>.TestValueClass.equals' type=<root>.TestValueClass origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.TestValueClass'
+              CONST Boolean type=kotlin.Boolean value=false
+        RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.TestValueClass'
+          CONST Boolean type=kotlin.Boolean value=true
+    FUN GENERATED_SINGLE_FIELD_VALUE_CLASS_MEMBER name:hashCode visibility:public modality:OPEN returnType:kotlin.Int
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.TestValueClass
+      overridden:
+        public open fun hashCode (): kotlin.Int declared in kotlin.Any
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun hashCode (): kotlin.Int declared in <root>.TestValueClass'
+          CALL 'public open fun hashCode (): kotlin.Int declared in kotlin.Long' type=kotlin.Int origin=null
+            ARG <this>: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:long type:kotlin.Long visibility:private [final]' type=kotlin.Long origin=null
+              receiver: GET_VAR '<this>: <root>.TestValueClass declared in <root>.TestValueClass.hashCode' type=<root>.TestValueClass origin=null
+    FUN GENERATED_SINGLE_FIELD_VALUE_CLASS_MEMBER name:toString visibility:public modality:OPEN returnType:kotlin.String
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.TestValueClass
+      overridden:
+        public open fun toString (): kotlin.String declared in kotlin.Any
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun toString (): kotlin.String declared in <root>.TestValueClass'
+          STRING_CONCATENATION type=kotlin.String
+            CONST String type=kotlin.String value="TestValueClass("
+            CONST String type=kotlin.String value="long="
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:long type:kotlin.Long visibility:private [final]' type=kotlin.Long origin=null
+              receiver: GET_VAR '<this>: <root>.TestValueClass declared in <root>.TestValueClass.toString' type=<root>.TestValueClass origin=null
+            CONST String type=kotlin.String value=")"
   FUN name:box visibility:public modality:FINAL returnType:kotlin.String
     BLOCK_BODY
-      VAR name:v type:kotlin.Long [val]
-        CONST Long type=kotlin.Long value=-881777603154417559
+      VAR name:v type:net.derfruhling.serenity.localization.ConstantName [val]
+        CONSTRUCTOR_CALL 'internal constructor <init> (asLong: kotlin.Long) declared in net.derfruhling.serenity.localization.ConstantName' type=net.derfruhling.serenity.localization.ConstantName origin=null
+          ARG asLong: CONST Long type=kotlin.Long value=4739537262115603309
+      VAR name:t type:<root>.TestValueClass [val]
+        CONSTRUCTOR_CALL 'public constructor <init> (long: kotlin.Long) declared in <root>.TestValueClass' type=<root>.TestValueClass origin=null
+          ARG long: CONST Long type=kotlin.Long value=7
       RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
         CONST String type=kotlin.String value="OK"

@@ -23,13 +23,15 @@ fun main() {
             }
         }
 
+        commonMain()
+
         embeddedServer(CIO, applicationEnvironment {
             log = createKtorLogger()
         }, {
-                           connector {
-                               host = "127.0.0.1"
-                               port = 8080
-                           }
-                       }) { configure() }.startAwait()
+            connector {
+                host = "127.0.0.1"
+                port = 8080
+            }
+        }) { configure() }.startAwait()
     }
 }

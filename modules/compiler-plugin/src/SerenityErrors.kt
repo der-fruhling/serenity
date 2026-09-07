@@ -1,16 +1,17 @@
 package net.derfruhling.serenity.compiler
 
-import com.intellij.psi.PsiAnnotation
-import com.intellij.psi.PsiExpression
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.*
 import org.jetbrains.kotlin.diagnostics.rendering.BaseDiagnosticRendererFactory
+import org.jetbrains.kotlin.psi.KtAnnotation
+import org.jetbrains.kotlin.psi.KtExpression
 
 object SerenityErrors : KtDiagnosticsContainer() {
     val ILLEGAL_SIDE = KtDiagnosticFactory2<Side, Side>(
         "ILLEGAL_SIDE",
         Severity.ERROR,
         SourceElementPositioningStrategies.DEFAULT,
-        PsiExpression::class,
+        KtExpression::class,
         SerenityErrorMessages
     )
 
@@ -18,7 +19,7 @@ object SerenityErrors : KtDiagnosticsContainer() {
         "DUPLICATE_ATTRIBUTE",
         Severity.ERROR,
         SourceElementPositioningStrategies.DEFAULT,
-        PsiAnnotation::class,
+        KtAnnotation::class,
         SerenityErrorMessages
     )
 
@@ -27,7 +28,7 @@ object SerenityErrors : KtDiagnosticsContainer() {
         "MISMATCHED_ATTRIBUTE",
         Severity.ERROR,
         SourceElementPositioningStrategies.DEFAULT,
-        PsiAnnotation::class,
+        KtAnnotation::class,
         SerenityErrorMessages
     )
 

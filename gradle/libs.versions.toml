@@ -23,6 +23,7 @@ buildconfig = "6.0.10"
 [libraries]
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor", version.ref = "kotlinx-serialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
@@ -66,6 +67,8 @@ ksp-symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-
 openhft-zeroAllocationHashing = { module = "net.openhft:zero-allocation-hashing", version = "2026.0" }
 
 serene-wasm = { module = "net.derfruhling.serenity:serene-wasm", version = "0.1.0-SNAPSHOT" }
+
+ktoml-core = { module = "com.akuleshov7:ktoml-core", version = "0.7.1" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

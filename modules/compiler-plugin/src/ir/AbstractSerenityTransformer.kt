@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.name.FqName
 
 abstract class AbstractSerenityTransformer : IrElementTransformerVoid(), ModuleLoweringPass, FileLoweringPass {
     protected val serenityPackage by lazy { FqName("net.derfruhling.serenity") }
-    protected val localizationPackage by lazy { FqName("net.derfruhling.serenity.localizations") }
+    protected val localizationPackage by lazy { FqName("net.derfruhling.serenity.localization") }
 
     override fun lower(irModule: IrModuleFragment) {
         irModule.transformChildrenVoid(this)

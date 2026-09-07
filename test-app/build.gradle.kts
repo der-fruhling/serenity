@@ -4,7 +4,9 @@ plugins {
     id("net.derfruhling.serenity")
     id("net.derfruhling.serenity.stylist-sass")
     id("net.derfruhling.serenity.convention")
+    id("net.derfruhling.serenity.compiler-plugin")
     id("net.derfruhling.serenity.resources")
+    id("net.derfruhling.serenity.localization")
 }
 
 dependencies {
@@ -17,6 +19,8 @@ serenity {
 
     dependencies {
         implementation(project(":serenity-core"))
+        implementation(project(":serenity-localization"))
+        implementation(project(":serenity-inline-style"))
         implementation(libs.androidx.compose.runtime)
         implementation(libs.androidx.compose.runtime.saveable)
         implementation(libs.oshai.kotlinLogging)
@@ -24,6 +28,10 @@ serenity {
 
     testDependencies {
         implementation(kotlin("test"))
+    }
+
+    localization {
+        sourceDir = file("common/resources/lang")
     }
 
     resources {

@@ -55,6 +55,7 @@ gradlePlugin {
         new("web", "web.SerenityWebPlugin")
         new("convention", "SerenityConventionPlugin")
         new("resources", "resources.SerenityResourcesPlugin")
+        new("localization", "resources.SerenityLocalizationPlugin")
         new(null, "SerenityPlugin")
     }
 }
@@ -67,6 +68,8 @@ dependencies {
     api(libs.serene.wasm)
     implementation(libs.openhft.zeroAllocationHashing)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.cbor)
+    implementation(libs.ktoml.core)
 }
 
 sourceSets.main {

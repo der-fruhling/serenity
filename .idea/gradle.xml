@@ -38,6 +38,7 @@
             <option value="$PROJECT_DIR$/modules/collectors/web" />
             <option value="$PROJECT_DIR$/modules/compiler-plugin" />
             <option value="$PROJECT_DIR$/modules/core" />
+            <option value="$PROJECT_DIR$/modules/dynamic" />
             <option value="$PROJECT_DIR$/modules/inline-style" />
             <option value="$PROJECT_DIR$/modules/ktor-server" />
             <option value="$PROJECT_DIR$/modules/localization" />

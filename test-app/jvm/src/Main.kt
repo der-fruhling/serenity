@@ -6,12 +6,13 @@ import net.derfruhling.serenity.ktor.server.createKtorLogger
 import net.derfruhling.serenity.ktor.server.startAwait
 
 fun main() {
+    commonMain()
     embeddedServer(Netty, applicationEnvironment {
         log = createKtorLogger()
     }, {
-                       connector {
-                           host = "127.0.0.1"
-                           port = 8080
-                       }
-                   }) { configure() }.startAwait()
+        connector {
+            host = "127.0.0.1"
+            port = 8080
+        }
+    }) { configure() }.startAwait()
 }

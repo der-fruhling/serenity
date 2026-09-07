@@ -5,6 +5,17 @@ plugins {
     kotlin("multiplatform")
 }
 
+plugins.withId("com.google.devtools.ksp") {
+    afterEvaluate {
+        tasks.named("linuxX64SourcesJar").configure { dependsOn("kspKotlinLinuxX64") }
+        tasks.named("linuxArm64SourcesJar").configure { dependsOn("kspKotlinLinuxArm64") }
+        tasks.named("macosArm64SourcesJar").configure { dependsOn("kspKotlinMacosArm64") }
+        tasks.named("jvmSourcesJar").configure { dependsOn("kspKotlinJvm") }
+        tasks.named("jsSourcesJar").configure { dependsOn("kspKotlinJs") }
+        tasks.named("wasmJsSourcesJar").configure { dependsOn("kspKotlinWasmJs") }
+    }
+}
+
 kotlin {
     jvmToolchain(25)
     jvm()

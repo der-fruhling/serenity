@@ -8,10 +8,29 @@ plugins {
     id("net.derfruhling.serenity.resources") apply false
     alias(libs.plugins.kotlin.ksp) apply false
     alias(libs.plugins.node.gradle) apply false
+
+    `version-catalog`
+    id("published")
 }
 
 allprojects {
     group = "net.derfruhling.serenity"
 
     apply(from = rootProject.file("common.gradle.kts"))
+}
+
+catalog {
+    versionCatalog {
+        from(files("gradle/serenity.versions.toml"))
+
+        version("serenity", project.version.toString())
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["versionCatalog"])
+        }
+    }
 }

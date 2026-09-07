@@ -69,7 +69,7 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
     }
 
     private fun FirAnnotation.getSideSimple(classLike: FirClassLikeDeclaration? = annotationTypeRef.firClassLike(session)): Side? {
-        return when (classLike?.classId) {
+        return when (classLike?.symbol?.classId) {
             clientClass -> Side.CLIENT
             serverClass -> Side.SERVER
             else -> null

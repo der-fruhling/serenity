@@ -1,5 +1,6 @@
 package net.derfruhling.serenity.compiler.ir
 
+import net.derfruhling.serenity.compiler.NotApplicable
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
@@ -11,12 +12,14 @@ class SerenityIrGenerationExtension : IrGenerationExtension {
         pluginContext: IrPluginContext
     ) {
         val transformers = listOf(
-            IrConstantNameGenerator(pluginContext),
-            IrSidedFunctionBodyDeleter(pluginContext)
+            ::IrConstantNameGenerator,
+            ::IrSidedFunctionBodyDeleter
         )
 
         for(transformer in transformers) {
-            transformer.lower(moduleFragment)
+            try {
+                transformer(pluginContext).lower(moduleFragment)
+            } catch(_: NotApplicable) {}
         }
     }
 }

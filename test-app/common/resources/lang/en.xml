@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang>
+  <test-app type="group">
+    <hello>Hello</hello>
+    <bold>
+      This is <b>bold</b>!
+    </bold>
+
+    <buttons type="group">
+      <clicks>Click count: <arg of="0" name="click count"/></clicks>
+    </buttons>
+  </test-app>
+</lang>

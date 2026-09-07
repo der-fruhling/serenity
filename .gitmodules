@@ -1,3 +1,0 @@
-[submodule "serene-wasm"]
-	path = gradle-plugin/serene-wasm
-	url = git@github.com:der-fruhling/serene-wasm.git

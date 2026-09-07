@@ -1,10 +1,21 @@
 package net.derfruhling.serenity.modularity
 
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+
 object Modules {
     private val loadedModules = mutableSetOf<Module>()
+    val onChanged: Event<() -> Unit> field = Event()
 
     fun install(fn: ModuleInstaller.() -> Unit) {
         InstallerImpl().apply(fn).done()
+        onChanged()
+    }
+
+    suspend fun createProvidedValues(context: ProvideContext) = coroutineScope {
+        loadedModules.forEach {
+            launch { it.useProvide(context) }
+        }
     }
 
     private class InstallerImpl : ModuleInstaller {
