@@ -19,6 +19,7 @@ serenity {
 
     dependencies {
         implementation(project(":serenity-core"))
+        implementation(project(":serenity-logging"))
         implementation(project(":serenity-localization"))
         implementation(project(":serenity-inline-style"))
         implementation(libs.androidx.compose.runtime)

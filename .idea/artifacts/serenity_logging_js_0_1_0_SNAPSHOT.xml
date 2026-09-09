@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="serenity-logging-js-0.1.0-SNAPSHOT">
+    <output-path>$PROJECT_DIR$/modules/logging/build/libs</output-path>
+    <root id="archive" name="serenity-logging-js-0.1.0-SNAPSHOT.jar">
+      <element id="module-output" name="serenity.serenity-logging.jsMain" />
+    </root>
+  </artifact>
+</component>

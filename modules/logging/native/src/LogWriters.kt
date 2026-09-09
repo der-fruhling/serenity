@@ -1,4 +1,4 @@
-package net.derfruhling.serenity
+package net.derfruhling.serenity.logging
 
 import io.github.oshai.kotlinlogging.Appender
 import io.github.oshai.kotlinlogging.Formatter

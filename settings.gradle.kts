@@ -57,6 +57,7 @@ fun collector(name: String, dirName: String = name) {
 module("compiler-plugin")
 module("annotations")
 module("core")
+module("logging")
 module("dynamic")
 module("localization")
 module("inline-style")

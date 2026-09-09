@@ -26,7 +26,7 @@ import net.derfruhling.serenity.modularity.ProvideContext
 import net.derfruhling.serenity.modularity.ServerContext
 import net.derfruhling.serenity.platform.HtmlCompositionContext
 import net.derfruhling.serenity.platform.RehydratingHtmlTree
-import net.derfruhling.serenity.tree.encodeToString
+import net.derfruhling.serenity.platform.encodeToString
 import net.derfruhling.serenity.platform.Document
 import net.derfruhling.serenity.platform.PlatformApplier
 

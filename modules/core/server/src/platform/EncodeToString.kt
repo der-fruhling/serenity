@@ -1,7 +1,6 @@
-package net.derfruhling.serenity.tree
+package net.derfruhling.serenity.platform
 
 import com.fleeksoft.ksoup.nodes.DocumentType
-import net.derfruhling.serenity.platform.Document
 
 fun Document.encodeToString(): String {
     if (real.node.documentType() == null) {
