@@ -11,11 +11,10 @@ import kotlinx.coroutines.yield
 import net.derfruhling.serenity.*
 import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.elements.Page
-import net.derfruhling.serenity.tree.HtmlCompositionContext
-import net.derfruhling.serenity.tree.RehydratingHtmlTree
+import net.derfruhling.serenity.platform.HtmlCompositionContext
+import net.derfruhling.serenity.platform.RehydratingHtmlTree
 import net.derfruhling.serenity.platform.PlatformApplier
 import net.derfruhling.serenity.platform.RealDocument
-import web.console.console
 import web.dom.Document
 import web.dom.document
 import net.derfruhling.serenity.platform.Document as PlatformDocument

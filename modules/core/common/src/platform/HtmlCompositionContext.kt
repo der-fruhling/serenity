@@ -1,4 +1,4 @@
-package net.derfruhling.serenity.tree
+package net.derfruhling.serenity.platform
 
 import androidx.compose.runtime.Recomposer
 

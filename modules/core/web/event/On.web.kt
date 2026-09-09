@@ -12,7 +12,7 @@ import net.derfruhling.serenity.SnapshotContext
 import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.htmlComposer
 import net.derfruhling.serenity.ifClient
-import net.derfruhling.serenity.tree.HtmlApplier
+import net.derfruhling.serenity.platform.HtmlApplier
 import net.derfruhling.serenity.platform.EventHandlerNode
 import kotlin.coroutines.CoroutineContext
 

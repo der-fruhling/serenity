@@ -3,6 +3,8 @@ package net.derfruhling.serenity.tree
 import androidx.compose.runtime.CompositionContext
 import androidx.compose.runtime.ReusableComposition
 import net.derfruhling.serenity.platform.Document
+import net.derfruhling.serenity.platform.HtmlApplier
+import net.derfruhling.serenity.platform.RehydratingHtmlTree
 
 fun RehydratingHtmlTree(
     parent: CompositionContext,

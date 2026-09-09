@@ -2,9 +2,6 @@ package net.derfruhling.serenity.platform
 
 import androidx.compose.runtime.Applier
 import net.derfruhling.serenity.Stack
-import net.derfruhling.serenity.platform.ChildNode
-import net.derfruhling.serenity.platform.ComposeNode
-import net.derfruhling.serenity.tree.HtmlApplier
 
 actual sealed interface RootNode
 

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReusableComposition
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.HtmlComposable
-import net.derfruhling.serenity.tree.HtmlCompositionContext
 
 private val logger = KotlinLogging.logger {}
 

@@ -1,9 +1,8 @@
-package net.derfruhling.serenity.tree
+package net.derfruhling.serenity.platform
 
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.attribute.Attribute
 import net.derfruhling.serenity.attribute.Attributes
-import net.derfruhling.serenity.platform.*
 import kotlin.jvm.JvmInline
 
 @JvmInline

@@ -5,7 +5,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.currentComposer
 import net.derfruhling.serenity.HtmlComposable
-import net.derfruhling.serenity.tree.HtmlApplier
+import net.derfruhling.serenity.platform.HtmlApplier
 
 @PublishedApi
 internal val reflowEnabled = compositionLocalOf { true }

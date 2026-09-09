@@ -2,7 +2,6 @@ package net.derfruhling.serenity.platform
 
 import androidx.compose.runtime.Applier
 import net.derfruhling.serenity.Name
-import net.derfruhling.serenity.tree.HtmlApplier
 
 expect sealed interface RootNode
 

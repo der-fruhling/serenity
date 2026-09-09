@@ -1,4 +1,4 @@
-package net.derfruhling.serenity.tree
+package net.derfruhling.serenity.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ControlledComposition
@@ -6,9 +6,6 @@ import androidx.compose.runtime.ReusableComposition
 import androidx.compose.runtime.snapshots.MutableSnapshot
 import androidx.compose.runtime.snapshots.Snapshot
 import net.derfruhling.serenity.HtmlComposable
-import net.derfruhling.serenity.platform.ElementNode
-import net.derfruhling.serenity.platform.NodeWithChildren
-import net.derfruhling.serenity.platform.RootNode
 
 class RehydratingHtmlTree<Node : RootNode> internal constructor(
     val root: Node,
