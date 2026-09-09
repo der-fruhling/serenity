@@ -55,17 +55,11 @@ suspend fun runDomComposeTest(
     launch { recomposer.runRecomposeAndApplyChanges() }
 
     try {
-        console.log("before yield")
         yield()
-        console.log("after yield")
         recomposer.awaitIdle()
-        console.log("after awaitIdle")
         DomComposeContext(recomposer, tree).after(document)
-        console.log("after all")
     } finally {
-        console.log("before cancel")
         recomposer.close()
         recomposer.join()
-        console.log("after cancel")
     }
 }

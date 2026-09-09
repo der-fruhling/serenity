@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.tooling.CompositionObserver
 import androidx.compose.runtime.tooling.ObservableComposition
 import androidx.compose.runtime.tooling.setObserver
+import io.github.oshai.kotlinlogging.KotlinLogging
 import js.objects.Object
 import js.objects.TypedPropertyDescriptor
 import js.promise.Promise
@@ -16,10 +17,9 @@ import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.modularity.CommonContext
 import net.derfruhling.serenity.modularity.Modules
 import net.derfruhling.serenity.modularity.ProvideContext
-import net.derfruhling.serenity.platform.ComposeNode
+import net.derfruhling.serenity.platform.*
 import net.derfruhling.serenity.tree.HtmlCompositionContext
 import net.derfruhling.serenity.tree.RehydratingHtmlTree
-import net.derfruhling.serenity.platform.*
 import web.console.console
 import web.dom.document
 import web.events.EventHandler
@@ -75,11 +75,14 @@ private external fun emptyObject(): JsAny
 
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class WebEntryPoint private constructor() : CommonContext {
+    private val logger = KotlinLogging.logger("net.derfruhling.serenity.WebEntryPoint")
+
     init {
         window.onpopstate = EventHandler { ev: PopStateEvent ->
             val state = ev.state
             if (state != null) {
                 val page = SerialRegistry.decodeFromObject<SerialPageHolder>(state)
+                logger.debug { "Backwards navigation to $page" }
                 navigateDirect(page as PageHolder<*>)
             }
         }
@@ -92,7 +95,7 @@ internal class WebEntryPoint private constructor() : CommonContext {
     }
 
     override suspend fun getManifest(): Manifest {
-        return if(manifestDeferred.isCompleted) {
+        return if (manifestDeferred.isCompleted) {
             _manifest
         } else manifestDeferred.await()
     }
@@ -128,13 +131,11 @@ internal class WebEntryPoint private constructor() : CommonContext {
     private fun initialize() {
         scope = CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock)
         scope.launch {
-            console.log(Formatter.formatString(Document.CURRENT::format))
-
             val initJob = launch { reinitialize() }
 
             htmlContext = HtmlCompositionContext(Recomposer(coroutineContext))
             htmlContextStartHandlers.forEach { it(htmlContext) }
-            val manifestRequest: Promise<JsAny?> = if(htmlContext.enableTestMode) {
+            val manifestRequest: Promise<JsAny?> = if (htmlContext.enableTestMode) {
                 Promise.resolve(emptyObject())
             } else {
                 fetchAsync("/_/application-manifest.json").flatThen {
@@ -142,9 +143,9 @@ internal class WebEntryPoint private constructor() : CommonContext {
                 }
             }
 
-            if(location.hash.isNotEmpty()) {
+            if (location.hash.isNotEmpty()) {
                 val properties = URLSearchParams(location.hash)
-                when(properties.get("debug".toJsString())?.toKotlinString()) {
+                when (properties.get("debug".toJsString())?.toKotlinString()) {
                     "", "yes", "true" -> htmlContext.enableDebugMode = true
                     "no", "false" -> htmlContext.enableDebugMode = false
                 }
@@ -161,16 +162,16 @@ internal class WebEntryPoint private constructor() : CommonContext {
             }
 
             launch {
-                console.debug("Entering recomposition loop")
+                logger.debug { "Entering recomposition loop" }
                 try {
                     htmlComposer.snapshot.enter {
                         htmlContext.compositionContext.runRecomposeAndApplyChanges()
                     }
-                    console.warn("Composition loop exited normally???")
-                } catch (_: CancellationException) {
-
+                    logger.warn { "Composition loop exited normally???" }
+                } catch (e: CancellationException) {
+                    logger.info(e) { "Recomposition loop was cancelled" }
                 } catch (e: Exception) {
-                    console.error("Recomposition loop stopped\n${e.stackTraceToString()}")
+                    logger.error(e) { "Recomposition loop stopped" }
                     alert("An error has occurred: ${e::class.simpleName}\n${e.message}")
                 }
             }
@@ -179,6 +180,7 @@ internal class WebEntryPoint private constructor() : CommonContext {
                 val manifestJson = manifestRequest.await()
                 SerialRegistry.decodeFromObject<Manifest>(manifestJson!!)
             } catch (e: Exception) {
+                logger.error(e) { "Error occurred fetching application manifest" }
                 alert(
                     "An error occurred trying to fetch the application manifest: ${e::class.simpleName}\n${e.message}\n\n" +
                         "If you're the developer of this site, this error is likely due to a misconfiguration. " +
@@ -195,11 +197,15 @@ internal class WebEntryPoint private constructor() : CommonContext {
             }
 
             initialized = true
-            if(!htmlContext.enableTestMode) {
+            if (!htmlContext.enableTestMode) {
                 // first apply what should be the server's version
                 setPageContent()
 
-                console.debug(htmlComposer.rootElement.dom)
+                logger.atDebug {
+                    message = "Initial DOM state"
+                    payload = mapOf("element" to htmlComposer.rootElement.dom)
+                }
+
                 document.replaceChild(htmlComposer.rootElement.dom, document.documentElement)
 
                 // then, update the tree with the client's version
@@ -231,7 +237,11 @@ internal class WebEntryPoint private constructor() : CommonContext {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            logger.error(e) {
+                "An error occurred setting the page contents. " +
+                    "@Composable functions should almost never throw uncaught exceptions; if this " +
+                    "error comes from Serenity, consider making a bug report."
+            }
             alert("An error occurred: ${e::class.simpleName}\n${e.message}")
             throw e
         }
