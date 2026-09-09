@@ -91,8 +91,13 @@ internal class WebEntryPoint private constructor() : CommonContext {
             ))
     }
 
+    override suspend fun getManifest(): Manifest {
+        return if(manifestDeferred.isCompleted) {
+            _manifest
+        } else manifestDeferred.await()
+    }
+
     private lateinit var _manifest: Manifest
-    override val manifest: Manifest by ::_manifest
     private var first: Boolean = true
     private var initialized: Boolean = false
     private var clientMode by mutableStateOf(false)
@@ -111,6 +116,7 @@ internal class WebEntryPoint private constructor() : CommonContext {
     }
 
     private lateinit var scope: CoroutineScope
+    private val manifestDeferred = CompletableDeferred<Manifest>()
 
     suspend fun reinitialize() {
         moduleProvidedState = ProvideContextImpl()
@@ -123,6 +129,8 @@ internal class WebEntryPoint private constructor() : CommonContext {
         scope = CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock)
         scope.launch {
             console.log(Formatter.formatString(Document.CURRENT::format))
+
+            val initJob = launch { reinitialize() }
 
             htmlContext = HtmlCompositionContext(Recomposer(coroutineContext))
             htmlContextStartHandlers.forEach { it(htmlContext) }
@@ -179,11 +187,12 @@ internal class WebEntryPoint private constructor() : CommonContext {
                 Manifest(mutableMapOf())
             }
 
+            manifestDeferred.complete(_manifest)
+            initJob.join()
+
             Modules.onChanged.subscribe {
                 launch { reinitialize() }
             }
-
-            reinitialize()
 
             initialized = true
             if(!htmlContext.enableTestMode) {

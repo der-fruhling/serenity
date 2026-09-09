@@ -9,6 +9,7 @@ private data class Option(val tag: LanguageTag, val quality: Float)
 internal actual suspend fun ProvideContext.actualProvide() {
     check(this is ServerContext) { "'this' must be implement ServerContext when calling provide() on the server" }
 
+    val manifest = getManifest()
     val avail = manifest[AvailableLocalizations::class] ?: return
     val resolver = manifest.findOf<ResourceResolver>() ?: ResourceResolver.Default
 

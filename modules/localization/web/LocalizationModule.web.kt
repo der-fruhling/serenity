@@ -10,6 +10,7 @@ private data class Option(val tag: LanguageTag, val quality: Float)
 
 @OptIn(ExperimentalWasmJsInterop::class)
 internal actual suspend fun ProvideContext.actualProvide() {
+    val manifest = getManifest()
     val avail = manifest[AvailableLocalizations::class] ?: return
     val resolver = manifest.findOf<ResourceResolver>() ?: ResourceResolver.Default
 

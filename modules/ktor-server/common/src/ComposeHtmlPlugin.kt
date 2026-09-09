@@ -130,8 +130,9 @@ val ComposeHtml = createApplicationPlugin(
 }
 
 private abstract class CommonContextImpl(private val call: ApplicationCall) : CommonContext, ServerContext {
-    override val manifest: Manifest
-        get() = call.currentManifest
+    override suspend fun getManifest(): Manifest {
+        return call.currentManifest
+    }
 
     override fun getHeader(name: String): String? {
         return call.request.header(name)
