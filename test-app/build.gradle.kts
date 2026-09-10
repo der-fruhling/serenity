@@ -15,7 +15,6 @@ dependencies {
 
 serenity {
     javaVersion = 25
-    disableDefaultDependencies = true
 
     dependencies {
         implementation(project(":serenity-core"))

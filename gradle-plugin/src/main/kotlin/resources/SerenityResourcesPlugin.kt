@@ -9,7 +9,6 @@ import org.gradle.api.artifacts.type.ArtifactTypeDefinition
 import org.gradle.api.attributes.Usage
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.internal.model.NamedObjectInstantiator
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Sync
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.*
@@ -173,10 +172,10 @@ class SerenityResourcesPlugin @Inject constructor(
         }
 
         target.plugins.withType(SerenityApplicationPlugin::class) {
-            val composeApplicationManifest =
+            val serenityComposeManifestTask =
                 target.tasks.register(
                     "composeApplicationManifest",
-                    ComposeApplicationManifest::class
+                    SerenityComposeManifestTask::class
                 ) {
                     description =
                         "Builds the final application-manifest.json file for release builds"
@@ -184,10 +183,10 @@ class SerenityResourcesPlugin @Inject constructor(
                     outputManifest.set(target.layout.buildDirectory.file("resources/release-manifest/application-manifest.json"))
                 }
 
-            val composeApplicationManifestDebug =
+            val serenityComposeManifestTaskDebug =
                 target.tasks.register(
                     "composeApplicationManifestDebug",
-                    ComposeApplicationManifest::class
+                    SerenityComposeManifestTask::class
                 ) {
                     description = "Builds the final application-manifest.json file for debug builds"
                     prettyJson.convention(ext.prettyJson)
@@ -237,7 +236,7 @@ class SerenityResourcesPlugin @Inject constructor(
                     prettyJson.convention(ext.prettyJson)
                 }
 
-                composeApplicationManifest.configure {
+                serenityComposeManifestTask.configure {
                     dependsOn(vendorServerResources, locatePageScript)
                     sourceFragments.from(
                         vendorServerResources.get().resourceIndexFile,
@@ -245,7 +244,7 @@ class SerenityResourcesPlugin @Inject constructor(
                     )
                 }
 
-                composeApplicationManifestDebug.configure {
+                serenityComposeManifestTaskDebug.configure {
                     dependsOn(locatePageScriptDebug)
                     sourceFragments.from(
                         locatePageScriptDebug.get().outputFile
@@ -254,8 +253,8 @@ class SerenityResourcesPlugin @Inject constructor(
 
                 this.serverExtension.apply {
                     resourceTask.set(vendorServerResources.name)
-                    composeApplicationManifestTask.set(composeApplicationManifest.name)
-                    composeApplicationManifestDebugTask.set(composeApplicationManifestDebug.name)
+                    composeApplicationManifestTask.set(serenityComposeManifestTask.name)
+                    composeApplicationManifestDebugTask.set(serenityComposeManifestTaskDebug.name)
                 }
             }
         }

@@ -1,7 +1,5 @@
 package net.derfruhling.serenity.gradle.resources
 
-import com.akuleshov7.ktoml.Toml
-import kotlinx.serialization.decodeFromString
 import net.derfruhling.serenity.gradle.SerenityBasePlugin
 import net.derfruhling.serenity.gradle.SerenityExtension
 import org.gradle.api.InvalidUserDataException
@@ -47,7 +45,7 @@ class SerenityLocalizationPlugin : Plugin<Project> {
             }
         }
 
-        target.tasks.withType<ComposeApplicationManifest>().configureEach {
+        target.tasks.withType<SerenityComposeManifestTask>().configureEach {
             dependsOn(parseLocale)
 
             sourceFragments.from(parseLocale.map { it.configOutput })

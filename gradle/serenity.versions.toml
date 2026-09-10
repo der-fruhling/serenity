@@ -4,10 +4,34 @@ serenity = "0.1.0-SNAPSHOT"
 [libraries]
 annotations = { module = "net.derfruhling.serenity:serenity-annotations", version.ref = "serenity" }
 core = { module = "net.derfruhling.serenity:serenity-core", version.ref = "serenity" }
+logging = { module = "net.derfruhling.serenity:serenity-logging", version.ref = "serenity" }
 server-ktor = { module = "net.derfruhling.serenity:serenity-ktor-server", version.ref = "serenity" }
 component-inlineStyle = { module = "net.derfruhling.serenity:serenity-inline-style", version.ref = "serenity" }
+component-dynamic = { module = "net.derfruhling.serenity:serenity-dynamic", version.ref = "serenity" }
 component-localization = { module = "net.derfruhling.serenity:serenity-localization", version.ref = "serenity" }
 test = { module = "net.derfruhling.serenity:serenity-test", version.ref = "serenity" }
+collectors-common = { module = "net.derfruhling.serenity:serenity-common-collector", version.ref = "serenity" }
+collectors-ktor = { module = "net.derfruhling.serenity:serenity-ktor-collector", version.ref = "serenity" }
+collectors-lib = { module = "net.derfruhling.serenity:serenity-collector-lib", version.ref = "serenity" }
+collectors-web = { module = "net.derfruhling.serenity:serenity-web-collector", version.ref = "serenity" }
+
+[bundles]
+core = [
+    "core",
+    "annotations",
+    "logging"
+]
+complete = [
+    "core",
+    "annotations",
+    "logging",
+    "component-inlineStyle",
+    "component-dynamic",
+    "component-localization"
+]
+ktor = [
+    "server-ktor"
+]
 
 [plugins]
 base = { id = "net.derfruhling.serenity.base", version.ref = "serenity" }
@@ -16,5 +40,5 @@ server = { id = "net.derfruhling.serenity.server", version.ref = "serenity" }
 web = { id = "net.derfruhling.serenity.web", version.ref = "serenity" }
 conventions = { id = "net.derfruhling.serenity.convention", version.ref = "serenity" }
 resources = { id = "net.derfruhling.serenity.resources", version.ref = "serenity" }
-all = { id = "net.derfruhling.serenity", version.ref = "serenity" }
+simple = { id = "net.derfruhling.serenity", version.ref = "serenity" }
 stylist-sass = { id = "net.derfruhling.serenity.stylist-sass", version.ref = "serenity" }
