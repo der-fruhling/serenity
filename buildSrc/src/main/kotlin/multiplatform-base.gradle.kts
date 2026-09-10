@@ -13,6 +13,12 @@ plugins.withId("com.google.devtools.ksp") {
         tasks.named("jvmSourcesJar").configure { dependsOn("kspKotlinJvm") }
         tasks.named("jsSourcesJar").configure { dependsOn("kspKotlinJs") }
         tasks.named("wasmJsSourcesJar").configure { dependsOn("kspKotlinWasmJs") }
+        tasks.named("compileKotlinLinuxX64").configure { dependsOn("kspKotlinLinuxX64", "kspCommonMainKotlinMetadata", "kspServerMainKotlinMetadata") }
+        tasks.named("compileKotlinLinuxArm64").configure { dependsOn("kspKotlinLinuxArm64", "kspCommonMainKotlinMetadata", "kspServerMainKotlinMetadata") }
+        tasks.named("compileKotlinMacosArm64").configure { dependsOn("kspKotlinMacosArm64", "kspCommonMainKotlinMetadata", "kspServerMainKotlinMetadata") }
+        tasks.named("compileKotlinJvm").configure { dependsOn("kspKotlinJvm", "kspCommonMainKotlinMetadata", "kspServerMainKotlinMetadata") }
+        tasks.named("compileKotlinJs").configure { dependsOn("kspKotlinJs", "kspCommonMainKotlinMetadata", "kspWebMainKotlinMetadata") }
+        tasks.named("compileKotlinWasmJs").configure { dependsOn("kspKotlinWasmJs", "kspCommonMainKotlinMetadata", "kspWebMainKotlinMetadata") }
     }
 }
 

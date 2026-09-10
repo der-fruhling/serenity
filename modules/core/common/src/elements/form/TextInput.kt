@@ -3,7 +3,7 @@ package net.derfruhling.serenity.elements.form
 import androidx.compose.runtime.*
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.attribute
-import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.dom.HTMLInputElement
 import net.derfruhling.serenity.elements.StyleClasses
 import net.derfruhling.serenity.event.Event
@@ -114,14 +114,14 @@ private fun commonTextInputUpdater(
 
     setCommonClasses(type)
 
-    attribute(Attributes.type, type.actual)
-    attribute(Attributes.name, name)
-    attribute(Attributes.id, id)
-    attribute(Attributes.placeholder, placeholder)
+    attribute(HtmlAttributes.type, type.actual)
+    attribute(HtmlAttributes.name, name)
+    attribute(HtmlAttributes.id, id)
+    attribute(HtmlAttributes.placeholder, placeholder)
 
     if (isServerStatic && initialText.isNotEmpty()) {
         init(initialText) {
-            attribute(Attributes.value, it)
+            attribute(HtmlAttributes.value, it)
         }
     }
 }

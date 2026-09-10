@@ -6,12 +6,17 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName($$"$data")
-class SerialSavedData private constructor(
+internal class SerialSavedData private constructor(
     internal val items: Map<String, List<@Polymorphic Any?>>
 ) {
     val isEmpty: Boolean get() = items.isEmpty()
 
-    fun items() = items.mapValues { (_, value) -> mapList(value, ::fromSerial) }
+    fun items() = items.mapValues { (_, value) ->
+        SerialMapping.mapList(
+            value,
+            SerialMapping::fromSerial
+        )
+    }
 
     override fun toString(): String {
         return "SerialSavedData(items=$items)"
@@ -21,7 +26,7 @@ class SerialSavedData private constructor(
         val empty = SerialSavedData(emptyMap())
 
         fun of(value: Map<String, List<Any?>>) = SerialSavedData(
-            value.mapValues { (_, value) -> mapList(value, ::toSerial) }
+            value.mapValues { (_, value) -> SerialMapping.mapList(value, SerialMapping::toSerial) }
         )
     }
 }

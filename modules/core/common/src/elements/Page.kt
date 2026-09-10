@@ -2,21 +2,16 @@ package net.derfruhling.serenity.elements
 
 import androidx.compose.runtime.*
 import net.derfruhling.serenity.*
-import net.derfruhling.serenity.annotations.UnescapedTextDanger
-import net.derfruhling.serenity.attribute.Attributes
-import net.derfruhling.serenity.manifest.Preload
-import net.derfruhling.serenity.manifest.ResourceResolver
-import net.derfruhling.serenity.manifest.ScriptLocation
-import net.derfruhling.serenity.manifest.preloadSetLocal
+import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.platform.ElementNode
-import kotlin.time.Duration.Companion.hours
 
 @Composable
+@HtmlComposable
 fun html(lang: String = "en", content: @Composable HtmlContext.() -> Unit) {
     DocumentType()
 
     Element(name = "html", update = {
-        set(lang) { attribute(Attributes.lang, it) }
+        set(lang) { attribute(HtmlAttributes.lang, it) }
     }) { HtmlContext.content() }
 }
 
@@ -41,22 +36,11 @@ object PageContext {
             fn()
         }
     }
-
-    @Composable
-    @NonRestartableComposable
-    inline fun Layout(
-        crossinline updateBody: Updater<ElementNode>.() -> Unit = {},
-        crossinline fn: @Composable () -> Unit
-    ) {
-        Body(updateBody = {
-            init { classes.add(StyleClasses.PageLayout) }
-            updateBody()
-        }) { fn() }
-    }
 }
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
+@HtmlComposable
 fun Page(
     lang: String = "en",
     body: @Composable PageContext.() -> Unit

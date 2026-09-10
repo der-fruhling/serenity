@@ -5,7 +5,7 @@ import androidx.compose.runtime.remember
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.attribute
-import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.dom.HTMLSelectElement
 import net.derfruhling.serenity.event.*
 
@@ -20,10 +20,10 @@ sealed class SelectOptions {
     ) {
         Element(
             update = {
-                attribute(Attributes.value, value)
-                attribute(Attributes.label, label)
-                attribute(Attributes.disabled, disabled)
-                attribute(Attributes.selected, selected)
+                attribute(HtmlAttributes.value, value)
+                attribute(HtmlAttributes.label, label)
+                attribute(HtmlAttributes.disabled, disabled)
+                attribute(HtmlAttributes.selected, selected)
             },
             "option", fn
         )
@@ -40,10 +40,10 @@ sealed class SelectOptions {
     ) {
         Element(
             update = {
-                attribute(Attributes.value, value)
-                attribute(Attributes.label, label, keepNulls = false)
-                attribute(Attributes.disabled, disabled)
-                attribute(Attributes.selected, selected)
+                attribute(HtmlAttributes.value, value)
+                attribute(HtmlAttributes.label, label, keepNulls = false)
+                attribute(HtmlAttributes.disabled, disabled)
+                attribute(HtmlAttributes.selected, selected)
             },
             "option"
         ) {
@@ -62,8 +62,8 @@ sealed class SelectOptionsRoot : SelectOptions() {
     ) {
         Element(
             update = {
-                attribute(Attributes.label, label)
-                attribute(Attributes.disabled, disabled)
+                attribute(HtmlAttributes.label, label)
+                attribute(HtmlAttributes.disabled, disabled)
             },
             "optgroup"
         ) { fn() }
@@ -99,12 +99,12 @@ fun Select(
 
     Element(
         update = {
-            attribute(Attributes.name, name)
-            attribute(Attributes.id, id)
-            attribute(Attributes.multiple, multiple)
-            attribute(Attributes.autofocus, autofocus)
-            attribute(Attributes.disabled, disabled)
-            attribute(Attributes.form, form)
+            attribute(HtmlAttributes.name, name)
+            attribute(HtmlAttributes.id, id)
+            attribute(HtmlAttributes.multiple, multiple)
+            attribute(HtmlAttributes.autofocus, autofocus)
+            attribute(HtmlAttributes.disabled, disabled)
+            attribute(HtmlAttributes.form, form)
         },
         "select"
     ) {

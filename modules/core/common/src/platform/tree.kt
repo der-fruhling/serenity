@@ -2,7 +2,7 @@ package net.derfruhling.serenity.platform
 
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.attribute.Attribute
-import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.HtmlAttributes
 import kotlin.jvm.JvmInline
 
 @JvmInline
@@ -40,7 +40,7 @@ value class Builder<N : ComposeNode>(val node: N) {
         body: Builder<ElementNode>.() -> Unit
     ): ElementNode =
         element("html") {
-            attribute(Attributes.lang, lang)
+            attribute(HtmlAttributes.lang, lang)
 
             element("head") {
                 element("title") {

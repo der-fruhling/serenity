@@ -1,9 +1,12 @@
 @file:GenerateServerStubs
+@file:OptIn(ExperimentalJsNoRuntime::class)
 
 package net.derfruhling.serenity.dom
 
 import net.derfruhling.serenity.annotations.GenerateServerStubs
 import net.derfruhling.serenity.platform.ElementNode
+import kotlin.js.ExperimentalJsNoRuntime
+import kotlin.js.JsNoRuntime
 
 expect open class Element : EventTarget
 
@@ -20,6 +23,7 @@ expect open class DomValidityState {
     val valueMissing: Boolean
 }
 
+@JsNoRuntime
 expect interface DomValidationTarget {
     val validationMessage: String
     val validity: DomValidityState

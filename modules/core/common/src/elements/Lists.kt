@@ -6,19 +6,7 @@ import net.derfruhling.serenity.Text
 
 abstract class GenericList<T : GenericList<T>> {
     @Composable
-    fun Entry(fn: @Composable () -> Unit) {
-        Element("li", fn)
-    }
-
-    @Composable
-    fun Entry(text: String) {
-        Element("li") {
-            Text(text)
-        }
-    }
-
-    @Composable
-    fun Entry(text: String, fn: @Composable () -> Unit) {
+    fun Entry(text: String = "", fn: @Composable () -> Unit = {}) {
         Element("li") {
             Text(text)
             fn()

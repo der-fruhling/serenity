@@ -7,11 +7,14 @@ import net.derfruhling.serenity.elements.HeadContext
 @Stable
 interface TemplateBuilder {
     @Composable
+    @HtmlComposable
     fun HeadContext.SlotHead()
 
     @Composable
-    fun WithPage(fn: @Composable (PageHolder<*>) -> Unit)
+    @HtmlComposable
+    fun WithPage(fn: @Composable @HtmlComposable (PageHolder<*>) -> Unit)
 
     @Composable
+    @HtmlComposable
     fun SlotBody()
 }

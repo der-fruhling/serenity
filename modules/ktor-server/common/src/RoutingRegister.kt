@@ -1,4 +1,4 @@
-package net.derfruhling.serenity.ktor.server
+package net.derfruhling.serenity.server.ktor
 
 import androidx.compose.runtime.*
 import io.ktor.server.application.ApplicationCall

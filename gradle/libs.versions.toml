@@ -15,7 +15,7 @@ kotlinx-datetime = "0.8.0"
 kotlin-wrappers = "2026.9.0"
 kotlin-logging = "8.0.4"
 ktor = "3.5.2"
-ksp-version = "2.3.10"
+ksp-version = "2.3.12"
 node-gradle = "7.1.0"
 
 # https://github.com/gmazzo/gradle-buildconfig-plugin
@@ -80,6 +80,6 @@ kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.re
 kotlinx-atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicfu" }
 sassBase = { id = "io.freefair.sass-base", version = "9.5.0" }
 stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.12.0" }
-kotlin-ksp = { id = "com.google.devtools.ksp", version = "2.3.10" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-version" }
 node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig"}

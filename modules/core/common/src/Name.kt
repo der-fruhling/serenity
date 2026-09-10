@@ -3,7 +3,7 @@ package net.derfruhling.serenity
 import androidx.compose.runtime.Immutable
 
 @Immutable
-abstract class Name {
+sealed class Name {
     abstract val namespaceUrl: String?
     abstract val namespace: String?
     abstract val localName: String
@@ -32,7 +32,7 @@ abstract class Name {
     }
 
     companion object {
-        val HTML_NS: String = "http://www.w3.org/1999/xhtml"
+        const val HTML_NS: String = "http://www.w3.org/1999/xhtml"
 
         fun of(name: String): Name {
             return Simple(name)

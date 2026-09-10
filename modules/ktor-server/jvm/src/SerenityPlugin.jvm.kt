@@ -1,4 +1,4 @@
-package net.derfruhling.serenity.ktor.server
+package net.derfruhling.serenity.server.ktor
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.engine.*
@@ -26,7 +26,7 @@ actual fun <E : ApplicationEngine, C : ApplicationEngine.Configuration> Embedded
         startSuspend(wait = true)
     }
 
-actual fun ComposeHtmlConfig.readManifest(): String {
+actual fun SerenityConfig.readManifest(): String {
     return if (manifestAlwaysInFileSystem) {
         SystemFileSystem.source(manifestPath).use {
             it.buffered().readString()

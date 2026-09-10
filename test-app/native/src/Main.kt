@@ -2,8 +2,8 @@ package net.derfruhling.serenity.testapp
 
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import net.derfruhling.serenity.ktor.server.createKtorLogger
-import net.derfruhling.serenity.ktor.server.startAwait
+import net.derfruhling.serenity.server.ktor.createKtorLogger
+import net.derfruhling.serenity.server.ktor.startAwait
 import net.derfruhling.serenity.logging.setupSimpleLogging
 
 fun main() = setupSimpleLogging {

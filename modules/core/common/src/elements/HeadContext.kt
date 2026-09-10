@@ -8,7 +8,7 @@ import net.derfruhling.serenity.SerialPageHolder
 import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.UnescapedTextDanger
-import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.ResourceResolver
 import net.derfruhling.serenity.manifest.ScriptLocation
@@ -27,8 +27,8 @@ object HeadContext {
         Element(
             name = "script",
             update = {
-                set(async) { attribute(Attributes.async, it) }
-                set(defer) { attribute(Attributes.defer, it) }
+                set(async) { attribute(HtmlAttributes.async, it) }
+                set(defer) { attribute(HtmlAttributes.defer, it) }
             }
         ) {
             Data(javascript)
@@ -39,9 +39,9 @@ object HeadContext {
         Element(
             name = "script",
             update = {
-                set(uri) { attribute(Attributes.src, it) }
-                set(async) { attribute(Attributes.async, it) }
-                set(defer) { attribute(Attributes.defer, it) }
+                set(uri) { attribute(HtmlAttributes.src, it) }
+                set(async) { attribute(HtmlAttributes.async, it) }
+                set(defer) { attribute(HtmlAttributes.defer, it) }
             }
         )
 
@@ -67,8 +67,8 @@ object HeadContext {
         Element(
             name = "link",
             update = {
-                set(rel) { attribute(Attributes.rel, it) }
-                set(href) { attribute(Attributes.href, it) }
+                set(rel) { attribute(HtmlAttributes.rel, it) }
+                set(href) { attribute(HtmlAttributes.href, it) }
             }
         )
     }

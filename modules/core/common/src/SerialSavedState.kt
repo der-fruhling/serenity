@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName($$"$state")
-class SerialSavedState private constructor(
+internal class SerialSavedState private constructor(
     internal val items: Map<String, @Polymorphic Any?>
 ) {
     override fun toString(): String {
@@ -15,7 +15,7 @@ class SerialSavedState private constructor(
 
     companion object {
         fun of(items: Map<String, Any?>) = SerialSavedState(
-            items.mapValues { (_, value) -> toSerial(value) }
+            items.mapValues { (_, value) -> SerialMapping.toSerial(value) }
         )
     }
 }

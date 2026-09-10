@@ -22,12 +22,12 @@ class ExpectProcessor(
     override fun process(resolver: Resolver): List<KSAnnotated> {
         resolver.getAllFiles()
             .filter { it.isAnnotationPresent(PlatformDefinitions::class) }
-            .filter { it.validate() }
+            .filter { it.validate(enableNewFeatures = true) }
             .toList()
             .forEach { it.accept(PlatformAcceptor(), Unit) }
 
         resolver.getSymbolsWithAnnotation(RegisterPage::class.qualifiedName!!)
-            .filter { it.validate() }
+            .filter { it.validate(enableNewFeatures = true) }
             .filterIsInstance<KSFunctionDeclaration>()
             .toList()
             .forEach { it.accept(Acceptor(), Unit) }
@@ -35,13 +35,13 @@ class ExpectProcessor(
         return emptyList()
     }
 
-    inner class PlatformAcceptor : KSVisitorVoid() {
+    inner class PlatformAcceptor : KSVisitorVoid(enableNewFeatures = true) {
         override fun visitFile(file: KSFile, data: Unit) {
             platformDefs = file.packageName.asString()
         }
     }
 
-    inner class Acceptor : KSVisitorVoid() {
+    inner class Acceptor : KSVisitorVoid(enableNewFeatures = true) {
         override fun visitFunctionDeclaration(function: KSFunctionDeclaration, data: Unit) {
             codeGenerator.createNewFile(
                 Dependencies(false, function.containingFile!!),

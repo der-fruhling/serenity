@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.attribute
 import net.derfruhling.serenity.attribute.AttributeValue
-import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.attribute.Rel
 import net.derfruhling.serenity.event.ElementEvent
 import net.derfruhling.serenity.event.Handler
@@ -51,15 +51,15 @@ fun Form(
 
     Element(
         update = {
-            attribute(Attributes.`accept-charset`, acceptCharset)
-            attribute(Attributes.action, action)
-            attribute(Attributes.autocomplete, autocomplete)
-            attribute(Attributes.enctype, encType)
-            attribute(Attributes.method, method)
-            attribute(Attributes.name, name)
-            attribute(Attributes.novalidate, novalidate)
-            attribute(Attributes.rel, rel?.asValue)
-            attribute(Attributes.target, target)
+            attribute(HtmlAttributes.`accept-charset`, acceptCharset)
+            attribute(HtmlAttributes.action, action)
+            attribute(HtmlAttributes.autocomplete, autocomplete)
+            attribute(HtmlAttributes.enctype, encType)
+            attribute(HtmlAttributes.method, method)
+            attribute(HtmlAttributes.name, name)
+            attribute(HtmlAttributes.novalidate, novalidate)
+            attribute(HtmlAttributes.rel, rel?.asValue)
+            attribute(HtmlAttributes.target, target)
         },
         "form", fn
     )

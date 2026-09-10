@@ -1,4 +1,4 @@
-package net.derfruhling.serenity.ktor.server
+package net.derfruhling.serenity.server.ktor
 
 import io.ktor.http.*
 import io.ktor.http.content.*

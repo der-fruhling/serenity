@@ -1,4 +1,4 @@
-package net.derfruhling.serenity.ktor.server
+package net.derfruhling.serenity.server.ktor
 
 import androidx.compose.runtime.*
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -32,7 +32,7 @@ import net.derfruhling.serenity.platform.PlatformApplier
 
 private val logger = KotlinLogging.logger {}
 
-interface ComposeHtmlConfig {
+interface SerenityConfig {
     var manifestPath: Path
     var manifestAlwaysInFileSystem: Boolean
 
@@ -44,7 +44,7 @@ fun interface Transformer {
     fun ApplicationCall.cacheKey(tree: Document): Int? = null
 }
 
-private class ComposeHtmlConfigImpl : ComposeHtmlConfig {
+private class SerenityConfigImpl : SerenityConfig {
     override var manifestPath: Path = Path("application-manifest.json")
     override var manifestAlwaysInFileSystem: Boolean = false
     val transformations = mutableListOf<Transformer>()
@@ -55,7 +55,7 @@ private class ComposeHtmlConfigImpl : ComposeHtmlConfig {
     }
 }
 
-expect fun ComposeHtmlConfig.readManifest(): String
+expect fun SerenityConfig.readManifest(): String
 
 class KtorHtmlCompositionContext(
     recomposer: Recomposer,
@@ -85,7 +85,7 @@ inline val currentCall: ApplicationCall
     @ReadOnlyComposable
     inline get() = applicationCallLocal.current
 
-private val contextKey = AttributeKey<KtorHtmlCompositionContext>("htmlCompositionContext")
+private val contextKey = AttributeKey<KtorHtmlCompositionContext>("serenityCompositionContext")
 private val manifestKey = AttributeKey<Manifest>("serenityManifest")
 internal val staticFilePath = AttributeKey<String>("staticFilePath")
 
@@ -95,11 +95,11 @@ val ApplicationCall.compositionContext: KtorHtmlCompositionContext
 val ApplicationCall.currentManifest: Manifest
     get() = attributes[manifestKey]
 
-val ComposeHtml = createApplicationPlugin(
-    "ComposeHtml",
-    { ComposeHtmlConfigImpl() as ComposeHtmlConfig }
+val Serenity = createApplicationPlugin(
+    "Serenity",
+    { SerenityConfigImpl() as SerenityConfig }
 ) {
-    val impl = pluginConfig as ComposeHtmlConfigImpl
+    val impl = pluginConfig as SerenityConfigImpl
     val context =
         KtorHtmlCompositionContext(
             Recomposer(application.coroutineContext),

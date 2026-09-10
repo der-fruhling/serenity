@@ -2,12 +2,12 @@ package net.derfruhling.serenity.testapp
 
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
-import net.derfruhling.serenity.ktor.server.ComposeHtml
-import net.derfruhling.serenity.ktor.server.registerServerPages
-import net.derfruhling.serenity.ktor.server.serveStatic
+import net.derfruhling.serenity.server.ktor.Serenity
+import net.derfruhling.serenity.server.ktor.registerServerPages
+import net.derfruhling.serenity.server.ktor.serveStatic
 
 fun Application.configure() {
-    install(ComposeHtml)
+    install(Serenity)
 
     routing {
         serveStatic()

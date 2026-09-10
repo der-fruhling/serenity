@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName($$"$mutable")
-data class MutableStateWrapper<T>(val state: T)
+internal data class MutableStateWrapper<T>(val state: T)

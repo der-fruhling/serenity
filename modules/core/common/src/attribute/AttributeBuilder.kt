@@ -29,7 +29,7 @@ class AttributeBuilder<T : Any>(val name: Name, val kClass: KClass<T>) {
         parser = fn
     }
 
-    fun build() = ConfiguredAttribute(
+    fun build(): Attribute<T> = ConfiguredAttribute(
         name,
         parser,
         kClass,

@@ -1,35 +1,8 @@
 package net.derfruhling.serenity.elements
 
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
+private typealias Augment = AbstractPrefixedStyleClassContainer
 
-object StyleClasses {
-    private val regex = Regex("(?<!^)[A-Z]")
-
-    private fun hyphenate(name: String) = name.replace(regex) { '-' + it.value.lowercase() }
-
-    private val lazyClass
-        get() = object : ReadOnlyProperty<Any?, String> {
-            private var value: String? = null
-
-            override fun getValue(thisRef: Any?, property: KProperty<*>): String {
-                if (value == null) value = "s-${property.name}"
-                return value!!
-            }
-        }
-
-    abstract class Augment(val prefix: String) {
-        protected val lazyAugment
-            get() = object : ReadOnlyProperty<Any?, String> {
-                private var value: String? = null
-
-                override fun getValue(thisRef: Any?, property: KProperty<*>): String {
-                    if (value == null) value = prefix + '-' + hyphenate(property.name)
-                    return value!!
-                }
-            }
-    }
-
+object StyleClasses : AbstractPrefixedStyleClassContainer("s", false) {
     val FlexColumn by lazyClass
     val FlexRow by lazyClass
     val PageLayout by lazyClass
@@ -37,16 +10,16 @@ object StyleClasses {
     val TextInput by lazyClass
     val SearchInput by lazyClass
 
-    abstract class Axis(prefix: String) : Augment(prefix) {
-        val start by lazyAugment
-        val center by lazyAugment
-        val end by lazyAugment
+    sealed class Axis(prefix: String) : Augment(prefix) {
+        val start by lazyClass
+        val center by lazyClass
+        val end by lazyClass
     }
 
     object CrossAxis : Axis("cross") {
-        val spaceEvenly by lazyAugment
-        val spaceAround by lazyAugment
-        val spaceBetween by lazyAugment
+        val spaceEvenly by lazyClass
+        val spaceAround by lazyClass
+        val spaceBetween by lazyClass
     }
 
     object MainAxis : Axis("main")

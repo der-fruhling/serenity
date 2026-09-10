@@ -7,7 +7,7 @@ import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.PageHolder
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.ClientOnly
-import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.defaultFn
 import net.derfruhling.serenity.event.ClickEvent
 import net.derfruhling.serenity.event.On
@@ -35,7 +35,7 @@ private fun LinkAnchor(
     }
 
     Element(name = "a", update = {
-        set(actualLink) { attribute(Attributes.href, it) }
+        set(actualLink) { attribute(HtmlAttributes.href, it) }
     }) {
         fn()
     }
@@ -73,7 +73,7 @@ private fun LinkAnchor(
     val actualLink = remember(to, linkBase) { to.constructActualAddress(linkBase) }
 
     Element(name = "a", update = {
-        set(actualLink) { attribute(Attributes.href, it) }
+        set(actualLink) { attribute(HtmlAttributes.href, it) }
     }) {
         fn()
 

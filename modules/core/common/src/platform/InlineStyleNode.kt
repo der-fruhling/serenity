@@ -1,7 +1,7 @@
 package net.derfruhling.serenity.platform
 
 import net.derfruhling.serenity.Formatter
-import net.derfruhling.serenity.attribute.Attributes
+import net.derfruhling.serenity.attribute.HtmlAttributes
 
 class InlineStyleNode : ChildNode<ElementNode> {
     override val index: Index<InlineStyleNode> = Index(this)
@@ -32,6 +32,6 @@ class InlineStyleNode : ChildNode<ElementNode> {
     }
 
     fun notifyChanged() {
-        parent?.attribute(Attributes.style, style.makeStyle())
+        parent?.attribute(HtmlAttributes.style, style.makeStyle())
     }
 }
