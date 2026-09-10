@@ -5,7 +5,6 @@ import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
-import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.validate
 import net.derfruhling.serenity.annotations.RegisterPage
 
@@ -24,7 +23,7 @@ class PageProcessor(
         return emptyList()
     }
 
-    inner class Acceptor : KSVisitorVoid() {
+    inner class Acceptor : KSVisitorVoid(enableNewFeatures = true) {
         @OptIn(KspExperimental::class)
         override fun visitFunctionDeclaration(function: KSFunctionDeclaration, data: Unit) {
             codeGenerator.createNewFile(

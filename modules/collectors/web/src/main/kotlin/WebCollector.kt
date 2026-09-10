@@ -5,6 +5,7 @@ import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.getClassDeclarationByName
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
+import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.validate
 import net.derfruhling.serenity.annotations.RegisterPage
 
@@ -15,7 +16,7 @@ class WebCollector(
 ) : SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
         resolver.getSymbolsWithAnnotation(RegisterPage::class.qualifiedName!!)
-            .filter { it.validate() }
+            .filter { it.validate(enableNewFeatures = true) }
             .filterIsInstance<KSFunctionDeclaration>()
             .toList()
             .forEach { it.accept(Acceptor(), Unit) }
@@ -23,7 +24,7 @@ class WebCollector(
         return emptyList()
     }
 
-    inner class Acceptor : KSVisitorVoid() {
+    inner class Acceptor : KSVisitorVoid(enableNewFeatures = true) {
         @OptIn(KspExperimental::class)
         override fun visitFunctionDeclaration(function: KSFunctionDeclaration, data: Unit) {
             codeGenerator.createNewFile(

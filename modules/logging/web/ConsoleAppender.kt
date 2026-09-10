@@ -23,7 +23,9 @@ class ConsoleAppender : Appender {
         }
 
         loggingEvent.cause?.let {
-            if(it is JsException && it.thrownValue != null) {
+            // JsException is a typealias to Throwable on JS, but not Wasm/JS
+            @Suppress("USELESS_IS_CHECK")
+            if(it is JsException) {
                 args.add(it.thrownValue!!)
             } else {
                 args.add(it.toJsErrorLike() ?: ("\n" + it.stackTraceToString()).toJsString())

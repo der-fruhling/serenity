@@ -25,7 +25,7 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
         if(platforms.all { it is JvmPlatformInfo || it is NativePlatformInfo }) {
             resolver.getSymbolsWithAnnotation(GenerateServerStubs::class.qualifiedName!!)
                 .filterIsInstance<KSFile>()
-                .filter { it.validate() }
+                .filter { it.validate(enableNewFeatures = true) }
                 .forEach {
                     codeGenerator.createNewFile(
                         Dependencies(false, it),
@@ -45,7 +45,7 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
         return emptyList()
     }
 
-    inner class FileVisitor : KSTopDownVisitor<BufferedWriter, Unit>() {
+    inner class FileVisitor : KSTopDownVisitor<BufferedWriter, Unit>(enableNewFeatures = true) {
         private var indent = ""
         private var inExpectContext = false
         private var inInterfaceContext = false
