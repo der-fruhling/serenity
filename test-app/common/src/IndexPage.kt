@@ -6,7 +6,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.RegisterPage
-import net.derfruhling.serenity.channel.InvalidateRemotely
 import net.derfruhling.serenity.channel.countRemoteInvalidations
 import net.derfruhling.serenity.elements.Link
 import net.derfruhling.serenity.elements.form.Button
@@ -102,7 +101,7 @@ fun InputsPage() {
 
 @Composable
 @RegisterPage("/inval")
-fun InvalidationTest() {
+fun InvalidationTestPage() {
     val count by countRemoteInvalidations("timer")
 
     Text("$count invalidations")
