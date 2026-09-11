@@ -5,6 +5,7 @@ import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.validate
 import net.derfruhling.serenity.annotations.RegisterPage
 
@@ -38,9 +39,9 @@ class PageProcessor(
                 out.appendLine("import androidx.compose.runtime.key")
                 out.appendLine("import androidx.compose.runtime.SideEffect")
                 out.appendLine("import io.ktor.server.application.ApplicationCall")
-                out.appendLine("import net.derfruhling.serenity.ktor.server.respondCompose")
-                out.appendLine("import net.derfruhling.serenity.ktor.server.pageFunctionName")
-                out.appendLine("import net.derfruhling.serenity.ktor.server.currentCall")
+                out.appendLine("import net.derfruhling.serenity.server.ktor.respondCompose")
+                out.appendLine("import net.derfruhling.serenity.server.ktor.pageFunctionName")
+                out.appendLine("import net.derfruhling.serenity.server.ktor.currentCall")
                 out.appendLine("import net.derfruhling.serenity.PageHolder")
                 out.appendLine("import net.derfruhling.serenity.PageDetails")
                 out.appendLine("import net.derfruhling.serenity.PageHolderFactory")

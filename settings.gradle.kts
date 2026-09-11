@@ -57,6 +57,8 @@ fun collector(name: String, dirName: String = name) {
 module("compiler-plugin")
 module("annotations")
 module("core")
+module("channel")
+module("channel-ktor")
 module("logging")
 module("dynamic")
 module("localization")

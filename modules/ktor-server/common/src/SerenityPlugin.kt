@@ -2,6 +2,7 @@ package net.derfruhling.serenity.server.ktor
 
 import androidx.compose.runtime.*
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ktor.events.Events
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.application.hooks.*
@@ -14,6 +15,7 @@ import io.ktor.server.routing.*
 import io.ktor.util.*
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 import kotlinx.io.files.Path
 import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.HtmlComposable
@@ -126,20 +128,30 @@ val Serenity = createApplicationPlugin(
         }
     }
 
+    application.monitor.subscribe(ApplicationStarted) {
+        it.launch {
+            Modules.asyncInit(CommonContextImpl(manifest))
+        }
+    }
+
     logger.info { "Serenity framework initialized" }
 }
 
-private abstract class CommonContextImpl(private val call: ApplicationCall) : CommonContext, ServerContext {
-    override suspend fun getManifest(): Manifest {
-        return call.currentManifest
-    }
+private open class CommonContextImpl(private val manifest: Manifest) : CommonContext {
+    constructor(call: ApplicationCall) : this(call.currentManifest)
 
+    override suspend fun getManifest(): Manifest {
+        return manifest
+    }
+}
+
+private open class ServerContextImpl(protected val call: ApplicationCall) : CommonContextImpl(call), ServerContext {
     override fun getHeader(name: String): String? {
         return call.request.header(name)
     }
 }
 
-private class ProvideContextImpl(call: ApplicationCall) : CommonContextImpl(call), ProvideContext {
+private class ProvideContextImpl(call: ApplicationCall) : ServerContextImpl(call), ProvideContext {
     private val list = mutableListOf<ProvidedValue<*>>()
 
     override suspend fun use(provide: ProvidedValue<*>) {

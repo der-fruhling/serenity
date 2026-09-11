@@ -9,6 +9,8 @@ server-ktor = { module = "net.derfruhling.serenity:serenity-ktor-server", versio
 component-inlineStyle = { module = "net.derfruhling.serenity:serenity-inline-style", version.ref = "serenity" }
 component-dynamic = { module = "net.derfruhling.serenity:serenity-dynamic", version.ref = "serenity" }
 component-localization = { module = "net.derfruhling.serenity:serenity-localization", version.ref = "serenity" }
+component-channel = { module = "net.derfruhling.serenity:serenity-channel", version.ref = "serenity" }
+component-channel-ktor = { module = "net.derfruhling.serenity:serenity-channel-ktor", version.ref = "serenity" }
 test = { module = "net.derfruhling.serenity:serenity-test", version.ref = "serenity" }
 collectors-common = { module = "net.derfruhling.serenity:serenity-common-collector", version.ref = "serenity" }
 collectors-ktor = { module = "net.derfruhling.serenity:serenity-ktor-collector", version.ref = "serenity" }
@@ -19,7 +21,7 @@ collectors-web = { module = "net.derfruhling.serenity:serenity-web-collector", v
 core = [
     "core",
     "annotations",
-    "logging"
+    "logging",
 ]
 complete = [
     "core",
@@ -27,10 +29,11 @@ complete = [
     "logging",
     "component-inlineStyle",
     "component-dynamic",
-    "component-localization"
+    "component-localization",
+    "component-channel",
 ]
 ktor = [
-    "server-ktor"
+    "server-ktor",
 ]
 
 [plugins]

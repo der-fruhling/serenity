@@ -122,6 +122,7 @@ internal class WebEntryPoint private constructor() : CommonContext {
     private val manifestDeferred = CompletableDeferred<Manifest>()
 
     suspend fun reinitialize() {
+        Modules.asyncInit(this)
         moduleProvidedState = ProvideContextImpl()
             .also { Modules.createProvidedValues(it) }
             .build()

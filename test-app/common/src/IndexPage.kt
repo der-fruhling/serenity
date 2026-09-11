@@ -6,6 +6,8 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.RegisterPage
+import net.derfruhling.serenity.channel.InvalidateRemotely
+import net.derfruhling.serenity.channel.countRemoteInvalidations
 import net.derfruhling.serenity.elements.Link
 import net.derfruhling.serenity.elements.form.Button
 import net.derfruhling.serenity.elements.form.Select
@@ -96,4 +98,12 @@ fun InputsPage() {
 
         Text("Current section: $selection")
     }
+}
+
+@Composable
+@RegisterPage("/inval")
+fun InvalidationTest() {
+    val count by countRemoteInvalidations("timer")
+
+    Text("$count invalidations")
 }

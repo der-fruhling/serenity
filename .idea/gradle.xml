@@ -31,6 +31,8 @@
             <option value="$PROJECT_DIR$/gradle-plugin" />
             <option value="$PROJECT_DIR$/gradle-plugin/sass-plugin" />
             <option value="$PROJECT_DIR$/modules/annotations" />
+            <option value="$PROJECT_DIR$/modules/channel" />
+            <option value="$PROJECT_DIR$/modules/channel-ktor" />
             <option value="$PROJECT_DIR$/modules/collectors/common" />
             <option value="$PROJECT_DIR$/modules/collectors/ktor" />
             <option value="$PROJECT_DIR$/modules/collectors/lib" />

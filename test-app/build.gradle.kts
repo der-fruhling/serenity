@@ -21,6 +21,8 @@ serenity {
         implementation(project(":serenity-logging"))
         implementation(project(":serenity-localization"))
         implementation(project(":serenity-inline-style"))
+        implementation(project(":serenity-channel"))
+        implementation(project(":serenity-channel-ktor"))
         implementation(libs.androidx.compose.runtime)
         implementation(libs.androidx.compose.runtime.saveable)
         implementation(libs.oshai.kotlinLogging)

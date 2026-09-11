@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="serenity-channel-ktor-js-0.1.0-SNAPSHOT">
+    <output-path>$PROJECT_DIR$/modules/channel-ktor/build/libs</output-path>
+    <root id="archive" name="serenity-channel-ktor-js-0.1.0-SNAPSHOT.jar">
+      <element id="module-output" name="serenity.serenity-channel-ktor.jsMain" />
+    </root>
+  </artifact>
+</component>

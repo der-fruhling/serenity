@@ -3,8 +3,9 @@ package net.derfruhling.serenity.localization
 import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.modularity.Module
 import net.derfruhling.serenity.modularity.ProvideContext
+import net.derfruhling.serenity.modularity.SimpleModule
 
-object LocalizationModule : Module("serenity-localization") {
+object LocalizationModule : SimpleModule("serenity-localization") {
     override fun initialize() {
         SerialRegistry.registerManifestEntry<AvailableLocalizations>()
     }
