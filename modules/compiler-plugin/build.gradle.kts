@@ -169,6 +169,7 @@ dependencies {
     testFixturesApi(libs.kotlin.test.framework)
     testFixturesApi(libs.kotlin.compiler)
     testFixturesApi(libs.junit.api)
+    testFixturesRuntimeOnly(libs.junit.vintageEngine)
     testFixturesRuntimeOnly(libs.junit.engine)
 
     annotationsRuntimeClasspath(project(":serenity-annotations"))
@@ -194,6 +195,8 @@ tasks.test {
 
     useJUnitPlatform()
     workingDir = rootDir
+
+    jvmArgs("-Xmx2G")
 
     systemProperty("annotationsRuntime.jvm.classpath", annotationsJvmRuntimeClasspath.get().asPath)
     systemProperty("annotationsRuntime.js.classpath", annotationsJsRuntimeClasspath.get().asPath)

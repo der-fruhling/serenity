@@ -15,19 +15,24 @@ import kotlin.test.assertTrue
 class ButtonTest {
     @Test
     fun `click event`() = runTest {
-        var isPressed by mutableStateOf(false)
-        runDomComposeTest({
-            Button("Hello, world!", onClick = {
-                isPressed = true
-            })
-        }) {
-            useSnapshot { assertFalse(isPressed) }
+        try {
+            var isPressed by mutableStateOf(false)
+            runDomComposeTest({
+                Button("Hello, world!", onClick = {
+                    isPressed = true
+                })
+            }) {
+                useSnapshot { assertFalse(isPressed) }
 
-            val button = it.body.getElementsByTagName("button").asList().single()
-            (button as HTMLButtonElement).click()
-            awaitIdle()
+                val button = it.body.getElementsByTagName("button").asList().single()
+                (button as HTMLButtonElement).click()
+                awaitIdle()
 
-            useSnapshot { assertTrue(isPressed) }
+                useSnapshot { assertTrue(isPressed) }
+            }
+        } catch(e: Exception) {
+            e.printStackTrace()
+            throw e
         }
     }
 }

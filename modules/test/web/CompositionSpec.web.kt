@@ -11,6 +11,7 @@ import kotlinx.coroutines.yield
 import net.derfruhling.serenity.*
 import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.elements.Page
+import net.derfruhling.serenity.platform.CURRENT
 import net.derfruhling.serenity.platform.HtmlCompositionContext
 import net.derfruhling.serenity.platform.RehydratingHtmlTree
 import net.derfruhling.serenity.platform.PlatformApplier
@@ -40,8 +41,7 @@ suspend fun runDomComposeTest(
     after: suspend DomComposeContext.(Document) -> Unit
 ) = withContext(AnimationFrameClock + SnapshotContext(Snapshot.takeMutableSnapshot())) {
     val recomposer = Recomposer(currentCoroutineContext())
-    val document = document.implementation.createHTMLDocument()
-    val tree = RehydratingHtmlTree(recomposer, PlatformDocument(RealDocument(document)), ::PlatformApplier)
+    val tree = RehydratingHtmlTree(recomposer, PlatformDocument.CURRENT, ::PlatformApplier)
     setHtmlComposerForTesting(HtmlCompositionContext(recomposer), tree)
 
     tree.setContent {

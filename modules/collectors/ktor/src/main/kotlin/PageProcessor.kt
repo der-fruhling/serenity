@@ -16,7 +16,7 @@ class PageProcessor(
 ) : SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
         resolver.getSymbolsWithAnnotation(RegisterPage::class.qualifiedName!!)
-            .filter { it.validate() }
+            .filter { it.validate(enableNewFeatures = true) }
             .filterIsInstance<KSFunctionDeclaration>()
             .toList()
             .forEach { it.accept(Acceptor(), Unit) }

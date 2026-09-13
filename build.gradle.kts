@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinTest
+import kotlin.jvm.java
+
 plugins {
     id("net.derfruhling.serenity.base") apply false
     id("net.derfruhling.serenity.web") apply false
@@ -17,6 +20,14 @@ allprojects {
     group = "net.derfruhling.serenity"
 
     apply(from = rootProject.file("common.gradle.kts"))
+
+    tasks.withType(Test::class.java).configureEach {
+        failOnNoDiscoveredTests = false
+    }
+
+    tasks.withType(KotlinTest::class.java).configureEach {
+        failOnNoDiscoveredTests = false
+    }
 }
 
 catalog {

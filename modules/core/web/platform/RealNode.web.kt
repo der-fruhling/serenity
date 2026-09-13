@@ -17,6 +17,10 @@ import web.events.EventType as WebEventType
 private const val HTML_NS = "http://www.w3.org/1999/xhtml"
 
 @OptIn(ExperimentalWasmJsInterop::class)
+@JsFun("(x) => x instanceof Node")
+private external fun isActuallyNode(x: JsAny): Boolean
+
+@OptIn(ExperimentalWasmJsInterop::class)
 actual fun RealNode(base: UnderlyingBase): RealNode? {
     // No, kotlin. This when is not exhaustive
     @Suppress("REDUNDANT_ELSE_IN_WHEN")
@@ -29,7 +33,7 @@ actual fun RealNode(base: UnderlyingBase): RealNode? {
         Node.DOCUMENT_TYPE_NODE -> RealDocumentType(base as UnderlyingDocType)
         else -> {
             @Suppress("USELESS_IS_CHECK")
-            if((base as JsAny) is Node) {
+            if(isActuallyNode(base)) {
                 null
             } else {
                 throw IllegalArgumentException("Not a node: $base")

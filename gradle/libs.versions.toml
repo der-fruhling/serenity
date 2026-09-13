@@ -39,6 +39,8 @@ androidx-collections = { module = "androidx.collection:collection", version = "1
 ksoup = { module = "com.fleeksoft.ksoup:ksoup", version = "0.2.6" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-vintageApi = { module = "junit:junit", version = "4.13.2" }
+junit-vintageEngine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit-jupiter" }
 oshai-kotlinLogging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlin-logging" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version = "2.+" }
 
@@ -51,6 +53,7 @@ kotlin-stdlib-js = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-js", 
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlin-test-js = { group = "org.jetbrains.kotlin", name = "kotlin-test-js", version.ref = "kotlin" }
 kotlin-script-runtime = { group = "org.jetbrains.kotlin", name = "kotlin-script-runtime", version.ref = "kotlin" }
+kotlin-test-junit = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit", version.ref = "kotlin" }
 kotlin-test-junit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
 kotlin-test-framework = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-internal-test-framework", version.ref = "kotlin" }
 kotlin-annotations-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-annotations-jvm", version.ref = "kotlin" }

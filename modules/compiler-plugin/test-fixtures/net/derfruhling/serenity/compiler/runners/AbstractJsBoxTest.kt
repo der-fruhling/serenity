@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.test.services.EnvironmentBasedStandardLibrariesPathP
 import org.jetbrains.kotlin.test.services.KotlinStandardLibrariesPathProvider
 
 open class AbstractJsBoxTest : AbstractJsTest(
-    pathToTestDir = "compiler-plugin/testData/box",
+    pathToTestDir = "modules/compiler-plugin/testData/box",
     testGroupOutputDirPrefix = "box/",
     parser = FirParser.LightTree,
 ) {

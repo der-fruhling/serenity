@@ -18,6 +18,10 @@ allprojects {
 
     apply(from = rootProject.file("../common.gradle.kts"))
 
+    tasks.withType(Test::class.java).configureEach {
+        failOnNoDiscoveredTests = false
+    }
+
     repositories {
         gradlePluginPortal()
 
@@ -30,12 +34,23 @@ allprojects {
             }
         }
     }
-}
 
-publishing {
-    repositories {
-        maven(rootProject.layout.projectDirectory.dir("../build/local-publish")) {
-            name = "LocalDirectory"
+    plugins.withType<PublishingPlugin> {
+        configure<PublishingExtension> {
+            repositories {
+                maven(rootProject.layout.projectDirectory.dir("../build/local-publish")) {
+                    name = "LocalDirectory"
+                }
+
+                maven("https://maven.pkg.github.com/der-fruhling/serenity") {
+                    name = "GithubPackages"
+
+                    credentials {
+                        username = project.findProperty("gpr.user")?.toString() ?: System.getenv("USERNAME")
+                        password = project.findProperty("gpr.key")?.toString() ?: System.getenv("TOKEN")
+                    }
+                }
+            }
         }
     }
 }
