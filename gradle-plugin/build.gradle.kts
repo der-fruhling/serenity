@@ -29,8 +29,8 @@ allprojects {
             name = "GitHubPackages"
 
             credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("GH_USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("GK_TOKEN")
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
             }
         }
     }
