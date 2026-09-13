@@ -26,8 +26,8 @@ pluginManagement {
                     props.load(it)
                 }
 
-                username = props.getProperty("gpr.user") ?: System.getenv("GH_USERNAME")
-                password = props.getProperty("gpr.key") ?: System.getenv("GK_TOKEN")
+                username = props.getProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = props.getProperty("gpr.key") ?: System.getenv("TOKEN")
             }
         }
     }
