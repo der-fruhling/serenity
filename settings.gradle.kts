@@ -14,8 +14,12 @@ pluginManagement {
 
             credentials {
                 val props = java.util.Properties()
-                gradle.gradleUserHomeDir.resolve("gradle.properties").inputStream().use {
-                    props.load(it)
+                val globalProps = gradle.gradleUserHomeDir.resolve("gradle.properties")
+
+                if(globalProps.exists()) {
+                    globalProps.inputStream().use {
+                        props.load(it)
+                    }
                 }
 
                 file("gradle.properties").inputStream().use {
