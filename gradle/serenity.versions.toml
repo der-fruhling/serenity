@@ -45,3 +45,4 @@ conventions = { id = "net.derfruhling.serenity.convention", version.ref = "seren
 resources = { id = "net.derfruhling.serenity.resources", version.ref = "serenity" }
 simple = { id = "net.derfruhling.serenity", version.ref = "serenity" }
 stylist-sass = { id = "net.derfruhling.serenity.stylist-sass", version.ref = "serenity" }
+localization = { id = "net.derfruhling.serenity.localization", version.ref = "serenity" }
