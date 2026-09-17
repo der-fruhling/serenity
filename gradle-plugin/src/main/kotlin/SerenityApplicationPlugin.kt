@@ -15,15 +15,19 @@ class SerenityApplicationPlugin : Plugin<Project> {
                     dependsOn("kspCommonMainKotlinMetadata")
                 }
 
-            tasks.named { it.startsWith("compileKotlinMacos") || it.startsWith("compileKotlinLinux") || it.startsWith("compileKotlinJvm") }
-                .configureEach {
-                    dependsOn("kspServerMainKotlinMetadata")
-                }
+            if("kspServerMainKotlinMetadata" in tasks.names) {
+                tasks.named { it.startsWith("compileKotlinMacos") || it.startsWith("compileKotlinLinux") || it.startsWith("compileKotlinJvm") }
+                    .configureEach {
+                        dependsOn("kspServerMainKotlinMetadata")
+                    }
+            }
 
-            tasks.named { it.startsWith("compileKotlinJs") || it.startsWith("compileKotlinWasmJs") }
-                .configureEach {
-                    dependsOn("kspWebMainKotlinMetadata")
-                }
+            if("kspWebMainKotlinMetadata" in tasks.names) {
+                tasks.named { it.startsWith("compileKotlinJs") || it.startsWith("compileKotlinWasmJs") }
+                    .configureEach {
+                        dependsOn("kspWebMainKotlinMetadata")
+                    }
+            }
 
             tasks.register("kspAll") {
                 dependsOn(tasks.named { it.startsWith("ksp") && it != "kspAll" })
