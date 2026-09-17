@@ -2,11 +2,11 @@ package net.derfruhling.serenity.gradle
 
 import org.gradle.api.Named
 
-enum class SerenityUsage(val actualName: String) : Named, Comparable<SerenityUsage> {
-    RESOURCES_ZIP("resources-zip"),
-    RESOURCES_DIR("resources-dir"),
+enum class SerenityUsage : Named, Comparable<SerenityUsage> {
+    RESOURCES_ZIP,
+    RESOURCES_DIR,
 
     ;
 
-    override fun getName(): String = actualName
+    override fun getName(): String = name
 }
