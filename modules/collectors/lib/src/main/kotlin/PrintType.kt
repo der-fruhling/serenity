@@ -6,32 +6,29 @@ import com.google.devtools.ksp.symbol.Modifier
 import com.google.devtools.ksp.symbol.Variance
 
 fun printType(typeReference: KSTypeReference): String = buildString {
-    val element = typeReference.element
-    if (element != null) {
-        val type = typeReference.resolve()
-        append(if(type.declaration.packageName.asString() == "kotlin") {
-            type.declaration.simpleName.asString()
-        } else type.declaration.qualifiedName!!.asString())
+    val type = typeReference.resolve()
+    append(if(type.declaration.packageName.asString() == "kotlin") {
+        type.declaration.simpleName.asString()
+    } else type.declaration.qualifiedName!!.asString())
 
-        if(element.typeArguments.isNotEmpty()) {
-            append('<')
-            append(element.typeArguments.joinToString {
-                when (it.variance) {
-                    Variance.STAR -> {
-                        return@joinToString "*"
-                    }
+    if(type.arguments.isNotEmpty()) {
+        append('<')
+        append(type.arguments.joinToString {
+            when (it.variance) {
+                Variance.STAR -> {
+                    return@joinToString "*"
+                }
 
-                    Variance.INVARIANT -> ""
-                    Variance.COVARIANT -> "in "
-                    Variance.CONTRAVARIANT -> "out "
-                } + printType(it.type!!)
-            })
-            append('>')
-        }
+                Variance.INVARIANT -> ""
+                Variance.COVARIANT -> "in "
+                Variance.CONTRAVARIANT -> "out "
+            } + printType(it.type!!)
+        })
+        append('>')
+    }
 
-        if(type.isMarkedNullable) {
-            append('?')
-        }
+    if(type.isMarkedNullable) {
+        append('?')
     }
 }
 

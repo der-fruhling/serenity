@@ -17,6 +17,8 @@ import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.modularity.CommonContext
 import net.derfruhling.serenity.modularity.Modules
 import net.derfruhling.serenity.modularity.ProvideContext
+import net.derfruhling.serenity.modularity.extension.PageExtensionController
+import net.derfruhling.serenity.modularity.extension.pageExtensionControllerLocal
 import net.derfruhling.serenity.platform.*
 import net.derfruhling.serenity.platform.HtmlCompositionContext
 import net.derfruhling.serenity.platform.RehydratingHtmlTree
@@ -107,6 +109,7 @@ internal class WebEntryPoint private constructor() : CommonContext {
     private val mutableStatePage = mutableStateOf<PageHolder<*>?>(null)
     private var page: PageHolder<*>? by mutableStatePage
     private var moduleProvidedState by mutableStateOf(emptyArray<ProvidedValue<*>>())
+    private val extensionController = PageExtensionController()
 
     private inner class ProvideContextImpl : ProvideContext, CommonContext by this {
         private val list = mutableListOf<ProvidedValue<*>>()
@@ -230,7 +233,8 @@ internal class WebEntryPoint private constructor() : CommonContext {
                     CompositionLocalProvider(
                         Manifest.local provides _manifest,
                         isClientLocal provides clientMode,
-                        pageTemplateLocal provides pageTemplate
+                        pageTemplateLocal provides pageTemplate,
+                        pageExtensionControllerLocal provides extensionController
                     ) {
                         pageTemplateLocal.current?.BuildPage(mutableStatePage)
                             ?: PageContent()
@@ -263,6 +267,7 @@ internal class WebEntryPoint private constructor() : CommonContext {
     internal fun setPageDirect(page: PageHolder<*>) {
         actualCurrentPage = page
         this.page = page
+        extensionController.setPage(page)
 
         if (first) {
             initialize()

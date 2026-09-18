@@ -47,6 +47,7 @@ fun IndexPage() {
 
 @Composable
 @RegisterPage("/buttons/{start}", title = "Buttons")
+@UseTestPageExtension
 fun ButtonsPage(start: Int) {
     var count by remember { mutableIntStateOf(start) }
 

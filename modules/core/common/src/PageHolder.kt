@@ -6,6 +6,10 @@ import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import net.derfruhling.serenity.modularity.extension.AbstractPageExtension
+import kotlin.reflect.KClass
+import kotlin.reflect.KType
 
 @Immutable
 @Polymorphic
@@ -16,6 +20,10 @@ interface SerialPageHolder {
     val hash: Map<String, String>
         get() = emptyMap()
     val details: PageDetails
+
+    @Transient
+    val extensions: Map<KClass<out Annotation>, AbstractPageExtension>
+        get() = emptyMap()
 
     @Composable
     @HtmlComposable

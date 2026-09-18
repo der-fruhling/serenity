@@ -2,7 +2,6 @@ package net.derfruhling.serenity.processor
 
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
-import com.google.devtools.ksp.getClassDeclarationByName
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.symbol.KSVisitorVoid
@@ -19,12 +18,12 @@ class WebCollector(
             .filter { it.validate(enableNewFeatures = true) }
             .filterIsInstance<KSFunctionDeclaration>()
             .toList()
-            .forEach { it.accept(Acceptor(), Unit) }
+            .forEach { it.accept(Acceptor(resolver), Unit) }
 
         return emptyList()
     }
 
-    inner class Acceptor : KSVisitorVoid(enableNewFeatures = true) {
+    inner class Acceptor(val resolver: Resolver) : KSVisitorVoid(enableNewFeatures = true) {
         @OptIn(KspExperimental::class)
         override fun visitFunctionDeclaration(function: KSFunctionDeclaration, data: Unit) {
             codeGenerator.createNewFile(
@@ -41,6 +40,9 @@ class WebCollector(
                 if (function.packageName.asString()
                         .isNotEmpty()
                 ) out.append("package ${function.packageName.asString()}\n\n")
+
+                val extendingAnnotations = function.getExtendingAnnotations()
+
                 out.appendLine("import androidx.compose.runtime.Composable")
                 out.appendLine("import androidx.compose.runtime.key")
                 out.appendLine("import androidx.compose.runtime.SideEffect")
@@ -52,11 +54,19 @@ class WebCollector(
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.SerialName")
 
+                if(extendingAnnotations.isNotEmpty()) {
+                    out.appendLine("import net.derfruhling.serenity.modularity.extension.AbstractPageExtension")
+                    out.appendLine("import kotlin.reflect.KClass")
+                    out.appendLine("import kotlinx.serialization.Transient")
+                }
+
                 val parameters by lazy { PageParameters(function, logger) }
                 val isClass = function.parameters.isNotEmpty()
 
                 if(isClass) {
-                    out.appendLine("import kotlinx.serialization.Transient")
+                    if(extendingAnnotations.isEmpty()) {
+                        out.appendLine("import kotlinx.serialization.Transient")
+                    }
                     out.appendLine("import net.derfruhling.serenity.PageHolderFactory")
                     out.appendLine("import net.derfruhling.serenity.SerialRegistry")
                     out.appendLine("import net.derfruhling.serenity.WebContext")
@@ -91,6 +101,10 @@ class WebCollector(
                     actual override val details: PageDetails = ${generatePageDetails(annotation)}
                 """.trimIndent().prependIndent("    ")
                 )
+
+                if(extendingAnnotations.isNotEmpty()) {
+                    addPageExtensions(out, resolver, extendingAnnotations)
+                }
 
                 out.appendLine(
                     """

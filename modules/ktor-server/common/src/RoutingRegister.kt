@@ -12,6 +12,8 @@ import net.derfruhling.serenity.PageTemplate
 import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.TemplateBuilder
 import net.derfruhling.serenity.elements.pageTemplateLocal
+import net.derfruhling.serenity.modularity.extension.PageExtensionController
+import net.derfruhling.serenity.modularity.extension.pageExtensionControllerLocal
 import kotlin.reflect.KClass
 
 val pageFunctionName = AttributeKey<String>("pageFunctionName")
@@ -21,8 +23,10 @@ private fun Route.commonRegister(page: PageHolderFactory<ApplicationCall, *>) {
     get(page.path) {
         call.respondCompose {
             val page = remember { page.create(call) }
+            val extensionController = remember(page) { PageExtensionController().also { it.setPage(page) } }
             CompositionLocalProvider(
-                pageTemplateLocal provides pageTemplate
+                pageTemplateLocal provides pageTemplate,
+                pageExtensionControllerLocal provides extensionController
             ) {
                 pageTemplate?.BuildPage(mutableStateOf(page))
             }

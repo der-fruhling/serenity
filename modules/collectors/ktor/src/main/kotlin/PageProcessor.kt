@@ -19,12 +19,12 @@ class PageProcessor(
             .filter { it.validate(enableNewFeatures = true) }
             .filterIsInstance<KSFunctionDeclaration>()
             .toList()
-            .forEach { it.accept(Acceptor(), Unit) }
+            .forEach { it.accept(Acceptor(resolver), Unit) }
 
         return emptyList()
     }
 
-    inner class Acceptor : KSVisitorVoid(enableNewFeatures = true) {
+    inner class Acceptor(val resolver: Resolver) : KSVisitorVoid(enableNewFeatures = true) {
         @OptIn(KspExperimental::class)
         override fun visitFunctionDeclaration(function: KSFunctionDeclaration, data: Unit) {
             codeGenerator.createNewFile(
@@ -49,6 +49,12 @@ class PageProcessor(
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.Transient")
                 out.appendLine("import kotlinx.serialization.SerialName")
+
+                val extendingAnnotations = function.getExtendingAnnotations()
+                if(extendingAnnotations.isNotEmpty()) {
+                    out.appendLine("import net.derfruhling.serenity.modularity.extension.AbstractPageExtension")
+                    out.appendLine("import kotlin.reflect.KClass")
+                }
 
                 out.appendLine()
                 out.appendLine("@Serializable")
@@ -85,6 +91,10 @@ class PageProcessor(
                     actual override val details: PageDetails = ${generatePageDetails(annotation)}
                 """.trimIndent().prependIndent("    ")
                 )
+
+                if(extendingAnnotations.isNotEmpty()) {
+                    addPageExtensions(out, resolver, extendingAnnotations)
+                }
 
                 out.appendLine(
                     """
