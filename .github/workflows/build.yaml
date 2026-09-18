@@ -7,6 +7,11 @@ jobs:
   build:
     name: Build Project
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    env:
+      USERNAME: ${{ github.actor }}
+      TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -14,8 +19,6 @@ jobs:
         uses: burrunan/gradle-cache-action@v3
         with:
           read-only: ${{ github.ref != 'refs/heads/master' }}
-      - name: Print actor name
-        run: echo "${{ github.actor }}"
       - name: Accept Develocity Terms of Use
         run: |
           cat >> ./settings.gradle.kts <<EOF
