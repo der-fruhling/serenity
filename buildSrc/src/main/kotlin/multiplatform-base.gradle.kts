@@ -24,7 +24,7 @@ plugins.withId("com.google.devtools.ksp") {
 }
 
 kotlin {
-    jvmToolchain(25)
+    jvmToolchain(17)
     jvm()
 
     macosArm64()

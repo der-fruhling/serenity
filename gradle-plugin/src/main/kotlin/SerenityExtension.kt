@@ -28,7 +28,7 @@ abstract class SerenityExtension(internal val mpp: KotlinMultiplatformExtension)
     abstract val serenityVersion: Property<VersionConstraint>
 
     init {
-        javaVersion.convention(25)
+        javaVersion.convention(17)
 
         serenityVersion.convention(project.provider {
             project.extensions.findByType<VersionCatalog>()?.let { c ->

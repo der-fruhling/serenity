@@ -14,7 +14,7 @@ dependencies {
 }
 
 serenity {
-    javaVersion = 25
+    javaVersion = 17
 
     dependencies {
         implementation(project(":serenity-core"))
