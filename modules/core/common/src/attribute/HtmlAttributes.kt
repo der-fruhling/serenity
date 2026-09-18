@@ -32,4 +32,5 @@ object HtmlAttributes : AbstractAttributeContainer() {
     val method by name<FormMethod>("method")
     val novalidate by name<Boolean>("novalidate")
     val placeholder by name<String>("placeholder")
+    val title by name<String>("title")
 }

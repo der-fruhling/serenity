@@ -140,13 +140,13 @@ class SerenityResourcesPlugin @Inject constructor(
         }
 
         target.artifacts.add("resourceElements", resourcesZip) {
-            type = "resources"
+            type = "zip"
             builtBy(resourcesZip)
         }
 
         resourceElements.outgoing.variants.register("resourceDir") {
             artifact(target.layout.buildDirectory.dir("distributions/sync")) {
-                type = "resources"
+                type = "zip"
                 builtBy(resourcesSync)
             }
 
@@ -156,13 +156,13 @@ class SerenityResourcesPlugin @Inject constructor(
         }
 
         target.artifacts.add("resourceElementsDebug", resourcesDebugZip) {
-            type = "debug-resources"
+            type = "zip"
             builtBy(resourcesDebugZip)
         }
 
         resourceElements.outgoing.variants.register("resourceDirDebug") {
             artifact(target.layout.buildDirectory.dir("distributions/sync-debug")) {
-                type = "debug-resources"
+                type = "zip"
                 builtBy(resourcesSyncDebug)
             }
 
@@ -323,12 +323,7 @@ class SerenityResourcesPlugin @Inject constructor(
                 attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage::class.java, "serenity"))
                 attribute(Attributes.USAGE, SerenityUsage.RESOURCES_DIR)
                 attribute(Attributes.STATUS, status)
-                attribute(
-                    ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, when (status) {
-                        Status.DEBUG -> "debug-resources"
-                        Status.PRODUCTION -> "resources"
-                    }
-                )
+                attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, "zip")
             }
         }
 }

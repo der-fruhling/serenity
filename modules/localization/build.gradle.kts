@@ -57,10 +57,7 @@ kotlin {
 }
 
 dependencies {
-    add("kspJvm", project(":serenity-platform-collector"))
-    add("kspLinuxX64", project(":serenity-platform-collector"))
-    add("kspLinuxArm64", project(":serenity-platform-collector"))
-    add("kspMacosArm64", project(":serenity-platform-collector"))
+    add("kspCommonMainMetadata", project(":serenity-platform-collector"))
 }
 
 tasks.withType<Test>().configureEach {

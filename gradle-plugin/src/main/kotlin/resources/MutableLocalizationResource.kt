@@ -75,6 +75,18 @@ class MutableLocalizationResource(
             return Italic(dynamicString?.component ?: EMPTY)
         }
 
+        fun toUnderlined(): Underlined {
+            return Underlined(dynamicString?.component ?: EMPTY)
+        }
+
+        fun toStrike(): Strike {
+            return Strike(dynamicString?.component ?: EMPTY)
+        }
+
+        fun toParagraph(): Paragraph {
+            return Paragraph(dynamicString?.component ?: EMPTY)
+        }
+
         fun build(): PhonyDynamicString = dynamicString ?: PhonyDynamicString(EMPTY)
     }
 
@@ -83,6 +95,24 @@ class MutableLocalizationResource(
             get() = super.dynamicString
             set(value) {
                 argument.fallback = value?.component
+                super.dynamicString = value
+            }
+    }
+
+    private class SpanRuleBuilder(val argument: Span) : RuleBuilder() {
+        override var dynamicString: PhonyDynamicString?
+            get() = super.dynamicString
+            set(value) {
+                argument.content = value?.component
+                super.dynamicString = value
+            }
+    }
+
+    private class LinkRuleBuilder(val argument: Link) : RuleBuilder() {
+        override var dynamicString: PhonyDynamicString?
+            get() = super.dynamicString
+            set(value) {
+                argument.content = value?.component
                 super.dynamicString = value
             }
     }
@@ -132,7 +162,7 @@ class MutableLocalizationResource(
                 }
             } else {
                 when(qName) {
-                    "b", "i" -> {
+                    "b", "strong", "i", "u", "ul", "s", "strike", "p" -> {
                         mutableRuleStack.push(RuleBuilder())
                     }
 
@@ -141,6 +171,21 @@ class MutableLocalizationResource(
                         val argument = Argument(index)
                         mutableRuleStack.lastElement().append(argument)
                         mutableRuleStack.push(ArgRuleBuilder(argument))
+                    }
+
+                    "span" -> {
+                        val title: String? = attributes.getValue("title")
+                        val span = Span(title)
+                        mutableRuleStack.lastElement().append(span)
+                        mutableRuleStack.push(SpanRuleBuilder(span))
+                    }
+
+                    "a", "link" -> {
+                        val href: String = attributes.getValue("href")
+                            ?: throw InvalidUserDataException("At ${locator.lineNumber}:${locator.columnNumber}: missing attribute 'href' for element '$qName'")
+                        val link = Link(href)
+                        mutableRuleStack.lastElement().append(link)
+                        mutableRuleStack.push(LinkRuleBuilder(link))
                     }
 
                     else -> {
@@ -158,8 +203,11 @@ class MutableLocalizationResource(
                     strings[hasher.hashBytes((stack.pop() as Rule).name.toByteArray())] =
                         last.build()
                 } else when(qName) {
-                    "b" -> mutableRuleStack.peek()!!.append(last.toBold())
+                    "b", "strong" -> mutableRuleStack.peek()!!.append(last.toBold())
                     "i" -> mutableRuleStack.peek()!!.append(last.toItalic())
+                    "u", "ul" -> mutableRuleStack.peek()!!.append(last.toUnderlined())
+                    "s", "strike" -> mutableRuleStack.peek()!!.append(last.toStrike())
+                    "p" -> mutableRuleStack.peek()!!.append(last.toParagraph())
                 }
             } else {
                 stack.pop()

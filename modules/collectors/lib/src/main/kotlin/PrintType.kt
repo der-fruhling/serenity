@@ -9,7 +9,9 @@ fun printType(typeReference: KSTypeReference): String = buildString {
     val element = typeReference.element
     if (element != null) {
         val type = typeReference.resolve()
-        append(type.declaration.qualifiedName!!.asString())
+        append(if(type.declaration.packageName.asString() == "kotlin") {
+            type.declaration.simpleName.asString()
+        } else type.declaration.qualifiedName!!.asString())
 
         element.typeArguments.joinToString {
             when (it.variance) {

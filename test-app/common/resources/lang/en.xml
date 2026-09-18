@@ -3,7 +3,7 @@
   <test-app type="group">
     <hello>Hello</hello>
     <bold>
-      This is <b>bold</b>!
+      <span title="Miaw title">This</span> is <b>bold</b>!
     </bold>
 
     <buttons type="group">
