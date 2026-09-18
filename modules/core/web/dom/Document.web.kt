@@ -2,9 +2,11 @@
 
 package net.derfruhling.serenity.dom
 
+import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.platform.CURRENT
 import net.derfruhling.serenity.platform.RealDocument
 import web.dom.Document
+import web.dom.ElementId
 import web.dom.document
 import net.derfruhling.serenity.platform.Document as PlatformDocument
 
@@ -27,3 +29,12 @@ actual val Document.node: PlatformDocument
         document -> PlatformDocument.CURRENT
         else -> PlatformDocument(RealDocument(this))
     }.also { setDocumentNode(this, it.toJsReference()) }
+
+@ClientOnly
+actual val document: Document
+    get() = document
+
+@ClientOnly
+actual fun Document.getElementById(id: String): HTMLElement? {
+    return getElementById(ElementId(id))
+}

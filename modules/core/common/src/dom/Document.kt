@@ -2,11 +2,17 @@
 
 package net.derfruhling.serenity.dom
 
+import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.GenerateServerStubs
 import net.derfruhling.serenity.platform.Document
 import net.derfruhling.serenity.dom.Document as DomDocument
 
-expect class Document : EventTarget {
-}
+expect class Document : EventTarget
 
 expect val DomDocument.node: Document
+
+@ClientOnly
+expect val document: DomDocument
+
+@ClientOnly
+expect fun DomDocument.getElementById(id: String): HTMLElement?

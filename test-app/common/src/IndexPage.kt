@@ -7,7 +7,12 @@ import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.RegisterPage
 import net.derfruhling.serenity.channel.countRemoteInvalidations
+import net.derfruhling.serenity.dom.Document
+import net.derfruhling.serenity.dom.HTMLInputElement
+import net.derfruhling.serenity.dom.document
+import net.derfruhling.serenity.dom.getElementById
 import net.derfruhling.serenity.elements.Link
+import net.derfruhling.serenity.elements.UnorderedList
 import net.derfruhling.serenity.elements.form.Button
 import net.derfruhling.serenity.elements.form.Select
 import net.derfruhling.serenity.elements.form.TextInput
@@ -73,8 +78,16 @@ fun SaveDataPage() {
 @RegisterPage("/inputs")
 fun InputsPage() {
     FlexColumn {
+        val inputs = remember { mutableStateSetOf<String>() }
+
         var plainText by remember { mutableStateOf("<hello!>") }
-        TextInput(placeholder = "Plain", onChange = { plainText = it })
+        TextInput(placeholder = "Plain", id = "the-input", onChange = { plainText = it })
+
+        Button("Save input", onClick = {
+            val input = document.getElementById("the-input")!! as HTMLInputElement
+            inputs.add(input.value)
+            input.value = ""
+        })
 
         Text(plainText)
 
@@ -96,6 +109,10 @@ fun InputsPage() {
         }
 
         Text("Current section: $selection")
+
+        UnorderedList(inputs) {
+            Text(it)
+        }
     }
 }
 

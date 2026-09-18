@@ -9,6 +9,7 @@ import kotlin.js.ExperimentalJsNoRuntime
 import kotlin.js.JsNoRuntime
 
 expect open class Element : EventTarget
+expect open class HTMLElement : Element
 
 expect open class DomValidityState {
     val badInput: Boolean
@@ -33,7 +34,7 @@ expect interface DomValidationTarget {
     fun reportValidity(): Boolean
 }
 
-expect open class HTMLSelectElement : Element, DomValidationTarget {
+expect open class HTMLSelectElement : HTMLElement, DomValidationTarget {
     var value: String
 
     override val validationMessage: String
@@ -44,7 +45,7 @@ expect open class HTMLSelectElement : Element, DomValidationTarget {
     fun setCustomValidity(error: String)
 }
 
-expect open class HTMLInputElement : Element, DomValidationTarget {
+expect open class HTMLInputElement : HTMLElement, DomValidationTarget {
     var value: String
 
     override val validationMessage: String

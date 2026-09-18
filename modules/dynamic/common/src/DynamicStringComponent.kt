@@ -112,7 +112,7 @@ sealed interface DynamicStringComponent : DynamicStringRenderable {
         DynamicStringComponent {
         @Composable
         override fun Render(context: DynamicStringContext) {
-            RealSpan(title) { 
+            RealSpan(title = title) {
                 content.Render(context)
             }
         }

@@ -13,16 +13,24 @@ fun printType(typeReference: KSTypeReference): String = buildString {
             type.declaration.simpleName.asString()
         } else type.declaration.qualifiedName!!.asString())
 
-        element.typeArguments.joinToString {
-            when (it.variance) {
-                Variance.STAR -> {
-                    return@joinToString "*"
-                }
+        if(element.typeArguments.isNotEmpty()) {
+            append('<')
+            append(element.typeArguments.joinToString {
+                when (it.variance) {
+                    Variance.STAR -> {
+                        return@joinToString "*"
+                    }
 
-                Variance.INVARIANT -> ""
-                Variance.COVARIANT -> "in "
-                Variance.CONTRAVARIANT -> "out "
-            } + printType(it.type!!)
+                    Variance.INVARIANT -> ""
+                    Variance.COVARIANT -> "in "
+                    Variance.CONTRAVARIANT -> "out "
+                } + printType(it.type!!)
+            })
+            append('>')
+        }
+
+        if(type.isMarkedNullable) {
+            append('?')
         }
     }
 }
