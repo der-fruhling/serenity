@@ -8,5 +8,6 @@ class ConstantNameTest {
     @Test
     fun testConstantNameWorks() {
         assertEquals(6600211057155226609L, n("yeppers peppers").asLong)
+        assertEquals(6600211057155226609L, n("yeppers ${"peppers"}").asLong)
     }
 }
