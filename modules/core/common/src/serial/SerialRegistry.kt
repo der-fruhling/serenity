@@ -1,4 +1,4 @@
-package net.derfruhling.serenity
+package net.derfruhling.serenity.serial
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
@@ -7,6 +7,8 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlinx.serialization.serializer
+import net.derfruhling.serenity.PageHolder
+import net.derfruhling.serenity.SerialPageHolder
 import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.manifest.ManifestEntry
 import net.derfruhling.serenity.manifest.ResourceIndex
@@ -18,8 +20,10 @@ object SerialRegistry {
 
     private val composedModules = mutableListOf<SerializersModule>()
     private val subclasses = mutableMapOf<KClass<*>, SerialEntry<*>>()
-    private val pages = mutableMapOf<KClass<out SerialPageHolder>, SerialEntry<out SerialPageHolder>>()
-    private val manifestEntries = mutableMapOf<KClass<out ManifestEntry>, SerialEntry<out ManifestEntry>>()
+    private val pages =
+        mutableMapOf<KClass<out SerialPageHolder>, SerialEntry<out SerialPageHolder>>()
+    private val manifestEntries =
+        mutableMapOf<KClass<out ManifestEntry>, SerialEntry<out ManifestEntry>>()
 
     private var _serializersModule: SerializersModule? = null
     private var _json: Json? = null

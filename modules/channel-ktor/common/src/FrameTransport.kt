@@ -1,6 +1,6 @@
 package net.derfruhling.serenity.channel.ktor
 
-import io.ktor.websocket.Frame
+import io.ktor.websocket.*
 import net.derfruhling.serenity.channel.FullMessage
 
 interface FrameTransport {

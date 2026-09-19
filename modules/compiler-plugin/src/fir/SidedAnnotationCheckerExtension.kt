@@ -16,22 +16,15 @@ import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirBasicDeclaratio
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.ExpressionCheckers
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirCallChecker
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirPropertyAccessExpressionChecker
-import org.jetbrains.kotlin.fir.analysis.checkers.toClassLikeSymbol
 import org.jetbrains.kotlin.fir.analysis.checkers.type.TypeCheckers
 import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtension
 import org.jetbrains.kotlin.fir.declarations.FirClassLikeDeclaration
 import org.jetbrains.kotlin.fir.declarations.FirDeclaration
-import org.jetbrains.kotlin.fir.declarations.getTargetType
-import org.jetbrains.kotlin.fir.declarations.utils.classId
 import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.moduleData
 import org.jetbrains.kotlin.fir.resolve.firClassLike
 import org.jetbrains.kotlin.fir.resolve.getContainingClassSymbol
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
-import org.jetbrains.kotlin.fir.types.ConeKotlinType
-import org.jetbrains.kotlin.fir.types.coneType
-import org.jetbrains.kotlin.fir.types.hasResolvedType
-import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.platform.NativePlatform
 import org.jetbrains.kotlin.platform.PotentiallyWebPlatform
 import org.jetbrains.kotlin.platform.jvm.JvmPlatform
@@ -68,7 +61,11 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
         return classLike.annotations.firstNotNullOfOrNull { it.getSideSimple() }
     }
 
-    private fun FirAnnotation.getSideSimple(classLike: FirClassLikeDeclaration? = annotationTypeRef.firClassLike(session)): Side? {
+    private fun FirAnnotation.getSideSimple(
+        classLike: FirClassLikeDeclaration? = annotationTypeRef.firClassLike(
+            session
+        )
+    ): Side? {
         return when (classLike?.symbol?.classId) {
             clientClass -> Side.CLIENT
             serverClass -> Side.SERVER
@@ -90,35 +87,48 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
         context: CheckerContext,
         reporter: DiagnosticReporter
     )
-    private fun <D> checkAttrs(element: FirElement, symbol: FirBasedSymbol<D>, expectedSide: Side = this.expectedSide!!) where D : FirAnnotationContainer, D : FirDeclaration {
+    private fun <D> checkAttrs(
+        element: FirElement,
+        symbol: FirBasedSymbol<D>,
+        expectedSide: Side = this.expectedSide!!
+    ) where D : FirAnnotationContainer, D : FirDeclaration {
         val attrs = symbol.getSidedAnnotations()
         when {
             attrs.isEmpty() -> return
             attrs.size > 1 -> {
-                for((_, annotation) in attrs.listIterator(1)) {
+                for ((_, annotation) in attrs.listIterator(1)) {
                     reporter.reportOn(annotation.source, SerenityErrors.DUPLICATE_ATTRIBUTE)
                 }
             }
         }
 
         val (side, _) = attrs.first()
-        if (side != expectedSide) reporter.reportOn(element.source, SerenityErrors.ILLEGAL_SIDE, side, expectedSide)
+        if (side != expectedSide) reporter.reportOn(
+            element.source,
+            SerenityErrors.ILLEGAL_SIDE,
+            side,
+            expectedSide
+        )
     }
 
     context(
         context: CheckerContext,
         reporter: DiagnosticReporter
     )
-    private tailrec fun checkConsistency(side: Side, annotation: FirElement, container: FirBasedSymbol<*>) {
+    private tailrec fun checkConsistency(
+        side: Side,
+        annotation: FirElement,
+        container: FirBasedSymbol<*>
+    ) {
         val attrs = container.getSidedAnnotations().firstOrNull()
 
-        if(attrs != null && attrs.first != side) {
+        if (attrs != null && attrs.first != side) {
             reporter.reportOn(annotation.source, SerenityErrors.MISMATCHED_ATTRIBUTE)
             return
         }
 
         val parent = container.getContainingClassSymbol()
-        if(parent != null) checkConsistency(side, annotation, parent)
+        if (parent != null) checkConsistency(side, annotation, parent)
     }
 
     override val declarationCheckers: DeclarationCheckers = object : DeclarationCheckers() {
@@ -133,8 +143,11 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
                     when {
                         attrs.isEmpty() -> return
                         attrs.size > 1 -> {
-                            for((_, annotation) in attrs.listIterator(1)) {
-                                reporter.reportOn(annotation.source, SerenityErrors.DUPLICATE_ATTRIBUTE)
+                            for ((_, annotation) in attrs.listIterator(1)) {
+                                reporter.reportOn(
+                                    annotation.source,
+                                    SerenityErrors.DUPLICATE_ATTRIBUTE
+                                )
                             }
                         }
                     }
@@ -160,7 +173,7 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
                         it.annotations.firstNotNullOfOrNull { a -> a.getSide() }
                     } ?: expectedSide ?: return
 
-                    if(expression is FirExpression && expression !is FirAnnotationCall) {
+                    if (expression is FirExpression && expression !is FirAnnotationCall) {
                         expression.toResolvedCallableSymbol(session)?.let { sym ->
                             checkAttrs(expression, sym, contextSide)
                         }
@@ -169,23 +182,24 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
             }
         )
 
-        override val propertyAccessExpressionCheckers: Set<FirPropertyAccessExpressionChecker> = setOf(
-            object : FirPropertyAccessExpressionChecker(MppCheckerKind.Platform) {
-                context(
-                    context: CheckerContext,
-                    reporter: DiagnosticReporter
-                )
-                override fun check(expression: FirPropertyAccessExpression) {
-                    val contextSide = context.annotationContainers.firstNotNullOfOrNull {
-                        it.annotations.firstNotNullOfOrNull { a -> a.getSide() }
-                    } ?: expectedSide ?: return
+        override val propertyAccessExpressionCheckers: Set<FirPropertyAccessExpressionChecker> =
+            setOf(
+                object : FirPropertyAccessExpressionChecker(MppCheckerKind.Platform) {
+                    context(
+                        context: CheckerContext,
+                        reporter: DiagnosticReporter
+                    )
+                    override fun check(expression: FirPropertyAccessExpression) {
+                        val contextSide = context.annotationContainers.firstNotNullOfOrNull {
+                            it.annotations.firstNotNullOfOrNull { a -> a.getSide() }
+                        } ?: expectedSide ?: return
 
-                    expression.toResolvedCallableSymbol()?.let {
-                        checkAttrs(expression, it, contextSide)
+                        expression.toResolvedCallableSymbol()?.let {
+                            checkAttrs(expression, it, contextSide)
+                        }
                     }
                 }
-            }
-        )
+            )
     }
 
     override val typeCheckers: TypeCheckers

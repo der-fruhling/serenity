@@ -1,9 +1,9 @@
 package net.derfruhling.serenity.platform
 
 import com.fleeksoft.ksoup.nodes.*
+import com.fleeksoft.ksoup.nodes.DataNode
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.TextNode
-import com.fleeksoft.ksoup.nodes.DataNode
 
 actual typealias UnderlyingBase = Any
 actual typealias UnderlyingElement = Element

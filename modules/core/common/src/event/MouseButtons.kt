@@ -13,11 +13,11 @@ value class MouseButtons(val buttons: Int) : Iterable<MouseButton> {
     operator fun contains(button: MouseButton): Boolean = (buttons and button.flag) != 0
 
     override fun iterator(): Iterator<MouseButton> = iterator {
-        if(isPrimary) yield(MouseButton.PRIMARY)
-        if(isSecondary) yield(MouseButton.SECONDARY)
-        if(isMiddle) yield(MouseButton.MIDDLE)
-        if(isBack) yield(MouseButton.BACK)
-        if(isForward) yield(MouseButton.FORWARD)
+        if (isPrimary) yield(MouseButton.PRIMARY)
+        if (isSecondary) yield(MouseButton.SECONDARY)
+        if (isMiddle) yield(MouseButton.MIDDLE)
+        if (isBack) yield(MouseButton.BACK)
+        if (isForward) yield(MouseButton.FORWARD)
     }
 
     companion object {

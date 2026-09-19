@@ -1,19 +1,15 @@
 package net.derfruhling.serenity.server.ktor
 
 import androidx.compose.runtime.*
-import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
 import kotlinx.serialization.KSerializer
-import net.derfruhling.serenity.PageHolder
-import net.derfruhling.serenity.PageHolderFactory
-import net.derfruhling.serenity.PageRegistry
-import net.derfruhling.serenity.PageTemplate
-import net.derfruhling.serenity.SerialRegistry
-import net.derfruhling.serenity.TemplateBuilder
+import net.derfruhling.serenity.*
 import net.derfruhling.serenity.elements.pageTemplateLocal
 import net.derfruhling.serenity.modularity.extension.PageExtensionController
 import net.derfruhling.serenity.modularity.extension.pageExtensionControllerLocal
+import net.derfruhling.serenity.serial.SerialRegistry
 import kotlin.reflect.KClass
 
 val pageFunctionName = AttributeKey<String>("pageFunctionName")
@@ -23,7 +19,8 @@ private fun Route.commonRegister(page: PageHolderFactory<ApplicationCall, *>) {
     get(page.path) {
         call.respondCompose {
             val page = remember { page.create(call) }
-            val extensionController = remember(page) { PageExtensionController().also { it.setPage(page) } }
+            val extensionController =
+                remember(page) { PageExtensionController().also { it.setPage(page) } }
             CompositionLocalProvider(
                 pageTemplateLocal provides pageTemplate,
                 pageExtensionControllerLocal provides extensionController

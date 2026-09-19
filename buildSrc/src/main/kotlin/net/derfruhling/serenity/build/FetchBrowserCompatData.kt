@@ -33,14 +33,15 @@ abstract class FetchBrowserCompatData : DefaultTask() {
             }
 
             result.result.get().rethrowFailure().assertNormalExitValue()
-            result.standardOutput.asText.get().isBlank() && result.standardError.asText.get().isBlank()
+            result.standardOutput.asText.get().isBlank() && result.standardError.asText.get()
+                .isBlank()
         }
     }
 
     @TaskAction
     fun fetch() {
         val dir = targetDir.get()
-        if(!dir.asFile.exists() || dir.asFile.listFiles().isNullOrEmpty()) {
+        if (!dir.asFile.exists() || dir.asFile.listFiles().isNullOrEmpty()) {
             execOps.exec {
                 commandLine(
                     "git",

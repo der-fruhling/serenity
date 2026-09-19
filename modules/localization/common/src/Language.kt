@@ -8,7 +8,11 @@ import net.derfruhling.serenity.annotations.NativeName
  * Thanks, Wikipedia!
  */
 @Suppress("EnumEntryName", "NonAsciiCharacters", "PropertyName")
-enum class Language(val iso639_1: String?, val iso639_3: String, val legacyIso639_2: String? = null) : LangFormattable {
+enum class Language(
+    val iso639_1: String?,
+    val iso639_3: String,
+    val legacyIso639_2: String? = null
+) : LangFormattable {
     @NativeName("Afrikaans")
     AFRIKAANS("af", "afr"),
 

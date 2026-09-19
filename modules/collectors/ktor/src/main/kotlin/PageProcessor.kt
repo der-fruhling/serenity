@@ -51,7 +51,7 @@ class PageProcessor(
                 out.appendLine("import kotlinx.serialization.SerialName")
 
                 val extendingAnnotations = function.getExtendingAnnotations()
-                if(extendingAnnotations.isNotEmpty()) {
+                if (extendingAnnotations.isNotEmpty()) {
                     out.appendLine("import net.derfruhling.serenity.modularity.extension.AbstractPageExtension")
                     out.appendLine("import kotlin.reflect.KClass")
                 }
@@ -92,7 +92,7 @@ class PageProcessor(
                 """.trimIndent().prependIndent("    ")
                 )
 
-                if(extendingAnnotations.isNotEmpty()) {
+                if (extendingAnnotations.isNotEmpty()) {
                     addPageExtensions(out, resolver, extendingAnnotations)
                 }
 
@@ -130,7 +130,7 @@ class PageProcessor(
                         buildString {
                             append("${it.serialName} = ctx.parameters[\"${it.serialName}\"]?.let { ${it.parseExpr} }")
 
-                            if(!it.type.isMarkedNullable) {
+                            if (!it.type.isMarkedNullable) {
                                 append(" ?: error(\"No value provided for parameter '${it.serialName}'\")")
                             }
                         }
@@ -148,15 +148,15 @@ class PageProcessor(
                             }
                             
                             actual fun of(${
-                                parameters.params.joinToString {
-                                    "${it.serialName}: ${printType(it.typeRef)}"
-                                }
-                            }): ${function.simpleName.getShortName()} {
+                            parameters.params.joinToString {
+                                "${it.serialName}: ${printType(it.typeRef)}"
+                            }
+                        }): ${function.simpleName.getShortName()} {
                                 return ${function.simpleName.getShortName()}(__serenity_generated = Unit, ${
-                                parameters.params.joinToString {
-                                    "${it.propertyName} = ${it.serialName}"
-                                }
-                            })
+                            parameters.params.joinToString {
+                                "${it.propertyName} = ${it.serialName}"
+                            }
+                        })
                             }
                         }
                     """.trimIndent().prependIndent("    ")

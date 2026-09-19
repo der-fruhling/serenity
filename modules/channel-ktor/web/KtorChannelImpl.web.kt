@@ -5,7 +5,9 @@ import io.ktor.client.engine.js.*
 import io.ktor.client.plugins.websocket.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import net.derfruhling.serenity.channel.*
+import net.derfruhling.serenity.channel.ChannelImpl
+import net.derfruhling.serenity.channel.Connection
+import net.derfruhling.serenity.channel.FullMessage
 import net.derfruhling.serenity.manifest.Manifest
 import web.url.URL
 import web.window.window
@@ -55,11 +57,11 @@ actual class KtorChannelImpl : ChannelImpl<KtorChannelConfig> {
         val rx = Channel<FullMessage>()
         val conn = WebSocketConnectionImpl(tx, rx, frameTransport)
 
-        val url = if(endpoint.startsWith('/')) {
+        val url = if (endpoint.startsWith('/')) {
             URL(endpoint, window.location.href)
         } else URL(endpoint)
 
-        url.protocol = when(val p = url.protocol) {
+        url.protocol = when (val p = url.protocol) {
             "http:" -> "ws:"
             "https:" -> "wss:"
             else -> p

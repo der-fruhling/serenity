@@ -8,7 +8,9 @@ import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.FqName
 
-abstract class AbstractSerenityTransformer : IrElementTransformerVoid(), ModuleLoweringPass, FileLoweringPass {
+abstract class AbstractSerenityTransformer : IrElementTransformerVoid(),
+    ModuleLoweringPass,
+    FileLoweringPass {
     protected val serenityPackage by lazy { FqName("net.derfruhling.serenity") }
     protected val localizationPackage by lazy { FqName("net.derfruhling.serenity.localization") }
 

@@ -5,7 +5,6 @@ import androidx.compose.runtime.remember
 import net.derfruhling.serenity.Data
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.SerialPageHolder
-import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.UnescapedTextDanger
 import net.derfruhling.serenity.attribute.HtmlAttributes
@@ -13,6 +12,7 @@ import net.derfruhling.serenity.manifest.Preload
 import net.derfruhling.serenity.manifest.ResourceResolver
 import net.derfruhling.serenity.manifest.ScriptLocation
 import net.derfruhling.serenity.manifest.preloadSetLocal
+import net.derfruhling.serenity.serial.SerialRegistry
 import kotlin.time.Duration.Companion.hours
 
 object HeadContext {

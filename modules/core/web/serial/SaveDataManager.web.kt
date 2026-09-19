@@ -1,4 +1,4 @@
-package net.derfruhling.serenity
+package net.derfruhling.serenity.serial
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -6,6 +6,8 @@ import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import io.github.oshai.kotlinlogging.KotlinLogging
+import net.derfruhling.serenity.PageHolder
+import net.derfruhling.serenity.compositionCompletionHandler
 import web.storage.localStorage
 
 private fun createSaveableStateRegistry(page: PageHolder<*>): SaveableStateRegistry {

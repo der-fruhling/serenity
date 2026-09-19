@@ -18,8 +18,13 @@ fun TestConfigurationBuilder.configureAnnotations() {
     useCustomRuntimeClasspathProviders(::PluginAnnotationsClasspathProvider)
 }
 
-private class PluginAnnotationsProvider(testServices: TestServices) : EnvironmentConfigurator(testServices) {
-    override fun configureCompilerConfiguration(configuration: CompilerConfiguration, module: TestModule) {
+private class PluginAnnotationsProvider(testServices: TestServices) : EnvironmentConfigurator(
+    testServices
+) {
+    override fun configureCompilerConfiguration(
+        configuration: CompilerConfiguration,
+        module: TestModule
+    ) {
         val platform = module.targetPlatform(testServices)
         when {
             platform.isJvm() -> {
@@ -37,7 +42,8 @@ private class PluginAnnotationsProvider(testServices: TestServices) : Environmen
     }
 }
 
-private class PluginAnnotationsClasspathProvider(testServices: TestServices) : RuntimeClasspathProvider(testServices) {
+private class PluginAnnotationsClasspathProvider(testServices: TestServices) :
+    RuntimeClasspathProvider(testServices) {
     override fun runtimeClassPaths(module: TestModule): List<File> {
         val targetPlatform = module.targetPlatform(testServices)
         return when {

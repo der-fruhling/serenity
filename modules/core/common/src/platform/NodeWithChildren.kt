@@ -100,7 +100,7 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
             list.forEach {
                 it.index.index = -1
 
-                if(it is ComposeNodeWithReal<*>) {
+                if (it is ComposeNodeWithReal<*>) {
                     val index = childIndices.indexOf(it.index)
                     real.children.removeAt(index)
                     childIndices.removeAt(index)

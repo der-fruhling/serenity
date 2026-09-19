@@ -1,4 +1,3 @@
 package net.derfruhling.serenity.compiler
 
-class NotApplicable : RuntimeException() {
-}
+class NotApplicable : RuntimeException()

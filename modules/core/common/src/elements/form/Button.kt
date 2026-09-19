@@ -6,7 +6,6 @@ import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.elements.reflow
 import net.derfruhling.serenity.event.ClickEvent
 import net.derfruhling.serenity.event.ElementPointerEvent
-import net.derfruhling.serenity.event.EventContext
 import net.derfruhling.serenity.event.Handler
 import net.derfruhling.serenity.event.On
 

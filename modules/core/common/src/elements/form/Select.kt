@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.Text
-import net.derfruhling.serenity.attribute
 import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.dom.HTMLSelectElement
+import net.derfruhling.serenity.elements.attribute
 import net.derfruhling.serenity.event.*
 
 sealed class SelectOptions {
@@ -86,7 +86,7 @@ fun Select(
     val useBody = remember(onChange) { onChange != null }
     val fn = remember(useBody) {
         if (useBody) (@Composable {
-            if(onChange != null) {
+            if (onChange != null) {
                 On(ChangeEvent) {
                     checkType<HTMLSelectElement>()
                     onChange(target.value)

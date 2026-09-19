@@ -14,4 +14,4 @@ package net.derfruhling.serenity.annotations
     RequiresOptIn.Level.ERROR
 )
 @MustBeDocumented
-annotation class PageExtensionImplementationApi()
+annotation class PageExtensionImplementationApi

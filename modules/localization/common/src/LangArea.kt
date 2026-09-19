@@ -18,13 +18,13 @@ enum class LangArea(val code: Int, val iso3166_code: String?, vararg val parents
     CENTRAL_AMERICA(840, AMERICAS, NORTH_AMERICA, LATIN_AMERICA_AND_THE_CARIBBEAN),
     BELIZE(84, "BZ", CENTRAL_AMERICA),
     COSTA_RICA(188, "CR", CENTRAL_AMERICA),
-    EL_SALVADOR(222, "SV",CENTRAL_AMERICA),
+    EL_SALVADOR(222, "SV", CENTRAL_AMERICA),
     GUATEMALA(320, "GT", CENTRAL_AMERICA),
     HONDURAS(340, "HN", CENTRAL_AMERICA),
     MEXICO(484, "MX", CENTRAL_AMERICA),
     NICARAGUA(558, "NI", CENTRAL_AMERICA),
     PANAMA(594, "PA", CENTRAL_AMERICA),
-    
+
     CARIBBEAN(29, CENTRAL_AMERICA, NORTH_AMERICA, LATIN_AMERICA_AND_THE_CARIBBEAN),
     ANTIGUA_AND_BARBUDA(28, "AG", CARIBBEAN),
     THE_BAHAMAS(44, "BS", CARIBBEAN),
@@ -265,7 +265,7 @@ enum class LangArea(val code: Int, val iso3166_code: String?, vararg val parents
 
     SOUTHERN_AFRICA(18, AFRICA),
     BOTSWANA(72, "BW", SOUTHERN_AFRICA),
-    LESOTHO(426, "LS",SOUTHERN_AFRICA),
+    LESOTHO(426, "LS", SOUTHERN_AFRICA),
     NAMIBIA(516, "NA", SOUTHERN_AFRICA),
     SOUTH_AFRICA(710, "ZA", SOUTHERN_AFRICA),
     ESWATINI(748, "SZ", SOUTHERN_AFRICA),
@@ -314,7 +314,10 @@ enum class LangArea(val code: Int, val iso3166_code: String?, vararg val parents
     constructor(code: Int, vararg parents: LangArea) : this(code, null, *parents)
 
     companion object {
-        private val map by lazy { entries.filter { it.iso3166_code != null }.associateBy { it.iso3166_code!! } }
+        private val map by lazy {
+            entries.filter { it.iso3166_code != null }
+                .associateBy { it.iso3166_code!! }
+        }
         private val codeMap by lazy { entries.associateBy { it.code } }
 
         fun fromISO3166(code: String): LangArea? {

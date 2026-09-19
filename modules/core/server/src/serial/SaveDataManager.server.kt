@@ -1,7 +1,8 @@
-package net.derfruhling.serenity
+package net.derfruhling.serenity.serial
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
+import net.derfruhling.serenity.PageHolder
 
 @Suppress("NOTHING_TO_INLINE")
 actual class SaveDataManager actual constructor(page: PageHolder<*>) {

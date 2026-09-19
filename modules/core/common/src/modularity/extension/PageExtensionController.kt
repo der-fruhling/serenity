@@ -17,7 +17,7 @@ class PageExtensionController {
         val ext = remember(extensions) {
             val instance = PageExtensionInstance()
 
-            for((_, value) in extensions) {
+            for ((_, value) in extensions) {
                 value.initialize(instance)
             }
 
@@ -36,4 +36,5 @@ class PageExtensionController {
     }
 }
 
-val pageExtensionControllerLocal = staticCompositionLocalOf<PageExtensionController> { throw NotImplementedError() }
+val pageExtensionControllerLocal =
+    staticCompositionLocalOf<PageExtensionController> { throw NotImplementedError() }

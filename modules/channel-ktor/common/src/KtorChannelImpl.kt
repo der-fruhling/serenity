@@ -5,11 +5,7 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.selects.select
 import kotlinx.serialization.SerializationException
-import net.derfruhling.serenity.channel.AbstractConnection
-import net.derfruhling.serenity.channel.ChannelExpectationsDiffer
-import net.derfruhling.serenity.channel.ChannelImpl
-import net.derfruhling.serenity.channel.FullMessage
-import net.derfruhling.serenity.channel.Message
+import net.derfruhling.serenity.channel.*
 
 const val DEFAULT_ENDPOINT: String = "/_rc"
 
@@ -62,17 +58,17 @@ internal class WebSocketConnectionImpl(
                             continues = false
                         } else {
                             val frame = it.getOrThrow()
-                            if(frame is Frame.Close) {
+                            if (frame is Frame.Close) {
                                 continues = false
                                 return@onReceiveCatching
                             }
                             try {
                                 frameTransport.decodeMessage(frame)
-                            } catch(e: SerializationException) {
+                            } catch (e: SerializationException) {
                                 logger.error(e) { "Serialization exception while decoding message" }
                                 send(frameTransport.encodeMessage(wrap(Message.Error("Internal serialization error"))))
                                 null
-                            } catch(e: IllegalArgumentException) {
+                            } catch (e: IllegalArgumentException) {
                                 logger.warn(e) { "Invalid input" }
                                 send(frameTransport.encodeMessage(wrap(Message.Error("Invalid message: ${e.message}"))))
                                 null

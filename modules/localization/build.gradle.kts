@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.BaseKotlinCompile
-
 plugins {
     id("multiplatform-compose")
     id("net.derfruhling.serenity.convention")

@@ -98,9 +98,9 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
     private fun xxh3b64f17to128(bytes: ByteArray) = xxh3medium(bytes.size) {
         val numRounds = ((bytes.size - 1) ushr 5) + 1
 
-        for(i in 0..<numRounds) {
+        for (i in 0..<numRounds) {
             val start = i * 16
-            val end = bytes.size - (i * 16) - 16;
+            val end = bytes.size - (i * 16) - 16
             acc += mixStep(bytes, start, i * 32, seed)
             acc += mixStep(bytes, end, i * 32 + 16, seed)
         }
@@ -111,13 +111,13 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
     private fun xxh3b64f129to240(bytes: ByteArray) = xxh3medium(bytes.size) {
         val numChunks = bytes.size ushr 5
 
-        for(i in 0..<8) {
+        for (i in 0..<8) {
             acc += mixStep(bytes, i * 16, i * 16, seed)
         }
 
         acc = avalanche(acc.toLong()).toULong()
 
-        for(i in 8..<numChunks) {
+        for (i in 8..<numChunks) {
             acc += mixStep(bytes, i * 16, (i - 8) * 16 + 3, seed)
         }
 
@@ -126,7 +126,7 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
     }
 
     private fun xxh3b64Medium(bytes: ByteArray): Long {
-        return when(bytes.size) {
+        return when (bytes.size) {
             in 17..128 -> xxh3b64f17to128(bytes)
             in 129..240 -> xxh3b64f129to240(bytes)
             else -> throw NotImplementedError()
@@ -149,7 +149,7 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
         )
 
         fun accumulate(stripeBytes: ByteArray, offset: Int, secretOffset: Int) {
-            for(i in 0..<8) {
+            for (i in 0..<8) {
                 val stripe = stripeBytes.getLong(offset + i * 8).toULong()
                 val secret = secret.getLong(secretOffset + i * 8).toULong()
                 val value = stripe xor secret
@@ -160,14 +160,14 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
 
         fun round(block: ByteArray, offset: Int) {
             fun roundAccumulate(block: ByteArray, offset: Int) {
-                for(i in 0..<stripesPerBlock) {
+                for (i in 0..<stripesPerBlock) {
                     accumulate(block, offset + i * 64, i * 8)
                 }
             }
 
             fun roundScramble() {
                 val secretOffset = secret.size - 64
-                for(i in 0..<8) {
+                for (i in 0..<8) {
                     val secret = secret.getLong(secretOffset + i * 8).toULong()
                     acc[i] = acc[i] xor (acc[i] shr 47)
                     acc[i] = acc[i] xor secret
@@ -183,7 +183,7 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
             val blockSize = blockSize
             var offset = 0
 
-            while(offset < bytes.size - blockSize) {
+            while (offset < bytes.size - blockSize) {
                 round(bytes, offset)
                 offset += blockSize
             }
@@ -194,7 +194,7 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
         fun lastRound(block: ByteArray, offset: Int, lastStripeOffset: Int) {
             val numFullStripes = (block.size - 1) / 64
 
-            for(i in 0..<numFullStripes) {
+            for (i in 0..<numFullStripes) {
                 accumulate(block, offset + i * 64, i * 8)
             }
 
@@ -206,7 +206,10 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
             var result: ULong = initValue
 
             repeat(4) { i ->
-                val (mh, ml) = u128Mul(acc[i * 2] xor secretWords[i * 2], acc[i * 2 + 1] xor secretWords[i * 2 + 1])
+                val (mh, ml) = u128Mul(
+                    acc[i * 2] xor secretWords[i * 2],
+                    acc[i * 2 + 1] xor secretWords[i * 2 + 1]
+                )
                 result += ml xor mh
             }
 
@@ -256,18 +259,198 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
             0x9FB21C651E98DF25UL  // 0b1001111110110010000111000110010100011110100110001101111100100101
 
         private val defaultSecret = intArrayOf(
-            0xb8, 0xfe, 0x6c, 0x39, 0x23, 0xa4, 0x4b, 0xbe, 0x7c, 0x01, 0x81, 0x2c, 0xf7, 0x21, 0xad, 0x1c,
-            0xde, 0xd4, 0x6d, 0xe9, 0x83, 0x90, 0x97, 0xdb, 0x72, 0x40, 0xa4, 0xa4, 0xb7, 0xb3, 0x67, 0x1f,
-            0xcb, 0x79, 0xe6, 0x4e, 0xcc, 0xc0, 0xe5, 0x78, 0x82, 0x5a, 0xd0, 0x7d, 0xcc, 0xff, 0x72, 0x21,
-            0xb8, 0x08, 0x46, 0x74, 0xf7, 0x43, 0x24, 0x8e, 0xe0, 0x35, 0x90, 0xe6, 0x81, 0x3a, 0x26, 0x4c,
-            0x3c, 0x28, 0x52, 0xbb, 0x91, 0xc3, 0x00, 0xcb, 0x88, 0xd0, 0x65, 0x8b, 0x1b, 0x53, 0x2e, 0xa3,
-            0x71, 0x64, 0x48, 0x97, 0xa2, 0x0d, 0xf9, 0x4e, 0x38, 0x19, 0xef, 0x46, 0xa9, 0xde, 0xac, 0xd8,
-            0xa8, 0xfa, 0x76, 0x3f, 0xe3, 0x9c, 0x34, 0x3f, 0xf9, 0xdc, 0xbb, 0xc7, 0xc7, 0x0b, 0x4f, 0x1d,
-            0x8a, 0x51, 0xe0, 0x4b, 0xcd, 0xb4, 0x59, 0x31, 0xc8, 0x9f, 0x7e, 0xc9, 0xd9, 0x78, 0x73, 0x64,
-            0xea, 0xc5, 0xac, 0x83, 0x34, 0xd3, 0xeb, 0xc3, 0xc5, 0x81, 0xa0, 0xff, 0xfa, 0x13, 0x63, 0xeb,
-            0x17, 0x0d, 0xdd, 0x51, 0xb7, 0xf0, 0xda, 0x49, 0xd3, 0x16, 0x55, 0x26, 0x29, 0xd4, 0x68, 0x9e,
-            0x2b, 0x16, 0xbe, 0x58, 0x7d, 0x47, 0xa1, 0xfc, 0x8f, 0xf8, 0xb8, 0xd1, 0x7a, 0xd0, 0x31, 0xce,
-            0x45, 0xcb, 0x3a, 0x8f, 0x95, 0x16, 0x04, 0x28, 0xaf, 0xd7, 0xfb, 0xca, 0xbb, 0x4b, 0x40, 0x7e,
+            0xb8,
+            0xfe,
+            0x6c,
+            0x39,
+            0x23,
+            0xa4,
+            0x4b,
+            0xbe,
+            0x7c,
+            0x01,
+            0x81,
+            0x2c,
+            0xf7,
+            0x21,
+            0xad,
+            0x1c,
+            0xde,
+            0xd4,
+            0x6d,
+            0xe9,
+            0x83,
+            0x90,
+            0x97,
+            0xdb,
+            0x72,
+            0x40,
+            0xa4,
+            0xa4,
+            0xb7,
+            0xb3,
+            0x67,
+            0x1f,
+            0xcb,
+            0x79,
+            0xe6,
+            0x4e,
+            0xcc,
+            0xc0,
+            0xe5,
+            0x78,
+            0x82,
+            0x5a,
+            0xd0,
+            0x7d,
+            0xcc,
+            0xff,
+            0x72,
+            0x21,
+            0xb8,
+            0x08,
+            0x46,
+            0x74,
+            0xf7,
+            0x43,
+            0x24,
+            0x8e,
+            0xe0,
+            0x35,
+            0x90,
+            0xe6,
+            0x81,
+            0x3a,
+            0x26,
+            0x4c,
+            0x3c,
+            0x28,
+            0x52,
+            0xbb,
+            0x91,
+            0xc3,
+            0x00,
+            0xcb,
+            0x88,
+            0xd0,
+            0x65,
+            0x8b,
+            0x1b,
+            0x53,
+            0x2e,
+            0xa3,
+            0x71,
+            0x64,
+            0x48,
+            0x97,
+            0xa2,
+            0x0d,
+            0xf9,
+            0x4e,
+            0x38,
+            0x19,
+            0xef,
+            0x46,
+            0xa9,
+            0xde,
+            0xac,
+            0xd8,
+            0xa8,
+            0xfa,
+            0x76,
+            0x3f,
+            0xe3,
+            0x9c,
+            0x34,
+            0x3f,
+            0xf9,
+            0xdc,
+            0xbb,
+            0xc7,
+            0xc7,
+            0x0b,
+            0x4f,
+            0x1d,
+            0x8a,
+            0x51,
+            0xe0,
+            0x4b,
+            0xcd,
+            0xb4,
+            0x59,
+            0x31,
+            0xc8,
+            0x9f,
+            0x7e,
+            0xc9,
+            0xd9,
+            0x78,
+            0x73,
+            0x64,
+            0xea,
+            0xc5,
+            0xac,
+            0x83,
+            0x34,
+            0xd3,
+            0xeb,
+            0xc3,
+            0xc5,
+            0x81,
+            0xa0,
+            0xff,
+            0xfa,
+            0x13,
+            0x63,
+            0xeb,
+            0x17,
+            0x0d,
+            0xdd,
+            0x51,
+            0xb7,
+            0xf0,
+            0xda,
+            0x49,
+            0xd3,
+            0x16,
+            0x55,
+            0x26,
+            0x29,
+            0xd4,
+            0x68,
+            0x9e,
+            0x2b,
+            0x16,
+            0xbe,
+            0x58,
+            0x7d,
+            0x47,
+            0xa1,
+            0xfc,
+            0x8f,
+            0xf8,
+            0xb8,
+            0xd1,
+            0x7a,
+            0xd0,
+            0x31,
+            0xce,
+            0x45,
+            0xcb,
+            0x3a,
+            0x8f,
+            0x95,
+            0x16,
+            0x04,
+            0x28,
+            0xaf,
+            0xd7,
+            0xfb,
+            0xca,
+            0xbb,
+            0x4b,
+            0x40,
+            0x7e,
         ).map { it.toByte() }.toByteArray()
 
         private val defaultSecretLongs: LongArray by lazy {

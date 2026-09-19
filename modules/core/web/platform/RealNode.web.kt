@@ -33,7 +33,7 @@ actual fun RealNode(base: UnderlyingBase): RealNode? {
         Node.DOCUMENT_TYPE_NODE -> RealDocumentType(base as UnderlyingDocType)
         else -> {
             @Suppress("USELESS_IS_CHECK")
-            if(isActuallyNode(base)) {
+            if (isActuallyNode(base)) {
                 null
             } else {
                 throw IllegalArgumentException("Not a node: $base")

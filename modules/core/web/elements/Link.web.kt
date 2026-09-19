@@ -5,18 +5,18 @@ import web.url.URLSearchParams
 
 @OptIn(ExperimentalWasmJsInterop::class)
 actual fun PageHolder<*>.constructActualAddress(linkBase: String): String = buildString {
-    if(linkBase.isNotEmpty()) {
-        if(!linkBase.startsWith('/')) append('/')
+    if (linkBase.isNotEmpty()) {
+        if (!linkBase.startsWith('/')) append('/')
         append(urlEncodePath(linkBase))
     }
 
-    if(!path.startsWith('/')) append('/')
+    if (!path.startsWith('/')) append('/')
     append(urlEncodePath(path))
 
-    if(hash.isNotEmpty()) {
+    if (hash.isNotEmpty()) {
         val urlSearchParams = URLSearchParams()
 
-        for((key, value) in hash) {
+        for ((key, value) in hash) {
             urlSearchParams.append(key, value)
         }
 

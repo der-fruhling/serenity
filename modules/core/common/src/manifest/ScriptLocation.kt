@@ -18,6 +18,7 @@ data class ScriptLocation(
         get() = arrayOf(local provides this)
 
     companion object {
-        val local = staticCompositionLocalOf<ScriptLocation> { throw UnsupportedOperationException() }
+        val local =
+            staticCompositionLocalOf<ScriptLocation> { throw UnsupportedOperationException() }
     }
 }

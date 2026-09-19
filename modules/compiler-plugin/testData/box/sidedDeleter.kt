@@ -3,10 +3,12 @@
 import net.derfruhling.serenity.annotations.*
 
 @ClientOnly
-fun clientFn() {}
+fun clientFn() {
+}
 
 @ServerOnly
-fun serverFn() {}
+fun serverFn() {
+}
 
 fun box(): String {
     return "OK"

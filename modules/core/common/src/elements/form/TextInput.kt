@@ -2,15 +2,11 @@ package net.derfruhling.serenity.elements.form
 
 import androidx.compose.runtime.*
 import net.derfruhling.serenity.Element
-import net.derfruhling.serenity.attribute
 import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.dom.HTMLInputElement
 import net.derfruhling.serenity.elements.StyleClasses
-import net.derfruhling.serenity.event.Event
-import net.derfruhling.serenity.event.Handler2
-import net.derfruhling.serenity.event.InputEvent
-import net.derfruhling.serenity.event.On
-import net.derfruhling.serenity.event.checkType
+import net.derfruhling.serenity.elements.attribute
+import net.derfruhling.serenity.event.*
 import net.derfruhling.serenity.isServerStatic
 import net.derfruhling.serenity.platform.ElementNode
 
@@ -29,7 +25,7 @@ fun TextInput(
     placeholder: String? = null,
     onChange: Handler2<Event<HTMLInputElement>, String>
 ) {
-    if(hasSpan) {
+    if (hasSpan) {
         Element(update = {
             setSpanClasses(type)
         }, "span") {
@@ -51,7 +47,7 @@ fun TextInputState(
 ): MutableState<String> {
     val state = remember { mutableStateOf(initialText) }
 
-    if(hasSpan) {
+    if (hasSpan) {
         Element(update = {
             setSpanClasses(type)
         }, "span") {
@@ -92,7 +88,10 @@ private fun commonTextInput(
     placeholder: String?,
     onChange: Handler2<Event<HTMLInputElement>, String>
 ) {
-    Element(update = commonTextInputUpdater(hasSpan, type, name, id, initialText, placeholder), "input") {
+    Element(
+        update = commonTextInputUpdater(hasSpan, type, name, id, initialText, placeholder),
+        "input"
+    ) {
         On(InputEvent) {
             checkType<HTMLInputElement>()
             onChange(target.value)
@@ -108,7 +107,7 @@ private fun commonTextInputUpdater(
     initialText: String,
     placeholder: String?
 ): Updater<ElementNode>.() -> Unit = {
-    if(!hasSpan) set(hasSpan) {
+    if (!hasSpan) set(hasSpan) {
         setClass(StyleClasses.TextInput, !it)
     }
 

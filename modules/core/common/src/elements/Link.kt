@@ -3,15 +3,11 @@ package net.derfruhling.serenity.elements
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import net.derfruhling.serenity.Element
-import net.derfruhling.serenity.PageHolder
-import net.derfruhling.serenity.Text
+import net.derfruhling.serenity.*
 import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.attribute.HtmlAttributes
-import net.derfruhling.serenity.defaultFn
 import net.derfruhling.serenity.event.ClickEvent
 import net.derfruhling.serenity.event.On
-import net.derfruhling.serenity.navigate
 
 val linkBase = compositionLocalOf { "" }
 

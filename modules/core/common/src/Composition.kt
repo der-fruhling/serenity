@@ -7,12 +7,7 @@ import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.ReusableComposeNode
 import androidx.compose.runtime.Updater
 import net.derfruhling.serenity.annotations.UnescapedTextDanger
-import net.derfruhling.serenity.attribute.Attribute
-import net.derfruhling.serenity.platform.HtmlApplier
-import net.derfruhling.serenity.platform.DataNode
-import net.derfruhling.serenity.platform.DocumentTypeNode
-import net.derfruhling.serenity.platform.ElementNode
-import net.derfruhling.serenity.platform.TextNode
+import net.derfruhling.serenity.platform.*
 
 internal val defaultFn = @Composable {}
 
@@ -88,10 +83,3 @@ fun Data(content: String) {
     })
 }
 
-fun <T : Any> Updater<ElementNode>.attribute(attribute: Attribute<T>, value: T?, keepNulls: Boolean = attribute.keepNulls) {
-    set(value) { attribute(attribute, it, keepNulls) }
-}
-
-fun Updater<ElementNode>.attribute(attribute: Attribute<Boolean>, value: Boolean) {
-    set(value) { attribute(attribute, it) }
-}

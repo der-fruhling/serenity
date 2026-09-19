@@ -1,4 +1,4 @@
-package net.derfruhling.serenity
+package net.derfruhling.serenity.serial
 
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName

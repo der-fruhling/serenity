@@ -4,7 +4,6 @@ import net.derfruhling.serenity.style.Notation
 import net.derfruhling.serenity.style.UnparsableNotationException
 import net.derfruhling.serenity.style.optRequire
 import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 sealed class NumberNotation<T> : Notation<T>
@@ -41,7 +40,7 @@ object FloatNotation : NumberNotation<Float>() {
         // when converting to a string if they are integers, but java and
         // native platforms do not do this. this check ensures the java and
         // native builds omit the decimal point when it shouldn't matter.
-        return if(((value % 1).absoluteValue - 0.5f).absoluteValue > 0.4999f && value < Long.MAX_VALUE) {
+        return if (((value % 1).absoluteValue - 0.5f).absoluteValue > 0.4999f && value < Long.MAX_VALUE) {
             value.roundToLong().toString()
         } else {
             value.toString()
@@ -68,7 +67,7 @@ object DoubleNotation : NumberNotation<Double>() {
     override fun asNotationString(value: Double): String {
         optRequire(value.isFinite()) { "Passed number is not finite" }
         // see FloatNotation for an explanation for this madness.
-        return if(((value % 1).absoluteValue - 0.5).absoluteValue > 0.4999 && value < Long.MAX_VALUE) {
+        return if (((value % 1).absoluteValue - 0.5).absoluteValue > 0.4999 && value < Long.MAX_VALUE) {
             value.roundToLong().toString()
         } else {
             value.toString()

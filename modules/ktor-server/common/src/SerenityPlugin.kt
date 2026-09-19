@@ -2,7 +2,6 @@ package net.derfruhling.serenity.server.ktor
 
 import androidx.compose.runtime.*
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ktor.events.Events
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.application.hooks.*
@@ -17,7 +16,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import kotlinx.io.files.Path
-import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.manifest.Preload
@@ -26,11 +24,8 @@ import net.derfruhling.serenity.modularity.CommonContext
 import net.derfruhling.serenity.modularity.Modules
 import net.derfruhling.serenity.modularity.ProvideContext
 import net.derfruhling.serenity.modularity.ServerContext
-import net.derfruhling.serenity.platform.HtmlCompositionContext
-import net.derfruhling.serenity.platform.RehydratingHtmlTree
-import net.derfruhling.serenity.platform.encodeToString
-import net.derfruhling.serenity.platform.Document
-import net.derfruhling.serenity.platform.PlatformApplier
+import net.derfruhling.serenity.platform.*
+import net.derfruhling.serenity.serial.SerialRegistry
 
 private val logger = KotlinLogging.logger {}
 
@@ -145,7 +140,8 @@ private open class CommonContextImpl(private val manifest: Manifest) : CommonCon
     }
 }
 
-private open class ServerContextImpl(protected val call: ApplicationCall) : CommonContextImpl(call), ServerContext {
+private open class ServerContextImpl(protected val call: ApplicationCall) : CommonContextImpl(call),
+    ServerContext {
     override fun getHeader(name: String): String? {
         return call.request.header(name)
     }

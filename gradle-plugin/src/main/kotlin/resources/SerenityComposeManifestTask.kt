@@ -36,12 +36,13 @@ abstract class SerenityComposeManifestTask : DefaultTask() {
     @TaskAction
     fun generate() {
         val json = vendorService.get().createJson(prettyJson.get())
-        val fragments = sourceFragments.map { json.decodeFromString<ManifestEntry>(it.readText()) }.toMutableList()
+        val fragments = sourceFragments.map { json.decodeFromString<ManifestEntry>(it.readText()) }
+            .toMutableList()
 
-        if(extraValues.get().isNotEmpty()) {
-            outer@ for((key, value) in extraValues.get()) {
-                for((i, existing) in fragments.withIndex()) {
-                    if(key.isInstance(existing)) {
+        if (extraValues.get().isNotEmpty()) {
+            outer@ for ((key, value) in extraValues.get()) {
+                for ((i, existing) in fragments.withIndex()) {
+                    if (key.isInstance(existing)) {
                         fragments[i] = value
                         break@outer
                     }
@@ -49,9 +50,9 @@ abstract class SerenityComposeManifestTask : DefaultTask() {
             }
         }
 
-        if(modifiers.get().isNotEmpty()) {
+        if (modifiers.get().isNotEmpty()) {
             for (it in modifiers.get()) {
-                for(fragment in fragments) {
+                for (fragment in fragments) {
                     it.execute(fragment)
                 }
             }
@@ -75,14 +76,14 @@ abstract class SerenityComposeManifestTask : DefaultTask() {
     fun <T : ManifestEntry> withType(clazz: Class<out T>, fn: Action<T>) {
         each {
             @Suppress("UNCHECKED_CAST")
-            if(clazz.isInstance(this)) fn.execute(this as T)
+            if (clazz.isInstance(this)) fn.execute(this as T)
         }
     }
 
     fun <T : ManifestEntry> withType(clazz: KClass<out T>, fn: (T) -> Unit) {
         each {
             @Suppress("UNCHECKED_CAST")
-            if(clazz.isInstance(this)) fn(this as T)
+            if (clazz.isInstance(this)) fn(this as T)
         }
     }
 

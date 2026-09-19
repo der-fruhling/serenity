@@ -39,14 +39,14 @@ actual object Channels {
         if (::channel.isInitialized && channel != ChannelModule.config.impl) {
             connectSubscriptionHandle?.let { channel.onConnect.unsubscribe(it) }
             disconnectSubscriptionHandle?.let { channel.onDisconnect.unsubscribe(it) }
-            if(channel.coroutineScope != null) scope = CoroutineScope(SupervisorJob())
+            if (channel.coroutineScope != null) scope = CoroutineScope(SupervisorJob())
             channel.close()
         }
 
         channel = ChannelModule.config.impl
         connectSubscriptionHandle = channel.onConnect.subscribe(this::onConnect)
         disconnectSubscriptionHandle = channel.onDisconnect.subscribe(this::onDisconnect)
-        scope = channel.coroutineScope ?: if(::scope.isInitialized) {
+        scope = channel.coroutineScope ?: if (::scope.isInitialized) {
             scope
         } else {
             CoroutineScope(SupervisorJob())

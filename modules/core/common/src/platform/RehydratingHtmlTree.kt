@@ -10,13 +10,7 @@ import net.derfruhling.serenity.HtmlComposable
 class RehydratingHtmlTree<Node : RootNode> internal constructor(
     val root: Node,
     val applier: HtmlApplier,
-    val composition: ReusableComposition
-) : AutoCloseable {
-    val rootElement: ElementNode
-        get() = (root as NodeWithChildren<*, *>).children.first { it is ElementNode } as ElementNode
-
-    private lateinit var composable: @Composable @HtmlComposable () -> Unit
-
+    val composition: ReusableComposition,
     val snapshot: MutableSnapshot = Snapshot.takeMutableSnapshot(
         readObserver = {
             (composition as ControlledComposition).recordReadOf(it)
@@ -25,6 +19,11 @@ class RehydratingHtmlTree<Node : RootNode> internal constructor(
             (composition as ControlledComposition).recordWriteOf(it)
         }
     )
+) : AutoCloseable {
+    val rootElement: ElementNode
+        get() = (root as NodeWithChildren<*, *>).children.first { it is ElementNode } as ElementNode
+
+    private lateinit var composable: @Composable @HtmlComposable () -> Unit
 
     fun setContent(fn: @Composable @HtmlComposable () -> Unit) {
         composable = fn

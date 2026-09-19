@@ -44,17 +44,17 @@ private inline fun rememberContent(value: ConstantName): DynamicString {
 
     val content = remember(language.current, value) {
         loaded.strings[value]
-        ?: default.strings[value]!!
+            ?: default.strings[value]!!
     }
 
     return content
 }
 
 private fun Any.toRenderable(): DynamicStringRenderable {
-    return when(this) {
+    return when (this) {
         is DynamicStringRenderable -> this
-        is String                  -> this.toComponent()
-        else                       -> this.toString().toComponent()
+        is String -> this.toComponent()
+        else -> this.toString().toComponent()
     }
 }
 
@@ -91,25 +91,51 @@ fun TextOf(value: ConstantName, arg0: Any, arg1: Any) {
 @Composable
 fun TextOf(value: ConstantName, arg0: String, arg1: String, arg2: String) {
     val content = rememberContent(value)
-    content.component.Render(DynamicStringContextImpl(arg0.toComponent(), arg1.toComponent(), arg2.toComponent()))
+    content.component.Render(
+        DynamicStringContextImpl(
+            arg0.toComponent(),
+            arg1.toComponent(),
+            arg2.toComponent()
+        )
+    )
 }
 
 @Composable
 fun TextOf(value: ConstantName, arg0: Any, arg1: Any, arg2: Any) {
     val content = rememberContent(value)
-    content.component.Render(DynamicStringContextImpl(arg0.toRenderable(), arg1.toRenderable(), arg2.toRenderable()))
+    content.component.Render(
+        DynamicStringContextImpl(
+            arg0.toRenderable(),
+            arg1.toRenderable(),
+            arg2.toRenderable()
+        )
+    )
 }
 
 @Composable
 fun TextOf(value: ConstantName, arg0: String, arg1: String, arg2: String, arg3: String) {
     val content = rememberContent(value)
-    content.component.Render(DynamicStringContextImpl(arg0.toComponent(), arg1.toComponent(), arg2.toComponent(), arg3.toComponent()))
+    content.component.Render(
+        DynamicStringContextImpl(
+            arg0.toComponent(),
+            arg1.toComponent(),
+            arg2.toComponent(),
+            arg3.toComponent()
+        )
+    )
 }
 
 @Composable
 fun TextOf(value: ConstantName, arg0: Any, arg1: Any, arg2: Any, arg3: Any) {
     val content = rememberContent(value)
-    content.component.Render(DynamicStringContextImpl(arg0.toRenderable(), arg1.toRenderable(), arg2.toRenderable(), arg3.toRenderable()))
+    content.component.Render(
+        DynamicStringContextImpl(
+            arg0.toRenderable(),
+            arg1.toRenderable(),
+            arg2.toRenderable(),
+            arg3.toRenderable()
+        )
+    )
 }
 
 @Composable

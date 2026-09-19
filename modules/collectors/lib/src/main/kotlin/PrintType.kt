@@ -7,11 +7,13 @@ import com.google.devtools.ksp.symbol.Variance
 
 fun printType(typeReference: KSTypeReference): String = buildString {
     val type = typeReference.resolve()
-    append(if(type.declaration.packageName.asString() == "kotlin") {
-        type.declaration.simpleName.asString()
-    } else type.declaration.qualifiedName!!.asString())
+    append(
+        if (type.declaration.packageName.asString() == "kotlin") {
+            type.declaration.simpleName.asString()
+        } else type.declaration.qualifiedName!!.asString()
+    )
 
-    if(type.arguments.isNotEmpty()) {
+    if (type.arguments.isNotEmpty()) {
         append('<')
         append(type.arguments.joinToString {
             when (it.variance) {
@@ -27,46 +29,48 @@ fun printType(typeReference: KSTypeReference): String = buildString {
         append('>')
     }
 
-    if(type.isMarkedNullable) {
+    if (type.isMarkedNullable) {
         append('?')
     }
 }
 
 fun printModifiers(obj: KSModifierListOwner, noExpect: Boolean = false): String = buildString {
-    for(m in obj.modifiers) {
-        append(when(m) {
-            Modifier.PUBLIC -> "public "
-            Modifier.PRIVATE -> "private "
-            Modifier.INTERNAL -> "internal "
-            Modifier.PROTECTED -> "protected "
-            Modifier.IN -> "in "
-            Modifier.OUT -> "out "
-            Modifier.OVERRIDE -> "override "
-            Modifier.LATEINIT -> "lateinit "
-            Modifier.ENUM -> "enum "
-            Modifier.SEALED -> "sealed "
-            Modifier.ANNOTATION -> "annotation "
-            Modifier.DATA -> "data "
-            Modifier.INNER -> "inner "
-            Modifier.FUN -> "fun "
-            Modifier.VALUE -> "value "
-            Modifier.SUSPEND -> "suspend "
-            Modifier.TAILREC -> "tailrec "
-            Modifier.OPERATOR -> "operator "
-            Modifier.INFIX -> "infix "
-            Modifier.INLINE -> "inline "
-            Modifier.EXTERNAL -> "external "
-            Modifier.ABSTRACT -> "abstract "
-            Modifier.FINAL -> "final "
-            Modifier.OPEN -> "open "
-            Modifier.CONST -> "const "
-            Modifier.VARARG -> "vararg "
-            Modifier.NOINLINE -> "noinline "
-            Modifier.CROSSINLINE -> "crossinline "
-            Modifier.REIFIED -> "reified "
-            Modifier.EXPECT if !noExpect -> "expect "
-            Modifier.ACTUAL -> "actual "
-            else -> ""
-        })
+    for (m in obj.modifiers) {
+        append(
+            when (m) {
+                Modifier.PUBLIC -> "public "
+                Modifier.PRIVATE -> "private "
+                Modifier.INTERNAL -> "internal "
+                Modifier.PROTECTED -> "protected "
+                Modifier.IN -> "in "
+                Modifier.OUT -> "out "
+                Modifier.OVERRIDE -> "override "
+                Modifier.LATEINIT -> "lateinit "
+                Modifier.ENUM -> "enum "
+                Modifier.SEALED -> "sealed "
+                Modifier.ANNOTATION -> "annotation "
+                Modifier.DATA -> "data "
+                Modifier.INNER -> "inner "
+                Modifier.FUN -> "fun "
+                Modifier.VALUE -> "value "
+                Modifier.SUSPEND -> "suspend "
+                Modifier.TAILREC -> "tailrec "
+                Modifier.OPERATOR -> "operator "
+                Modifier.INFIX -> "infix "
+                Modifier.INLINE -> "inline "
+                Modifier.EXTERNAL -> "external "
+                Modifier.ABSTRACT -> "abstract "
+                Modifier.FINAL -> "final "
+                Modifier.OPEN -> "open "
+                Modifier.CONST -> "const "
+                Modifier.VARARG -> "vararg "
+                Modifier.NOINLINE -> "noinline "
+                Modifier.CROSSINLINE -> "crossinline "
+                Modifier.REIFIED -> "reified "
+                Modifier.EXPECT if !noExpect -> "expect "
+                Modifier.ACTUAL -> "actual "
+                else -> ""
+            }
+        )
     }
 }

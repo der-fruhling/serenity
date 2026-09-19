@@ -99,7 +99,7 @@ class SerenityConventionPlugin : Plugin<Project> {
 
                         compilations.configureEach {
                             compileTaskProvider.configure {
-                                if(name.endsWith("Metadata") && !name.endsWith("CommonMainKotlinMetadata"))
+                                if (name.endsWith("Metadata") && !name.endsWith("CommonMainKotlinMetadata"))
                                     return@configure
                                 dependsOn(name.replace("compile", "ksp"))
                             }

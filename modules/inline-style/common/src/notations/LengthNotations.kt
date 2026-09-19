@@ -2,7 +2,6 @@ package net.derfruhling.serenity.style.notations
 
 import androidx.compose.runtime.Immutable
 import net.derfruhling.serenity.style.Notation
-import net.derfruhling.serenity.style.optRequire
 import kotlin.jvm.JvmInline
 import kotlin.math.roundToInt
 

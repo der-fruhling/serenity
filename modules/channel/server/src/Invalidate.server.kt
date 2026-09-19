@@ -3,8 +3,6 @@ package net.derfruhling.serenity.channel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.IntState
 import androidx.compose.runtime.NonRestartableComposable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import net.derfruhling.serenity.HtmlComposable
 
 @Composable

@@ -10,17 +10,14 @@ import net.derfruhling.serenity.gradle.web.WebAssemblySourceMapRemapTransformer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
-import org.gradle.api.file.FileSystemOperations
 import org.gradle.api.tasks.Sync
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.internal.extensions.stdlib.capitalized
 import org.gradle.kotlin.dsl.*
-import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
-import javax.inject.Inject
 
-class SerenityServerPlugin: Plugin<Project> {
+class SerenityServerPlugin : Plugin<Project> {
     lateinit var serverExtension: SerenityServerExtension
         private set
 

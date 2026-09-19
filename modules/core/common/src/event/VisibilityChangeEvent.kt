@@ -9,6 +9,6 @@ import net.derfruhling.serenity.dom.Document
 @Serializable
 @WidelyAvailable(Since(year = 2021, month = Month.APRIL))
 data object VisibilityChangeEvent : EventType<Event<Document>>("visibilitychange"),
-                                    BuiltinPlainDocumentEvent {
+    BuiltinPlainDocumentEvent {
     override val isSupported: Boolean by lazy { testSupportedDocumentEvent(name) }
 }

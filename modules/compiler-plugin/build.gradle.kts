@@ -113,7 +113,7 @@ fun kotlinVersionSourceSet(name: String, targetVersion: String) {
                 version = "$targetVersion-${rootProject.version}"
                 from(component)
 
-                if(this is DefaultMavenPublication) {
+                if (this is DefaultMavenPublication) {
                     isAlias = true
                 }
             }
@@ -220,8 +220,14 @@ tasks.test {
     setLibraryProperty("org.jetbrains.kotlin.test.kotlin-test-js", "kotlin-test-js")
 
     systemProperty("javascript.engine.path.V8", d8EnvSpec.executable.get())
-    systemProperty("javascript.engine.path.repl", "${layout.projectDirectory.file("repl.js").asFile}")
-    systemProperty("kotlin.js.test.root.out.dir", "${layout.buildDirectory.get().asFile}/js-test-output")
+    systemProperty(
+        "javascript.engine.path.repl",
+        "${layout.projectDirectory.file("repl.js").asFile}"
+    )
+    systemProperty(
+        "kotlin.js.test.root.out.dir",
+        "${layout.buildDirectory.get().asFile}/js-test-output"
+    )
 }
 
 tasks.jar {

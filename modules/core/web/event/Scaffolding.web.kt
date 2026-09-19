@@ -3,9 +3,9 @@
 package net.derfruhling.serenity.event
 
 import kotlinx.serialization.Serializable
+import net.derfruhling.serenity.dom.Document
 import net.derfruhling.serenity.dom.Element
 import net.derfruhling.serenity.dom.Window
-import net.derfruhling.serenity.dom.Document
 import web.events.Event as DomEvent
 import web.history.PageTransitionEvent as DomPageTransitionEvent
 import web.pointer.PointerEvent as DomPointerEvent
@@ -18,14 +18,15 @@ actual fun testSupportedWindowEvent(name: String): Boolean = js("('on' + name) i
 
 @Serializable
 actual sealed interface BuiltinPointerEvent : BuiltinEventType,
-                                              GenerateFromDomEvent<PointerEvent<Element>> {
+    GenerateFromDomEvent<PointerEvent<Element>> {
     override fun generate(event: DomEvent): PointerEvent<Element> {
         return (event as DomPointerEvent).asComposeEvent()
     }
 }
 
 @Serializable
-actual sealed interface BuiltinPlainElementEvent : BuiltinEventType, GenerateFromDomEvent<Event<Element>> {
+actual sealed interface BuiltinPlainElementEvent : BuiltinEventType,
+    GenerateFromDomEvent<Event<Element>> {
     override fun generate(event: DomEvent): Event<Element> {
         return event.asElementComposeEvent()
     }
@@ -33,7 +34,7 @@ actual sealed interface BuiltinPlainElementEvent : BuiltinEventType, GenerateFro
 
 @Serializable
 actual sealed interface BuiltinPlainWindowEvent : BuiltinEventType,
-                                                  GenerateFromDomEvent<Event<Window>> {
+    GenerateFromDomEvent<Event<Window>> {
     override fun generate(event: DomEvent): Event<Window> {
         return event.asWindowComposeEvent()
     }
@@ -41,7 +42,7 @@ actual sealed interface BuiltinPlainWindowEvent : BuiltinEventType,
 
 @Serializable
 actual sealed interface BuiltinPlainDocumentEvent : BuiltinEventType,
-                                                    GenerateFromDomEvent<Event<Document>> {
+    GenerateFromDomEvent<Event<Document>> {
     override fun generate(event: DomEvent): Event<Document> {
         return event.asDocumentComposeEvent()
     }
@@ -49,7 +50,7 @@ actual sealed interface BuiltinPlainDocumentEvent : BuiltinEventType,
 
 @Serializable
 actual sealed interface BuiltinPageTransitionEvent : BuiltinEventType,
-                                                     GenerateFromDomEvent<PageTransitionEvent> {
+    GenerateFromDomEvent<PageTransitionEvent> {
     override fun generate(event: DomEvent): PageTransitionEvent {
         return (event as DomPageTransitionEvent).asWindowComposeEvent()
     }

@@ -79,7 +79,10 @@ class ExpectProcessor(
                     out.appendLine("import net.derfruhling.serenity.PageHolderFactory")
 
                     val defsPackage = platformDefs ?: run {
-                        logger.error("Parameterized pages require a @PlatformDefinitions file to be present", function)
+                        logger.error(
+                            "Parameterized pages require a @PlatformDefinitions file to be present",
+                            function
+                        )
                         return
                     }
 

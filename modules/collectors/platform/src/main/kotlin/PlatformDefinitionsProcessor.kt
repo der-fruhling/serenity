@@ -18,11 +18,11 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
     lateinit var unit: KSTypeReference
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        if(platforms.size > 1) return emptyList()
+        if (platforms.size > 1) return emptyList()
         any = resolver.builtIns.anyType
         unit = resolver.createKSTypeReferenceFromKSType(resolver.builtIns.unitType)
 
-        if(platforms.all { it is JvmPlatformInfo || it is NativePlatformInfo }) {
+        if (platforms.all { it is JvmPlatformInfo || it is NativePlatformInfo }) {
             resolver.getSymbolsWithAnnotation(GenerateServerStubs::class.qualifiedName!!)
                 .filterIsInstance<KSFile>()
                 .filter { it.validate(enableNewFeatures = true) }
@@ -65,35 +65,44 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
         override fun defaultHandler(
             node: KSNode,
             data: BufferedWriter
-        ) {}
+        ) {
+        }
 
         override fun visitClassDeclaration(
             classDeclaration: KSClassDeclaration,
             data: BufferedWriter
         ) {
-            if(classDeclaration.isExpect) {
+            if (classDeclaration.isExpect) {
                 data.indented(buildString {
-                    val keyword = when(classDeclaration.classKind) {
+                    val keyword = when (classDeclaration.classKind) {
                         ClassKind.INTERFACE -> "interface"
                         ClassKind.OBJECT -> "object"
                         else -> "class"
                     }
-                    append("@Stub actual ${printModifiers(classDeclaration, noExpect = true)}$keyword ${classDeclaration.simpleName.asString()} ")
+                    append(
+                        "@Stub actual ${
+                            printModifiers(
+                                classDeclaration,
+                                noExpect = true
+                            )
+                        }$keyword ${classDeclaration.simpleName.asString()} "
+                    )
 
-                    when(classDeclaration.classKind) {
+                    when (classDeclaration.classKind) {
                         ClassKind.ANNOTATION_CLASS, ClassKind.ENUM_CLASS, ClassKind.CLASS ->
                             append("@Stub internal constructor() ")
+
                         else -> {}
                     }
 
                     val superTypes = classDeclaration.superTypes.toList()
-                    if(superTypes.isNotEmpty()) {
+                    if (superTypes.isNotEmpty()) {
                         var isFirst = true
-                        for(typeRef in superTypes) {
+                        for (typeRef in superTypes) {
                             val type = typeRef.resolve()
-                            if(type == any) continue
+                            if (type == any) continue
 
-                            if(!isFirst) {
+                            if (!isFirst) {
                                 append(", ")
                             } else {
                                 append(": ")
@@ -103,12 +112,15 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
                             append(printType(typeRef))
 
                             val typeDecl = type.declaration
-                            if(typeDecl is KSClassDeclaration && typeDecl.classKind != ClassKind.INTERFACE) {
+                            if (typeDecl is KSClassDeclaration && typeDecl.classKind != ClassKind.INTERFACE) {
                                 val constructors = typeDecl.getConstructors().toList()
-                                if(constructors.any { it.parameters.isEmpty() } || constructors.isEmpty()) {
+                                if (constructors.any { it.parameters.isEmpty() } || constructors.isEmpty()) {
                                     append("()")
                                 } else {
-                                    logger.error("No empty constructor for super class", classDeclaration)
+                                    logger.error(
+                                        "No empty constructor for super class",
+                                        classDeclaration
+                                    )
                                 }
                             }
                         }
@@ -133,17 +145,17 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
             property: KSPropertyDeclaration,
             data: BufferedWriter
         ) {
-            if(inExpectContext || property.isExpect) {
+            if (inExpectContext || property.isExpect) {
                 data.indented(buildString {
                     append("@Stub actual ${printModifiers(property, noExpect = true)}")
-                    append(if(property.isMutable) "var " else "val ")
+                    append(if (property.isMutable) "var " else "val ")
                     property.extensionReceiver?.let {
                         append("(${printType(it)}).")
                     }
                     append(property.simpleName.asString())
                     append(": ${printType(property.type)}")
 
-                    if(!inInterfaceContext) {
+                    if (!inInterfaceContext) {
                         append(" by notImplemented")
                     }
                 })
@@ -154,7 +166,7 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
             function: KSFunctionDeclaration,
             data: BufferedWriter
         ) {
-            if(inExpectContext || function.isExpect) {
+            if (inExpectContext || function.isExpect) {
                 data.indented(buildString {
                     append("@Stub actual ${printModifiers(function, noExpect = true)}fun ")
                     function.extensionReceiver?.let {
@@ -164,20 +176,20 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
                     append("(")
 
                     var isFirstParam: Boolean = true
-                    for(param in function.parameters) {
-                        if(!isFirstParam) {
+                    for (param in function.parameters) {
+                        if (!isFirstParam) {
                             append(", ")
                         } else isFirstParam = false
-                        if(param.isCrossInline) append("crossinline ")
-                        if(param.isNoInline) append("noinline ")
-                        if(param.isVararg) append("vararg ")
+                        if (param.isCrossInline) append("crossinline ")
+                        if (param.isNoInline) append("noinline ")
+                        if (param.isVararg) append("vararg ")
                         append(param.name?.asString() ?: logger.warn("Unnamed parameter", param))
                         append(": ${printType(param.type)}")
                     }
 
                     append("): ${printType(function.returnType ?: unit)}")
 
-                    if(!inInterfaceContext) {
+                    if (!inInterfaceContext) {
                         append(" = throw NotImplementedError()")
                     }
                 })

@@ -1,21 +1,12 @@
 package net.derfruhling.serenity.channel.ktor
 
-import io.ktor.server.application.createApplicationPlugin
-import io.ktor.server.application.install
-import io.ktor.server.routing.routing
-import io.ktor.server.websocket.WebSocketServerSession
-import io.ktor.server.websocket.WebSockets
-import io.ktor.server.websocket.webSocket
+import io.ktor.server.application.*
+import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import net.derfruhling.serenity.channel.ChannelExpectationsDiffer
-import net.derfruhling.serenity.channel.ChannelImpl
-import net.derfruhling.serenity.channel.ChannelModule
-import net.derfruhling.serenity.channel.Connection
-import net.derfruhling.serenity.channel.FullMessage
-import net.derfruhling.serenity.channel.Message
-import net.derfruhling.serenity.channel.ServerChannelImpl
+import net.derfruhling.serenity.channel.*
 import net.derfruhling.serenity.modularity.CallableEvent
 import net.derfruhling.serenity.modularity.Event
 import net.derfruhling.serenity.modularity.Modules
@@ -29,7 +20,8 @@ actual class KtorChannelConfig {
     actual var frameTransport: FrameTransport = JsonFrameTransport
 }
 
-actual class KtorChannelImpl : ChannelImpl<KtorChannelConfig>, ServerChannelImpl<KtorChannelConfig> {
+actual class KtorChannelImpl : ChannelImpl<KtorChannelConfig>,
+    ServerChannelImpl<KtorChannelConfig> {
     internal lateinit var config: KtorChannelConfig
     private lateinit var _endpoint: String
     private lateinit var frameTransport: FrameTransport
@@ -52,7 +44,8 @@ actual class KtorChannelImpl : ChannelImpl<KtorChannelConfig>, ServerChannelImpl
     suspend fun runSocket(session: WebSocketServerSession) {
         val tx = Channel<FullMessage>()
         val rx = Channel<FullMessage>()
-        val conn = WebSocketConnectionImpl(sessionIdCounter.getAndIncrement(), tx, rx, frameTransport)
+        val conn =
+            WebSocketConnectionImpl(sessionIdCounter.getAndIncrement(), tx, rx, frameTransport)
         session.launch { conn.send(Message.Hello(conn.id)) }
         _onConnect(conn.id, conn)
         try {

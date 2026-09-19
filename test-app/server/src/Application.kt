@@ -17,7 +17,7 @@ fun Application.configure() {
     install(KtorChannel)
 
     launch {
-        while(true) {
+        while (true) {
             Channels.sendAll(Message.InvalidateKey("timer"))
             delay(1500.milliseconds)
         }

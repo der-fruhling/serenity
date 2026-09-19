@@ -1,10 +1,9 @@
 package net.derfruhling.serenity.channel.ktor
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ktor.websocket.Frame
-import io.ktor.websocket.readText
-import net.derfruhling.serenity.SerialRegistry
+import io.ktor.websocket.*
 import net.derfruhling.serenity.channel.FullMessage
+import net.derfruhling.serenity.serial.SerialRegistry
 
 open class JsonFrameTransport : FrameTransport {
     private val logger = KotlinLogging.logger {}
@@ -15,7 +14,7 @@ open class JsonFrameTransport : FrameTransport {
     }
 
     override fun decodeMessage(frame: Frame): FullMessage? {
-        return when(frame) {
+        return when (frame) {
             is Frame.Text -> SerialRegistry.decode<FullMessage>(frame.readText())
 
             else -> {

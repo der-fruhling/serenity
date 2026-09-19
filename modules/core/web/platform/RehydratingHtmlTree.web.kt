@@ -2,6 +2,24 @@ package net.derfruhling.serenity.platform
 
 import androidx.compose.runtime.CompositionContext
 import androidx.compose.runtime.ReusableComposition
+import androidx.compose.runtime.TestOnly
+import androidx.compose.runtime.snapshots.MutableSnapshot
+
+@TestOnly
+fun RehydratingHtmlTree(
+    parent: CompositionContext,
+    document: Document,
+    applier: (Document) -> HtmlApplier,
+    snapshot: MutableSnapshot
+): RehydratingHtmlTree<Document> {
+    val applier = applier(document)
+    return RehydratingHtmlTree(
+        root = document,
+        applier = applier,
+        composition = ReusableComposition(applier, parent),
+        snapshot = snapshot
+    )
+}
 
 fun RehydratingHtmlTree(
     parent: CompositionContext,

@@ -33,10 +33,15 @@ class LocalizationPlatformStructureProcessor(env: SymbolProcessorEnvironment) : 
         override fun defaultHandler(
             node: KSNode,
             data: List<String>
-        ) {}
+        ) {
+        }
 
         override fun visitFile(file: KSFile, data: List<String>) {
-            codeGenerator.createNewFile(Dependencies(aggregating = true, file), file.packageName.asString(), "StructureGen").bufferedWriter().use { out ->
+            codeGenerator.createNewFile(
+                Dependencies(aggregating = true, file),
+                file.packageName.asString(),
+                "StructureGen"
+            ).bufferedWriter().use { out ->
                 out.appendLine("@file:Suppress(\"NOTHING_TO_INLINE\")")
                 out.appendLine("package ${file.packageName.asString()}")
                 out.appendLine()
@@ -49,14 +54,14 @@ class LocalizationPlatformStructureProcessor(env: SymbolProcessorEnvironment) : 
                     .filter { it.simpleName.asString() == "TextOf" }
                     .map { it.parameters.drop(1) }
 
-                for(key in data) {
-                    for(decl in decls) {
+                for (key in data) {
+                    for (decl in decls) {
                         out.appendLine("@Composable")
                         out.append("inline fun ${key}Of(value: ConstantName")
 
-                        for(param in decl) {
+                        for (param in decl) {
                             out.append(", ")
-                            if(param.isVararg) {
+                            if (param.isVararg) {
                                 out.append("vararg ")
                             }
 
@@ -66,9 +71,9 @@ class LocalizationPlatformStructureProcessor(env: SymbolProcessorEnvironment) : 
                         out.appendLine(") =")
                         out.append("    $key { TextOf(value")
 
-                        for(param in decl) {
+                        for (param in decl) {
                             out.append(", ")
-                            if(param.isVararg) {
+                            if (param.isVararg) {
                                 out.append('*')
                             }
 

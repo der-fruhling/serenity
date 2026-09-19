@@ -38,11 +38,11 @@ object PointerEvents {
 
     @Serializable
     data object GotCapture : EventType<ElementPointerEvent>("gotpointercapture"),
-                             BuiltinPointerEvent
+        BuiltinPointerEvent
 
     @Serializable
     data object LostCapture : EventType<ElementPointerEvent>("lostpointercapture"),
-                              BuiltinPointerEvent
+        BuiltinPointerEvent
 
     @LimitedAvailability
     @UnsupportedOnSafari

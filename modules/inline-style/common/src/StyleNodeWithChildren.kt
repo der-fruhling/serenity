@@ -56,7 +56,7 @@ sealed class StyleNodeWithChildren : StyleNode() {
     }
 
     override fun clear() {
-        for(c in children) removeParent(c)
+        for (c in children) removeParent(c)
         children.clear()
     }
 }

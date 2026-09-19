@@ -195,7 +195,8 @@ class SerenityResourcesPlugin @Inject constructor(
 
             target.plugins.withType(SerenityServerPlugin::class) {
                 val processServerResources = target.tasks.named("syncServerResources")
-                val processServerResourcesDebug = target.tasks.named("syncServerResourcesDebug", Sync::class)
+                val processServerResourcesDebug =
+                    target.tasks.named("syncServerResourcesDebug", Sync::class)
 
                 val outDir = target.layout.buildDirectory.dir("resources/vendored")
                 val vendorServerResources =

@@ -18,7 +18,7 @@ class InlineStyleNode : ChildNode<ElementNode> {
 
     override fun format(fmt: Formatter) {
         fmt.block("InlineStyle") {
-            if(::_style.isInitialized) {
+            if (::_style.isInitialized) {
                 write(style.makeStyle())
             } else {
                 write("<null>")

@@ -158,9 +158,26 @@ sealed interface PhonyDynamicStringComponent {
 
                 is Link -> encodeSerializableElement(descriptor, LINK, Link.serializer(), value)
                 is Span -> encodeSerializableElement(descriptor, SPAN, Span.serializer(), value)
-                is Paragraph -> encodeSerializableElement(descriptor, PARAGRAPH, Paragraph.serializer(), value)
-                is Underlined -> encodeSerializableElement(descriptor, UNDERLINED, Underlined.serializer(), value)
-                is Strike -> encodeSerializableElement(descriptor, STRIKE, Strike.serializer(), value)
+                is Paragraph -> encodeSerializableElement(
+                    descriptor,
+                    PARAGRAPH,
+                    Paragraph.serializer(),
+                    value
+                )
+
+                is Underlined -> encodeSerializableElement(
+                    descriptor,
+                    UNDERLINED,
+                    Underlined.serializer(),
+                    value
+                )
+
+                is Strike -> encodeSerializableElement(
+                    descriptor,
+                    STRIKE,
+                    Strike.serializer(),
+                    value
+                )
             }
         }
 
@@ -174,8 +191,18 @@ sealed interface PhonyDynamicStringComponent {
                     ARGUMENT -> decodeSerializableElement(descriptor, index, Argument.serializer())
                     LINK -> decodeSerializableElement(descriptor, index, Link.serializer())
                     SPAN -> decodeSerializableElement(descriptor, index, Span.serializer())
-                    PARAGRAPH -> decodeSerializableElement(descriptor, index, Paragraph.serializer())
-                    UNDERLINED -> decodeSerializableElement(descriptor, index, Underlined.serializer())
+                    PARAGRAPH -> decodeSerializableElement(
+                        descriptor,
+                        index,
+                        Paragraph.serializer()
+                    )
+
+                    UNDERLINED -> decodeSerializableElement(
+                        descriptor,
+                        index,
+                        Underlined.serializer()
+                    )
+
                     STRIKE -> decodeSerializableElement(descriptor, index, Strike.serializer())
                     else -> throw IllegalArgumentException("Unknown element $index")
                 }

@@ -13,7 +13,7 @@ import web.pointer.PointerEvent as DomPointerEvent
 abstract class AbstractPointerEvent<T : EventTarget>(dom: DomPointerEvent) : AbstractMouseEvent<T>(
     dom
 ),
-                                                                             PointerEvent<T> {
+    PointerEvent<T> {
     @NewWebApi
     override val altitudeAngle: Float? by lazy {
         dom.takeIfPresent(DomPointerEvent::altitudeAngle)

@@ -2,7 +2,11 @@ package net.derfruhling.serenity.processor
 
 import kotlin.reflect.KClass
 
-enum class BuiltinParamParser(val typeName: String, val parse: String, val encode: String = "it.toString()") {
+enum class BuiltinParamParser(
+    val typeName: String,
+    val parse: String,
+    val encode: String = "it.toString()"
+) {
     STRING(String::class, "it"),
     BYTE(Byte::class, "it.toByte()"),
     U_BYTE(UByte::class, "it.toUByte()"),

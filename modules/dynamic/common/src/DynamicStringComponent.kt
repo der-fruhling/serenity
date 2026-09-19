@@ -74,7 +74,7 @@ sealed interface DynamicStringComponent : DynamicStringRenderable {
     value class Sequence(val children: List<DynamicStringComponent>) : DynamicStringComponent {
         @Composable
         override fun Render(context: DynamicStringContext) {
-            for(child in children) {
+            for (child in children) {
                 child.Render(context)
             }
         }
@@ -84,7 +84,8 @@ sealed interface DynamicStringComponent : DynamicStringRenderable {
     @SerialName($$"$d-arg")
     @Immutable
     @CborArray
-    data class Argument(val index: Int, val fallback: DynamicStringComponent? = null) : DynamicStringComponent {
+    data class Argument(val index: Int, val fallback: DynamicStringComponent? = null) :
+        DynamicStringComponent {
         @Composable
         override fun Render(context: DynamicStringContext) {
             context.args.elementAtOrNull(index)?.Render(context)
@@ -124,7 +125,7 @@ sealed interface DynamicStringComponent : DynamicStringRenderable {
     value class Paragraph(val content: DynamicStringComponent) : DynamicStringComponent {
         @Composable
         override fun Render(context: DynamicStringContext) {
-            RealParagraph { 
+            RealParagraph {
                 content.Render(context)
             }
         }
@@ -187,10 +188,20 @@ sealed interface DynamicStringComponent : DynamicStringRenderable {
                 isOptional = true
             )
             element<Argument>("asArgument", listOf(CborLabel(ARGUMENT.toLong())), isOptional = true)
-            element<Link>("asLink", listOf(CborLabel(
-                LINK.toLong())), isOptional = true)
-            element<Span>("asSpan", listOf(CborLabel(
-                SPAN.toLong())), isOptional = true)
+            element<Link>(
+                "asLink", listOf(
+                    CborLabel(
+                        LINK.toLong()
+                    )
+                ), isOptional = true
+            )
+            element<Span>(
+                "asSpan", listOf(
+                    CborLabel(
+                        SPAN.toLong()
+                    )
+                ), isOptional = true
+            )
             element(
                 "asParagraph",
                 Paragraph.serializer().descriptor,
@@ -224,7 +235,13 @@ sealed interface DynamicStringComponent : DynamicStringRenderable {
                 )
 
                 is Bold -> encodeSerializableElement(descriptor, BOLD, Bold.serializer(), value)
-                is Italic -> encodeSerializableElement(descriptor, ITALIC, Italic.serializer(), value)
+                is Italic -> encodeSerializableElement(
+                    descriptor,
+                    ITALIC,
+                    Italic.serializer(),
+                    value
+                )
+
                 is Sequence -> encodeSerializableElement(
                     descriptor,
                     SEQUENCE,
@@ -236,9 +253,26 @@ sealed interface DynamicStringComponent : DynamicStringRenderable {
 
                 is Link -> encodeSerializableElement(descriptor, LINK, Link.serializer(), value)
                 is Span -> encodeSerializableElement(descriptor, SPAN, Span.serializer(), value)
-                is Paragraph -> encodeSerializableElement(descriptor, PARAGRAPH, Paragraph.serializer(), value)
-                is Underlined -> encodeSerializableElement(descriptor, UNDERLINED, Underlined.serializer(), value)
-                is Strike -> encodeSerializableElement(descriptor, STRIKE, Strike.serializer(), value)
+                is Paragraph -> encodeSerializableElement(
+                    descriptor,
+                    PARAGRAPH,
+                    Paragraph.serializer(),
+                    value
+                )
+
+                is Underlined -> encodeSerializableElement(
+                    descriptor,
+                    UNDERLINED,
+                    Underlined.serializer(),
+                    value
+                )
+
+                is Strike -> encodeSerializableElement(
+                    descriptor,
+                    STRIKE,
+                    Strike.serializer(),
+                    value
+                )
             }
         }
 
@@ -247,13 +281,33 @@ sealed interface DynamicStringComponent : DynamicStringRenderable {
                 when (val index = decodeElementIndex(descriptor)) {
                     SEQUENCE -> decodeSerializableElement(descriptor, index, Sequence.serializer())
                     STRING -> StringConst(decodeStringElement(descriptor, index))
-                    BOLD -> decodeSerializableElement(descriptor, index, DynamicStringComponent.Bold.serializer())
-                    ITALIC -> decodeSerializableElement(descriptor, index, DynamicStringComponent.Italic.serializer())
+                    BOLD -> decodeSerializableElement(
+                        descriptor,
+                        index,
+                        DynamicStringComponent.Bold.serializer()
+                    )
+
+                    ITALIC -> decodeSerializableElement(
+                        descriptor,
+                        index,
+                        DynamicStringComponent.Italic.serializer()
+                    )
+
                     ARGUMENT -> decodeSerializableElement(descriptor, index, Argument.serializer())
                     LINK -> decodeSerializableElement(descriptor, index, Link.serializer())
                     SPAN -> decodeSerializableElement(descriptor, index, Span.serializer())
-                    PARAGRAPH -> decodeSerializableElement(descriptor, index, Paragraph.serializer())
-                    UNDERLINED -> decodeSerializableElement(descriptor, index, Underlined.serializer())
+                    PARAGRAPH -> decodeSerializableElement(
+                        descriptor,
+                        index,
+                        Paragraph.serializer()
+                    )
+
+                    UNDERLINED -> decodeSerializableElement(
+                        descriptor,
+                        index,
+                        Underlined.serializer()
+                    )
+
                     STRIKE -> decodeSerializableElement(descriptor, index, Strike.serializer())
                     else -> throw IllegalArgumentException("Unknown element $index")
                 }

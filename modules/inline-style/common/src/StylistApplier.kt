@@ -3,7 +3,7 @@ package net.derfruhling.serenity.style
 import androidx.compose.runtime.Applier
 import net.derfruhling.serenity.Stack
 
-class StylistApplier<T: StyleNode>(val target: StylistTarget<T>) : Applier<T> {
+class StylistApplier<T : StyleNode>(val target: StylistTarget<T>) : Applier<T> {
     private val stack: Stack<T> = Stack()
     private var _current: T? = null
     override val current: T get() = _current!!
@@ -29,7 +29,7 @@ class StylistApplier<T: StyleNode>(val target: StylistTarget<T>) : Applier<T> {
         index: Int,
         instance: T
     ) {
-        when(val c = _current) {
+        when (val c = _current) {
             null -> target.add(instance)
             else -> c.add(instance)
         }
@@ -38,7 +38,8 @@ class StylistApplier<T: StyleNode>(val target: StylistTarget<T>) : Applier<T> {
     override fun insertTopDown(
         index: Int,
         instance: T
-    ) {}
+    ) {
+    }
 
     override fun move(from: Int, to: Int, count: Int) {
         (_current ?: target).move(from, to, count)

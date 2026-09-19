@@ -2,7 +2,7 @@ package net.derfruhling.serenity.modularity.extension
 
 import net.derfruhling.serenity.Stack
 
-class PageExtensionPoint<T: Function<Unit>>(@PublishedApi internal val sequence: ReferencePointSequence) {
+class PageExtensionPoint<T : Function<Unit>>(@PublishedApi internal val sequence: ReferencePointSequence) {
     @PublishedApi
     internal var beforeAllOrNull: MutableList<T>? = null
         private set
@@ -24,9 +24,21 @@ class PageExtensionPoint<T: Function<Unit>>(@PublishedApi internal val sequence:
         private set
 
     private val beforeAll by lazy { mutableListOf<T>().also { beforeAllOrNull = it } }
-    private val beforeEach by lazy { mutableMapOf<ReferencePoint, MutableList<T>>().also { beforeEachOrNull = it } }
-    private val each by lazy { mutableMapOf<ReferencePoint, MutableList<T>>().also { eachOrNull = it } }
-    private val afterEach by lazy { mutableMapOf<ReferencePoint, MutableList<T>>().also { afterEachOrNull = it } }
+    private val beforeEach by lazy {
+        mutableMapOf<ReferencePoint, MutableList<T>>().also {
+            beforeEachOrNull = it
+        }
+    }
+    private val each by lazy {
+        mutableMapOf<ReferencePoint, MutableList<T>>().also {
+            eachOrNull = it
+        }
+    }
+    private val afterEach by lazy {
+        mutableMapOf<ReferencePoint, MutableList<T>>().also {
+            afterEachOrNull = it
+        }
+    }
     private val afterAll by lazy { mutableListOf<T>().also { afterAllOrNull = it } }
 
     @PublishedApi
@@ -93,7 +105,7 @@ class PageExtensionPoint<T: Function<Unit>>(@PublishedApi internal val sequence:
 
     @PublishedApi
     internal inline fun flyState(fn: (T) -> Unit): Boolean {
-        return when(state) {
+        return when (state) {
             State.BEFORE -> {
                 beforeAllOrNull?.forEach { fn(it) }
                 pointIterator = sequence.points.iterator()
@@ -107,13 +119,18 @@ class PageExtensionPoint<T: Function<Unit>>(@PublishedApi internal val sequence:
     }
 
     @PublishedApi
-    internal inline fun execute(next: ReferencePoint, isStack: Boolean, fn: (T) -> Unit, check: () -> Unit = {}) {
+    internal inline fun execute(
+        next: ReferencePoint,
+        isStack: Boolean,
+        fn: (T) -> Unit,
+        check: () -> Unit = {}
+    ) {
         lastPoint?.let { last ->
             afterEachOrNull?.get(last)?.forEach { fn(it) }
             lastPoint = null
         }
 
-        if(!isStack) {
+        if (!isStack) {
             beforeEachOrNull?.get(next)?.forEach { fn(it) }
         }
 
@@ -123,34 +140,34 @@ class PageExtensionPoint<T: Function<Unit>>(@PublishedApi internal val sequence:
     }
 
     inline fun execute(fn: (T) -> Unit) {
-        if(flyState(fn)) return
+        if (flyState(fn)) return
 
         do {
             val (next, isStack) = nextPoint()
 
-            if(next != null) {
+            if (next != null) {
                 execute(next, isStack, fn)
             }
-        } while(next != null)
+        } while (next != null)
 
         finish(fn)
     }
 
     inline fun executeUntil(point: ReferencePoint, fn: (T) -> Unit) {
-        if(flyState(fn)) return
+        if (flyState(fn)) return
 
         do {
             val (next, isStack) = nextPoint()
 
-            if(next != null) {
+            if (next != null) {
                 execute(next, isStack, fn) {
-                    if(next == point) {
+                    if (next == point) {
                         pointStack.push(next)
                         return
                     }
                 }
             }
-        } while(next != null)
+        } while (next != null)
     }
 
     inline fun finish(fn: (T) -> Unit) {

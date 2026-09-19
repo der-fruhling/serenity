@@ -22,15 +22,15 @@ class ButtonTest {
                     isPressed = true
                 })
             }) {
-                useSnapshot { assertFalse(isPressed) }
+                assertFalse(isPressed)
 
                 val button = it.body.getElementsByTagName("button").asList().single()
                 (button as HTMLButtonElement).click()
                 awaitIdle()
 
-                useSnapshot { assertTrue(isPressed) }
+                assertTrue(isPressed)
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             throw e
         }

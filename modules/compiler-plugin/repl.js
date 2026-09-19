@@ -93,7 +93,7 @@ async function loop() {
                 default:
                     print(await Realm.eval(currentRealmIndex, code));
             }
-        } catch(e) {
+        } catch (e) {
             printErr(e.stack != null ? e.stack : e.toString());
             printErr('\nCODE:\n' + code);
         }

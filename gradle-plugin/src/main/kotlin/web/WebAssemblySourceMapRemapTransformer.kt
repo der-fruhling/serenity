@@ -6,7 +6,6 @@ import net.derfruhling.serene.wasm.WasmModule
 import net.derfruhling.serene.wasm.sections.SourceMappingURLSection
 import net.derfruhling.serene.wasm.sections.UnidentifiedCustomSection
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.Internal
 import org.jetbrains.kotlin.konan.file.File
 

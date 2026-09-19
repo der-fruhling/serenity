@@ -7,7 +7,6 @@ import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.RegisterPage
 import net.derfruhling.serenity.channel.countRemoteInvalidations
-import net.derfruhling.serenity.dom.Document
 import net.derfruhling.serenity.dom.HTMLInputElement
 import net.derfruhling.serenity.dom.document
 import net.derfruhling.serenity.dom.getElementById

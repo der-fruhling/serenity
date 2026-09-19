@@ -3,34 +3,22 @@ package net.derfruhling.serenity.compiler.ir
 import net.derfruhling.serenity.compiler.NotApplicable
 import net.derfruhling.serenity.compiler.SerenityWarnings
 import net.openhft.hashing.LongHashFunction
-import org.jetbrains.kotlin.backend.common.FileLoweringPass
-import org.jetbrains.kotlin.backend.common.ModuleLoweringPass
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.jvm.unboxInlineClass
-import org.jetbrains.kotlin.fir.resolve.defaultType
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.classSymbol
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationBase
-import org.jetbrains.kotlin.ir.declarations.IrFile
-import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
-import org.jetbrains.kotlin.ir.defaultType
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrConst
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
-import org.jetbrains.kotlin.ir.expressions.implicitCastTo
 import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.constructors
-import org.jetbrains.kotlin.ir.util.defaultConstructor
 import org.jetbrains.kotlin.ir.util.isTopLevelInPackage
-import org.jetbrains.kotlin.ir.util.primaryConstructor
 import org.jetbrains.kotlin.ir.util.toIrConst
-import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
-import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
 class IrConstantNameGenerator(private val context: IrPluginContext) : AbstractSerenityTransformer() {
@@ -38,7 +26,7 @@ class IrConstantNameGenerator(private val context: IrPluginContext) : AbstractSe
     private val textType = context(context.irBuiltIns) {
         try {
             ClassId(localizationPackage, Name.identifier("ConstantName")).classSymbol()
-        } catch(_: IllegalStateException) {
+        } catch (_: IllegalStateException) {
             throw NotApplicable()
         }
     }

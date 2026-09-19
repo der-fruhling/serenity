@@ -5,9 +5,9 @@ import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.withRunningRecomposer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.currentCoroutineContext
+import net.derfruhling.serenity.platform.DocumentFragment
 import net.derfruhling.serenity.platform.HtmlCompositionContext
 import net.derfruhling.serenity.platform.composeHtmlOnce
-import net.derfruhling.serenity.platform.DocumentFragment
 
 suspend fun runStaticComposeTest(
     fn: @Composable () -> Unit

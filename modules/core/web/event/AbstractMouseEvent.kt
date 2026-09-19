@@ -29,7 +29,7 @@ private external interface DomMouseEventExt {
 }
 
 abstract class AbstractMouseEvent<T : EventTarget>(dom: DomMouseEvent) : AbstractUIEvent<T>(dom),
-                                                                         MouseEvent<T> {
+    MouseEvent<T> {
     override val altKey: Boolean by dom::altKey
     override val button: MouseButton by lazy { mouseButtonFromDom(dom.button) }
     override val buttons: MouseButtons? by lazy {

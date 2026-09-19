@@ -5,12 +5,7 @@ import net.derfruhling.serenity.gradle.SerenityExtension
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.the
-import org.gradle.kotlin.dsl.withType
+import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 class SerenityLocalizationPlugin : Plugin<Project> {
@@ -39,8 +34,10 @@ class SerenityLocalizationPlugin : Plugin<Project> {
             val sourceDirStr = ext.sourceDir.get().asFile.absolutePath
             sourceDir.set(sourceDirStr)
 
-            for(sourceRoot in target.the<KotlinMultiplatformExtension>().sourceSets) {
-                val dir = sourceRoot.resources.srcDirs.find { sourceDirStr.startsWith(it.absolutePath) } ?: continue
+            for (sourceRoot in target.the<KotlinMultiplatformExtension>().sourceSets) {
+                val dir =
+                    sourceRoot.resources.srcDirs.find { sourceDirStr.startsWith(it.absolutePath) }
+                        ?: continue
                 baseDir.set(dir.absolutePath)
             }
         }
@@ -53,9 +50,11 @@ class SerenityLocalizationPlugin : Plugin<Project> {
 
         target.afterEvaluate {
             val sourceDirStr = ext.sourceDir.get().asFile.absolutePath
-            val baseDir = target.the<KotlinMultiplatformExtension>().sourceSets.firstNotNullOfOrNull { sourceSet ->
-                sourceSet.resources.srcDirs.find { sourceDirStr.startsWith(it.absolutePath) }
-            } ?: throw InvalidUserDataException("locale source dir must be under a resource root")
+            val baseDir =
+                target.the<KotlinMultiplatformExtension>().sourceSets.firstNotNullOfOrNull { sourceSet ->
+                    sourceSet.resources.srcDirs.find { sourceDirStr.startsWith(it.absolutePath) }
+                }
+                    ?: throw InvalidUserDataException("locale source dir must be under a resource root")
 
             val outputDir = ext.sourceDir.get().asFile.toRelativeString(baseDir)
 

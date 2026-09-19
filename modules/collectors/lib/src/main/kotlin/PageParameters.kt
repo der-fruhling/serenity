@@ -1,11 +1,7 @@
 package net.derfruhling.serenity.processor
 
 import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.symbol.KSAnnotation
-import com.google.devtools.ksp.symbol.KSFunctionDeclaration
-import com.google.devtools.ksp.symbol.KSType
-import com.google.devtools.ksp.symbol.KSValueArgument
-import com.google.devtools.ksp.symbol.KSValueParameter
+import com.google.devtools.ksp.symbol.*
 import net.derfruhling.serenity.annotations.UseParser
 
 class PageParameters(function: KSFunctionDeclaration, val logger: KSPLogger) {
@@ -31,7 +27,7 @@ class PageParameters(function: KSFunctionDeclaration, val logger: KSPLogger) {
         }
 
         val parseExpr by lazy {
-            if(annotation != null) {
+            if (annotation != null) {
                 val a = annotation!!
                 val type = a.arguments
                     .mapNotNull(KSValueArgument::value)

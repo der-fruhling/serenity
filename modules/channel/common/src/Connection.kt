@@ -1,7 +1,6 @@
 package net.derfruhling.serenity.channel
 
 import kotlinx.atomicfu.atomic
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ChannelResult
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -22,7 +21,8 @@ abstract class AbstractConnection(
 ) : Connection, ReceiveChannel<FullMessage> by rx {
     private val idCounter = atomic(0)
 
-    override fun wrap(message: Message): FullMessage = FullMessage(idCounter.getAndIncrement(), message)
+    override fun wrap(message: Message): FullMessage =
+        FullMessage(idCounter.getAndIncrement(), message)
 
     override fun trySend(message: FullMessage): ChannelResult<Unit> {
         return tx.trySend(message)

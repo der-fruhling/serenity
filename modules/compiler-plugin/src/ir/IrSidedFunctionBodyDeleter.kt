@@ -48,12 +48,28 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
     }
 
     val notImplementedErrorType by lazy {
-        context.finderForBuiltins().findClass(ClassId.fromString(NotImplementedError::class.qualifiedName!!.replace('.', '/')))!!
+        context.finderForBuiltins()
+            .findClass(
+                ClassId.fromString(
+                    NotImplementedError::class.qualifiedName!!.replace(
+                        '.',
+                        '/'
+                    )
+                )
+            )!!
             .typeWith()
     }
 
     val notImplementedError by lazy {
-        context.finderForBuiltins().findConstructors(ClassId.fromString(NotImplementedError::class.qualifiedName!!.replace('.', '/')))
+        context.finderForBuiltins()
+            .findConstructors(
+                ClassId.fromString(
+                    NotImplementedError::class.qualifiedName!!.replace(
+                        '.',
+                        '/'
+                    )
+                )
+            )
             .find { it.owner.parameters.isEmpty() }!!
     }
 
@@ -79,16 +95,21 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
         if (expectedSide != null) {
             val targetSide = declaration.getSide()
             if (targetSide != null && expectedSide != targetSide) {
-                declaration.body = IrBlockBodyBuilder(context, Scope(declaration.symbol), 0, 0).blockBody {
-                    +irThrow(irConstructorCall(IrConstructorCallImpl(
-                        UNDEFINED_OFFSET,
-                        UNDEFINED_OFFSET,
-                        notImplementedErrorType,
-                        notImplementedError,
-                        0,
-                        0
-                    ), notImplementedError))
-                }
+                declaration.body =
+                    IrBlockBodyBuilder(context, Scope(declaration.symbol), 0, 0).blockBody {
+                        +irThrow(
+                            irConstructorCall(
+                                IrConstructorCallImpl(
+                                    UNDEFINED_OFFSET,
+                                    UNDEFINED_OFFSET,
+                                    notImplementedErrorType,
+                                    notImplementedError,
+                                    0,
+                                    0
+                                ), notImplementedError
+                            )
+                        )
+                    }
             }
         }
 

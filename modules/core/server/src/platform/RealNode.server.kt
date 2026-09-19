@@ -3,9 +3,9 @@
 package net.derfruhling.serenity.platform
 
 import com.fleeksoft.ksoup.nodes.*
+import com.fleeksoft.ksoup.nodes.DataNode
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.TextNode
-import com.fleeksoft.ksoup.nodes.DataNode
 import com.fleeksoft.ksoup.parser.Parser
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.event.EventSubscriptionHandle
@@ -133,7 +133,7 @@ actual class RealElement actual constructor(node: UnderlyingElement) :
         override fun add(element: RealAttribute): Boolean {
             map[element.name] = element
             node.attr((element.name.namespace?.let { "$it:" } ?: "") + element.name.localName,
-                      element.value)
+                element.value)
             return true
         }
 

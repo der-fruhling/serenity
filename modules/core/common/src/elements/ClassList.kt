@@ -56,7 +56,9 @@ data object EmptyClassList : ClassList(emptySet())
 private class ImmutableClassListImpl(classes: Set<String>) : ClassList(classes)
 
 @Stable
-class MutableClassList internal constructor(val asStateSet: SnapshotStateSet<String>) : ClassList(asStateSet), MutableSet<String> by asStateSet {
+class MutableClassList internal constructor(val asStateSet: SnapshotStateSet<String>) : ClassList(
+    asStateSet
+), MutableSet<String> by asStateSet {
     override fun iterator(): MutableIterator<String> {
         return asStateSet.iterator()
     }
@@ -87,7 +89,8 @@ fun mutableClassListOf(vararg className: String) = MutableClassList(mutableState
 fun mutableClassListOf(stateSet: SnapshotStateSet<String>) = MutableClassList(stateSet)
 
 @RememberInComposition
-fun mutableClassListOf(set: Set<String>) = MutableClassList(SnapshotStateSet<String>().also { it += set })
+fun mutableClassListOf(set: Set<String>) =
+    MutableClassList(SnapshotStateSet<String>().also { it += set })
 
 fun classes(set: Iterable<String>): ClassList = ImmutableClassListImpl(set.toSet())
 fun classes(className: String): ClassList = ImmutableClassListImpl(setOf(className))

@@ -17,12 +17,12 @@ abstract class Module<Config : Any>(
     protected open suspend fun ProvideContext.provide() {}
 
     internal fun initialize(addedModules: Set<Module<*>>) {
-        if(!_isInitialized) {
+        if (!_isInitialized) {
             initialize()
             _isInitialized = true
         }
 
-        for(added in addedModules) {
+        for (added in addedModules) {
             moduleAdded(added)
         }
     }

@@ -1,4 +1,4 @@
-package net.derfruhling.serenity
+package net.derfruhling.serenity.serial
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf

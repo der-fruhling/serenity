@@ -20,8 +20,10 @@ import net.derfruhling.serenity.modularity.ProvideContext
 import net.derfruhling.serenity.modularity.extension.PageExtensionController
 import net.derfruhling.serenity.modularity.extension.pageExtensionControllerLocal
 import net.derfruhling.serenity.platform.*
-import net.derfruhling.serenity.platform.HtmlCompositionContext
-import net.derfruhling.serenity.platform.RehydratingHtmlTree
+import net.derfruhling.serenity.serial.SerialRegistry
+import net.derfruhling.serenity.serial.decodeFromObject
+import net.derfruhling.serenity.serial.encodeToObject
+import net.derfruhling.serenity.serial.pageTemplate
 import web.console.console
 import web.dom.document
 import web.events.EventHandler

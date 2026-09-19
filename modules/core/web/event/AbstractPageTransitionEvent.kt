@@ -7,7 +7,7 @@ import web.history.PageTransitionEvent as DomPageTransitionEvent
 import web.window.Window as DomWindow
 
 abstract class AbstractPageTransitionEvent(dom: Event) : AbstractEvent<Window>(dom),
-                                                         PageTransitionEvent {
+    PageTransitionEvent {
     override fun eventTargetFromDom(eventTarget: EventTarget?): Window {
         return eventTarget as DomWindow
     }

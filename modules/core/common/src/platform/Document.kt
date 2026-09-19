@@ -3,7 +3,7 @@ package net.derfruhling.serenity.platform
 import net.derfruhling.serenity.Formatter
 
 open class Document(node: RealDocument) : DocumentLike<Document, RealDocument>(node),
-                                          RootNode {
+    RootNode {
     init {
         updateReal()
     }

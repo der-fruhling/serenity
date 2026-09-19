@@ -3,7 +3,8 @@ package net.derfruhling.serenity.processor
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.processing.*
-import com.google.devtools.ksp.symbol.*
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.validate
 import net.derfruhling.serenity.annotations.RegisterPage
@@ -54,7 +55,7 @@ class WebCollector(
                 out.appendLine("import kotlinx.serialization.Serializable")
                 out.appendLine("import kotlinx.serialization.SerialName")
 
-                if(extendingAnnotations.isNotEmpty()) {
+                if (extendingAnnotations.isNotEmpty()) {
                     out.appendLine("import net.derfruhling.serenity.modularity.extension.AbstractPageExtension")
                     out.appendLine("import kotlin.reflect.KClass")
                     out.appendLine("import kotlinx.serialization.Transient")
@@ -63,8 +64,8 @@ class WebCollector(
                 val parameters by lazy { PageParameters(function, logger) }
                 val isClass = function.parameters.isNotEmpty()
 
-                if(isClass) {
-                    if(extendingAnnotations.isEmpty()) {
+                if (isClass) {
+                    if (extendingAnnotations.isEmpty()) {
                         out.appendLine("import kotlinx.serialization.Transient")
                     }
                     out.appendLine("import net.derfruhling.serenity.PageHolderFactory")
@@ -97,12 +98,16 @@ class WebCollector(
                 out.appendLine(
                     """
                     actual override val id: String = "$hashFunctionName"
-                    actual override val path: String = "${if(isClass) parameters.pathExpression(annotation.path) else annotation.path}"
+                    actual override val path: String = "${
+                        if (isClass) parameters.pathExpression(
+                            annotation.path
+                        ) else annotation.path
+                    }"
                     actual override val details: PageDetails = ${generatePageDetails(annotation)}
                 """.trimIndent().prependIndent("    ")
                 )
 
-                if(extendingAnnotations.isNotEmpty()) {
+                if (extendingAnnotations.isNotEmpty()) {
                     addPageExtensions(out, resolver, extendingAnnotations)
                 }
 
@@ -137,7 +142,7 @@ class WebCollector(
                         buildString {
                             append("${it.serialName} = parameters[\"${it.serialName}\"]?.let { ${it.parseExpr} }")
 
-                            if(!it.type.isMarkedNullable) {
+                            if (!it.type.isMarkedNullable) {
                                 append(" ?: error(\"No value provided for parameter '${it.serialName}'\")")
                             }
                         }
@@ -175,7 +180,7 @@ class WebCollector(
                 out.appendLine('}')
                 out.appendLine()
 
-                if(function.parameters.isNotEmpty()) {
+                if (function.parameters.isNotEmpty()) {
                     out.appendLine(
                         """
                         @JsExport

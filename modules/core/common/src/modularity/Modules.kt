@@ -53,12 +53,12 @@ object Modules {
             val fullSet = loadedModules + initSet
             val existingModules = loadedModules.toSet()
 
-            for(module in toInit) {
+            for (module in toInit) {
                 module.initialize(fullSet)
                 loadedModules.add(module)
             }
 
-            for(existing in existingModules) {
+            for (existing in existingModules) {
                 existing.initialize(initSet)
             }
         }

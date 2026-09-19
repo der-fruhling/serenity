@@ -25,7 +25,7 @@ private fun isUndefined(any: JsAny): Boolean = js("any === undefined")
 
 @OptIn(ExperimentalWasmJsInterop::class)
 actual val Document.node: PlatformDocument
-    get() = getDocumentNode(this)?.get() ?: when(this) {
+    get() = getDocumentNode(this)?.get() ?: when (this) {
         document -> PlatformDocument.CURRENT
         else -> PlatformDocument(RealDocument(this))
     }.also { setDocumentNode(this, it.toJsReference()) }

@@ -71,8 +71,8 @@ abstract class TransformWebAssembly @Inject constructor(
 
     @TaskAction
     protected open fun transform() {
-        if(outputDir.get().asFile.exists()) {
-            for(file in outputDir.get().asFile.listFiles()!!) {
+        if (outputDir.get().asFile.exists()) {
+            for (file in outputDir.get().asFile.listFiles()!!) {
                 file.deleteRecursively()
             }
         }
@@ -111,7 +111,7 @@ abstract class TransformWebAssembly @Inject constructor(
                 val op = progressLoggerFactory.newOperation(opClass, parent)
 
                 tf.newBinary.set(newBinaryFile)
-                if(sourceMap != null) {
+                if (sourceMap != null) {
                     tf.newSourceMap.set(newSourceMap)
                 }
 

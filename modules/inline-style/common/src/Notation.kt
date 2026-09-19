@@ -10,7 +10,7 @@ inline fun optRequire(condition: Boolean, message: () -> String) {
         returns() implies condition
     }
 
-    if(!condition) throw UnparsableNotationException(message())
+    if (!condition) throw UnparsableNotationException(message())
 }
 
 @Stable
@@ -43,7 +43,7 @@ interface Notation<T> {
                 override fun fromNotationString(value: String): T {
                     val suppressed = mutableListOf<UnparsableNotationException>()
 
-                    for(n in notations) {
+                    for (n in notations) {
                         try {
                             return n.fromNotationString(value)
                         } catch (e: UnparsableNotationException) {
@@ -52,7 +52,7 @@ interface Notation<T> {
                     }
 
                     throw UnparsableNotationException("Could not parse aggregate type ${T::class}").also {
-                        for(s in suppressed) {
+                        for (s in suppressed) {
                             it.addSuppressed(s)
                         }
                     }

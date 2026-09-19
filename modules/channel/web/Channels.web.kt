@@ -1,15 +1,8 @@
 package net.derfruhling.serenity.channel
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import net.derfruhling.serenity.manifest.Manifest
 import net.derfruhling.serenity.modularity.CallableEvent
 import net.derfruhling.serenity.modularity.Event
@@ -35,7 +28,7 @@ actual object Channels {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     val sessionId: Int by lazy {
-        if(_sessionId < 0) {
+        if (_sessionId < 0) {
             throw IllegalStateException("Session not initialized yet")
         }
 
@@ -50,7 +43,7 @@ actual object Channels {
 
     private var _delayDuration: Duration = Duration.ZERO
     private val delayDuration: Duration
-        get() = when(failedAttempts) {
+        get() = when (failedAttempts) {
             0 -> Duration.ZERO
             in 1..3 -> 5.seconds.also { _delayDuration = it }
             else -> {
@@ -65,7 +58,7 @@ actual object Channels {
     }
 
     private tailrec suspend fun reconnect(manifest: Manifest) {
-        if(failedAttempts > 10) {
+        if (failedAttempts > 10) {
             logger.error { "Too many failed attempts at reconnecting" }
             return
         }
@@ -80,7 +73,7 @@ actual object Channels {
             failedAttempts = 0
             scope.launch { manageConnection(manifest) }
             return
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             val attId = ++failedAttempts
             val delayDuration = delayDuration
             logger.warn(e) { "Attempt #$attId at connection failed, trying again in ${delayDuration.inWholeSeconds} seconds" }
@@ -111,15 +104,15 @@ actual object Channels {
             val cCtx = CancellationContext { isCancelled = true }
             onMessage(cCtx, msgId, message)
 
-            if(isCancelled && message.isCancellable) return
+            if (isCancelled && message.isCancellable) return
 
-            when(message) {
+            when (message) {
                 is Message.Hello -> {
                     _sessionId = message.sessionId
                 }
 
                 is Message.InvalidateKey -> {
-                    for(key in message.keys) {
+                    for (key in message.keys) {
                         invalidate(key)
                     }
                 }

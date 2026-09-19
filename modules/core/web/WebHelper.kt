@@ -12,7 +12,8 @@ internal fun isUndefined(@Suppress("unused") value: JsAny): Boolean = js("value 
 internal fun isNull(@Suppress("unused") value: JsAny): Boolean = js("value === null")
 
 @ExperimentalWasmJsInterop
-private fun checkField(@Suppress("unused") of: JsAny, @Suppress("unused") name: String): Boolean = js("name in of")
+private fun checkField(@Suppress("unused") of: JsAny, @Suppress("unused") name: String): Boolean =
+    js("name in of")
 
 @ExperimentalWasmJsInterop
 fun <T : JsAny> T.hasField(name: String): Boolean = checkField(this, name)
@@ -47,13 +48,15 @@ private external interface JsTryCatchResult<R : JsAny> {
 @ExperimentalWasmJsInterop
 private fun <R : JsAny> jsTryCatch(
     @Suppress("unused") lambda: () -> R?
-): JsTryCatchResult<R> = js("""(() => {
+): JsTryCatchResult<R> = js(
+    """(() => {
     try {
         return { success: lambda() };
     } catch(error) {
         return { error }
     }
-})()""")
+})()"""
+)
 
 @OptIn(ExperimentalWasmJsInterop::class)
 fun <R> catch(fn: () -> R): JsResult<R> {

@@ -1,9 +1,9 @@
 package net.derfruhling.serenity.testapp
 
-import net.derfruhling.serenity.SerialRegistry
 import net.derfruhling.serenity.logging.setupConsoleLogging
 import net.derfruhling.serenity.onHtmlContextStart
-import net.derfruhling.serenity.registerClientPages
+import net.derfruhling.serenity.serial.SerialRegistry
+import net.derfruhling.serenity.serial.registerClientPages
 
 fun main() {
     setupConsoleLogging()

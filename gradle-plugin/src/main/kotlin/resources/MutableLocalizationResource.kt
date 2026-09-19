@@ -38,32 +38,38 @@ class MutableLocalizationResource(
         open var dynamicString: PhonyDynamicString? = null
 
         fun appendText(text: String) {
-            dynamicString = if(dynamicString == null) {
+            dynamicString = if (dynamicString == null) {
                 PhonyDynamicString(StringConst(text))
             } else {
-                PhonyDynamicString(when(val orig = dynamicString!!.component) {
-                    is StringConst -> {
-                        StringConst(orig.text.trim() + ' ' + text)
+                PhonyDynamicString(
+                    when (val orig = dynamicString!!.component) {
+                        is StringConst -> {
+                            StringConst(orig.text.trim() + ' ' + text)
+                        }
+
+                        is Sequence -> Sequence(orig.children + StringConst(text))
+
+                        else -> Sequence(
+                            listOf(
+                                orig,
+                                StringConst(text)
+                            )
+                        )
                     }
-
-                    is Sequence -> Sequence(orig.children + StringConst(text))
-
-                    else -> Sequence(listOf(
-                        orig,
-                        StringConst(text)
-                    ))
-                })
+                )
             }
         }
 
         fun append(component: PhonyDynamicStringComponent) {
-            dynamicString = if(dynamicString == null) {
+            dynamicString = if (dynamicString == null) {
                 PhonyDynamicString(component)
             } else {
-                PhonyDynamicString(when(val orig = dynamicString!!.component) {
-                    is Sequence -> Sequence(orig.children + component)
-                    else -> Sequence(listOf(dynamicString!!.component, component))
-                })
+                PhonyDynamicString(
+                    when (val orig = dynamicString!!.component) {
+                        is Sequence -> Sequence(orig.children + component)
+                        else -> Sequence(listOf(dynamicString!!.component, component))
+                    }
+                )
             }
         }
 
@@ -127,7 +133,7 @@ class MutableLocalizationResource(
                 last.namePrefix?.let { return it }
 
                 return stack.mapNotNull {
-                    if(it is Group) it.name
+                    if (it is Group) it.name
                     else null
                 }.also { last.namePrefix = it }
             }
@@ -149,11 +155,11 @@ class MutableLocalizationResource(
             qName: String,
             attributes: Attributes
         ) {
-            if(stack.empty()) {
+            if (stack.empty()) {
                 attributes.getValue("whitespace")?.let { whitespace = it }
                 stack.push(Root)
             } else if (!isRule) {
-                when(attributes.getValue("type")) {
+                when (attributes.getValue("type")) {
                     "group" -> stack.push(Group(qName))
                     else -> {
                         stack.push(Rule((namePrefix + qName).joinToString("/")))
@@ -161,7 +167,7 @@ class MutableLocalizationResource(
                     }
                 }
             } else {
-                when(qName) {
+                when (qName) {
                     "b", "strong", "i", "u", "ul", "s", "strike", "p" -> {
                         mutableRuleStack.push(RuleBuilder())
                     }
@@ -196,13 +202,13 @@ class MutableLocalizationResource(
         }
 
         override fun endElement(uri: String, localName: String, qName: String) {
-            if(isRule) {
+            if (isRule) {
                 val last = mutableRuleStack.pop()!!
 
-                if(mutableRuleStack.empty()) {
+                if (mutableRuleStack.empty()) {
                     strings[hasher.hashBytes((stack.pop() as Rule).name.toByteArray())] =
                         last.build()
-                } else when(qName) {
+                } else when (qName) {
                     "b", "strong" -> mutableRuleStack.peek()!!.append(last.toBold())
                     "i" -> mutableRuleStack.peek()!!.append(last.toItalic())
                     "u", "ul" -> mutableRuleStack.peek()!!.append(last.toUnderlined())
@@ -215,9 +221,10 @@ class MutableLocalizationResource(
         }
 
         override fun characters(ch: CharArray, start: Int, length: Int) {
-            if(isRule) {
-                var text = ch.concatToString(start, start + length).replace(WHITESPACE_REGEX, whitespace)
-                if(mutableRuleStack.size == 1 && mutableRuleStack.peek().dynamicString == null) {
+            if (isRule) {
+                var text =
+                    ch.concatToString(start, start + length).replace(WHITESPACE_REGEX, whitespace)
+                if (mutableRuleStack.size == 1 && mutableRuleStack.peek().dynamicString == null) {
                     text = text.trimStart()
                 }
                 mutableRuleStack.peek()!!.appendText(text)

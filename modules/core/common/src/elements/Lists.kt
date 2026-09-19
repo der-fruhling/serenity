@@ -8,7 +8,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.runtime.snapshots.SnapshotStateSet
 import net.derfruhling.serenity.Element
 import net.derfruhling.serenity.Text
-import net.derfruhling.serenity.attribute
 import net.derfruhling.serenity.attribute.HtmlAttributes
 
 @Suppress("NOTHING_TO_INLINE")
@@ -16,7 +15,7 @@ import net.derfruhling.serenity.attribute.HtmlAttributes
 private inline fun <T> eachImpl(set: Set<T>, noinline fn: @Composable (T) -> Unit) {
     val map = remember { mutableMapOf<T, @Composable (T) -> Unit>() }
 
-    for(item in set) {
+    for (item in set) {
         val movableContent = map.getOrPut(item) { movableContentOf(fn) }
 
         movableContent(item)
@@ -40,7 +39,7 @@ fun <T> SnapshotStateSet<T>.forEachMovable(fn: @Composable (T) -> Unit) {
 private inline fun <K, V> eachImpl(values: Map<K, V>, noinline fn: @Composable (K, V) -> Unit) {
     val map = remember { mutableMapOf<K, @Composable (K, V) -> Unit>() }
 
-    for((key, value) in values) {
+    for ((key, value) in values) {
         val movableContent = map.getOrPut(key) { movableContentOf(fn) }
 
         movableContent(key, value)
@@ -93,7 +92,7 @@ fun <T> OrderedList(
     fn: @Composable (T) -> Unit
 ) {
     OrderedList(classList, id) {
-        for(item in iterable) {
+        for (item in iterable) {
             Entry {
                 fn(item)
             }
@@ -159,7 +158,7 @@ fun <T> UnorderedList(
     fn: @Composable (T) -> Unit
 ) {
     UnorderedList(classList, id) {
-        for(item in list) {
+        for (item in list) {
             Entry {
                 fn(item)
             }

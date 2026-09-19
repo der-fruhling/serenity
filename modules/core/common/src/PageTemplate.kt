@@ -8,6 +8,7 @@ import net.derfruhling.serenity.elements.currentPageLocal
 import net.derfruhling.serenity.modularity.extension.Body
 import net.derfruhling.serenity.modularity.extension.Head
 import net.derfruhling.serenity.modularity.extension.PageExtensionController
+import net.derfruhling.serenity.serial.SaveDataManager
 
 @Stable
 class PageTemplate(val builder: @Composable TemplateBuilder.() -> Unit) {

@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import net.derfruhling.serenity.Element
-import net.derfruhling.serenity.attribute
 import net.derfruhling.serenity.attribute.AttributeValue
 import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.attribute.Rel
+import net.derfruhling.serenity.elements.attribute
 import net.derfruhling.serenity.event.ElementEvent
 import net.derfruhling.serenity.event.Handler
 import net.derfruhling.serenity.event.On

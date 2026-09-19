@@ -7,16 +7,19 @@ import androidx.compose.runtime.snapshots.Snapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import net.derfruhling.serenity.InternalPageEntryPoint
-import net.derfruhling.serenity.SnapshotContext
 import net.derfruhling.serenity.HtmlComposable
+import net.derfruhling.serenity.InternalPageEntryPoint
 import net.derfruhling.serenity.htmlComposer
 import net.derfruhling.serenity.ifClient
-import net.derfruhling.serenity.platform.HtmlApplier
 import net.derfruhling.serenity.platform.EventHandlerNode
+import net.derfruhling.serenity.platform.HtmlApplier
+import net.derfruhling.serenity.serial.SnapshotContext
 import kotlin.coroutines.CoroutineContext
 
-actual class EventContext internal constructor(val snapshot: Snapshot, val eventType: EventType<*>) : CoroutineScope {
+actual class EventContext internal constructor(
+    val snapshot: Snapshot,
+    val eventType: EventType<*>
+) : CoroutineScope {
     private var jobInitialized = false
     internal val job: Job by lazy { Job().also { jobInitialized = true } }
 

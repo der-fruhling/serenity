@@ -73,7 +73,7 @@ class InlineStyle : StylistTarget<RuleNode>, StyleHolder {
     }
 
     override fun clear() {
-        for(c in rules) removeParent(c)
+        for (c in rules) removeParent(c)
         rules.clear()
     }
 
