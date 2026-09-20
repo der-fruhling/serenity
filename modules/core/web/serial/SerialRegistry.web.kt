@@ -7,6 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.serialization.KSerializer
+import net.derfruhling.serenity.PageHolder
+import net.derfruhling.serenity.PageHolderFactory
+import net.derfruhling.serenity.PageRegistry
+import net.derfruhling.serenity.PageTemplate
+import net.derfruhling.serenity.TemplateBuilder
 import kotlin.reflect.KClass
 
 @PublishedApi
@@ -23,19 +28,19 @@ inline fun <reified T> SerialRegistry.decodeFromObject(obj: JsAny): T {
     return decode(jsonStringify(obj))
 }
 
-internal var pageTemplate by mutableStateOf(null as net.derfruhling.serenity.PageTemplate?)
+internal var pageTemplate by mutableStateOf(null as PageTemplate?)
 
 interface WebContext {
     fun parseParameters(path: String): Map<String, String>
 }
 
-fun SerialRegistry.registerClientPages(fn: net.derfruhling.serenity.PageRegistry<WebContext>.() -> Unit) {
-    (object : net.derfruhling.serenity.PageRegistry<WebContext>() {
-        override fun template(fn: @Composable (net.derfruhling.serenity.TemplateBuilder.() -> Unit)) {
-            pageTemplate = _root_ide_package_.net.derfruhling.serenity.PageTemplate(fn)
+fun SerialRegistry.registerClientPages(fn: PageRegistry<WebContext>.() -> Unit) {
+    (object : PageRegistry<WebContext>() {
+        override fun template(fn: @Composable (TemplateBuilder.() -> Unit)) {
+            pageTemplate = PageTemplate(fn)
         }
 
-        override fun <R : net.derfruhling.serenity.PageHolder<R>, T : net.derfruhling.serenity.PageHolderFactory<WebContext, R>> register(
+        override fun <R : PageHolder<R>, T : PageHolderFactory<WebContext, R>> register(
             kClass: KClass<R>,
             kSerializer: KSerializer<R>,
             page: T
