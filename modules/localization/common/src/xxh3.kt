@@ -4,23 +4,23 @@ package net.derfruhling.serenity.localization
 
 // https://github.com/Cyan4973/xxHash/blob/dev/doc/xxhash_spec.md#xxh3-algorithm-overview
 
-class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
-    private val xxh3b64f4to8Seed by lazy { seed xor bswap((seed and 0xFFFFFFFF).toUInt()).toLong() }
+class XXH3 private constructor(val seed: ULong, internal val secret: ByteArray) {
+    private val xxh3b64f4to8Seed by lazy { seed xor bswap((seed and 0xFFFFFFFFu).toUInt()).toULong() }
 
     private val xxh3b64Empty by lazy {
-        val x1 = secret.getLong(56)
-        val x2 = secret.getLong(64)
+        val x1 = secret.getLong(56).toULong()
+        val x2 = secret.getLong(64).toULong()
         avalancheXXH64(seed xor x1 xor x2)
     }
 
-    private fun xxh3b64f1to3(combined: UInt): Long {
-        val x1 = secret.getInt(0)
-        val x2 = secret.getInt(4)
-        val value = ((x1 xor x2).toULong() + seed.toULong()) xor combined.toULong()
-        return avalancheXXH64(value.toLong())
+    private fun xxh3b64f1to3(combined: UInt): ULong {
+        val x1 = secret.getInt(0).toUInt()
+        val x2 = secret.getInt(4).toUInt()
+        val value = ((x1 xor x2).toULong() + seed) xor combined.toULong()
+        return avalancheXXH64(value)
     }
 
-    private fun xxh3b64f1to3(bytes: ByteArray): Long {
+    private fun xxh3b64f1to3(bytes: ByteArray): ULong {
         val combined = bytes[bytes.size - 1].toUInt() or
             (bytes.size.toUInt() shl 8) or
             (bytes[0].toUInt() shl 16) or
@@ -29,46 +29,46 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
         return xxh3b64f1to3(combined)
     }
 
-    private fun xxh3b64f4to8(inputFirst: UInt, inputLast: UInt, inputLength: UInt): Long {
+    private fun xxh3b64f4to8(inputFirst: UInt, inputLast: UInt, inputLength: UInt): ULong {
         val x1 = secret.getLong(8)
         val x2 = secret.getLong(16)
         val modifiedSeed = xxh3b64f4to8Seed
         val combined = inputLast.toULong() or (inputFirst.toULong() shl 32)
-        var value = ((x1 xor x2).toULong() - modifiedSeed.toULong()) xor combined
+        var value = ((x1 xor x2).toULong() - modifiedSeed) xor combined
         value = value xor (value shl 49) xor (value shl 24)
         value *= PRIME_MX2
         value = value xor ((value shr 35) + inputLength)
         value *= PRIME_MX2
         value = value xor (value shr 28)
-        return value.toLong()
+        return value
     }
 
-    private fun xxh3b64f4to8(bytes: ByteArray): Long {
+    private fun xxh3b64f4to8(bytes: ByteArray): ULong {
         val inputFirst = bytes.getInt(0).toUInt()
         val inputLast = bytes.getInt(bytes.size - 4).toUInt()
         return xxh3b64f4to8(inputFirst, inputLast, bytes.size.toUInt())
     }
 
-    private fun xxh3b64f9to16(inputFirst: ULong, inputLast: ULong, inputLength: UInt): Long {
+    private fun xxh3b64f9to16(inputFirst: ULong, inputLast: ULong, inputLength: UInt): ULong {
         val x1 = secret.getLong(24)
         val x2 = secret.getLong(32)
         val x3 = secret.getLong(40)
         val x4 = secret.getLong(48)
-        val low = ((x1 xor x2).toULong() + seed.toULong()) xor inputFirst
-        val high = ((x3 xor x4).toULong() - seed.toULong()) xor inputLast
+        val low = ((x1 xor x2).toULong() + seed) xor inputFirst
+        val high = ((x3 xor x4).toULong() - seed) xor inputLast
 
         val (mh, ml) = u128Mul(low, high)
         val value = inputLength + bswap(low) + high + (ml xor mh)
-        return avalanche(value.toLong())
+        return avalanche(value)
     }
 
-    private fun xxh3b64f9to16(bytes: ByteArray): Long {
+    private fun xxh3b64f9to16(bytes: ByteArray): ULong {
         val inputFirst = bytes.getLong(0).toULong()
         val inputLast = bytes.getLong(bytes.size - 8).toULong()
         return xxh3b64f9to16(inputFirst, inputLast, bytes.size.toUInt())
     }
 
-    private fun xxh3b64Small(bytes: ByteArray): Long {
+    private fun xxh3b64Small(bytes: ByteArray): ULong {
         return when (bytes.size) {
             0 -> xxh3b64Empty
             in 1..3 -> xxh3b64f1to3(bytes)
@@ -81,17 +81,17 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
     private inner class MediumAccum(inputLength: Int) {
         var acc: ULong = inputLength.toULong() * PRIME64_1
 
-        fun mixStep(data: ByteArray, offset: Int, secretOffset: Int, seed: Long): ULong {
+        fun mixStep(data: ByteArray, offset: Int, secretOffset: Int, seed: ULong): ULong {
             val d1 = data.getLong(offset).toULong()
             val d2 = data.getLong(offset + 8).toULong()
             val x1 = secret.getLong(secretOffset).toULong()
             val x2 = secret.getLong(secretOffset + 8).toULong()
-            val (mh, ml) = u128Mul(d1 xor (x1 + seed.toULong()), d2 xor (x2 - seed.toULong()))
+            val (mh, ml) = u128Mul(d1 xor (x1 + seed), d2 xor (x2 - seed))
             return ml xor mh
         }
     }
 
-    private inline fun xxh3medium(inputLength: Int, fn: MediumAccum.() -> Long): Long {
+    private inline fun xxh3medium(inputLength: Int, fn: MediumAccum.() -> ULong): ULong {
         return MediumAccum(inputLength).fn()
     }
 
@@ -105,27 +105,27 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
             acc += mixStep(bytes, end, i * 32 + 16, seed)
         }
 
-        avalanche(acc.toLong())
+        avalanche(acc)
     }
 
     private fun xxh3b64f129to240(bytes: ByteArray) = xxh3medium(bytes.size) {
-        val numChunks = bytes.size ushr 5
+        val numChunks = bytes.size ushr 4
 
         for (i in 0..<8) {
             acc += mixStep(bytes, i * 16, i * 16, seed)
         }
 
-        acc = avalanche(acc.toLong()).toULong()
+        acc = avalanche(acc)
 
         for (i in 8..<numChunks) {
             acc += mixStep(bytes, i * 16, (i - 8) * 16 + 3, seed)
         }
 
         acc += mixStep(bytes, bytes.size - 16, 119, seed)
-        avalanche(acc.toLong())
+        avalanche(acc)
     }
 
-    private fun xxh3b64Medium(bytes: ByteArray): Long {
+    private fun xxh3b64Medium(bytes: ByteArray): ULong {
         return when (bytes.size) {
             in 17..128 -> xxh3b64f17to128(bytes)
             in 129..240 -> xxh3b64f129to240(bytes)
@@ -201,7 +201,7 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
             accumulate(block, lastStripeOffset, secret.size - 71)
         }
 
-        fun finalMerge(initValue: ULong, secretOffset: Int): Long {
+        fun finalMerge(initValue: ULong, secretOffset: Int): ULong {
             val secretWords = ULongArray(8) { secret.getLong(secretOffset + it * 8).toULong() }
             var result: ULong = initValue
 
@@ -213,7 +213,7 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
                 result += ml xor mh
             }
 
-            return avalanche(result.toLong())
+            return avalanche(result)
         }
     }
 
@@ -223,19 +223,19 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
         finalMerge(bytes.size.toULong() * PRIME64_1, 11)
     }
 
-    fun digest(bytes: ByteArray): Long = when {
+    fun digest(bytes: ByteArray): ULong = when {
         bytes.size <= 16 -> xxh3b64Small(bytes)
         bytes.size in 17..240 -> xxh3b64Medium(bytes)
         else -> xxh3b64Large(bytes)
     }
 
     companion object {
-        private val default by lazy { XXH3(0, defaultSecret) }
-        private fun fromSeedLarge(seed: Long) = XXH3(seed, deriveSecret(seed))
-        private fun fromSeed(seed: Long) = XXH3(seed, defaultSecret)
+        private val default by lazy { XXH3(0u, defaultSecret) }
+        private fun fromSeedLarge(seed: ULong) = XXH3(seed, deriveSecret(seed))
+        private fun fromSeed(seed: ULong) = XXH3(seed, defaultSecret)
 
-        fun digest(bytes: ByteArray): Long = default.digest(bytes)
-        fun digestWithSeed(bytes: ByteArray, seed: Long): Long = when {
+        fun digest(bytes: ByteArray): ULong = default.digest(bytes)
+        fun digestWithSeed(bytes: ByteArray, seed: ULong): ULong = when {
             bytes.size <= 240 -> fromSeed(seed)
             else -> fromSeedLarge(seed)
         }.digest(bytes)
@@ -320,39 +320,39 @@ class XXH3 private constructor(val seed: Long, internal val secret: ByteArray) {
                 ((value and 0xFF00000000000000u) shr 56)
         }
 
-        private fun deriveSecretLong(seed: Long): LongArray {
+        private fun deriveSecretLong(seed: ULong): LongArray {
             return defaultSecretLongs.copyOf().also {
                 for (i in 0..<12) {
-                    it[i * 2] = (it[i * 2].toULong() + seed.toULong()).toLong()
-                    it[i * 2 + 1] = (it[i * 2 + 1].toULong() - seed.toULong()).toLong()
+                    it[i * 2] = (it[i * 2].toULong() + seed).toLong()
+                    it[i * 2 + 1] = (it[i * 2 + 1].toULong() - seed).toLong()
                 }
             }
         }
 
-        private fun deriveSecret(seed: Long): ByteArray {
+        private fun deriveSecret(seed: ULong): ByteArray {
             val longs = deriveSecretLong(seed)
             return ByteArray(192) {
-                val long = longs[it shr 3]
-                val byte = (long ushr ((it and 7) * 8)).toByte()
+                val long = longs[it shr 3].toULong()
+                val byte = (long shr ((it and 7) * 8)).toUByte().toByte()
                 byte
             }
         }
 
-        private fun avalanche(target: Long): Long {
+        private fun avalanche(target: ULong): ULong {
             var x = target
-            x = x xor (x ushr 37)
-            x = (x.toULong() * PRIME_MX1).toLong()
-            x = x xor (x ushr 32)
+            x = x xor (x shr 37)
+            x *= PRIME_MX1
+            x = x xor (x shr 32)
             return x
         }
 
-        private fun avalancheXXH64(target: Long): Long {
+        private fun avalancheXXH64(target: ULong): ULong {
             var x = target
-            x = x xor (x ushr 33)
-            x = (x.toULong() * PRIME64_2).toLong()
-            x = x xor (x ushr 29)
-            x = (x.toULong() * PRIME64_3).toLong()
-            x = x xor (x ushr 33)
+            x = x xor (x shr 33)
+            x *= PRIME64_2
+            x = x xor (x shr 29)
+            x *= PRIME64_3
+            x = x xor (x shr 32)
             return x
         }
 

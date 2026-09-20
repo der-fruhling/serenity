@@ -3,14 +3,11 @@
   <test-app type="group">
     <hello>Hello</hello>
     <bold>
-      <span title="Miaw title">This</span>
-      is <b>bold</b>!
+      <span title="Miaw title">This</span> is <b>bold</b>!
     </bold>
 
     <buttons type="group">
-      <clicks>Click count:
-        <arg of="0" name="click count"/>
-      </clicks>
+      <clicks>Click count: <arg of="0" name="click count"/></clicks>
     </buttons>
   </test-app>
 </lang>

@@ -114,6 +114,11 @@ plugins.withId("com.google.devtools.ksp") {
     }
 }
 
+repositories {
+    mavenCentral()
+    google()
+}
+
 kotlin {
     jvmToolchain(17)
     jvm()
