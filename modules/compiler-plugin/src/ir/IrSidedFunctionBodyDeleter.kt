@@ -15,6 +15,8 @@ import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.expressions.IrAnnotation
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.types.typeWith
+import org.jetbrains.kotlin.ir.util.classId
+import org.jetbrains.kotlin.ir.util.constructedClass
 import org.jetbrains.kotlin.ir.util.irConstructorCall
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.platform.NativePlatform
@@ -84,7 +86,7 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
     }
 
     private fun sideOf(annotation: IrAnnotation): Side? {
-        return when (annotation.classId) {
+        return when (annotation.symbol.owner.constructedClass.classId) {
             clientClass -> Side.CLIENT
             serverClass -> Side.SERVER
             else -> null
