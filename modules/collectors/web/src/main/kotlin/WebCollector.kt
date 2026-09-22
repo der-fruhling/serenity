@@ -69,9 +69,9 @@ class WebCollector(
                         out.appendLine("import kotlinx.serialization.Transient")
                     }
                     out.appendLine("import net.derfruhling.serenity.PageHolderFactory")
-                    out.appendLine("import net.derfruhling.serenity.SerialRegistry")
-                    out.appendLine("import net.derfruhling.serenity.WebContext")
-                    out.appendLine("import net.derfruhling.serenity.decodeFromObject")
+                    out.appendLine("import net.derfruhling.serenity.serial.SerialRegistry")
+                    out.appendLine("import net.derfruhling.serenity.serial.WebContext")
+                    out.appendLine("import net.derfruhling.serenity.serial.decodeFromObject")
                 }
 
                 out.appendLine()
