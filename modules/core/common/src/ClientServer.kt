@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.key
 import net.derfruhling.serenity.annotations.ClientOnly
+import net.derfruhling.serenity.annotations.UsedByGeneratedCode
 
 @get:Composable
 @get:ReadOnlyComposable
@@ -22,7 +23,7 @@ inline val isServerStatic: Boolean
     inline get() = !isClientStatic
 
 @Composable
-expect fun ifClient(fn: @Composable () -> Unit)
+expect fun ifClient(fn: @Composable @ClientOnly () -> Unit)
 
 @Composable
 fun ifServer(fn: @Composable () -> Unit) {

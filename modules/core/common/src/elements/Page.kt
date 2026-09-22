@@ -10,8 +10,8 @@ import net.derfruhling.serenity.platform.ElementNode
 fun html(lang: String = "en", content: @Composable HtmlContext.() -> Unit) {
     DocumentType()
 
-    Element(name = "html", update = {
-        set(lang) { attribute(HtmlAttributes.lang, it) }
+    Element("html", update = {
+        attribute(HtmlAttributes.lang, lang)
     }) { HtmlContext.content() }
 }
 

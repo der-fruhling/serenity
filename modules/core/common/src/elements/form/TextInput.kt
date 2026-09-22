@@ -26,11 +26,9 @@ fun TextInput(
     onChange: Handler2<Event<HTMLInputElement>, String>
 ) {
     if (hasSpan) {
-        Element(update = {
+        Element("span", update = {
             setSpanClasses(type)
-        }, "span") {
-            commonTextInput(type, hasSpan, name, id, initialText, placeholder, onChange)
-        }
+        }) { commonTextInput(type, hasSpan, name, id, initialText, placeholder, onChange) }
     } else {
         commonTextInput(type, hasSpan, name, id, initialText, placeholder, onChange)
     }
@@ -48,9 +46,9 @@ fun TextInputState(
     val state = remember { mutableStateOf(initialText) }
 
     if (hasSpan) {
-        Element(update = {
+        Element("span", update = {
             setSpanClasses(type)
-        }, "span") {
+        }) {
             commonTextInput(type, hasSpan, name, id, initialText, placeholder) {
                 state.value = it
             }
@@ -88,10 +86,7 @@ private fun commonTextInput(
     placeholder: String?,
     onChange: Handler2<Event<HTMLInputElement>, String>
 ) {
-    Element(
-        update = commonTextInputUpdater(hasSpan, type, name, id, initialText, placeholder),
-        "input"
-    ) {
+    Element("input", update = commonTextInputUpdater(hasSpan, type, name, id, initialText, placeholder)) {
         On(InputEvent) {
             checkType<HTMLInputElement>()
             onChange(target.value)

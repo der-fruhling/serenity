@@ -16,7 +16,7 @@ actual inline val isClient: Boolean
 internal val isClientLocal = compositionLocalOf { true }
 
 @Composable
-actual fun ifClient(fn: @Composable (() -> Unit)) {
+actual fun ifClient(fn: @Composable @ClientOnly () -> Unit) {
     if (isClient) {
         fn()
     }

@@ -10,12 +10,11 @@ fun Header(fn: @Composable () -> Unit) {
 }
 
 @Composable
+@Deprecated("Use Main {} instead", replaceWith = ReplaceWith("Main", "net.derfruhling.serenity.elements.Main"))
 fun Content(fn: @Composable () -> Unit) {
-    Element(name = "div", update = {
+    Element("div", update = {
         init { classes.add(StyleClasses.PageContent) }
-    }) {
-        fn()
-    }
+    }) { fn() }
 }
 
 @Composable

@@ -49,18 +49,15 @@ fun Form(
         }) else fn
     }
 
-    Element(
-        update = {
-            attribute(HtmlAttributes.`accept-charset`, acceptCharset)
-            attribute(HtmlAttributes.action, action)
-            attribute(HtmlAttributes.autocomplete, autocomplete)
-            attribute(HtmlAttributes.enctype, encType)
-            attribute(HtmlAttributes.method, method)
-            attribute(HtmlAttributes.name, name)
-            attribute(HtmlAttributes.novalidate, novalidate)
-            attribute(HtmlAttributes.rel, rel?.asValue)
-            attribute(HtmlAttributes.target, target)
-        },
-        "form", fn
-    )
+    Element("form", update = {
+        attribute(HtmlAttributes.`accept-charset`, acceptCharset)
+        attribute(HtmlAttributes.action, action)
+        attribute(HtmlAttributes.autocomplete, autocomplete)
+        attribute(HtmlAttributes.enctype, encType)
+        attribute(HtmlAttributes.method, method)
+        attribute(HtmlAttributes.name, name)
+        attribute(HtmlAttributes.novalidate, novalidate)
+        attribute(HtmlAttributes.rel, rel?.asValue)
+        attribute(HtmlAttributes.target, target)
+    }) { fn() }
 }

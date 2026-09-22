@@ -76,10 +76,10 @@ fun OrderedList(
     id: String? = null,
     fn: @Composable OrderedList.() -> Unit
 ) {
-    Element(update = {
+    Element("ol", update = {
         apply(classList)
         attribute(HtmlAttributes.id, id)
-    }, "ol") {
+    }) {
         OrderedList.apply { fn() }
     }
 }
@@ -118,10 +118,10 @@ fun UnorderedList(
     id: String? = null,
     fn: @Composable UnorderedList.() -> Unit
 ) {
-    Element(update = {
+    Element("ul", update = {
         apply(classList)
         attribute(HtmlAttributes.id, id)
-    }, "ul") {
+    }) {
         UnorderedList.apply { fn() }
     }
 }

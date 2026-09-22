@@ -24,26 +24,20 @@ object HeadContext {
     @Composable
     @UnescapedTextDanger
     fun inlineScript(javascript: String, async: Boolean = false, defer: Boolean = false) =
-        Element(
-            name = "script",
-            update = {
-                set(async) { attribute(HtmlAttributes.async, it) }
-                set(defer) { attribute(HtmlAttributes.defer, it) }
-            }
-        ) {
+        Element("script", update = {
+            attribute(HtmlAttributes.async, async)
+            attribute(HtmlAttributes.defer, defer)
+        }) {
             Data(javascript)
         }
 
     @Composable
     fun useScriptDirectly(uri: String, async: Boolean = false, defer: Boolean = false) =
-        Element(
-            name = "script",
-            update = {
-                set(uri) { attribute(HtmlAttributes.src, it) }
-                set(async) { attribute(HtmlAttributes.async, it) }
-                set(defer) { attribute(HtmlAttributes.defer, it) }
-            }
-        )
+        Element("script", update = {
+            attribute(HtmlAttributes.src, uri)
+            attribute(HtmlAttributes.async, async)
+            attribute(HtmlAttributes.defer, defer)
+        })
 
     @Composable
     fun useScript(
@@ -64,13 +58,10 @@ object HeadContext {
 
     @Composable
     fun link(rel: String, href: String) {
-        Element(
-            name = "link",
-            update = {
-                set(rel) { attribute(HtmlAttributes.rel, it) }
-                set(href) { attribute(HtmlAttributes.href, it) }
-            }
-        )
+        Element("link", update = {
+            set(rel) { attribute(HtmlAttributes.rel, it) }
+            set(href) { attribute(HtmlAttributes.href, it) }
+        })
     }
 
     @Composable

@@ -12,60 +12,60 @@ fun H1(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("h1", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "h1") { fn() }
+}) { fn() }
 
 @Composable
 fun H2(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("h2", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "h2") { fn() }
+}) { fn() }
 
 @Composable
 fun H3(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("h3", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "h3") { fn() }
+}) { fn() }
 
 @Composable
 fun H4(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("h4", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "h4") { fn() }
+}) { fn() }
 
 @Composable
 fun H5(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("h5", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "h5") { fn() }
+}) { fn() }
 
 @Composable
 fun H6(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("h6", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "h6") { fn() }
+}) { fn() }
 
 @Composable
 inline fun H1(text: String) = H1 { Text(text) }

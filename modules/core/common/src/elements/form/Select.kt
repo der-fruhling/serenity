@@ -18,15 +18,12 @@ sealed class SelectOptions {
         selected: Boolean = false,
         fn: @Composable () -> Unit
     ) {
-        Element(
-            update = {
-                attribute(HtmlAttributes.value, value)
-                attribute(HtmlAttributes.label, label)
-                attribute(HtmlAttributes.disabled, disabled)
-                attribute(HtmlAttributes.selected, selected)
-            },
-            "option", fn
-        )
+        Element("option", update = {
+            attribute(HtmlAttributes.value, value)
+            attribute(HtmlAttributes.label, label)
+            attribute(HtmlAttributes.disabled, disabled)
+            attribute(HtmlAttributes.selected, selected)
+        }) { fn() }
     }
 
     @Composable
@@ -38,15 +35,12 @@ sealed class SelectOptions {
         text: String,
         fn: (@Composable () -> Unit)? = null
     ) {
-        Element(
-            update = {
-                attribute(HtmlAttributes.value, value)
-                attribute(HtmlAttributes.label, label, keepNulls = false)
-                attribute(HtmlAttributes.disabled, disabled)
-                attribute(HtmlAttributes.selected, selected)
-            },
-            "option"
-        ) {
+        Element("option", update = {
+            attribute(HtmlAttributes.value, value)
+            attribute(HtmlAttributes.label, label, keepNulls = false)
+            attribute(HtmlAttributes.disabled, disabled)
+            attribute(HtmlAttributes.selected, selected)
+        }) {
             Text(text)
             fn?.invoke()
         }
@@ -60,13 +54,10 @@ sealed class SelectOptionsRoot : SelectOptions() {
         disabled: Boolean = false,
         fn: @Composable SelectOptions.() -> Unit
     ) {
-        Element(
-            update = {
-                attribute(HtmlAttributes.label, label)
-                attribute(HtmlAttributes.disabled, disabled)
-            },
-            "optgroup"
-        ) { fn() }
+        Element("optgroup", update = {
+            attribute(HtmlAttributes.label, label)
+            attribute(HtmlAttributes.disabled, disabled)
+        }) { fn() }
     }
 }
 
@@ -97,17 +88,14 @@ fun Select(
         }) else fn
     }
 
-    Element(
-        update = {
-            attribute(HtmlAttributes.name, name)
-            attribute(HtmlAttributes.id, id)
-            attribute(HtmlAttributes.multiple, multiple)
-            attribute(HtmlAttributes.autofocus, autofocus)
-            attribute(HtmlAttributes.disabled, disabled)
-            attribute(HtmlAttributes.form, form)
-        },
-        "select"
-    ) {
+    Element("select", update = {
+        attribute(HtmlAttributes.name, name)
+        attribute(HtmlAttributes.id, id)
+        attribute(HtmlAttributes.multiple, multiple)
+        attribute(HtmlAttributes.autofocus, autofocus)
+        attribute(HtmlAttributes.disabled, disabled)
+        attribute(HtmlAttributes.form, form)
+    }) {
         SelectOptionsImpl.fn()
     }
 }

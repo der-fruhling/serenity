@@ -14,13 +14,11 @@ fun Div(
     id: String? = null,
     title: String? = null,
     fn: @Composable () -> Unit
-) {
-    Element(update = {
-        apply(classList)
-        attribute(HtmlAttributes.id, id)
-        attribute(HtmlAttributes.title, title)
-    }, "div") { fn() }
-}
+) = Element("div", update = {
+    apply(classList)
+    attribute(HtmlAttributes.id, id)
+    attribute(HtmlAttributes.title, title)
+}) { fn() }
 
 @Composable
 fun Span(
@@ -28,43 +26,41 @@ fun Span(
     id: String? = null,
     title: String? = null,
     fn: @Composable () -> Unit
-) {
-    Element(update = {
-        apply(classList)
-        attribute(HtmlAttributes.id, id)
-        attribute(HtmlAttributes.title, title)
-    }, "span") { fn() }
-}
+) = Element("span", update = {
+    apply(classList)
+    attribute(HtmlAttributes.id, id)
+    attribute(HtmlAttributes.title, title)
+}) { fn() }
 
 @Composable
 fun Main(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("main", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "main") { fn() }
+}) { fn() }
 
 @Composable
 fun Nav(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("nav", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "nav") { fn() }
+}) { fn() }
 
 @Composable
 fun Paragraph(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("p", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "p") { fn() }
+}) { fn() }
 
 @Composable
 fun Bold(fn: @Composable () -> Unit) = Element("b") { fn() }
@@ -106,10 +102,10 @@ fun Code(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("code", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "code") { fn() }
+}) { fn() }
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
@@ -120,10 +116,10 @@ fun Kbd(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("kbd", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "kbd") { fn() }
+}) { fn() }
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
@@ -134,7 +130,7 @@ fun Article(
     classList: ClassList = ClassList.EMPTY,
     id: String? = null,
     fn: @Composable () -> Unit
-) = Element(update = {
+) = Element("article", update = {
     apply(classList)
     attribute(HtmlAttributes.id, id)
-}, "article") { fn() }
+}) { fn() }

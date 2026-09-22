@@ -12,5 +12,5 @@ object HtmlContext {
 
     @Composable
     fun body(updateBody: Updater<ElementNode>.() -> Unit = {}, content: @Composable () -> Unit) =
-        Element(updateBody, name = "body") { content() }
+        Element(name = "body", updateBody, { content() })
 }

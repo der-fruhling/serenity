@@ -31,16 +31,11 @@ private inline fun Flex(
     mainAxis: MainAxis?,
     crossinline fn: @Composable () -> Unit
 ) {
-    Element(
-        name = "div",
-        update = {
-            set(styleClass) { classes.add(styleClass) }
-            set(crossAxis) { classMap[CrossAxis] = crossAxis?.augment }
-            set(mainAxis) { classMap[MainAxis] = mainAxis?.augment }
-        }
-    ) {
-        fn()
-    }
+    Element("div", update = {
+        set(styleClass) { classes.add(styleClass) }
+        set(crossAxis) { classMap[CrossAxis] = crossAxis?.augment }
+        set(mainAxis) { classMap[MainAxis] = mainAxis?.augment }
+    }) { fn() }
 }
 
 @Composable

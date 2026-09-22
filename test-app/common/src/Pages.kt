@@ -1,6 +1,7 @@
 package net.derfruhling.serenity.testapp
 
 import net.derfruhling.serenity.PageRegistry
+import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.elements.Page
 
 fun PageRegistry<PlatformContext>.registerPages() {
@@ -28,4 +29,9 @@ fun PageRegistry<PlatformContext>.registerPages() {
     register(SaveDataPage)
     register(InputsPage)
     register(InvalidationTestPage)
+}
+
+@ClientOnly
+fun testClient() {
+
 }

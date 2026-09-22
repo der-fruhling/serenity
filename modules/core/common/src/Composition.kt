@@ -12,9 +12,9 @@ import net.derfruhling.serenity.platform.*
 internal val defaultFn = @Composable {}
 
 @Composable
-fun Element(
+inline fun Element(
     name: Name,
-    content: @Composable () -> Unit = defaultFn
+    content: @Composable () -> Unit = {}
 ) {
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
         init(name) { this.name = it }
@@ -22,9 +22,9 @@ fun Element(
 }
 
 @Composable
-fun Element(
+inline fun Element(
     name: String,
-    content: @Composable () -> Unit = defaultFn
+    content: @Composable () -> Unit = {}
 ) {
     val name = Name.of(name)
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
@@ -33,10 +33,10 @@ fun Element(
 }
 
 @Composable
-fun Element(
-    update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
+inline fun Element(
     name: Name,
-    content: @Composable () -> Unit = defaultFn
+    update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
+    content: @Composable () -> Unit = {}
 ) {
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {
         init(name) { this.name = it }
@@ -45,10 +45,10 @@ fun Element(
 }
 
 @Composable
-fun Element(
-    update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
+inline fun Element(
     name: String,
-    content: @Composable () -> Unit = defaultFn
+    update: @DisallowComposableCalls Updater<ElementNode>.() -> Unit,
+    content: @Composable () -> Unit = {}
 ) {
     val name = Name.of(name)
     ReusableComposeNode<ElementNode, HtmlApplier>(::ElementNode, update = {

@@ -7,11 +7,8 @@ import net.derfruhling.serenity.elements.attribute
 
 @Composable
 fun Submit(value: String? = null) {
-    Element(
-        update = {
-            attribute(HtmlAttributes.type, "submit")
-            attribute(HtmlAttributes.value, value)
-        },
-        "input"
-    )
+    Element("input", update = {
+        attribute(HtmlAttributes.type, "submit")
+        attribute(HtmlAttributes.value, value)
+    })
 }

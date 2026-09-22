@@ -30,7 +30,7 @@ private fun LinkAnchor(
         }
     }
 
-    Element(name = "a", update = {
+    Element("a", update = {
         set(actualLink) { attribute(HtmlAttributes.href, it) }
     }) {
         fn()
@@ -68,7 +68,7 @@ private fun LinkAnchor(
     val linkBase = linkBase.current
     val actualLink = remember(to, linkBase) { to.constructActualAddress(linkBase) }
 
-    Element(name = "a", update = {
+    Element("a", update = {
         set(actualLink) { attribute(HtmlAttributes.href, it) }
     }) {
         fn()
