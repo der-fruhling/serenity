@@ -1,78 +1,45 @@
 package net.derfruhling.serenity.compiler.ir
 
+import net.derfruhling.serenity.compiler.Names
 import net.derfruhling.serenity.compiler.Side
-import net.derfruhling.serenity.compiler.clientClass
-import net.derfruhling.serenity.compiler.serverClass
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
-import org.jetbrains.kotlin.backend.common.lower.irThrow
 import org.jetbrains.kotlin.ir.IrStatement
-import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.IrBlockBodyBuilder
 import org.jetbrains.kotlin.ir.builders.Scope
 import org.jetbrains.kotlin.ir.declarations.IrAnnotationContainer
 import org.jetbrains.kotlin.ir.declarations.IrDeclaration
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.expressions.IrAnnotation
-import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrAnnotationImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
 import org.jetbrains.kotlin.ir.types.typeWith
+import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.classId
 import org.jetbrains.kotlin.ir.util.constructedClass
-import org.jetbrains.kotlin.ir.util.irConstructorCall
-import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.kotlin.platform.NativePlatform
-import org.jetbrains.kotlin.platform.PotentiallyWebPlatform
-import org.jetbrains.kotlin.platform.jvm.JvmPlatform
+import org.jetbrains.kotlin.ir.util.copyAnnotationsFrom
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
 
 class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : AbstractSerenityTransformer() {
-    val expectedSide by lazy {
-        var side = null as Side?
+    val expectedSide: Side? by lazy { Side.of(context.platform) }
 
-        for (p in context.platform ?: return@lazy null) {
-            when (p) {
-                is JvmPlatform, is NativePlatform -> {
-                    if (side == Side.CLIENT) return@lazy null
-                    side = Side.SERVER
-                }
-
-                is PotentiallyWebPlatform -> {
-                    if (p.isWeb) {
-                        if (side == Side.SERVER) return@lazy null
-                        side = Side.CLIENT
-                    } else {
-                        if (side == Side.CLIENT) return@lazy null
-                        side = Side.SERVER
-                    }
-                }
-            }
-        }
-
-        side
+    val throwRemovedByOptimization by lazy {
+        context.finderForBuiltins()
+            .findFunctions(CallableId(serenityPackage, Name.identifier("removedByOptimization")))
+            .single()
     }
 
-    val notImplementedErrorType by lazy {
+    val stubClass by lazy {
         context.finderForBuiltins()
-            .findClass(
-                ClassId.fromString(
-                    NotImplementedError::class.qualifiedName!!.replace(
-                        '.',
-                        '/'
-                    )
-                )
-            )!!
-            .typeWith()
+            .findClass(Names.stubClass)!!
     }
 
-    val notImplementedError by lazy {
+    val stubType by lazy { stubClass.typeWith() }
+
+    val stubConstructor by lazy {
         context.finderForBuiltins()
-            .findConstructors(
-                ClassId.fromString(
-                    NotImplementedError::class.qualifiedName!!.replace(
-                        '.',
-                        '/'
-                    )
-                )
-            )
-            .find { it.owner.parameters.isEmpty() }!!
+            .findConstructors(Names.stubClass)
+            .single()
     }
 
     private tailrec fun <T> T.getSide(): Side? where T : IrAnnotationContainer {
@@ -87,8 +54,8 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
 
     private fun sideOf(annotation: IrAnnotation): Side? {
         return when (annotation.symbol.owner.constructedClass.classId) {
-            clientClass -> Side.CLIENT
-            serverClass -> Side.SERVER
+            Names.clientClass -> Side.CLIENT
+            Names.serverClass -> Side.SERVER
             else -> null
         }
     }
@@ -97,20 +64,15 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
         if (expectedSide != null) {
             val targetSide = declaration.getSide()
             if (targetSide != null && expectedSide != targetSide) {
+                val annotation = IrAnnotationImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, stubType, stubConstructor, 0, 0)
+
+                declaration.copyAnnotationsFrom(object : IrAnnotationContainer {
+                    override val annotations: List<IrAnnotation> = listOf(annotation)
+                })
+
                 declaration.body =
-                    IrBlockBodyBuilder(context, Scope(declaration.symbol), 0, 0).blockBody {
-                        +irThrow(
-                            irConstructorCall(
-                                IrConstructorCallImpl(
-                                    UNDEFINED_OFFSET,
-                                    UNDEFINED_OFFSET,
-                                    notImplementedErrorType,
-                                    notImplementedError,
-                                    0,
-                                    0
-                                ), notImplementedError
-                            )
-                        )
+                    IrBlockBodyBuilder(context, Scope(declaration.symbol), SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).blockBody {
+                        +IrCallImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, throwRemovedByOptimization.owner.returnType, throwRemovedByOptimization)
                     }
             }
         }

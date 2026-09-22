@@ -1,9 +1,8 @@
 package net.derfruhling.serenity.compiler.fir
 
+import net.derfruhling.serenity.compiler.Names
 import net.derfruhling.serenity.compiler.SerenityErrors
 import net.derfruhling.serenity.compiler.Side
-import net.derfruhling.serenity.compiler.clientClass
-import net.derfruhling.serenity.compiler.serverClass
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.FirAnnotationContainer
@@ -25,35 +24,9 @@ import org.jetbrains.kotlin.fir.moduleData
 import org.jetbrains.kotlin.fir.resolve.firClassLike
 import org.jetbrains.kotlin.fir.resolve.getContainingClassSymbol
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
-import org.jetbrains.kotlin.platform.NativePlatform
-import org.jetbrains.kotlin.platform.PotentiallyWebPlatform
-import org.jetbrains.kotlin.platform.jvm.JvmPlatform
 
 class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalCheckersExtension(session) {
-    val expectedSide by lazy {
-        var side = null as Side?
-
-        for (p in session.moduleData.platform) {
-            when (p) {
-                is JvmPlatform, is NativePlatform -> {
-                    if (side == Side.CLIENT) return@lazy null
-                    side = Side.SERVER
-                }
-
-                is PotentiallyWebPlatform -> {
-                    if (p.isWeb) {
-                        if (side == Side.SERVER) return@lazy null
-                        side = Side.CLIENT
-                    } else {
-                        if (side == Side.CLIENT) return@lazy null
-                        side = Side.SERVER
-                    }
-                }
-            }
-        }
-
-        side
-    }
+    val expectedSide: Side? by lazy { Side.of(session.moduleData.platform) }
 
     private fun FirAnnotation.getSide(): Side? {
         val classLike = annotationTypeRef.firClassLike(session) ?: return null
@@ -67,8 +40,8 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
         )
     ): Side? {
         return when (classLike?.symbol?.classId) {
-            clientClass -> Side.CLIENT
-            serverClass -> Side.SERVER
+            Names.clientClass -> Side.CLIENT
+            Names.serverClass -> Side.SERVER
             else -> null
         }
     }

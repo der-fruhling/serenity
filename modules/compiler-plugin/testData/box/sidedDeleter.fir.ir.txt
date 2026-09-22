@@ -6,7 +6,9 @@ FILE fqName:<root> fileName:/sidedDeleter.kt
   FUN name:clientFn visibility:public modality:FINAL returnType:kotlin.Unit
     annotations:
       ClientOnly
+      Stub
     BLOCK_BODY
+      CALL 'internal final fun removedByOptimization (): kotlin.Nothing declared in net.derfruhling.serenity' type=kotlin.Nothing origin=null
   FUN name:serverFn visibility:public modality:FINAL returnType:kotlin.Unit
     annotations:
       ServerOnly

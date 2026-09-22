@@ -36,3 +36,9 @@ fun ifServer(fn: @Composable () -> Unit) {
 
 @Composable
 expect fun <T> alternative(onServer: @Composable () -> T, onClient: @Composable @ClientOnly () -> T)
+
+@UsedByGeneratedCode
+@PublishedApi
+internal fun removedByOptimization(): Nothing {
+    throw NotImplementedError("This method had it's implementation removed by the Serenity compiler plugin")
+}
