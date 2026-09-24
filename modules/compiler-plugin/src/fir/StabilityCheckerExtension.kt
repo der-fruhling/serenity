@@ -32,19 +32,21 @@ class StabilityCheckerExtension(session: FirSession) : FirAdditionalCheckersExte
                 it.annotationTypeRef.toClassLikeSymbol(session)!!.hasAnnotation(Names.androidxStableMarkerClass, session)
             }
 
-            val isImmutable = applicableAnnotations.any { it.annotationTypeRef.toClassLikeSymbol(session)!!.classId == Names.androidxImmutableClass }
+            if(applicableAnnotations.isNotEmpty()) {
+                val isImmutable = applicableAnnotations.any { it.annotationTypeRef.toClassLikeSymbol(session)!!.classId == Names.androidxImmutableClass }
 
-            declaration.acceptChildren(object : FirVisitorVoid() {
-                override fun visitElement(element: FirElement) {}
+                declaration.acceptChildren(object : FirVisitorVoid() {
+                    override fun visitElement(element: FirElement) {}
 
-                override fun visitProperty(property: FirProperty) {
-                    if(property.setter != null && (isImmutable || !property.hasAnnotation(Names.notifiedRuntimeClass, session))) {
-                        reporter.reportOn(property.source, if(isImmutable) {
-                            SerenityWarnings.MUTABLE_PROPERTY
-                        } else SerenityWarnings.UNSTABLE_PROPERTY)
+                    override fun visitProperty(property: FirProperty) {
+                        if(property.setter != null && (isImmutable || !property.hasAnnotation(Names.notifiedRuntimeClass, session))) {
+                            reporter.reportOn(property.source, if(isImmutable) {
+                                SerenityWarnings.MUTABLE_PROPERTY
+                            } else SerenityWarnings.UNSTABLE_PROPERTY)
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     }
 }

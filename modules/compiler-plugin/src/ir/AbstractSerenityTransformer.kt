@@ -14,6 +14,14 @@ abstract class AbstractSerenityTransformer : IrElementTransformerVoid(),
     protected val serenityPackage by lazy { FqName("net.derfruhling.serenity") }
     protected val localizationPackage by lazy { FqName("net.derfruhling.serenity.localization") }
 
+    protected lateinit var currentFile: IrFile
+        private set
+
+    override fun visitFile(declaration: IrFile): IrFile {
+        currentFile = declaration
+        return super.visitFile(declaration)
+    }
+
     override fun lower(irModule: IrModuleFragment) {
         irModule.transformChildrenVoid(this)
     }

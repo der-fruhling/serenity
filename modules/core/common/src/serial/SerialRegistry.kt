@@ -28,6 +28,8 @@ object SerialRegistry {
     private var _serializersModule: SerializersModule? = null
     private var _json: Json? = null
 
+    val parameterParsers = ParameterParserContext()
+
     private inline fun <reified T> wrap(fn: () -> KSerializer<T> = { serializer<T>() }): KSerializer<T> {
         return Wrapped.Serializer(fn())
     }

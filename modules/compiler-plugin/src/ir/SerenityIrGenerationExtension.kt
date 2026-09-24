@@ -12,7 +12,9 @@ class SerenityIrGenerationExtension : IrGenerationExtension {
     ) {
         val transformers = listOf(
             ::IrConstantNameGenerator,
-            ::IrSidedFunctionBodyDeleter
+            ::IrSidedFunctionBodyDeleter,
+            ::IrPageGenerator,
+//            ::IrPageLocatorTransformer
         )
 
         for (transformer in transformers) {
