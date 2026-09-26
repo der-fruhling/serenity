@@ -5,6 +5,7 @@ import androidx.compose.runtime.saveable.rememberSerializable
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.ClientOnly
+import net.derfruhling.serenity.annotations.Page
 import net.derfruhling.serenity.annotations.RegisterPage
 import net.derfruhling.serenity.channel.countRemoteInvalidations
 import net.derfruhling.serenity.dom.HTMLInputElement
@@ -22,12 +23,17 @@ import net.derfruhling.serenity.elements.layout.Footer
 import net.derfruhling.serenity.elements.layout.Header
 import net.derfruhling.serenity.localization.TextOf
 import net.derfruhling.serenity.localization.n
+import net.derfruhling.serenity.pageContract
 
 private val logger = KotlinLogging.logger {}
 
 @Composable
-@RegisterPage("/", title = "Hello, world!")
+@Page("/")
 fun IndexPage() {
+    pageContract {
+        title = "Hello, world!"
+    }
+
     Header {
         TextOf(n("test-app/bold"))
     }
@@ -45,9 +51,13 @@ fun IndexPage() {
 }
 
 @Composable
-@RegisterPage("/buttons/{start}", title = "Buttons")
+@Page("/buttons/{start}")
 @UseTestPageExtension
 fun ButtonsPage(start: Int) {
+    pageContract {
+        title = "Buttons"
+    }
+
     var count by remember { mutableIntStateOf(start) }
 
     Button(
@@ -61,8 +71,12 @@ fun ButtonsPage(start: Int) {
 }
 
 @Composable
-@RegisterPage("/save-data", title = "Buttons")
+@Page("/save-data")
 fun SaveDataPage() {
+    pageContract {
+        title = "Buttons"
+    }
+
     var count by rememberSerializable { mutableIntStateOf(0) }
 
     Button(
@@ -75,7 +89,7 @@ fun SaveDataPage() {
 }
 
 @Composable
-@RegisterPage("/inputs")
+@Page("/inputs")
 fun InputsPage() {
     FlexColumn {
         val inputs = remember { mutableStateSetOf<String>() }
@@ -117,7 +131,7 @@ fun InputsPage() {
 }
 
 @Composable
-@RegisterPage("/inval")
+@Page("/inval")
 fun InvalidationTestPage() {
     val count by countRemoteInvalidations("timer")
 

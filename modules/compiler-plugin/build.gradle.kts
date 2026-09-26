@@ -133,11 +133,16 @@ val testArtifacts: Configuration = configurations.create("testArtifact")
 val annotationsRuntimeClasspath = configurations.dependencyScope("annotationsRuntimeClasspath") {
     isTransitive = false
 }
+
+val annotationsRuntimeClasspathJs = configurations.dependencyScope("annotationsRuntimeClasspathJs") {
+    isTransitive = false
+}
+
 val annotationsJvmRuntimeClasspath = configurations.resolvable("annotationsJvmRuntimeClasspath") {
     extendsFrom(annotationsRuntimeClasspath)
 }
 val annotationsJsRuntimeClasspath = configurations.resolvable("annotationsJsRuntimeClasspath") {
-    extendsFrom(annotationsRuntimeClasspath)
+    extendsFrom(annotationsRuntimeClasspath, annotationsRuntimeClasspathJs)
     attributes {
         attribute(Usage.USAGE_ATTRIBUTE, objects.named(KotlinUsages.KOTLIN_RUNTIME))
         attribute(KotlinPlatformType.attribute, KotlinPlatformType.js)

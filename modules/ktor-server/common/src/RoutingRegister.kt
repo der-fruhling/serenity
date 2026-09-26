@@ -15,10 +15,16 @@ import kotlin.reflect.KClass
 val pageFunctionName = AttributeKey<String>("pageFunctionName")
 private var pageTemplate: PageTemplate? by mutableStateOf(null)
 
-private fun Route.commonRegister(page: PageHolderFactory<ApplicationCall, *>) {
+private class PageContextImpl(val call: ApplicationCall) : PageContext() {
+    override fun getParameter(name: String): String? {
+        return call.parameters[name]
+    }
+}
+
+private fun Route.commonRegister(page: PageHolderFactory<PageContext, *>) {
     get(page.path) {
         call.respondCompose {
-            val page = remember { page.create(call) }
+            val page = remember { page.create(PageContextImpl(call)) }
             val extensionController =
                 remember(page) { PageExtensionController().also { it.setPage(page) } }
             CompositionLocalProvider(
@@ -31,13 +37,13 @@ private fun Route.commonRegister(page: PageHolderFactory<ApplicationCall, *>) {
     }
 }
 
-fun Route.registerServerPages(fn: PageRegistry<ApplicationCall>.() -> Unit) {
-    (object : PageRegistry<ApplicationCall>() {
+fun Route.registerServerPages(fn: PageRegistry.() -> Unit) {
+    (object : PageRegistry() {
         override fun template(fn: @Composable TemplateBuilder.() -> Unit) {
             pageTemplate = PageTemplate(fn)
         }
 
-        override fun <R : PageHolder<R>, T : PageHolderFactory<ApplicationCall, R>> register(
+        override fun <R : PageHolder<R>, T : PageHolderFactory<PageContext, R>> register(
             kClass: KClass<R>,
             kSerializer: KSerializer<R>,
             page: T

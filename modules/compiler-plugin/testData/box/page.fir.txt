@@ -1,12 +1,12 @@
 FILE: page.kt
     @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/annotations/Page|(path = String(/) [evaluated = String(/)]) public final fun IndexPage(): R|kotlin/Unit| {
-        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=Inline, kind=UNKNOWN>  {
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
             this@R|special/anonymous|.R|net/derfruhling/serenity/PageContract.title| = String(Hello, world!)
         }
         )
     }
     @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/annotations/Page|(path = String(/) [evaluated = String(/)]) public final fun Page2(param1: R|kotlin/String|, param2: R|kotlin/Int|): R|kotlin/Unit| {
-        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=Inline, kind=UNKNOWN>  {
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
             this@R|special/anonymous|.R|net/derfruhling/serenity/PageContract.title| = <strcat>(String(Hello, ), R|<local>/param1|, String(!))
         }
         )
@@ -27,14 +27,18 @@ FILE: page.kt
         }
 
     }
+    public final inline fun <reified T : R|net/derfruhling/serenity/PageHolder<T>|> accept(factory: R|net/derfruhling/serenity/PageHolderFactory<net/derfruhling/serenity/PageContext, T>|): R|kotlin/Unit| {
+    }
     public final fun box(): R|kotlin/String| {
         lval page1: R|IndexPage| = Q|IndexPage|
-        lval page2: <ERROR TYPE REF: Unresolved name: of> = Q|Page2|.<Unresolved name: of>#(String(world), Int(42))
+        lval page2: R|Page2.Instance| = Q|Page2|.R|/Page2.of|(String(world), Int(42))
         Q|Test|.R|/Test.Factory.of|()
+        R|/accept|<R|IndexPage|>(Q|IndexPage|)
+        R|/accept|<R|Page2.Instance|>(Q|Page2|)
         ^box String(OK)
     }
 FILE: /IndexPage.kt
-    public final object IndexPage : R|net/derfruhling/serenity/PageHolder<R>| {
+    public final object IndexPage : R|net/derfruhling/serenity/PageHolder<IndexPage>| {
         public final val id: R|kotlin/String|
             public get(): R|kotlin/String|
 
@@ -51,31 +55,33 @@ FILE: /IndexPage.kt
 
     }
 FILE: /Page2.kt
-    public final class Page2 : R|net/derfruhling/serenity/PageHolder<R>| {
+    public final object Page2 : R|net/derfruhling/serenity/PageHolderFactory<net/derfruhling/serenity/PageContext, Page2.Instance>| {
         public final val id: R|kotlin/String|
             public get(): R|kotlin/String|
 
         public final val path: R|kotlin/String|
             public get(): R|kotlin/String|
 
-        public final val details: R|net/derfruhling/serenity/PageDetails|
-            public get(): R|net/derfruhling/serenity/PageDetails|
+        public final override fun create(ctx: R|net/derfruhling/serenity/PageContext|): R|Page2.Instance|
 
-        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out kotlin/Annotation>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension>|
-            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out kotlin/Annotation>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension>|
+        public final override fun of(param1: R|kotlin/String|, param2: R|kotlin/Int|): R|Page2.Instance|
 
-        @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
-
-        public final companion object Companion : R|net/derfruhling/serenity/PageHolderFactory<Ctx, R>| {
+        public final class Instance : R|net/derfruhling/serenity/PageHolder<Page2.Instance>| {
             public final val id: R|kotlin/String|
                 public get(): R|kotlin/String|
 
             public final val path: R|kotlin/String|
                 public get(): R|kotlin/String|
 
-            public final override fun create(ctx: R|net/derfruhling/serenity/PageContext|): R|Page2|
+            public final val details: R|net/derfruhling/serenity/PageDetails|
+                public get(): R|net/derfruhling/serenity/PageDetails|
 
-            public final override fun of(param1: R|kotlin/String|, param2: R|kotlin/Int|): R|Page2|
+            public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out kotlin/Annotation>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension>|
+                public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out kotlin/Annotation>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension>|
+
+            @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
+
+            internal constructor(serenity$identifier: R|kotlin/Unit|, param1: R|kotlin/String|, param2: R|kotlin/Int|): R|Page2.Instance|
 
         }
 

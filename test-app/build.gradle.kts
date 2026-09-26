@@ -40,11 +40,11 @@ serenity {
         prettyJson = true
     }
 
-    collectors {
+    /*collectors {
         useCommon(project(":serenity-common-collector"))
         useWeb(project(":serenity-web-collector"))
         useServer(project(":serenity-ktor-collector"))
-    }
+    }*/
 
     server {
         nativeEntryPoint = "net.derfruhling.serenity.testapp.main"

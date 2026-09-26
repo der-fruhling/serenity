@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.test.FirParser
 import org.jetbrains.kotlin.test.builders.TestConfigurationBuilder
 import org.jetbrains.kotlin.test.directives.CodegenTestDirectives
 import org.jetbrains.kotlin.test.directives.FirDiagnosticsDirectives
+import org.jetbrains.kotlin.test.directives.JsEnvironmentConfigurationDirectives
 import org.jetbrains.kotlin.test.services.EnvironmentBasedStandardLibrariesPathProvider
 import org.jetbrains.kotlin.test.services.KotlinStandardLibrariesPathProvider
 
@@ -37,6 +38,8 @@ open class AbstractJsBoxTest : AbstractJsTest(
                 +CodegenTestDirectives.DUMP_IR
                 +FirDiagnosticsDirectives.FIR_DUMP
             }
+
+            useCustomRuntimeClasspathProviders()
 
             configurePlugin()
         }

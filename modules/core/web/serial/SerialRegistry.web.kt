@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.serialization.KSerializer
+import net.derfruhling.serenity.PageContext
 import net.derfruhling.serenity.PageHolder
 import net.derfruhling.serenity.PageHolderFactory
 import net.derfruhling.serenity.PageRegistry
@@ -30,17 +31,13 @@ inline fun <reified T> SerialRegistry.decodeFromObject(obj: JsAny): T {
 
 internal var pageTemplate by mutableStateOf(null as PageTemplate?)
 
-interface WebContext {
-    fun parseParameters(path: String): Map<String, String>
-}
-
-fun SerialRegistry.registerClientPages(fn: PageRegistry<WebContext>.() -> Unit) {
-    (object : PageRegistry<WebContext>() {
+fun SerialRegistry.registerClientPages(fn: PageRegistry.() -> Unit) {
+    (object : PageRegistry() {
         override fun template(fn: @Composable (TemplateBuilder.() -> Unit)) {
             pageTemplate = PageTemplate(fn)
         }
 
-        override fun <R : PageHolder<R>, T : PageHolderFactory<WebContext, R>> register(
+        override fun <R : PageHolder<R>, T : PageHolderFactory<PageContext, R>> register(
             kClass: KClass<R>,
             kSerializer: KSerializer<R>,
             page: T

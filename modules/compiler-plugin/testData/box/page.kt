@@ -2,6 +2,9 @@
 
 import net.derfruhling.serenity.annotations.*
 import net.derfruhling.serenity.pageContract
+import net.derfruhling.serenity.PageHolder
+import net.derfruhling.serenity.PageHolderFactory
+import net.derfruhling.serenity.PageContext
 import androidx.compose.runtime.*
 
 @Composable
@@ -26,9 +29,15 @@ class Test {
     }
 }
 
+inline fun <reified T : PageHolder<T>> accept(factory: PageHolderFactory<PageContext, T>) {
+
+}
+
 fun box(): String {
     val page1 = IndexPage
     val page2 = Page2.of("world", 42)
     Test.of()
+    accept(IndexPage)
+    accept(Page2)
     return "OK"
 }

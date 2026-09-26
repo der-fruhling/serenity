@@ -3,7 +3,7 @@ package net.derfruhling.serenity.compiler.fir
 import org.jetbrains.kotlin.GeneratedDeclarationKey
 
 sealed class FirPageGenerated : GeneratedDeclarationKey() {
-    data object PageClass : FirPageGenerated()
+    data class PageClass(val isSubClass: Boolean) : FirPageGenerated()
     data object PageFactoryClass : FirPageGenerated()
     data object PageIdProperty : FirPageGenerated()
     data object PagePathProperty : FirPageGenerated()

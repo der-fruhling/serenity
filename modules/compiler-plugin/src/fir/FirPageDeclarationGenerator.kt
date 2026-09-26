@@ -2,21 +2,27 @@ package net.derfruhling.serenity.compiler.fir
 
 import net.derfruhling.serenity.compiler.Names
 import net.derfruhling.serenity.compiler.Predicates
+import org.jetbrains.kotlin.KtFakeSourceElementKind
+import org.jetbrains.kotlin.KtSourceElement
+import org.jetbrains.kotlin.KtSourceElementOffsetStrategy
 import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.fakeElement
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.FirDeclarationOrigin
+import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
 import org.jetbrains.kotlin.fir.declarations.FirValueParameterKind
 import org.jetbrains.kotlin.fir.declarations.builder.buildNamedFunction
 import org.jetbrains.kotlin.fir.declarations.builder.buildValueParameter
+import org.jetbrains.kotlin.fir.declarations.getAnnotationByClassId
 import org.jetbrains.kotlin.fir.declarations.hasAnnotationWithClassId
 import org.jetbrains.kotlin.fir.declarations.impl.FirResolvedDeclarationStatusImpl
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotation
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationArgumentMapping
 import org.jetbrains.kotlin.fir.extensions.*
 import org.jetbrains.kotlin.fir.moduleData
-import org.jetbrains.kotlin.fir.plugin.createCompanionObject
 import org.jetbrains.kotlin.fir.plugin.createConstructor
 import org.jetbrains.kotlin.fir.plugin.createMemberProperty
+import org.jetbrains.kotlin.fir.plugin.createNestedClass
 import org.jetbrains.kotlin.fir.plugin.createTopLevelClass
 import org.jetbrains.kotlin.fir.resolve.defaultType
 import org.jetbrains.kotlin.fir.resolve.isContextParameter
@@ -28,43 +34,63 @@ import org.jetbrains.kotlin.fir.types.constructClassLikeType
 import org.jetbrains.kotlin.fir.types.constructType
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.SpecialNames
+import org.jetbrains.kotlin.realElement
+import kotlin.reflect.full.companionObjectInstance
 
 class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGenerationExtension(session) {
-    init {
-        session.registeredPluginAnnotations.registerUserDefinedAnnotation(FqName("net.derfruhling.serenity.annotations.UsedByCompilerPlugin"), emptySet())
-    }
-
     override fun FirDeclarationPredicateRegistrar.registerPredicates() {
         register(Predicates.isPage)
     }
 
     @ExperimentalTopLevelDeclarationsGenerationApi
     override fun generateTopLevelClassLikeDeclaration(classId: ClassId): FirClassLikeSymbol<*> {
-        val targetCallable = session.symbolProvider.getTopLevelCallableSymbols(classId.packageFqName, classId.shortClassName).single {
+        val targetCallable = session.symbolProvider.getTopLevelCallableSymbols(classId.packageFqName, classId.shortClassName).first {
             it.hasAnnotationWithClassId(Names.pageClass, session)
         }
 
-        return createTopLevelClass(classId, FirPageGenerated.PageClass, classKind = if (targetCallable is FirFunctionSymbol<*> && targetCallable.valueParameterSymbols.isNotEmpty()) {
-            ClassKind.CLASS
-        } else ClassKind.OBJECT) {
-            superType(session.symbolProvider.getClassLikeSymbolByClassId(Names.pageHolderClass)!!
-                .defaultType())
-        }.symbol
+        val targetAnnotation = targetCallable.getAnnotationByClassId(Names.pageClass, session)!!
+        val isFactory = targetCallable is FirFunctionSymbol<*> && targetCallable.valueParameterSymbols.isNotEmpty()
+        val pluginGenerated = KtFakeSourceElementKind.PluginGenerated::class
+
+        val fakeElement = (if(pluginGenerated.isSealed) {
+            pluginGenerated.nestedClasses.find { it.simpleName == "Default" }!!.objectInstance!!
+        } else pluginGenerated.objectInstance!!) as KtFakeSourceElementKind
+
+        return if(isFactory) {
+            createTopLevelClass(classId, FirPageGenerated.PageFactoryClass, classKind = ClassKind.OBJECT) {
+                superType(session.symbolProvider.getClassLikeSymbolByClassId(Names.pageFactoryClass)!!
+                    .constructType(arrayOf(
+                        session.symbolProvider.getClassLikeSymbolByClassId(Names.pageContextClass)!!.defaultType(),
+                        classId.createNestedClassId(Name.identifier("Instance")).constructClassLikeType()
+                    )))
+
+                //source = targetAnnotation.source?.fakeElement(fakeElement)
+            }.symbol
+        } else {
+            createTopLevelClass(classId, FirPageGenerated.PageClass(false), classKind = ClassKind.OBJECT) {
+                superType(session.symbolProvider.getClassLikeSymbolByClassId(Names.pageHolderClass)!!
+                    .constructType(arrayOf(
+                        classId.constructClassLikeType()
+                    )))
+
+                //source = targetAnnotation.source?.fakeElement(fakeElement)
+            }.symbol
+        }
     }
 
     override fun generateConstructors(context: MemberGenerationContext): List<FirConstructorSymbol> {
         return if(context.owner.classKind.isObject) {
             emptyList()
         } else {
-            val classId = context.owner.classId
-            val targetCallable = session.symbolProvider.getTopLevelCallableSymbols(classId.packageFqName, classId.shortClassName).single {
+            val classId = context.owner.classId.outerClassId!!
+            val targetCallable = session.symbolProvider.getTopLevelCallableSymbols(classId.packageFqName, classId.shortClassName).first {
                 it.hasAnnotationWithClassId(Names.pageClass, session)
             }
 
             listOf(createConstructor(context.owner, FirPageGenerated.PageConstructor, isPrimary = true) {
-                visibility = Visibilities.Private
+                visibility = Visibilities.Internal
 
                 valueParameter(Name.identifier($$"serenity$identifier"), session.builtinTypes.unitType.coneType)
 
@@ -82,11 +108,13 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         name: Name,
         context: NestedClassGenerationContext
     ): FirClassLikeSymbol<*>? {
-        if(owner.origin != FirDeclarationOrigin.Plugin(FirPageGenerated.PageClass) || owner.classKind != ClassKind.CLASS)
+        if(owner.origin != FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryClass))
             return null
 
-        return createCompanionObject(context.owner, FirPageGenerated.PageFactoryClass) {
-            superType(session.symbolProvider.getClassLikeSymbolByClassId(Names.pageFactoryClass)!!.defaultType())
+        return createNestedClass(context.owner, name, FirPageGenerated.PageClass(true)) {
+            superType(session.symbolProvider.getClassLikeSymbolByClassId(Names.pageHolderClass)!!.constructType(arrayOf(
+                owner.classId.createNestedClassId(name).constructClassLikeType()
+            )))
         }.symbol
     }
 
@@ -96,12 +124,13 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
     ): List<FirNamedFunctionSymbol> {
         if(context != null) {
             val targetClass = context.owner.classId.outerClassId ?: context.owner.classId
-            val targetCallable = session.symbolProvider.getTopLevelCallableSymbols(targetClass.packageFqName, targetClass.shortClassName).single {
+            val targetCallable = session.symbolProvider.getTopLevelCallableSymbols(targetClass.packageFqName, targetClass.shortClassName).first {
                 it.hasAnnotationWithClassId(Names.pageClass, session)
             }
 
             return when(callableId.callableName.identifier) {
                 "Main" -> listOf(buildNamedFunction {
+                    resolvePhase = FirResolvePhase.BODY_RESOLVE
                     symbol = FirNamedFunctionSymbol(callableId)
                     dispatchReceiverType = context.owner.defaultType()
                     moduleData = session.moduleData
@@ -133,6 +162,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                 }.symbol)
 
                 "create" -> listOf(buildNamedFunction {
+                    resolvePhase = FirResolvePhase.BODY_RESOLVE
                     symbol = FirNamedFunctionSymbol(callableId)
                     dispatchReceiverType = context.owner.defaultType()
                     moduleData = session.moduleData
@@ -145,7 +175,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                     ).also { it.isOverride = true }
 
                     returnTypeRef = buildResolvedTypeRef {
-                        coneType = targetClass.constructClassLikeType()
+                        coneType = targetClass.createNestedClassId(Name.identifier("Instance")).constructClassLikeType()
                     }
 
                     isLocal = false
@@ -163,6 +193,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                 }.symbol)
 
                 "of" -> listOf(buildNamedFunction {
+                    resolvePhase = FirResolvePhase.BODY_RESOLVE
                     symbol = FirNamedFunctionSymbol(callableId)
                     dispatchReceiverType = context.owner.defaultType()
                     moduleData = session.moduleData
@@ -175,7 +206,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                     ).also { it.isOverride = true }
 
                     returnTypeRef = buildResolvedTypeRef {
-                        coneType = targetClass.constructClassLikeType()
+                        coneType = targetClass.createNestedClassId(Name.identifier("Instance")).constructClassLikeType()
                     }
 
                     isLocal = false
@@ -246,8 +277,19 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         context: MemberGenerationContext
     ): Set<Name> {
         return when (classSymbol.origin) {
-            FirDeclarationOrigin.Plugin(FirPageGenerated.PageClass) -> {
+            FirDeclarationOrigin.Plugin(FirPageGenerated.PageClass(false)) -> {
                 setOf(
+                    Name.identifier("id"),
+                    Name.identifier("path"),
+                    Name.identifier("details"),
+                    Name.identifier("extensions"),
+                    Name.identifier("Main"),
+                )
+            }
+
+            FirDeclarationOrigin.Plugin(FirPageGenerated.PageClass(true)) -> {
+                setOf(
+                    SpecialNames.INIT,
                     Name.identifier("id"),
                     Name.identifier("path"),
                     Name.identifier("details"),
@@ -275,8 +317,8 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         classSymbol: FirClassSymbol<*>,
         context: NestedClassGenerationContext
     ): Set<Name> {
-        return if(classSymbol.origin == FirDeclarationOrigin.Plugin(FirPageGenerated.PageClass) && classSymbol.classKind == ClassKind.CLASS) {
-            setOf(Name.identifier("Companion"))
+        return if(classSymbol.origin == FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryClass)) {
+            setOf(Name.identifier("Instance"))
         } else emptySet()
     }
 

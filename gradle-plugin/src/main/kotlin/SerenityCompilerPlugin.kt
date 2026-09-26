@@ -13,6 +13,7 @@ class SerenityCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         kotlinCompilation.compileTaskProvider.configure {
             // Run this compiler plugin before Compose plugin.
             compilerOptions.freeCompilerArgs.add("-Xcompiler-plugin-order=net.derfruhling.serenity>androidx.compose.compiler.plugins.kotlin")
+            compilerOptions.freeCompilerArgs.add("-Xcompiler-plugin-order=net.derfruhling.serenity>org.jetbrains.kotlinx.serialization")
         }
 
         return project.provider { emptyList() }
