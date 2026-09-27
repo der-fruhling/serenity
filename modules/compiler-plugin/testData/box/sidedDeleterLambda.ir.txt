@@ -1,9 +1,11 @@
 FILE fqName:<root> fileName:/sidedDeleterLambda.kt
   FUN name:box visibility:public modality:FINAL returnType:kotlin.String
     BLOCK_BODY
-      CALL 'public final fun testClient (fn: @[ClientOnly] kotlin.Function0<kotlin.Unit>): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
-        ARG fn: FUN_EXPR type=kotlin.Function0<kotlin.Unit> origin=LAMBDA
+      CALL 'public final fun testClient (fn: @[ClientOnly] @[ExtensionFunctionType] kotlin.Function2<kotlin.Int, kotlin.String, kotlin.Unit>): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
+        ARG fn: FUN_EXPR type=@[ExtensionFunctionType] kotlin.Function2<kotlin.Int, kotlin.String, kotlin.Unit> origin=LAMBDA
           FUN LOCAL_FUNCTION_FOR_LAMBDA name:<anonymous> visibility:local modality:FINAL returnType:kotlin.Unit
+            VALUE_PARAMETER kind:ExtensionReceiver name:$this$testClient index:0 type:kotlin.Int
+            VALUE_PARAMETER kind:Regular name:it index:1 type:kotlin.String
             annotations:
               Stub
               ClientOnly
@@ -20,7 +22,7 @@ FILE fqName:<root> fileName:/sidedDeleterLambda.kt
       RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
         CONST String type=kotlin.String value="OK"
   FUN name:testClient visibility:public modality:FINAL returnType:kotlin.Unit
-    VALUE_PARAMETER kind:Regular name:fn index:0 type:@[ClientOnly] kotlin.Function0<kotlin.Unit>
+    VALUE_PARAMETER kind:Regular name:fn index:0 type:@[ClientOnly] @[ExtensionFunctionType] kotlin.Function2<kotlin.Int, kotlin.String, kotlin.Unit>
     BLOCK_BODY
   FUN name:testServer visibility:public modality:FINAL returnType:kotlin.Unit
     VALUE_PARAMETER kind:Regular name:fn index:0 type:@[ServerOnly] kotlin.Function0<kotlin.Unit>

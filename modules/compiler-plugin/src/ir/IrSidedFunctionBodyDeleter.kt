@@ -17,11 +17,14 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.types.getClass
+import org.jetbrains.kotlin.ir.types.makeNullable
+import org.jetbrains.kotlin.ir.types.typeOrFail
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.SpecialNames
 
 class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : AbstractSerenityTransformer() {
     val expectedSide: Side = Side.of(context.platform) ?: throw NotApplicable()
@@ -157,7 +160,11 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
                 if (side != expectedSide) {
                     val funExpr = expr as? IrFunctionExpression
                         ?: run {
-                            val targetFun = expr.type.getClass()!!.invokeFun!!
+                            val targetClass = expr.type.getClass()!!
+                            val targetFun = targetClass.invokeFun!!
+                            val subMap = expr.type.arguments?.withIndex()?.associate { (i, arg) ->
+                                targetClass.typeParameters[i].symbol to arg.typeOrFail
+                            } ?: emptyMap()
                             IrFunctionExpressionImpl(
                                 SYNTHETIC_OFFSET,
                                 SYNTHETIC_OFFSET,
@@ -166,18 +173,24 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
                                     SYNTHETIC_OFFSET,
                                     SYNTHETIC_OFFSET,
                                     IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA,
-                                    targetFun.name,
+                                    SpecialNames.ANONYMOUS,
                                     DescriptorVisibilities.LOCAL,
                                     isInline = false,
                                     isExpect = false,
-                                    targetFun.returnType,
+                                    targetFun.returnType.substitute(subMap).makeNullable(),
                                     Modality.FINAL,
                                     IrSimpleFunctionSymbolImpl(),
                                     isTailrec = false,
                                     isSuspend = false,
                                     isOperator = false,
                                     isInfix = false
-                                ),
+                                ).also { fn ->
+                                    fn.copyParametersFrom(
+                                        targetFun,
+                                        subMap
+                                    )
+                                    fn.parameters = fn.parameters.filter { it.kind != IrParameterKind.DispatchReceiver }
+                                },
                                 IrStatementOrigin.LAMBDA
                             ).also {
                                 call.arguments[param] = it

@@ -2,7 +2,7 @@
 
 import net.derfruhling.serenity.annotations.*
 
-fun testClient(fn: @ClientOnly () -> Unit) {
+fun testClient(fn: @ClientOnly Int.(String) -> Unit) {
 
 }
 
@@ -12,7 +12,7 @@ fun testServer(fn: @ServerOnly () -> Unit) {
 
 fun box(): String {
     testClient {
-        println("Hello, client!")
+        println("Hello, $it!")
     }
 
     testServer {
