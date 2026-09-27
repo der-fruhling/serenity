@@ -1,0 +1,14 @@
+FILE: sidedDeleterClass.kt
+    @R|net/derfruhling/serenity/annotations/ClientOnly|() public final class ClientClass : R|kotlin/Any| {
+        public constructor(): R|ClientClass| {
+            super<R|kotlin/Any|>()
+        }
+
+        public final fun test(): R|kotlin/Unit| {
+            R|kotlin/io/println|(String(Hello, client!))
+        }
+
+    }
+    public final fun box(): R|kotlin/String| {
+        ^box String(OK)
+    }

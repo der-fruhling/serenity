@@ -1,6 +1,7 @@
 package net.derfruhling.serenity.compiler.ir
 
 import net.derfruhling.serenity.compiler.Names
+import net.derfruhling.serenity.compiler.NotApplicable
 import net.derfruhling.serenity.compiler.Side
 import org.jetbrains.kotlin.backend.common.extensions.DeclarationFinder
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
@@ -9,10 +10,7 @@ import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.builders.IrBlockBodyBuilder
 import org.jetbrains.kotlin.ir.builders.Scope
-import org.jetbrains.kotlin.ir.declarations.IrAnnotationContainer
-import org.jetbrains.kotlin.ir.declarations.IrDeclaration
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.*
 import org.jetbrains.kotlin.ir.expressions.impl.IrAnnotationImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
@@ -21,11 +19,12 @@ import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.types.getClass
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.*
+import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
 
 class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : AbstractSerenityTransformer() {
-    val expectedSide: Side? by lazy { Side.of(context.platform) }
+    val expectedSide: Side = Side.of(context.platform) ?: throw NotApplicable()
     val finder: DeclarationFinder by lazy { context.finderForBuiltins() }
 
     val throwRemovedByOptimization by lazy {
@@ -68,24 +67,65 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
     private lateinit var currentFunction: IrFunction
 
     override fun visitFunction(declaration: IrFunction): IrStatement {
-        if (expectedSide != null) {
-            val targetSide = declaration.getSide()
-            if (targetSide != null && expectedSide != targetSide) {
-                rewriteFunction(declaration)
-            }
+        val targetSide = declaration.getSide()
+        if (targetSide != null && expectedSide != targetSide) {
+            rewriteFunction(declaration)
         }
 
         currentFunction = declaration
         return super.visitFunction(declaration)
     }
 
+    private inner class ApplyAnnotationTransformer(annotation: IrAnnotation) :
+        AbstractSerenityTransformer() {
+        val container: IrAnnotationContainer by lazy { AnnotationContainerImpl(annotation) }
+        val classId = annotation.classId
+
+        override fun visitDeclaration(declaration: IrDeclarationBase): IrStatement {
+            if(!declaration.hasAnnotation(classId)) {
+                declaration.copyAnnotationsFrom(container)
+            }
+
+            return super.visitDeclaration(declaration)
+        }
+
+        override fun visitValueParameter(declaration: IrValueParameter): IrStatement {
+            return declaration
+        }
+
+        override fun visitAnnotation(expression: IrAnnotation): IrExpression {
+            return expression
+        }
+    }
+
+    override fun visitClass(declaration: IrClass): IrStatement {
+        commonRewriteMany(declaration)
+        return super.visitClass(declaration)
+    }
+
+    private fun commonRewriteMany(declaration: IrDeclaration) {
+        val targetSide = declaration.getSide()
+        if (targetSide != null && expectedSide != targetSide) {
+            declaration.transformChildrenVoid(
+                ApplyAnnotationTransformer(
+                    targetSide.createAnnotation(
+                        finder
+                    )
+                )
+            )
+        }
+    }
+
+    override fun visitProperty(declaration: IrProperty): IrStatement {
+        commonRewriteMany(declaration)
+        return super.visitProperty(declaration)
+    }
+
     private fun rewriteFunction(declaration: IrFunction) {
         val annotation =
             IrAnnotationImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, stubType, stubConstructor, 0, 0)
 
-        declaration.copyAnnotationsFrom(object : IrAnnotationContainer {
-            override val annotations: List<IrAnnotation> = listOf(annotation)
-        })
+        declaration.copyAnnotationsFrom(AnnotationContainerImpl(annotation))
 
         declaration.body =
             IrBlockBodyBuilder(
@@ -103,14 +143,18 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
             }
     }
 
+    private class AnnotationContainerImpl(annotation: IrAnnotation) : IrAnnotationContainer {
+        override val annotations: List<IrAnnotation> = listOf(annotation)
+    }
+
     override fun visitCall(expression: IrCall): IrExpression {
         val target = expression.target
-        if(expectedSide != null && target.parameters.any { it.type.isFunction() }) {
+        if (target.parameters.any { it.type.isFunction() }) {
             val call = super.visitCall(expression) as IrCall
-            for(param in target.parameters.filter { it.type.isFunction() }) {
+            for (param in target.parameters.filter { it.type.isFunction() }) {
                 val side = param.type.getSide() ?: continue
                 val expr = call.arguments[param] ?: continue
-                if(side != expectedSide) {
+                if (side != expectedSide) {
                     val funExpr = expr as? IrFunctionExpression
                         ?: run {
                             val targetFun = expr.type.getClass()!!.invokeFun!!
@@ -142,15 +186,13 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
                         }
                     val function = funExpr.function
 
-                    if(!function.hasAnnotation(Names.stubClass)) {
+                    if (!function.hasAnnotation(Names.stubClass)) {
                         rewriteFunction(function)
                     }
                 }
 
-                if(expr is IrFunctionExpression) {
-                    expr.function.copyAnnotationsFrom(object : IrAnnotationContainer {
-                        override val annotations: List<IrAnnotation> = listOf(side.createAnnotation(finder))
-                    })
+                if (expr is IrFunctionExpression) {
+                    expr.function.copyAnnotationsFrom(AnnotationContainerImpl(side.createAnnotation(finder)))
                 }
             }
 
