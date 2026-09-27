@@ -887,35 +887,33 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
             }
 
             val parentClass = parentAsClass
-            if(!parentClass.isObject) {
-                +irDoWhile().also { loop ->
-                    loop.body = irBlock {
-                        +irSet(indexVal, irCall(compositeDecoderDecodeIndex).also { call ->
-                            call.arguments[0] = irGet(compositeDecoder)
-                            call.arguments[1] = irGet(descriptor)
-                        })
+            +irDoWhile().also { loop ->
+                loop.body = irBlock {
+                    +irSet(indexVal, irCall(compositeDecoderDecodeIndex).also { call ->
+                        call.arguments[0] = irGet(compositeDecoder)
+                        call.arguments[1] = irGet(descriptor)
+                    })
 
-                        // decode done
-                        branches += irBranch(irEquals(irGet(indexVal), (-1).toIrConst(b.intType)), irBreak(loop))
+                    // decode done
+                    branches += irBranch(irEquals(irGet(indexVal), (-1).toIrConst(b.intType)), irBreak(loop))
 
-                        // unknown name
-                        branches += irBranch(irEquals(irGet(indexVal), (-3).toIrConst(b.intType)), irContinue(loop))
+                    // unknown name
+                    branches += irBranch(irEquals(irGet(indexVal), (-3).toIrConst(b.intType)), irContinue(loop))
 
-                        // invalid index
-                        branches += irElseBranch(irThrow(irCall(b.illegalArgumentExceptionSymbol).also { call ->
-                            call.arguments[0] = irConcat().also {
-                                it.arguments += irString("Invalid serial index: ")
-                                it.arguments += irCall(b.intClass.functionByName("toString")).also { call ->
-                                    call.arguments[0] = irGet(indexVal)
-                                }
+                    // invalid index
+                    branches += irElseBranch(irThrow(irCall(b.illegalArgumentExceptionSymbol).also { call ->
+                        call.arguments[0] = irConcat().also {
+                            it.arguments += irString("Invalid serial index: ")
+                            it.arguments += irCall(b.intClass.functionByName("toString")).also { call ->
+                                call.arguments[0] = irGet(indexVal)
                             }
-                        }))
+                        }
+                    }))
 
-                        +irWhen(b.unitType, branches)
-                    }
-
-                    loop.condition = irNotEquals(irGet(indexVal), (-1).toIrConst(b.intType))
+                    +irWhen(b.unitType, branches)
                 }
+
+                loop.condition = irNotEquals(irGet(indexVal), (-1).toIrConst(b.intType))
             }
 
             +irCall(compositeDecoderEnd).also { call ->

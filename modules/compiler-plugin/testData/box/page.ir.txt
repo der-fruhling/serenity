@@ -194,6 +194,69 @@ FILE fqName:<root> fileName:/ComplexPage.kt
             CONST Boolean type=kotlin.Boolean value=false
           VAR IR_TEMPORARY_VARIABLE name:tmp_8 type:kotlin.Int [var]
             CONST Int type=kotlin.Int value=-2
+          DO_WHILE label=null origin=null
+            body: BLOCK type=kotlin.Unit origin=null
+              SET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                CALL 'public abstract fun decodeElementIndex (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Int declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Int origin=null
+                  ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                  ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+              WHEN type=kotlin.Unit origin=null
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=0
+                  then: BLOCK type=kotlin.Unit origin=null
+                    SET_VAR 'var tmp_4: kotlin.String? declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                      CALL 'public abstract fun decodeSerializableElement <T> (descriptor: kotlinx.serialization.descriptors.SerialDescriptor, index: kotlin.Int, deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement>, previousValue: T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement?): T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.String origin=null
+                        TYPE_ARG T: kotlin.String
+                        ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                        ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+                        ARG index: CONST Int type=kotlin.Int value=0
+                        ARG deserializer: CALL 'public final fun serializer <T> (): kotlinx.serialization.KSerializer<T of kotlinx.serialization.serializer> declared in kotlinx.serialization' type=kotlinx.serialization.KSerializer<kotlin.String> origin=null
+                          TYPE_ARG T: kotlin.String
+                        ARG previousValue: GET_VAR 'var tmp_4: kotlin.String? declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.String? origin=null
+                    SET_VAR 'var tmp_5: kotlin.Boolean declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                      CONST Boolean type=kotlin.Boolean value=true
+                    GET_OBJECT 'CLASS IR_EXTERNAL_DECLARATION_STUB OBJECT name:Unit modality:FINAL visibility:public superTypes:[kotlin.Any]' type=kotlin.Unit
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=1
+                  then: BLOCK type=kotlin.Unit origin=null
+                    SET_VAR 'var tmp_6: kotlin.Int? declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                      CALL 'public abstract fun decodeSerializableElement <T> (descriptor: kotlinx.serialization.descriptors.SerialDescriptor, index: kotlin.Int, deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement>, previousValue: T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement?): T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Int origin=null
+                        TYPE_ARG T: kotlin.Int
+                        ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                        ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+                        ARG index: CONST Int type=kotlin.Int value=1
+                        ARG deserializer: CALL 'public final fun serializer <T> (): kotlinx.serialization.KSerializer<T of kotlinx.serialization.serializer> declared in kotlinx.serialization' type=kotlinx.serialization.KSerializer<kotlin.Int> origin=null
+                          TYPE_ARG T: kotlin.Int
+                        ARG previousValue: GET_VAR 'var tmp_6: kotlin.Int? declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Int? origin=null
+                    SET_VAR 'var tmp_7: kotlin.Boolean declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                      CONST Boolean type=kotlin.Boolean value=true
+                    GET_OBJECT 'CLASS IR_EXTERNAL_DECLARATION_STUB OBJECT name:Unit modality:FINAL visibility:public superTypes:[kotlin.Any]' type=kotlin.Unit
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=-1
+                  then: BREAK label=null loop.label=null
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=-3
+                  then: CONTINUE label=null loop.label=null
+                BRANCH
+                  if: CONST Boolean type=kotlin.Boolean value=true
+                  then: THROW type=kotlin.Nothing
+                    CALL 'public final fun illegalArgumentException (arg0: kotlin.String): kotlin.Nothing declared in kotlin.internal.ir' type=kotlin.Nothing origin=null
+                      ARG arg0: STRING_CONCATENATION type=kotlin.String
+                        CONST String type=kotlin.String value="Invalid serial index: "
+                        CALL 'public open fun toString (): kotlin.String declared in kotlin.Int' type=kotlin.String origin=null
+                          ARG <this>: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+            condition: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                ARG arg1: CONST Int type=kotlin.Int value=-1
           CALL 'public abstract fun endStructure (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Unit declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Unit origin=null
             ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
             ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
@@ -474,6 +537,69 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
             CONST Boolean type=kotlin.Boolean value=false
           VAR IR_TEMPORARY_VARIABLE name:tmp_8 type:kotlin.Int [var]
             CONST Int type=kotlin.Int value=-2
+          DO_WHILE label=null origin=null
+            body: BLOCK type=kotlin.Unit origin=null
+              SET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                CALL 'public abstract fun decodeElementIndex (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Int declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Int origin=null
+                  ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                  ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+              WHEN type=kotlin.Unit origin=null
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=0
+                  then: BLOCK type=kotlin.Unit origin=null
+                    SET_VAR 'var tmp_4: kotlin.Int? declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                      CALL 'public abstract fun decodeSerializableElement <T> (descriptor: kotlinx.serialization.descriptors.SerialDescriptor, index: kotlin.Int, deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement>, previousValue: T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement?): T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Int origin=null
+                        TYPE_ARG T: kotlin.Int
+                        ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                        ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+                        ARG index: CONST Int type=kotlin.Int value=0
+                        ARG deserializer: CALL 'public final fun serializer <T> (): kotlinx.serialization.KSerializer<T of kotlinx.serialization.serializer> declared in kotlinx.serialization' type=kotlinx.serialization.KSerializer<kotlin.Int> origin=null
+                          TYPE_ARG T: kotlin.Int
+                        ARG previousValue: GET_VAR 'var tmp_4: kotlin.Int? declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Int? origin=null
+                    SET_VAR 'var tmp_5: kotlin.Boolean declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                      CONST Boolean type=kotlin.Boolean value=true
+                    GET_OBJECT 'CLASS IR_EXTERNAL_DECLARATION_STUB OBJECT name:Unit modality:FINAL visibility:public superTypes:[kotlin.Any]' type=kotlin.Unit
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=1
+                  then: BLOCK type=kotlin.Unit origin=null
+                    SET_VAR 'var tmp_6: kotlin.String? declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                      CALL 'public abstract fun decodeSerializableElement <T> (descriptor: kotlinx.serialization.descriptors.SerialDescriptor, index: kotlin.Int, deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement>, previousValue: T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement?): T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.String origin=null
+                        TYPE_ARG T: kotlin.String
+                        ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                        ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+                        ARG index: CONST Int type=kotlin.Int value=1
+                        ARG deserializer: CALL 'public final fun serializer <T> (): kotlinx.serialization.KSerializer<T of kotlinx.serialization.serializer> declared in kotlinx.serialization' type=kotlinx.serialization.KSerializer<kotlin.String> origin=null
+                          TYPE_ARG T: kotlin.String
+                        ARG previousValue: GET_VAR 'var tmp_6: kotlin.String? declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.String? origin=null
+                    SET_VAR 'var tmp_7: kotlin.Boolean declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                      CONST Boolean type=kotlin.Boolean value=true
+                    GET_OBJECT 'CLASS IR_EXTERNAL_DECLARATION_STUB OBJECT name:Unit modality:FINAL visibility:public superTypes:[kotlin.Any]' type=kotlin.Unit
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=-1
+                  then: BREAK label=null loop.label=null
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=-3
+                  then: CONTINUE label=null loop.label=null
+                BRANCH
+                  if: CONST Boolean type=kotlin.Boolean value=true
+                  then: THROW type=kotlin.Nothing
+                    CALL 'public final fun illegalArgumentException (arg0: kotlin.String): kotlin.Nothing declared in kotlin.internal.ir' type=kotlin.Nothing origin=null
+                      ARG arg0: STRING_CONCATENATION type=kotlin.String
+                        CONST String type=kotlin.String value="Invalid serial index: "
+                        CALL 'public open fun toString (): kotlin.String declared in kotlin.Int' type=kotlin.String origin=null
+                          ARG <this>: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Int origin=null
+            condition: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                ARG arg1: CONST Int type=kotlin.Int value=-1
           CALL 'public abstract fun endStructure (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Unit declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Unit origin=null
             ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
             ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
@@ -698,6 +824,35 @@ FILE fqName:<root> fileName:/IndexPage.kt
               ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
           VAR IR_TEMPORARY_VARIABLE name:tmp_4 type:kotlin.Int [var]
             CONST Int type=kotlin.Int value=-2
+          DO_WHILE label=null origin=null
+            body: BLOCK type=kotlin.Unit origin=null
+              SET_VAR 'var tmp_4: kotlin.Int declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                CALL 'public abstract fun decodeElementIndex (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Int declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Int origin=null
+                  ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                  ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+              WHEN type=kotlin.Unit origin=null
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_4: kotlin.Int declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=-1
+                  then: BREAK label=null loop.label=null
+                BRANCH
+                  if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                    ARG arg0: GET_VAR 'var tmp_4: kotlin.Int declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    ARG arg1: CONST Int type=kotlin.Int value=-3
+                  then: CONTINUE label=null loop.label=null
+                BRANCH
+                  if: CONST Boolean type=kotlin.Boolean value=true
+                  then: THROW type=kotlin.Nothing
+                    CALL 'public final fun illegalArgumentException (arg0: kotlin.String): kotlin.Nothing declared in kotlin.internal.ir' type=kotlin.Nothing origin=null
+                      ARG arg0: STRING_CONCATENATION type=kotlin.String
+                        CONST String type=kotlin.String value="Invalid serial index: "
+                        CALL 'public open fun toString (): kotlin.String declared in kotlin.Int' type=kotlin.String origin=null
+                          ARG <this>: GET_VAR 'var tmp_4: kotlin.Int declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+            condition: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_VAR 'var tmp_4: kotlin.Int declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                ARG arg1: CONST Int type=kotlin.Int value=-1
           CALL 'public abstract fun endStructure (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Unit declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Unit origin=null
             ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
             ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
