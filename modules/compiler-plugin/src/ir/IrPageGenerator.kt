@@ -3,10 +3,10 @@ package net.derfruhling.serenity.compiler.ir
 import net.derfruhling.serenity.compiler.Names
 import net.derfruhling.serenity.compiler.fir.FirPageGenerated
 import net.derfruhling.serenity.compiler.hashFunctionName
+import net.derfruhling.serenity.compiler.ir.components.PathStringInterpolator
 import org.jetbrains.kotlin.backend.common.descriptors.synthesizedName
 import org.jetbrains.kotlin.backend.common.extensions.DeclarationFinder
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
-import org.jetbrains.kotlin.backend.common.ir.createExtensionReceiver
 import org.jetbrains.kotlin.backend.common.ir.moveBodyTo
 import org.jetbrains.kotlin.backend.common.lower.irNot
 import org.jetbrains.kotlin.backend.common.lower.irThrow
@@ -65,7 +65,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
     }
 
     private lateinit var arguments: Map<IrValueParameter, IrProperty>
-    private lateinit var params: Map<IrValueParameter, IrProperty>
+    private lateinit var params: Map<IrValueParameter, IrProperty?>
 
     private val jvmNameClass by lazy { context.finderForBuiltins().findClass(ClassId.topLevel(JVM_NAME_ANNOTATION_FQ_NAME))!! }
     private val jvmNameType by lazy { jvmNameClass.defaultType }
@@ -254,6 +254,19 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
 
                         val thisVal = declaration.thisReceiver!!
 
+                        if(params.isNotEmpty()) {
+                            val path = actualCallable.getAnnotationArgumentValue<String>(Names.pageClass.asSingleFqName(), "path")!!
+
+                            +irSetField(
+                                irGet(thisVal),
+                                declaration.properties.find { it.name == Name.identifier("path") }!!.backingField!!,
+                                context(context.irBuiltIns) {
+                                    PathStringInterpolator(params.keys.associate { it.name.asString() to irGet(it) })
+                                        .interpolatePath(path)
+                                }
+                            )
+                        }
+
                         if (contractFunction != null) {
                             val constructor =
                                 finder.findConstructors(Names.pageContractImplClass)
@@ -323,16 +336,20 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
 
                         params = arguments.associateWith { arg ->
                             val actualType = arg.type.makeNotNull()
-                            val parserType = parserClass.typeWith(actualType)
-                            declaration.createProperty(
-                                Name.identifier($$"$${arg.name.asString()}$parser"),
-                                parserType
-                            ) {
-                                irCallWithSubstitutedType(getParserFn, listOf(parserType)).also { call ->
-                                    call.arguments[0] = irCall(parserContext.getter!!).also { call ->
-                                        call.arguments[0] = irGet(declaration.thisReceiver!!)
+                            if(actualType.isString()) {
+                                null
+                            } else {
+                                val parserType = parserClass.typeWith(actualType)
+                                declaration.createProperty(
+                                    Name.identifier($$"$${arg.name.asString()}$parser"),
+                                    parserType
+                                ) {
+                                    irCallWithSubstitutedType(getParserFn, listOf(parserType)).also { call ->
+                                        call.arguments[0] = irCall(parserContext.getter!!).also { call ->
+                                            call.arguments[0] = irGet(declaration.thisReceiver!!)
+                                        }
+                                        call.arguments[1] = irCallWithSubstitutedType(typeOfFn, listOf(actualType))
                                     }
-                                    call.arguments[1] = irCallWithSubstitutedType(typeOfFn, listOf(actualType))
                                 }
                             }
                         }
@@ -379,9 +396,15 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                 FirPageGenerated.PagePathProperty -> {
                     val actualCallable = getActualCallable(currentClassId, declaration)
 
-                    // TODO string interpolation
                     val path = actualCallable.owner.getAnnotationArgumentValue<String>(Names.pageClass.asSingleFqName(), "path")!!
-                    declaration.backingField!!.initializer = context.irFactory.createExpressionBody(path.toIrConst(context.irBuiltIns.stringType))
+                    declaration.backingField!!.also {
+                        if(declaration.parentAsClass.isObject) {
+                            it.initializer = context.irFactory.createExpressionBody(path.toIrConst(context.irBuiltIns.stringType))
+                        } else {
+                            it.initializer = null
+                            it.isFinal = false
+                        }
+                    }
                 }
 
                 FirPageGenerated.PageDetailsProperty -> context(context.irBuiltIns) {
@@ -708,7 +731,8 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
 
                     val actualCallableId = actualCallable.owner.callableId
-                    val actualClassId = ClassId(actualCallableId.packageName, actualCallableId.callableName).let {
+                    val rootClass = ClassId(actualCallableId.packageName, actualCallableId.callableName)
+                    val actualClassId = rootClass.let {
                         if(actualCallable.owner.parameters.isNotEmpty()) {
                             it.createNestedClassId(Name.identifier("Instance"))
                         } else {
@@ -756,6 +780,10 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                                 call.arguments[0] = irCall(decodeFromObject, actualClass.defaultType, listOf(actualClass.defaultType)).also { call ->
                                     call.arguments[0] = irGetObject(serialRegistry)
                                     call.arguments[1] = irGet(obj)
+                                    val rootClass = finder.findClass(rootClass)!!
+                                    call.arguments[2] = irCall(rootClass.functionByName("serializer")).also { call ->
+                                        call.arguments[0] = irGetObject(rootClass)
+                                    }
                                 }
                             }
                         }
@@ -808,10 +836,9 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     createTmpVariable(irFalse(), it.name.asString() + "Set", isMutable = true, irType = context.irBuiltIns.booleanType)
             }
 
-            val indexVal = createTmpVariable((-1).toIrConst(b.intType), isMutable = true, irType = b.intType)
+            val indexVal = createTmpVariable((-2).toIrConst(b.intType), isMutable = true, irType = b.intType)
             val branches = mutableListOf<IrBranch>()
             val argExprs = mutableListOf<IrExpression>()
-
 
             for((index, prop) in descriptorOrder.withIndex()) {
                 val targetType = prop.getter!!.returnType
@@ -823,8 +850,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                             compositeDecoderDecodeNullableValue
                         } else {
                             compositeDecoderDecodeValue
-                        }).also { call ->
-                            call.typeArguments[0] = targetType.makeNotNull()
+                        }, targetType, listOf(targetType.makeNotNull())).also { call ->
                             call.arguments[0] = irGet(compositeDecoder)
                             call.arguments[1] = irGet(descriptor)
                             call.arguments[2] = index.toIrConst(context.irBuiltIns.intType)
@@ -833,6 +859,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                         })
 
                         +irSet(isSet, irTrue())
+                        +irUnit()
                     }
                 )
 
@@ -859,41 +886,42 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                 })
             }
 
-            +irDoWhile().also { loop ->
-                loop.body = irBlock {
-                    +irSet(indexVal, irCall(compositeDecoderDecodeIndex).also { call ->
-                        call.arguments[0] = irGet(compositeDecoder)
-                        call.arguments[1] = irGet(descriptor)
-                    })
+            val parentClass = parentAsClass
+            if(!parentClass.isObject) {
+                +irDoWhile().also { loop ->
+                    loop.body = irBlock {
+                        +irSet(indexVal, irCall(compositeDecoderDecodeIndex).also { call ->
+                            call.arguments[0] = irGet(compositeDecoder)
+                            call.arguments[1] = irGet(descriptor)
+                        })
 
-                    // decode done
-                    branches += irBranch(irEquals(irGet(indexVal), (-1).toIrConst(b.intType)), irBreak(loop))
+                        // decode done
+                        branches += irBranch(irEquals(irGet(indexVal), (-1).toIrConst(b.intType)), irBreak(loop))
 
-                    // unknown name
-                    branches += irBranch(irEquals(irGet(indexVal), (-3).toIrConst(b.intType)), irContinue(loop))
+                        // unknown name
+                        branches += irBranch(irEquals(irGet(indexVal), (-3).toIrConst(b.intType)), irContinue(loop))
 
-                    // invalid index
-                    branches += irElseBranch(irThrow(irCall(b.illegalArgumentExceptionSymbol).also { call ->
-                        call.arguments[0] = irConcat().also {
-                            it.arguments += irString("Invalid serial index: ")
-                            it.arguments += irCall(b.intClass.functionByName("toString")).also { call ->
-                                call.arguments[0] = irGet(indexVal)
+                        // invalid index
+                        branches += irElseBranch(irThrow(irCall(b.illegalArgumentExceptionSymbol).also { call ->
+                            call.arguments[0] = irConcat().also {
+                                it.arguments += irString("Invalid serial index: ")
+                                it.arguments += irCall(b.intClass.functionByName("toString")).also { call ->
+                                    call.arguments[0] = irGet(indexVal)
+                                }
                             }
-                        }
-                    }))
+                        }))
 
-                    irWhen(b.unitType, branches)
+                        +irWhen(b.unitType, branches)
+                    }
+
+                    loop.condition = irNotEquals(irGet(indexVal), (-1).toIrConst(b.intType))
                 }
-
-                loop.condition = irNotEquals(irGet(indexVal), (-1).toIrConst(b.intType))
             }
 
             +irCall(compositeDecoderEnd).also { call ->
                 call.arguments[0] = irGet(compositeDecoder)
                 call.arguments[1] = irGet(descriptor)
             }
-
-            val parentClass = parentAsClass
 
             +irReturn(if(parentClass.isObject) {
                 irGetObject(parentClass.symbol)

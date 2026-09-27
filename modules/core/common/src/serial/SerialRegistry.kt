@@ -1,7 +1,9 @@
 package net.derfruhling.serenity.serial
 
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -123,12 +125,12 @@ object SerialRegistry {
         registerManifestEntry(T::class, serializer<T>())
     }
 
-    inline fun <reified T> decode(value: String): T {
-        return json.decodeFromString(value)
+    inline fun <reified T> decode(value: String, deserializationStrategy: DeserializationStrategy<T> = serializersModule.serializer()): T {
+        return json.decodeFromString(deserializationStrategy, value)
     }
 
-    inline fun <reified T> encode(value: T): String {
-        return json.encodeToString(value)
+    inline fun <reified T> encode(value: T, serializationStrategy: SerializationStrategy<T> = serializersModule.serializer()): String {
+        return json.encodeToString(serializationStrategy, value)
     }
 
     init {

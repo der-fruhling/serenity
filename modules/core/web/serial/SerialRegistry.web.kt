@@ -6,7 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.serializer
 import net.derfruhling.serenity.PageContext
 import net.derfruhling.serenity.PageHolder
 import net.derfruhling.serenity.PageHolderFactory
@@ -21,12 +24,12 @@ internal fun jsonStringify(@Suppress("unused") value: JsAny): String = js("JSON.
 @PublishedApi
 internal fun jsonParse(@Suppress("unused") value: String): JsAny = js("JSON.parse(value)")
 
-inline fun <reified T> SerialRegistry.encodeToObject(value: T): JsAny {
-    return jsonParse(encode(value))
+inline fun <reified T> SerialRegistry.encodeToObject(value: T, serializationStrategy: SerializationStrategy<T> = serializersModule.serializer()): JsAny {
+    return jsonParse(encode(value, serializationStrategy))
 }
 
-inline fun <reified T> SerialRegistry.decodeFromObject(obj: JsAny): T {
-    return decode(jsonStringify(obj))
+inline fun <reified T> SerialRegistry.decodeFromObject(obj: JsAny, deserializationStrategy: DeserializationStrategy<T> = serializersModule.serializer()): T {
+    return decode(jsonStringify(obj), deserializationStrategy)
 }
 
 internal var pageTemplate by mutableStateOf(null as PageTemplate?)

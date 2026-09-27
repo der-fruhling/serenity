@@ -65,7 +65,7 @@ FILE fqName:<root> fileName:/IndexPage.kt
         FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]
           EXPRESSION_BODY
             CALL 'public final fun buildClassSerialDescriptor (serialName: kotlin.String, vararg typeParameters: kotlinx.serialization.descriptors.SerialDescriptor, builderAction: @[ExtensionFunctionType] kotlin.Function1<kotlinx.serialization.descriptors.ClassSerialDescriptorBuilder, kotlin.Unit>): kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.descriptors' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
-              ARG serialName: CONST String type=kotlin.String value="qFxEJ3O0M_VQFFYzWQpvuA"
+              ARG serialName: CONST String type=kotlin.String value="11tH5pc9xiFN8WL2nPzxQQ"
               ARG typeParameters: CALL 'public final fun arrayOf <T> (vararg elements: T of kotlin.arrayOf): kotlin.Array<T of kotlin.arrayOf> declared in kotlin' type=kotlin.Array<kotlinx.serialization.descriptors.SerialDescriptor> origin=null
                 TYPE_ARG T: kotlinx.serialization.descriptors.SerialDescriptor
               ARG builderAction: FUN_EXPR type=@[ExtensionFunctionType] kotlin.Function1<kotlinx.serialization.descriptors.ClassSerialDescriptorBuilder, kotlin.Unit> origin=LAMBDA
@@ -138,16 +138,6 @@ FILE fqName:<root> fileName:/IndexPage.kt
               ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
           VAR IR_TEMPORARY_VARIABLE name:tmp_4 type:kotlin.Int [var]
             CONST Int type=kotlin.Int value=-1
-          DO_WHILE label=null origin=null
-            body: BLOCK type=kotlin.Unit origin=null
-              SET_VAR 'var tmp_4: kotlin.Int declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
-                CALL 'public abstract fun decodeElementIndex (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Int declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Int origin=null
-                  ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
-                  ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
-            condition: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
-              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
-                ARG arg0: GET_VAR 'var tmp_4: kotlin.Int declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlin.Int origin=null
-                ARG arg1: CONST Int type=kotlin.Int value=-1
           CALL 'public abstract fun endStructure (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Unit declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Unit origin=null
             ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
             ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
@@ -269,27 +259,13 @@ FILE fqName:<root> fileName:/Page2.kt
           RETURN type=kotlin.Nothing from='public final fun <get-$parserContext> (): net.derfruhling.serenity.serial.ParameterParserContext declared in <root>.Page2'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:$parserContext type:net.derfruhling.serenity.serial.ParameterParserContext visibility:private' type=net.derfruhling.serenity.serial.ParameterParserContext origin=null
               receiver: GET_VAR '<this>: <root>.Page2 declared in <root>.Page2.<get-$parserContext>' type=<root>.Page2 origin=null
-    PROPERTY name:param1$parser visibility:public modality:FINAL [val]
-      FIELD PROPERTY_BACKING_FIELD name:param1$parser type:net.derfruhling.serenity.serial.ParameterParser<kotlin.String> visibility:private
-        EXPRESSION_BODY
-          CALL 'internal final fun getParser <T> (kType: kotlin.reflect.KType): net.derfruhling.serenity.serial.ParameterParser<T of net.derfruhling.serenity.serial.ParameterParserContext.getParser> declared in net.derfruhling.serenity.serial.ParameterParserContext' type=net.derfruhling.serenity.serial.ParameterParser<net.derfruhling.serenity.serial.ParameterParser<kotlin.String>> origin=null
-            TYPE_ARG T: net.derfruhling.serenity.serial.ParameterParser<kotlin.String>
-            ARG <this>: CALL 'public final fun <get-$parserContext> (): net.derfruhling.serenity.serial.ParameterParserContext declared in <root>.Page2' type=net.derfruhling.serenity.serial.ParameterParserContext origin=null
-            ARG kType: CALL 'public final fun typeOf <T> (): kotlin.reflect.KType declared in kotlin.reflect' type=kotlin.reflect.KType origin=null
-              TYPE_ARG T: kotlin.String
-      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-param1$parser> visibility:public modality:FINAL returnType:net.derfruhling.serenity.serial.ParameterParser<kotlin.String>
-        VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2
-        correspondingProperty: PROPERTY name:param1$parser visibility:public modality:FINAL [val]
-        BLOCK_BODY
-          RETURN type=kotlin.Nothing from='public final fun <get-param1$parser> (): net.derfruhling.serenity.serial.ParameterParser<kotlin.String> declared in <root>.Page2'
-            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:param1$parser type:net.derfruhling.serenity.serial.ParameterParser<kotlin.String> visibility:private' type=net.derfruhling.serenity.serial.ParameterParser<kotlin.String> origin=null
-              receiver: GET_VAR '<this>: <root>.Page2 declared in <root>.Page2.<get-param1$parser>' type=<root>.Page2 origin=null
     PROPERTY name:param2$parser visibility:public modality:FINAL [val]
       FIELD PROPERTY_BACKING_FIELD name:param2$parser type:net.derfruhling.serenity.serial.ParameterParser<kotlin.Int> visibility:private
         EXPRESSION_BODY
           CALL 'internal final fun getParser <T> (kType: kotlin.reflect.KType): net.derfruhling.serenity.serial.ParameterParser<T of net.derfruhling.serenity.serial.ParameterParserContext.getParser> declared in net.derfruhling.serenity.serial.ParameterParserContext' type=net.derfruhling.serenity.serial.ParameterParser<net.derfruhling.serenity.serial.ParameterParser<kotlin.Int>> origin=null
             TYPE_ARG T: net.derfruhling.serenity.serial.ParameterParser<kotlin.Int>
             ARG <this>: CALL 'public final fun <get-$parserContext> (): net.derfruhling.serenity.serial.ParameterParserContext declared in <root>.Page2' type=net.derfruhling.serenity.serial.ParameterParserContext origin=null
+              ARG <this>: GET_VAR '<this>: <root>.Page2 declared in <root>.Page2' type=<root>.Page2 origin=null
             ARG kType: CALL 'public final fun typeOf <T> (): kotlin.reflect.KType declared in kotlin.reflect' type=kotlin.reflect.KType origin=null
               TYPE_ARG T: kotlin.Int
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-param2$parser> visibility:public modality:FINAL returnType:net.derfruhling.serenity.serial.ParameterParser<kotlin.Int>
@@ -306,7 +282,7 @@ FILE fqName:<root> fileName:/Page2.kt
           public abstract id: kotlin.String declared in net.derfruhling.serenity.PageHolder
         FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]
           EXPRESSION_BODY
-            CONST String type=kotlin.String value="zfDQrxhmtND6FQyMPKeL9A"
+            CONST String type=kotlin.String value="lACeYUAbnYrINHVLpnekug"
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-id> visibility:public modality:FINAL returnType:kotlin.String
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance
           correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
@@ -319,9 +295,7 @@ FILE fqName:<root> fileName:/Page2.kt
       PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
         overridden:
           public abstract path: kotlin.String declared in net.derfruhling.serenity.PageHolder
-        FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]
-          EXPRESSION_BODY
-            CONST String type=kotlin.String value="/"
+        FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-path> visibility:public modality:FINAL returnType:kotlin.String
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance
           correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
@@ -329,7 +303,7 @@ FILE fqName:<root> fileName:/Page2.kt
             public abstract fun <get-path> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
           BLOCK_BODY
             RETURN type=kotlin.Nothing from='public final fun <get-path> (): kotlin.String declared in <root>.Page2.Instance'
-              GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private' type=kotlin.String origin=null
                 receiver: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.<get-path>' type=<root>.Page2.Instance origin=null
       PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
         overridden:
@@ -383,7 +357,7 @@ FILE fqName:<root> fileName:/Page2.kt
           FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]
             EXPRESSION_BODY
               CALL 'public final fun buildClassSerialDescriptor (serialName: kotlin.String, vararg typeParameters: kotlinx.serialization.descriptors.SerialDescriptor, builderAction: @[ExtensionFunctionType] kotlin.Function1<kotlinx.serialization.descriptors.ClassSerialDescriptorBuilder, kotlin.Unit>): kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.descriptors' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
-                ARG serialName: CONST String type=kotlin.String value="V6VPZEhBRZpF2NrrdUkPOw"
+                ARG serialName: CONST String type=kotlin.String value="lACeYUAbnYrINHVLpnekug"
                 ARG typeParameters: CALL 'public final fun arrayOf <T> (vararg elements: T of kotlin.arrayOf): kotlin.Array<T of kotlin.arrayOf> declared in kotlin' type=kotlin.Array<kotlinx.serialization.descriptors.SerialDescriptor> origin=null
                   TYPE_ARG T: kotlinx.serialization.descriptors.SerialDescriptor
                 ARG builderAction: FUN_EXPR type=@[ExtensionFunctionType] kotlin.Function1<kotlinx.serialization.descriptors.ClassSerialDescriptorBuilder, kotlin.Unit> origin=LAMBDA
@@ -458,7 +432,7 @@ FILE fqName:<root> fileName:/Page2.kt
               ARG descriptor: GET_VAR 'val tmp_0: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.Page2.Instance.Serializer.serialize' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
               ARG index: CONST Int type=kotlin.Int value=0
               ARG serializer: CALL 'public final fun serializer <T> (): kotlinx.serialization.KSerializer<T of kotlinx.serialization.serializer> declared in kotlinx.serialization' type=kotlinx.serialization.KSerializer<kotlin.String> origin=null
-                TYPE_ARG T: <none>
+                TYPE_ARG T: kotlin.String
               ARG value: CALL 'public final fun <get-param1> (): kotlin.String declared in <root>.Page2.Instance' type=kotlin.String origin=null
                 ARG <this>: GET_VAR 'value: <root>.Page2.Instance declared in <root>.Page2.Instance.Serializer.serialize' type=<root>.Page2.Instance origin=null
             CALL 'public abstract fun encodeSerializableElement <T> (descriptor: kotlinx.serialization.descriptors.SerialDescriptor, index: kotlin.Int, serializer: kotlinx.serialization.SerializationStrategy<T of kotlinx.serialization.encoding.CompositeEncoder.encodeSerializableElement>, value: T of kotlinx.serialization.encoding.CompositeEncoder.encodeSerializableElement): kotlin.Unit declared in kotlinx.serialization.encoding.CompositeEncoder' type=kotlin.Unit origin=null
@@ -467,7 +441,7 @@ FILE fqName:<root> fileName:/Page2.kt
               ARG descriptor: GET_VAR 'val tmp_0: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.Page2.Instance.Serializer.serialize' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
               ARG index: CONST Int type=kotlin.Int value=1
               ARG serializer: CALL 'public final fun serializer <T> (): kotlinx.serialization.KSerializer<T of kotlinx.serialization.serializer> declared in kotlinx.serialization' type=kotlinx.serialization.KSerializer<kotlin.Int> origin=null
-                TYPE_ARG T: <none>
+                TYPE_ARG T: kotlin.Int
               ARG value: CALL 'public final fun <get-param2> (): kotlin.Int declared in <root>.Page2.Instance' type=kotlin.Int origin=null
                 ARG <this>: GET_VAR 'value: <root>.Page2.Instance declared in <root>.Page2.Instance.Serializer.serialize' type=<root>.Page2.Instance origin=null
             CALL 'public abstract fun endStructure (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Unit declared in kotlinx.serialization.encoding.CompositeEncoder' type=kotlin.Unit origin=null
@@ -500,6 +474,57 @@ FILE fqName:<root> fileName:/Page2.kt
                   CALL 'public abstract fun decodeElementIndex (descriptor: kotlinx.serialization.descriptors.SerialDescriptor): kotlin.Int declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Int origin=null
                     ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
                     ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+                WHEN type=kotlin.Unit origin=null
+                  BRANCH
+                    if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                      ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                      ARG arg1: CONST Int type=kotlin.Int value=0
+                    then: BLOCK type=kotlin.Unit origin=null
+                      SET_VAR 'var tmp_4: kotlin.String? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                        CALL 'public abstract fun decodeSerializableElement <T> (descriptor: kotlinx.serialization.descriptors.SerialDescriptor, index: kotlin.Int, deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement>, previousValue: T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement?): T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.String origin=null
+                          TYPE_ARG T: kotlin.String
+                          ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                          ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+                          ARG index: CONST Int type=kotlin.Int value=0
+                          ARG deserializer: CALL 'public final fun serializer <T> (): kotlinx.serialization.KSerializer<T of kotlinx.serialization.serializer> declared in kotlinx.serialization' type=kotlinx.serialization.KSerializer<kotlin.String> origin=null
+                            TYPE_ARG T: kotlin.String
+                          ARG previousValue: GET_VAR 'var tmp_4: kotlin.String? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.String? origin=null
+                      SET_VAR 'var tmp_5: kotlin.Boolean declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                        CONST Boolean type=kotlin.Boolean value=true
+                  BRANCH
+                    if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                      ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                      ARG arg1: CONST Int type=kotlin.Int value=1
+                    then: BLOCK type=kotlin.Unit origin=null
+                      SET_VAR 'var tmp_6: kotlin.Int? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                        CALL 'public abstract fun decodeSerializableElement <T> (descriptor: kotlinx.serialization.descriptors.SerialDescriptor, index: kotlin.Int, deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement>, previousValue: T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement?): T of kotlinx.serialization.encoding.CompositeDecoder.decodeSerializableElement declared in kotlinx.serialization.encoding.CompositeDecoder' type=kotlin.Int origin=null
+                          TYPE_ARG T: kotlin.Int
+                          ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
+                          ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
+                          ARG index: CONST Int type=kotlin.Int value=1
+                          ARG deserializer: CALL 'public final fun serializer <T> (): kotlinx.serialization.KSerializer<T of kotlinx.serialization.serializer> declared in kotlinx.serialization' type=kotlinx.serialization.KSerializer<kotlin.Int> origin=null
+                            TYPE_ARG T: kotlin.Int
+                          ARG previousValue: GET_VAR 'var tmp_6: kotlin.Int? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int? origin=null
+                      SET_VAR 'var tmp_7: kotlin.Boolean declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Unit origin=EQ
+                        CONST Boolean type=kotlin.Boolean value=true
+                  BRANCH
+                    if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                      ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                      ARG arg1: CONST Int type=kotlin.Int value=-1
+                    then: BREAK label=null loop.label=null
+                  BRANCH
+                    if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                      ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                      ARG arg1: CONST Int type=kotlin.Int value=-3
+                    then: CONTINUE label=null loop.label=null
+                  BRANCH
+                    if: CONST Boolean type=kotlin.Boolean value=true
+                    then: THROW type=kotlin.Nothing
+                      CALL 'public final fun illegalArgumentException (arg0: kotlin.String): kotlin.Nothing declared in kotlin.internal.ir' type=kotlin.Nothing origin=null
+                        ARG arg0: STRING_CONCATENATION type=kotlin.String
+                          CONST String type=kotlin.String value="Invalid serial index: "
+                          CALL 'public open fun toString (): kotlin.String declared in kotlin.Int' type=kotlin.String origin=null
+                            ARG <this>: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int origin=null
               condition: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
                 ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
                   ARG arg0: GET_VAR 'var tmp_8: kotlin.Int declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int origin=null
@@ -526,7 +551,8 @@ FILE fqName:<root> fileName:/Page2.kt
                         ARG arg0: CONST String type=kotlin.String value="Property 'param1' has null value"
                   BRANCH
                     if: CONST Boolean type=kotlin.Boolean value=true
-                    then: GET_VAR 'var tmp_4: kotlin.String? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.String origin=null
+                    then: TYPE_OP type=kotlin.String origin=IMPLICIT_CAST typeOperand=kotlin.String
+                      GET_VAR 'var tmp_4: kotlin.String? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.String? origin=null
                 ARG param2: WHEN type=kotlin.Int origin=null
                   BRANCH
                     if: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCL
@@ -543,7 +569,8 @@ FILE fqName:<root> fileName:/Page2.kt
                         ARG arg0: CONST String type=kotlin.String value="Property 'param2' has null value"
                   BRANCH
                     if: CONST Boolean type=kotlin.Boolean value=true
-                    then: GET_VAR 'var tmp_6: kotlin.Int? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int origin=null
+                    then: TYPE_OP type=kotlin.Int origin=IMPLICIT_CAST typeOperand=kotlin.Int
+                      GET_VAR 'var tmp_6: kotlin.Int? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int? origin=null
       CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageConstructor] visibility:internal returnType:<root>.Page2.Instance [primary]
         VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageConstructor] kind:Regular name:serenity$identifier index:0 type:kotlin.Unit
           EXPRESSION_BODY
@@ -553,6 +580,11 @@ FILE fqName:<root> fileName:/Page2.kt
         BLOCK_BODY
           DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
           INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] CLASS name:Instance modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.Page2.Instance>]' type=kotlin.Unit
+          SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private' type=kotlin.Unit origin=null
+            receiver: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance' type=<root>.Page2.Instance origin=null
+            value: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value="/"
+              CONST String type=kotlin.String value=""
           VAR IR_TEMPORARY_VARIABLE name:tmp_9 type:net.derfruhling.serenity.PageContractBuilder [val]
             CONSTRUCTOR_CALL 'public constructor <init> () declared in net.derfruhling.serenity.PageContractBuilder' type=net.derfruhling.serenity.PageContractBuilder origin=null
           CALL 'local final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.Page2.Instance): kotlin.Unit declared in <root>.Page2.Instance' type=kotlin.Unit origin=null
@@ -600,7 +632,9 @@ FILE fqName:<root> fileName:/Page2.kt
         BLOCK_BODY
           CALL 'public final fun Page2 (param1: kotlin.String, param2: kotlin.Int): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
             ARG param1: CALL 'public final fun <get-param1> (): kotlin.String declared in <root>.Page2.Instance' type=kotlin.String origin=null
+              ARG <this>: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.Main' type=<root>.Page2.Instance origin=null
             ARG param2: CALL 'public final fun <get-param2> (): kotlin.Int declared in <root>.Page2.Instance' type=kotlin.Int origin=null
+              ARG <this>: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.Main' type=<root>.Page2.Instance origin=null
       FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:local modality:FINAL returnType:kotlin.Unit
         VALUE_PARAMETER kind:ExtensionReceiver name:$this$pageContract index:0 type:net.derfruhling.serenity.PageContract
         VALUE_PARAMETER kind:Regular name:serenity$thisPage index:1 type:<root>.Page2.Instance
@@ -667,7 +701,7 @@ FILE fqName:<root> fileName:/Page2.kt
                   BRANCH
                     if: CONST Boolean type=kotlin.Boolean value=true
                     then: GET_VAR 'val tmp_10: kotlin.String? declared in <root>.Page2.create' type=kotlin.String origin=null
-              RETURN type=kotlin.Nothing from='public final fun create (ctx: net.derfruhling.serenity.PageContext): <root>.Page2.Instance declared in <root>.Page2'
+              RETURN type=kotlin.Nothing from='{IrReturnableBlockImpl}'
                 GET_VAR 'val tmp_11: kotlin.String declared in <root>.Page2.create' type=kotlin.String origin=null
             ARG param2: RETURNABLE_BLOCK type=kotlin.Int origin=null
               VAR IR_TEMPORARY_VARIABLE name:tmp_12 type:kotlin.String? [val]
@@ -685,7 +719,7 @@ FILE fqName:<root> fileName:/Page2.kt
                   BRANCH
                     if: CONST Boolean type=kotlin.Boolean value=true
                     then: GET_VAR 'val tmp_12: kotlin.String? declared in <root>.Page2.create' type=kotlin.String origin=null
-              RETURN type=kotlin.Nothing from='public final fun create (ctx: net.derfruhling.serenity.PageContext): <root>.Page2.Instance declared in <root>.Page2'
+              RETURN type=kotlin.Nothing from='{IrReturnableBlockImpl}'
                 CALL 'public abstract fun parse (fieldName: kotlin.String, text: kotlin.String): T of net.derfruhling.serenity.serial.ParameterParser declared in net.derfruhling.serenity.serial.ParameterParser' type=kotlin.Int origin=null
                   ARG <this>: CALL 'public final fun <get-param2$parser> (): net.derfruhling.serenity.serial.ParameterParser<kotlin.Int> declared in <root>.Page2' type=net.derfruhling.serenity.serial.ParameterParser<kotlin.Int> origin=null
                     ARG <this>: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<net.derfruhling.serenity.PageContext, <root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=<root>.Page2

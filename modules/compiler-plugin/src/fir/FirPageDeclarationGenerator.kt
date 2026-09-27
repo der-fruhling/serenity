@@ -402,7 +402,9 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                             moduleData = session.moduleData
                             origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
                             this.name = Name.identifier("obj")
-                            returnTypeRef = session.builtinTypes.unitType
+                            returnTypeRef = session.symbolProvider.getClassLikeSymbolByClassId(
+                                JsStandardClassIds.JsAny
+                            )!!.defaultType().toFirResolvedTypeRef()
                             containingDeclarationSymbol = this@buildNamedFunction.symbol
                         }
                     }
