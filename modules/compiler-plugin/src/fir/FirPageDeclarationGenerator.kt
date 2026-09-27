@@ -3,7 +3,6 @@ package net.derfruhling.serenity.compiler.fir
 import net.derfruhling.serenity.compiler.Names
 import net.derfruhling.serenity.compiler.Predicates
 import net.derfruhling.serenity.compiler.hashFunctionName
-import org.jetbrains.kotlin.KtFakeSourceElementKind
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.*
@@ -13,7 +12,6 @@ import org.jetbrains.kotlin.fir.declarations.builder.buildValueParameter
 import org.jetbrains.kotlin.fir.declarations.impl.FirResolvedDeclarationStatusImpl
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotation
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationArgumentMapping
-import org.jetbrains.kotlin.fir.expressions.builder.buildClassReferenceExpression
 import org.jetbrains.kotlin.fir.expressions.builder.buildLiteralExpression
 import org.jetbrains.kotlin.fir.extensions.*
 import org.jetbrains.kotlin.fir.moduleData
@@ -24,16 +22,9 @@ import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
 import org.jetbrains.kotlin.fir.scopes.kotlinScopeProvider
 import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.toFirResolvedTypeRef
-import org.jetbrains.kotlin.fir.types.ConeKotlinTypeProjectionOut
-import org.jetbrains.kotlin.fir.types.ConeStarProjection
+import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.fir.types.builder.buildResolvedTypeRef
-import org.jetbrains.kotlin.fir.types.constructClassLikeType
-import org.jetbrains.kotlin.fir.types.constructType
-import org.jetbrains.kotlin.name.CallableId
-import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.kotlin.name.JsStandardClassIds
-import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.name.SpecialNames
+import org.jetbrains.kotlin.name.*
 import org.jetbrains.kotlin.platform.PotentiallyWebPlatform
 import org.jetbrains.kotlin.types.ConstantValueKind
 
@@ -51,45 +42,42 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
             it.hasAnnotationWithClassId(Names.pageClass, session)
         }
 
-        val targetAnnotation = targetCallable.getAnnotationByClassId(Names.pageClass, session)!!
         val isFactory =
             targetCallable is FirFunctionSymbol<*> && targetCallable.valueParameterSymbols.isNotEmpty()
-        val pluginGenerated = KtFakeSourceElementKind.PluginGenerated::class
-
-        val fakeElement = (if (pluginGenerated.isSealed) {
-            pluginGenerated.nestedClasses.find { it.simpleName == "Default" }!!.objectInstance!!
-        } else pluginGenerated.objectInstance!!) as KtFakeSourceElementKind
 
         return if (isFactory) {
-            createTopLevelClass(
-                classId,
-                FirPageGenerated.PageFactoryClass,
-                classKind = ClassKind.OBJECT
-            ) {
-                val instanceId = classId.createNestedClassId(Name.identifier("Instance"))
-                superType(
-                    session.symbolProvider.getClassLikeSymbolByClassId(Names.pageFactoryClass)!!
-                        .constructType(
-                            arrayOf(
-                                session.symbolProvider.getClassLikeSymbolByClassId(Names.pageContextClass)!!
-                                    .defaultType(),
-                                instanceId.constructClassLikeType()
-                            )
-                        )
-                )
-
-                superType(
-                    session.symbolProvider.getClassLikeSymbolByClassId(Names.pageSerializerProviderClass)!!
-                        .constructType(
-                            arrayOf(
-                                instanceId.constructClassLikeType()
-                            )
-                        )
-                )
-            }.symbol
+            generatePageFactoryClass(classId).symbol
         } else {
             generatePageClass(classId, false).symbol
         }
+    }
+
+    @ExperimentalTopLevelDeclarationsGenerationApi
+    private fun generatePageFactoryClass(classId: ClassId): FirRegularClass = createTopLevelClass(
+        classId,
+        FirPageGenerated.PageFactoryClass,
+        classKind = ClassKind.OBJECT
+    ) {
+        val instanceId = classId.createNestedClassId(Name.identifier("Instance"))
+        superType(
+            session.symbolProvider.getClassLikeSymbolByClassId(Names.pageFactoryClass)!!
+                .constructType(
+                    arrayOf(
+                        session.symbolProvider.getClassLikeSymbolByClassId(Names.pageContextClass)!!
+                            .defaultType(),
+                        instanceId.constructClassLikeType()
+                    )
+                )
+        )
+
+        superType(
+            session.symbolProvider.getClassLikeSymbolByClassId(Names.pageSerializerProviderClass)!!
+                .constructType(
+                    arrayOf(
+                        instanceId.constructClassLikeType()
+                    )
+                )
+        )
     }
 
     private fun generatePageClass(classId: ClassId, isSubClass: Boolean) =
@@ -130,39 +118,41 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         return if (context.owner.classKind.isObject) {
             emptyList()
         } else {
-            val classId = context.owner.classId.outerClassId!!
-            val targetCallable = session.symbolProvider.getTopLevelCallableSymbols(
-                classId.packageFqName,
-                classId.shortClassName
-            ).first {
-                it.hasAnnotationWithClassId(Names.pageClass, session)
-            }
+            listOf(generateConstructor(context.owner).symbol)
+        }
+    }
 
-            listOf(
-                createConstructor(
-                    context.owner,
-                    FirPageGenerated.PageConstructor,
-                    isPrimary = true
-                ) {
-                    visibility = Visibilities.Internal
+    private fun generateConstructor(owner: FirClassSymbol<*>): FirConstructor {
+        val classId = owner.classId.outerClassId!!
+        val targetCallable = session.symbolProvider.getTopLevelCallableSymbols(
+            classId.packageFqName,
+            classId.shortClassName
+        ).first {
+            it.hasAnnotationWithClassId(Names.pageClass, session)
+        }
 
-                    valueParameter(
-                        Name.identifier($$"serenity$identifier"),
-                        session.builtinTypes.unitType.coneType
-                    )
+        return createConstructor(
+            owner,
+            FirPageGenerated.PageConstructor,
+            isPrimary = true
+        ) {
+            visibility = Visibilities.Internal
 
-                    if (targetCallable is FirFunctionSymbol<*>) {
-                        for (param in targetCallable.valueParameterSymbols) {
-                            valueParameter(
-                                param.name,
-                                param.resolvedReturnType,
-                                isVararg = param.isVararg,
-                                hasDefaultValue = param.hasDefaultValue
-                            )
-                        }
-                    }
-                }.symbol
+            valueParameter(
+                Name.identifier($$"serenity$identifier"),
+                session.builtinTypes.unitType.coneType
             )
+
+            if (targetCallable is FirFunctionSymbol<*>) {
+                for (param in targetCallable.valueParameterSymbols) {
+                    valueParameter(
+                        param.name,
+                        param.resolvedReturnType,
+                        isVararg = param.isVararg,
+                        hasDefaultValue = param.hasDefaultValue
+                    )
+                }
+            }
         }
     }
 
@@ -176,25 +166,30 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                 generatePageClass(owner.classId.createNestedClassId(name), true).symbol
 
             is FirPageGenerated.PageClass ->
-                createNestedClass(
-                    owner,
-                    name,
-                    FirPageGenerated.PageSerializerClass,
-                    classKind = ClassKind.OBJECT
-                ) {
-                    visibility = Visibilities.Private
-
-                    superType(
-                        Names.kSerializerClass.constructClassLikeType(
-                            typeArguments = arrayOf(
-                                owner.defaultType()
-                            )
-                        )
-                    )
-                }.symbol
+                generateSerializerClass(owner, name).symbol
 
             else -> null
         }
+    }
+
+    private fun generateSerializerClass(
+        owner: FirClassSymbol<*>,
+        name: Name
+    ): FirRegularClass = createNestedClass(
+        owner,
+        name,
+        FirPageGenerated.PageSerializerClass,
+        classKind = ClassKind.OBJECT
+    ) {
+        visibility = Visibilities.Private
+
+        superType(
+            Names.kSerializerClass.constructClassLikeType(
+                typeArguments = arrayOf(
+                    owner.defaultType()
+                )
+            )
+        )
     }
 
     override fun generateFunctions(
@@ -211,235 +206,301 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
             }
 
             return when (callableId.callableName.identifier) {
-                "Main" -> listOf(buildNamedFunction {
-                    resolvePhase = FirResolvePhase.BODY_RESOLVE
-                    symbol = FirNamedFunctionSymbol(callableId)
-                    dispatchReceiverType = context.owner.defaultType()
-                    moduleData = session.moduleData
-                    origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageMainFun)
-                    name = Name.identifier("Main")
-                    status = FirResolvedDeclarationStatusImpl(
-                        Visibilities.Public,
-                        Modality.FINAL,
-                        EffectiveVisibility.Public
-                    ).also { it.isOverride = true }
-                    returnTypeRef = session.builtinTypes.unitType
-                    isLocal = false
+                "Main" -> listOf(generateMainContentFunction(callableId, context).symbol)
 
-                    annotations += buildAnnotation {
-                        annotationTypeRef = buildResolvedTypeRef {
-                            coneType =
-                                session.symbolProvider.getClassLikeSymbolByClassId(Names.androidxComposableClass)!!
-                                    .defaultType()
-                        }
+                "create" -> listOf(
+                    generateFactoryCreateFunction(
+                        callableId,
+                        context,
+                        targetClass
+                    ).symbol
+                )
 
-                        argumentMapping = buildAnnotationArgumentMapping {}
-                    }
-
-                    annotations += buildAnnotation {
-                        annotationTypeRef = buildResolvedTypeRef {
-                            coneType =
-                                session.symbolProvider.getClassLikeSymbolByClassId(Names.htmlComposableClass)!!
-                                    .defaultType()
-                        }
-
-                        argumentMapping = buildAnnotationArgumentMapping {}
-                    }
-                }.symbol)
-
-                "create" -> listOf(buildNamedFunction {
-                    resolvePhase = FirResolvePhase.BODY_RESOLVE
-                    symbol = FirNamedFunctionSymbol(callableId)
-                    dispatchReceiverType = context.owner.defaultType()
-                    moduleData = session.moduleData
-                    origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryCreateFun)
-                    name = Name.identifier("create")
-                    status = FirResolvedDeclarationStatusImpl(
-                        Visibilities.Public,
-                        Modality.FINAL,
-                        EffectiveVisibility.Public
-                    ).also { it.isOverride = true }
-
-                    returnTypeRef = buildResolvedTypeRef {
-                        coneType = targetClass.createNestedClassId(Name.identifier("Instance"))
-                            .constructClassLikeType()
-                    }
-
-                    isLocal = false
-
-                    valueParameters += buildValueParameter {
-                        moduleData = session.moduleData
-                        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
-                        returnTypeRef = buildResolvedTypeRef {
-                            coneType =
-                                session.symbolProvider.getClassLikeSymbolByClassId(Names.pageContextClass)!!
-                                    .defaultType()
-                        }
-                        name = Name.identifier("ctx")
-                        symbol = FirValueParameterSymbol()
-                        containingDeclarationSymbol = this@buildNamedFunction.symbol
-                    }
-                }.symbol)
-
-                "of" -> listOf(buildNamedFunction {
-                    resolvePhase = FirResolvePhase.BODY_RESOLVE
-                    symbol = FirNamedFunctionSymbol(callableId)
-                    dispatchReceiverType = context.owner.defaultType()
-                    moduleData = session.moduleData
-                    origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryOfFun)
-                    name = Name.identifier("of")
-                    status = FirResolvedDeclarationStatusImpl(
-                        Visibilities.Public,
-                        Modality.FINAL,
-                        EffectiveVisibility.Public
-                    ).also { it.isOverride = true }
-
-                    returnTypeRef = buildResolvedTypeRef {
-                        coneType = targetClass.createNestedClassId(Name.identifier("Instance"))
-                            .constructClassLikeType()
-                    }
-
-                    isLocal = false
-
-                    if (targetCallable is FirFunctionSymbol<*>) {
-                        for (param in targetCallable.valueParameterSymbols) {
-                            valueParameters += buildValueParameter {
-                                moduleData = session.moduleData
-                                origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
-                                returnTypeRef = param.resolvedReturnTypeRef
-                                name = param.name
-                                symbol = FirValueParameterSymbol()
-                                containingDeclarationSymbol = this@buildNamedFunction.symbol
-                                defaultValue = param.resolvedDefaultValue
-                                isVararg = param.isVararg
-                                valueParameterKind = when (param.isContextParameter()) {
-                                    true -> FirValueParameterKind.ContextParameter
-                                    false -> FirValueParameterKind.Regular
-                                }
-                            }
-                        }
-                    }
-                }.symbol)
+                "of" -> listOf(
+                    generateFactoryOfFunction(
+                        callableId,
+                        context,
+                        targetClass,
+                        targetCallable
+                    ).symbol
+                )
 
                 "serializer" -> listOf(
-                    createMemberFunction(
-                        context.owner,
-                        FirPageGenerated.PageSerializerGetter,
-                        callableId.callableName,
-                        Names.kSerializerClass.constructClassLikeType(
-                            typeArguments = arrayOf(if(targetCallable is FirFunctionSymbol<*> && targetCallable.valueParameterSymbols.isNotEmpty()) {
-                                context.owner.classId.createNestedClassId(Name.identifier("Instance"))
-                            } else {
-                                context.owner.classId
-                            }.constructClassLikeType())
-                        )
-                    ) {
-                        status {
-                            isOverride = true
-                        }
-                    }.symbol
+                    generateSerializerGetterFunction(
+                        context,
+                        callableId,
+                        targetCallable
+                    ).symbol
                 )
 
-                "serialize" -> listOf(
-                    createMemberFunction(
-                        context.owner,
-                        FirPageGenerated.PageSerializeFun,
-                        callableId.callableName,
-                        session.builtinTypes.unitType.coneType
-                    ) {
-                        valueParameter(Name.identifier("encoder"), Names.encoderClass.constructClassLikeType())
-                        valueParameter(Name.identifier("value"), context.owner.classId.outerClassId!!.constructClassLikeType())
-
-                        status {
-                            isOverride = true
-                        }
-                    }.symbol
-                )
-
-                "deserialize" -> listOf(
-                    createMemberFunction(
-                        context.owner,
-                        FirPageGenerated.PageDeserializeFun,
-                        callableId.callableName,
-                        context.owner.classId.outerClassId!!.constructClassLikeType()
-                    ) {
-                        valueParameter(Name.identifier("decoder"), Names.decoderClass.constructClassLikeType())
-
-                        status {
-                            isOverride = true
-                        }
-                    }.symbol
-                )
+                "serialize" -> listOf(generateSerializeFunction(context, callableId).symbol)
+                "deserialize" -> listOf(generateDeserializeFunction(context, callableId).symbol)
 
                 else -> emptyList()
             }
         } else {
             val name = callableId.callableName
-            return if(name.isSpecial) {
-                val callableName = name.asString().removeSurrounding("<page ", " entrypoint>")
-                val actualCallableId = CallableId(callableId.packageName, Name.identifier(callableName))
-                val actualCallable = session.symbolProvider.getTopLevelFunctionSymbols(actualCallableId.packageName, actualCallableId.callableName)
-                    .single { it.hasAnnotation(Names.pageClass, session) }
-                val id = hashFunctionName(actualCallableId)
-
-                listOf(buildNamedFunction {
-                    resolvePhase = FirResolvePhase.BODY_RESOLVE
-                    symbol = FirNamedFunctionSymbol(callableId)
-                    moduleData = session.moduleData
-                    origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageEntrypointFun(actualCallableId))
-                    this.name = callableId.callableName
-                    status = FirResolvedDeclarationStatusImpl(
-                        Visibilities.Public,
-                        Modality.FINAL,
-                        EffectiveVisibility.Public
-                    )
-                    returnTypeRef = session.builtinTypes.unitType
-                    isLocal = false
-
-                    if(actualCallable.valueParameterSymbols.isNotEmpty()) {
-                        valueParameters += buildValueParameter {
-                            resolvePhase = FirResolvePhase.BODY_RESOLVE
-                            symbol = FirValueParameterSymbol()
-                            moduleData = session.moduleData
-                            origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
-                            this.name = Name.identifier("obj")
-                            returnTypeRef = session.symbolProvider.getClassLikeSymbolByClassId(
-                                JsStandardClassIds.JsAny
-                            )!!.defaultType().toFirResolvedTypeRef()
-                            containingDeclarationSymbol = this@buildNamedFunction.symbol
-                        }
-                    }
-
-                    annotations += buildAnnotation {
-                        annotationTypeRef = buildResolvedTypeRef {
-                            coneType =
-                                session.symbolProvider.getClassLikeSymbolByClassId(
-                                    JsStandardClassIds.Annotations.JsExport
-                                )!!.defaultType()
-                        }
-
-                        argumentMapping = buildAnnotationArgumentMapping {}
-                    }
-
-                    annotations += buildAnnotation {
-                        annotationTypeRef = buildResolvedTypeRef {
-                            coneType =
-                                session.symbolProvider.getClassLikeSymbolByClassId(
-                                    JsStandardClassIds.Annotations.JsName
-                                )!!.defaultType()
-                        }
-
-                        argumentMapping = buildAnnotationArgumentMapping {
-                            mapping[Name.identifier("name")] = buildLiteralExpression(
-                                null,
-                                ConstantValueKind.String,
-                                id,
-                                setType = true
-                            )
-                        }
-                    }
-                }.symbol)
+            return if (name.isSpecial) {
+                val entrypointFunction = generateEntrypointFunction(name, callableId)
+                listOf(entrypointFunction.symbol)
             } else emptyList()
+        }
+    }
+
+    private fun generateEntrypointFunction(
+        name: Name,
+        callableId: CallableId
+    ): FirNamedFunction {
+        val callableName = name.asString().removeSurrounding("<page ", " entrypoint>")
+        val actualCallableId =
+            CallableId(callableId.packageName, Name.identifier(callableName))
+        val actualCallable = session.symbolProvider.getTopLevelFunctionSymbols(
+            actualCallableId.packageName,
+            actualCallableId.callableName
+        )
+            .single { it.hasAnnotation(Names.pageClass, session) }
+        val id = hashFunctionName(actualCallableId)
+
+        val entrypointFunction = buildNamedFunction {
+            resolvePhase = FirResolvePhase.BODY_RESOLVE
+            symbol = FirNamedFunctionSymbol(callableId)
+            moduleData = session.moduleData
+            origin = FirDeclarationOrigin.Plugin(
+                FirPageGenerated.PageEntrypointFun(actualCallableId)
+            )
+            this.name = callableId.callableName
+            status = FirResolvedDeclarationStatusImpl(
+                Visibilities.Public,
+                Modality.FINAL,
+                EffectiveVisibility.Public
+            )
+            returnTypeRef = session.builtinTypes.unitType
+            isLocal = false
+
+            if (actualCallable.valueParameterSymbols.isNotEmpty()) {
+                valueParameters += buildValueParameter {
+                    resolvePhase = FirResolvePhase.BODY_RESOLVE
+                    symbol = FirValueParameterSymbol()
+                    moduleData = session.moduleData
+                    origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
+                    this.name = Name.identifier("obj")
+                    returnTypeRef = session.symbolProvider.getClassLikeSymbolByClassId(
+                        JsStandardClassIds.JsAny
+                    )!!.defaultType().toFirResolvedTypeRef()
+                    containingDeclarationSymbol = this@buildNamedFunction.symbol
+                }
+            }
+
+            annotations += buildAnnotation {
+                annotationTypeRef = buildResolvedTypeRef {
+                    coneType =
+                        session.symbolProvider.getClassLikeSymbolByClassId(
+                            JsStandardClassIds.Annotations.JsExport
+                        )!!.defaultType()
+                }
+
+                argumentMapping = buildAnnotationArgumentMapping {}
+            }
+
+            annotations += buildAnnotation {
+                annotationTypeRef = buildResolvedTypeRef {
+                    coneType =
+                        session.symbolProvider.getClassLikeSymbolByClassId(
+                            JsStandardClassIds.Annotations.JsName
+                        )!!.defaultType()
+                }
+
+                argumentMapping = buildAnnotationArgumentMapping {
+                    mapping[Name.identifier("name")] = buildLiteralExpression(
+                        null,
+                        ConstantValueKind.String,
+                        id,
+                        setType = true
+                    )
+                }
+            }
+        }
+        return entrypointFunction
+    }
+
+    private fun generateDeserializeFunction(
+        context: MemberGenerationContext,
+        callableId: CallableId
+    ): FirNamedFunction = createMemberFunction(
+        context.owner,
+        FirPageGenerated.PageDeserializeFun,
+        callableId.callableName,
+        context.owner.classId.outerClassId!!.constructClassLikeType()
+    ) {
+        valueParameter(Name.identifier("decoder"), Names.decoderClass.constructClassLikeType())
+
+        status {
+            isOverride = true
+        }
+    }
+
+    private fun generateSerializeFunction(
+        context: MemberGenerationContext,
+        callableId: CallableId
+    ): FirNamedFunction = createMemberFunction(
+        context.owner,
+        FirPageGenerated.PageSerializeFun,
+        callableId.callableName,
+        session.builtinTypes.unitType.coneType
+    ) {
+        valueParameter(Name.identifier("encoder"), Names.encoderClass.constructClassLikeType())
+        valueParameter(
+            Name.identifier("value"),
+            context.owner.classId.outerClassId!!.constructClassLikeType()
+        )
+
+        status {
+            isOverride = true
+        }
+    }
+
+    private fun generateSerializerGetterFunction(
+        context: MemberGenerationContext,
+        callableId: CallableId,
+        targetCallable: FirCallableSymbol<*>
+    ): FirNamedFunction = createMemberFunction(
+        context.owner,
+        FirPageGenerated.PageSerializerGetter,
+        callableId.callableName,
+        Names.kSerializerClass.constructClassLikeType(
+            typeArguments = arrayOf(
+                if (targetCallable is FirFunctionSymbol<*> && targetCallable.valueParameterSymbols.isNotEmpty()) {
+                    context.owner.classId.createNestedClassId(Name.identifier("Instance"))
+                } else {
+                    context.owner.classId
+                }.constructClassLikeType()
+            )
+        )
+    ) {
+        status {
+            isOverride = true
+        }
+    }
+
+    private fun generateFactoryOfFunction(
+        callableId: CallableId,
+        context: MemberGenerationContext,
+        targetClass: ClassId,
+        targetCallable: FirCallableSymbol<*>
+    ): FirNamedFunction = buildNamedFunction {
+        resolvePhase = FirResolvePhase.BODY_RESOLVE
+        symbol = FirNamedFunctionSymbol(callableId)
+        dispatchReceiverType = context.owner.defaultType()
+        moduleData = session.moduleData
+        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryOfFun)
+        name = Name.identifier("of")
+        status = FirResolvedDeclarationStatusImpl(
+            Visibilities.Public,
+            Modality.FINAL,
+            EffectiveVisibility.Public
+        ).also { it.isOverride = true }
+
+        returnTypeRef = buildResolvedTypeRef {
+            coneType = targetClass.createNestedClassId(Name.identifier("Instance"))
+                .constructClassLikeType()
+        }
+
+        isLocal = false
+
+        if (targetCallable is FirFunctionSymbol<*>) {
+            for (param in targetCallable.valueParameterSymbols) {
+                valueParameters += buildValueParameter {
+                    moduleData = session.moduleData
+                    origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
+                    returnTypeRef = param.resolvedReturnTypeRef
+                    name = param.name
+                    symbol = FirValueParameterSymbol()
+                    containingDeclarationSymbol = this@buildNamedFunction.symbol
+                    defaultValue = param.resolvedDefaultValue
+                    isVararg = param.isVararg
+                    valueParameterKind = when (param.isContextParameter()) {
+                        true -> FirValueParameterKind.ContextParameter
+                        false -> FirValueParameterKind.Regular
+                    }
+                }
+            }
+        }
+    }
+
+    private fun generateFactoryCreateFunction(
+        callableId: CallableId,
+        context: MemberGenerationContext,
+        targetClass: ClassId
+    ): FirNamedFunction = buildNamedFunction {
+        resolvePhase = FirResolvePhase.BODY_RESOLVE
+        symbol = FirNamedFunctionSymbol(callableId)
+        dispatchReceiverType = context.owner.defaultType()
+        moduleData = session.moduleData
+        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryCreateFun)
+        name = Name.identifier("create")
+        status = FirResolvedDeclarationStatusImpl(
+            Visibilities.Public,
+            Modality.FINAL,
+            EffectiveVisibility.Public
+        ).also { it.isOverride = true }
+
+        returnTypeRef = buildResolvedTypeRef {
+            coneType = targetClass.createNestedClassId(Name.identifier("Instance"))
+                .constructClassLikeType()
+        }
+
+        isLocal = false
+
+        valueParameters += buildValueParameter {
+            moduleData = session.moduleData
+            origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
+            returnTypeRef = buildResolvedTypeRef {
+                coneType =
+                    session.symbolProvider.getClassLikeSymbolByClassId(Names.pageContextClass)!!
+                        .defaultType()
+            }
+            name = Name.identifier("ctx")
+            symbol = FirValueParameterSymbol()
+            containingDeclarationSymbol = this@buildNamedFunction.symbol
+        }
+    }
+
+    private fun generateMainContentFunction(
+        callableId: CallableId,
+        context: MemberGenerationContext
+    ): FirNamedFunction = buildNamedFunction {
+        resolvePhase = FirResolvePhase.BODY_RESOLVE
+        symbol = FirNamedFunctionSymbol(callableId)
+        dispatchReceiverType = context.owner.defaultType()
+        moduleData = session.moduleData
+        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageMainFun)
+        name = Name.identifier("Main")
+        status = FirResolvedDeclarationStatusImpl(
+            Visibilities.Public,
+            Modality.FINAL,
+            EffectiveVisibility.Public
+        ).also { it.isOverride = true }
+        returnTypeRef = session.builtinTypes.unitType
+        isLocal = false
+
+        annotations += buildAnnotation {
+            annotationTypeRef = buildResolvedTypeRef {
+                coneType =
+                    session.symbolProvider.getClassLikeSymbolByClassId(Names.androidxComposableClass)!!
+                        .defaultType()
+            }
+
+            argumentMapping = buildAnnotationArgumentMapping {}
+        }
+
+        annotations += buildAnnotation {
+            annotationTypeRef = buildResolvedTypeRef {
+                coneType =
+                    session.symbolProvider.getClassLikeSymbolByClassId(Names.htmlComposableClass)!!
+                        .defaultType()
+            }
+
+            argumentMapping = buildAnnotationArgumentMapping {}
         }
     }
 
@@ -457,27 +518,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                     .defaultType()
 
                 "extensions" -> {
-                    val type = session.symbolProvider.getClassLikeSymbolByClassId(Names.abstractPageExtensionClass)!!
-                        .constructType(arrayOf(
-                            ConeStarProjection
-                        ))
-
-                    FirPageGenerated.PageExtensionsProperty to session.symbolProvider.getClassLikeSymbolByClassId(
-                        Names.mapClass
-                    )!!
-                        .constructType(
-                            arrayOf(
-                                session.symbolProvider.getClassLikeSymbolByClassId(Names.kClassClass)!!
-                                    .constructType(
-                                        arrayOf(
-                                            ConeKotlinTypeProjectionOut(
-                                                type
-                                            )
-                                        )
-                                    ),
-                                    type
-                                )
-                        )
+                    FirPageGenerated.PageExtensionsProperty to derivedExtensionMapType
                 }
 
                 "descriptor" -> FirPageGenerated.PageDescriptorProperty to session.symbolProvider.getClassLikeSymbolByClassId(
@@ -496,6 +537,35 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                 ).symbol
             )
         } else return emptyList()
+    }
+
+    private val derivedExtensionMapType: ConeClassLikeType by lazy {
+        val type =
+            session.symbolProvider.getClassLikeSymbolByClassId(Names.abstractPageExtensionClass)!!
+                .constructType(
+                    arrayOf(
+                        ConeStarProjection
+                    )
+                )
+
+        val extensionsType = session.symbolProvider.getClassLikeSymbolByClassId(
+            Names.mapClass
+        )!!
+            .constructType(
+                arrayOf(
+                    session.symbolProvider.getClassLikeSymbolByClassId(Names.kClassClass)!!
+                        .constructType(
+                            arrayOf(
+                                ConeKotlinTypeProjectionOut(
+                                    type
+                                )
+                            )
+                        ),
+                    type
+                )
+            )
+
+        extensionsType
     }
 
     override fun getCallableNamesForClass(
@@ -561,10 +631,14 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         }
     }
 
+    private val symbols: List<FirFunctionSymbol<*>> by lazy {
+        session.predicateBasedProvider.getSymbolsByPredicate(Predicates.isPage)
+            .filterIsInstance<FirFunctionSymbol<*>>()
+    }
+
     @ExperimentalTopLevelDeclarationsGenerationApi
     override fun getTopLevelClassIds(): Set<ClassId> {
-        return session.predicateBasedProvider.getSymbolsByPredicate(Predicates.isPage)
-            .filterIsInstance<FirFunctionSymbol<*>>()
+        return symbols
             .map { sym ->
                 val id = sym.callableId
                 ClassId(id.packageName, id.callableName)
@@ -574,12 +648,14 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
 
     @ExperimentalTopLevelDeclarationsGenerationApi
     override fun getTopLevelCallableIds(): Set<CallableId> {
-        return if(session.moduleData.platform.all { it is PotentiallyWebPlatform && it.isWeb }) {
-            session.predicateBasedProvider.getSymbolsByPredicate(Predicates.isPage)
-                .filterIsInstance<FirFunctionSymbol<*>>()
+        return if (session.moduleData.platform.all { it is PotentiallyWebPlatform && it.isWeb }) {
+            symbols
                 .map { sym ->
                     val id = sym.callableId
-                    CallableId(id.packageName, Name.special("<page ${id.callableName.asString()} entrypoint>"))
+                    CallableId(
+                        id.packageName,
+                        Name.special("<page ${id.callableName.asString()} entrypoint>")
+                    )
                 }
                 .toSet()
         } else {
