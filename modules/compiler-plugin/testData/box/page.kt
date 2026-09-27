@@ -23,6 +23,24 @@ fun Page2(param1: String, param2: Int) {
     }
 }
 
+@Composable
+@Page("/")
+context(_: String, param2: Int)
+fun ComplexPage() {
+    pageContract {
+        title = "Hello, ${param2}!"
+    }
+}
+
+@Composable
+@Page("/")
+context(param2: Int)
+fun String.ComplexPageReciever() {
+    pageContract {
+        title = "Hello, ${param2}!"
+    }
+}
+
 fun test(fn: Int.() -> Unit) {
     0.fn()
 }

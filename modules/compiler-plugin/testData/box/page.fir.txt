@@ -1,13 +1,27 @@
 FILE: page.kt
     @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/annotations/Page|(path = String(/) [evaluated = String(/)]) public final fun IndexPage(): R|kotlin/Unit| {
-        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
             this@R|special/anonymous|.R|net/derfruhling/serenity/PageContract.title| = String(Hello, world!)
         }
         )
     }
     @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/annotations/Page|(path = String(/) [evaluated = String(/)]) public final fun Page2(param1: R|kotlin/String|, param2: R|kotlin/Int|): R|kotlin/Unit| {
-        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
             this@R|special/anonymous|.R|net/derfruhling/serenity/PageContract.title| = <strcat>(String(Hello, ), R|<local>/param1|, String(!))
+        }
+        )
+    }
+    context(<unused var>: R|kotlin/String|, param2: R|kotlin/Int|)
+    @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/annotations/Page|(path = String(/) [evaluated = String(/)]) public final fun ComplexPage(): R|kotlin/Unit| {
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
+            this@R|special/anonymous|.R|net/derfruhling/serenity/PageContract.title| = <strcat>(String(Hello, ), R|<local>/param2|, String(!))
+        }
+        )
+    }
+    context(param2: R|kotlin/Int|)
+    @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/annotations/Page|(path = String(/) [evaluated = String(/)]) public final fun R|kotlin/String|.ComplexPageReciever(): R|kotlin/Unit| {
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
+            this@R|special/anonymous|.R|net/derfruhling/serenity/PageContract.title| = <strcat>(String(Hello, ), R|<local>/param2|, String(!))
         }
         )
     }
@@ -55,8 +69,8 @@ FILE: /IndexPage.kt
         public final val details: R|net/derfruhling/serenity/PageDetails|
             public get(): R|net/derfruhling/serenity/PageDetails|
 
-        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out kotlin/Annotation>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension>|
-            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out kotlin/Annotation>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension>|
+        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
 
         @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
 
@@ -97,8 +111,8 @@ FILE: /Page2.kt
             public final val details: R|net/derfruhling/serenity/PageDetails|
                 public get(): R|net/derfruhling/serenity/PageDetails|
 
-            public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out kotlin/Annotation>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension>|
-                public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out kotlin/Annotation>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension>|
+            public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+                public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
 
             @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
 
@@ -113,6 +127,64 @@ FILE: /Page2.kt
                 public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|Page2.Instance|
 
             }
+
+        }
+
+    }
+FILE: /ComplexPage.kt
+    public final object ComplexPage : R|net/derfruhling/serenity/PageHolder<ComplexPage>|, R|net/derfruhling/serenity/PageSerializerProvider<ComplexPage>| {
+        public final val id: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val path: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val details: R|net/derfruhling/serenity/PageDetails|
+            public get(): R|net/derfruhling/serenity/PageDetails|
+
+        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+
+        @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
+
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<ComplexPage>|
+
+        private final object Serializer : R|kotlinx/serialization/KSerializer<ComplexPage>| {
+            public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+            public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|ComplexPage|): R|kotlin/Unit|
+
+            public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|ComplexPage|
+
+        }
+
+    }
+FILE: /ComplexPageReciever.kt
+    public final object ComplexPageReciever : R|net/derfruhling/serenity/PageHolder<ComplexPageReciever>|, R|net/derfruhling/serenity/PageSerializerProvider<ComplexPageReciever>| {
+        public final val id: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val path: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val details: R|net/derfruhling/serenity/PageDetails|
+            public get(): R|net/derfruhling/serenity/PageDetails|
+
+        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+
+        @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
+
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<ComplexPageReciever>|
+
+        private final object Serializer : R|kotlinx/serialization/KSerializer<ComplexPageReciever>| {
+            public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+            public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|ComplexPageReciever|): R|kotlin/Unit|
+
+            public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|ComplexPageReciever|
 
         }
 
