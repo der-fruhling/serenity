@@ -1,0 +1,86 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Hexana target runtimes",
+    "description": "Runtimes and versions this project has to run on. Hexana checks every WebAssembly binary against them and warns about proposals a declared runtime cannot run. Read and written by both the IntelliJ plugin and the VS Code extension.",
+    "type": "object",
+    "required": [
+        "targets"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "description": "Reference to this schema. Written by Hexana; safe to leave alone."
+        },
+        "version": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "description": "Format version of this file. Currently 1."
+        },
+        "targets": {
+            "type": "array",
+            "description": "The runtimes to check against, in the order they appear as columns in the Compatibility tab. An empty list means no checking is performed.",
+            "items": {
+                "$ref": "#/definitions/target"
+            }
+        }
+    },
+    "definitions": {
+        "target": {
+            "type": "object",
+            "title": "Target runtime",
+            "required": [
+                "runtime"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "runtime": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Runtime name, spelled as WebAssembly's own features.json spells it (\"Chrome\", \"Node.js\", \"Wasmtime\"). A name the catalog does not know has no support data, so every verdict for it reads \"?\".",
+                    "enum": [
+                        "Chasm",
+                        "Chrome",
+                        "Deno",
+                        "Endive",
+                        "Firefox",
+                        "GraalWasm",
+                        "Node.js",
+                        "Owi",
+                        "Safari",
+                        "Soup",
+                        "wasm2c",
+                        "Wasm3",
+                        "wasmedge",
+                        "Wasmer",
+                        "Wasmi",
+                        "Wasmtime",
+                        "wazero",
+                        "wizard",
+                        "zwasm"
+                    ]
+                },
+                "version": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Version being targeted, as a string (\"120\", \"26.0\"). Omit it to target any version, which applies no version gate."
+                }
+            }
+        }
+    },
+    "examples": [
+        {
+            "version": 1,
+            "targets": [
+                {
+                    "runtime": "Chrome",
+                    "version": "120"
+                },
+                {
+                    "runtime": "Node.js"
+                }
+            ]
+        }
+    ]
+}

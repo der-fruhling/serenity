@@ -1,0 +1,18 @@
+{
+    "$schema": "./runtimes.schema.json",
+    "version": 1,
+    "targets": [
+        {
+            "runtime": "Chrome",
+            "version": "137"
+        },
+        {
+            "runtime": "Firefox",
+            "version": "145"
+        },
+        {
+            "runtime": "Safari",
+            "version": "18.4"
+        }
+    ]
+}

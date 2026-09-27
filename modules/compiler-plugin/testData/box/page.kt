@@ -23,6 +23,10 @@ fun Page2(param1: String, param2: Int) {
     }
 }
 
+fun test(fn: Int.() -> Unit) {
+    0.fn()
+}
+
 class Test {
     companion object Factory {
         fun of() {}
@@ -34,6 +38,8 @@ inline fun <reified T : PageHolder<T>> accept(factory: PageHolderFactory<PageCon
 }
 
 fun box(): String {
+    test { println(this) }
+
     val page1 = IndexPage
     val page2 = Page2.of("world", 42)
     Test.of()

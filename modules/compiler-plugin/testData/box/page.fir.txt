@@ -11,6 +11,9 @@ FILE: page.kt
         }
         )
     }
+    public final fun test(fn: R|kotlin/Int.() -> kotlin/Unit|): R|kotlin/Unit| {
+        R|<local>/fn|.R|SubstitutionOverride<kotlin/Function1.invoke: R|kotlin/Unit|>|(Int(0))
+    }
     public final class Test : R|kotlin/Any| {
         public constructor(): R|Test| {
             super<R|kotlin/Any|>()
@@ -30,6 +33,10 @@ FILE: page.kt
     public final inline fun <reified T : R|net/derfruhling/serenity/PageHolder<T>|> accept(factory: R|net/derfruhling/serenity/PageHolderFactory<net/derfruhling/serenity/PageContext, T>|): R|kotlin/Unit| {
     }
     public final fun box(): R|kotlin/String| {
+        R|/test|(<L> = test@fun R|kotlin/Int|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            R|kotlin/io/println|(this@R|special/anonymous|)
+        }
+        )
         lval page1: R|IndexPage| = Q|IndexPage|
         lval page2: R|Page2.Instance| = Q|Page2|.R|/Page2.of|(String(world), Int(42))
         Q|Test|.R|/Test.Factory.of|()
@@ -38,7 +45,7 @@ FILE: page.kt
         ^box String(OK)
     }
 FILE: /IndexPage.kt
-    public final object IndexPage : R|net/derfruhling/serenity/PageHolder<IndexPage>| {
+    public final object IndexPage : R|net/derfruhling/serenity/PageHolder<IndexPage>|, R|net/derfruhling/serenity/PageSerializerProvider<IndexPage>| {
         public final val id: R|kotlin/String|
             public get(): R|kotlin/String|
 
@@ -53,9 +60,21 @@ FILE: /IndexPage.kt
 
         @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
 
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<IndexPage>|
+
+        private final object Serializer : R|kotlinx/serialization/KSerializer<IndexPage>| {
+            public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+            public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|IndexPage|): R|kotlin/Unit|
+
+            public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|IndexPage|
+
+        }
+
     }
 FILE: /Page2.kt
-    public final object Page2 : R|net/derfruhling/serenity/PageHolderFactory<net/derfruhling/serenity/PageContext, Page2.Instance>| {
+    public final object Page2 : R|net/derfruhling/serenity/PageHolderFactory<net/derfruhling/serenity/PageContext, Page2.Instance>|, R|net/derfruhling/serenity/PageSerializerProvider<Page2.Instance>| {
         public final val id: R|kotlin/String|
             public get(): R|kotlin/String|
 
@@ -65,6 +84,8 @@ FILE: /Page2.kt
         public final override fun create(ctx: R|net/derfruhling/serenity/PageContext|): R|Page2.Instance|
 
         public final override fun of(param1: R|kotlin/String|, param2: R|kotlin/Int|): R|Page2.Instance|
+
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<Page2.Instance>|
 
         public final class Instance : R|net/derfruhling/serenity/PageHolder<Page2.Instance>| {
             public final val id: R|kotlin/String|
@@ -82,6 +103,16 @@ FILE: /Page2.kt
             @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
 
             internal constructor(serenity$identifier: R|kotlin/Unit|, param1: R|kotlin/String|, param2: R|kotlin/Int|): R|Page2.Instance|
+
+            private final object Serializer : R|kotlinx/serialization/KSerializer<Page2.Instance>| {
+                public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                    public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+                public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|Page2.Instance|): R|kotlin/Unit|
+
+                public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|Page2.Instance|
+
+            }
 
         }
 

@@ -4,8 +4,6 @@ package net.derfruhling.serenity
 
 import androidx.compose.runtime.Composable
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.serializer
-import net.derfruhling.serenity.annotations.UsedByGeneratedCode
 import kotlin.reflect.KClass
 
 abstract class PageRegistry {
@@ -17,7 +15,13 @@ abstract class PageRegistry {
         page: T
     )
 
+    @Suppress("UNCHECKED_CAST")
     inline fun <reified R : PageHolder<R>, reified T : PageHolderFactory<PageContext, R>> register(
         page: T
-    ) = register(R::class, serializer<R>(), page)
+    ) = register(
+        R::class,
+        (page as? PageSerializerProvider<R>
+            ?: throw IllegalArgumentException("Provided page or page factory **must** implement PageSerializerProvider, which should be the case if you use the compiler plugin. The provided page instance $page does not implement this interface.")).serializer(),
+        page
+    )
 }
