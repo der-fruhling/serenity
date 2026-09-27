@@ -1,0 +1,17 @@
+FILE: sidedDeleterLambda.kt
+    public final fun testClient(fn: R|@R|net/derfruhling/serenity/annotations/ClientOnly|()  () -> kotlin/Unit|): R|kotlin/Unit| {
+    }
+    public final fun testServer(fn: R|@R|net/derfruhling/serenity/annotations/ServerOnly|()  () -> kotlin/Unit|): R|kotlin/Unit| {
+        R|<local>/fn|.R|SubstitutionOverride<kotlin/Function0.invoke: R|kotlin/Unit|>|()
+    }
+    public final fun box(): R|kotlin/String| {
+        R|/testClient|(<L> = testClient@fun <anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            R|kotlin/io/println|(String(Hello, client!))
+        }
+        )
+        R|/testServer|(<L> = testServer@fun <anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            R|kotlin/io/println|(String(Hello, server!))
+        }
+        )
+        ^box String(OK)
+    }
