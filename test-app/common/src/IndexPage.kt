@@ -6,7 +6,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.derfruhling.serenity.Text
 import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.Page
-import net.derfruhling.serenity.annotations.RegisterPage
 import net.derfruhling.serenity.channel.countRemoteInvalidations
 import net.derfruhling.serenity.dom.HTMLInputElement
 import net.derfruhling.serenity.dom.document
@@ -21,6 +20,7 @@ import net.derfruhling.serenity.elements.layout.Content
 import net.derfruhling.serenity.elements.layout.FlexColumn
 import net.derfruhling.serenity.elements.layout.Footer
 import net.derfruhling.serenity.elements.layout.Header
+import net.derfruhling.serenity.extend
 import net.derfruhling.serenity.localization.TextOf
 import net.derfruhling.serenity.localization.n
 import net.derfruhling.serenity.pageContract
@@ -52,10 +52,11 @@ fun IndexPage() {
 
 @Composable
 @Page("/buttons/{start}")
-@UseTestPageExtension
 fun ButtonsPage(start: Int) {
     pageContract {
         title = "Buttons"
+
+        extend(TestPageExtension)
     }
 
     var count by remember { mutableIntStateOf(start) }

@@ -81,7 +81,6 @@ dependencies {
     api(plugin(libs.plugins.kotlin.multiplatform))
     api(plugin(libs.plugins.kotlin.plugin.compose))
     api(plugin(libs.plugins.kotlin.plugin.serialization))
-    api(plugin(libs.plugins.kotlin.ksp))
     api(libs.serene.wasm)
     implementation(libs.openhft.zeroAllocationHashing)
     implementation(libs.kotlinx.serialization.json)

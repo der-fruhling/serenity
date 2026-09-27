@@ -30,8 +30,3 @@ fun PageRegistry.registerPages() {
     register(InputsPage)
     register(InvalidationTestPage)
 }
-
-@ClientOnly
-fun testClient() {
-
-}

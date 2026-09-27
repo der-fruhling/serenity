@@ -2,11 +2,13 @@ package net.derfruhling.serenity.modularity.extension
 
 import androidx.compose.runtime.*
 import net.derfruhling.serenity.PageHolder
+import net.derfruhling.serenity.annotations.NotifiesRuntime
 import kotlin.reflect.KClass
 
 @Stable
 class PageExtensionController {
-    private var extensions by mutableStateOf(emptyMap<KClass<out Annotation>, AbstractPageExtension>())
+    @NotifiesRuntime
+    private var extensions by mutableStateOf(emptyMap<KClass<out AbstractPageExtension<*>>, AbstractPageExtension<*>>())
 
     fun setPage(page: PageHolder<*>) {
         extensions = page.extensions

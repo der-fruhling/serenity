@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.fir.scopes.kotlinScopeProvider
 import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.toFirResolvedTypeRef
 import org.jetbrains.kotlin.fir.types.ConeKotlinTypeProjectionOut
+import org.jetbrains.kotlin.fir.types.ConeStarProjection
 import org.jetbrains.kotlin.fir.types.builder.buildResolvedTypeRef
 import org.jetbrains.kotlin.fir.types.constructClassLikeType
 import org.jetbrains.kotlin.fir.types.constructType
@@ -455,23 +456,29 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                 )!!
                     .defaultType()
 
-                "extensions" -> FirPageGenerated.PageExtensionsProperty to session.symbolProvider.getClassLikeSymbolByClassId(
-                    Names.mapClass
-                )!!
-                    .constructType(
-                        arrayOf(
-                            session.symbolProvider.getClassLikeSymbolByClassId(Names.kClassClass)!!
-                                .constructType(
-                                    arrayOf(
-                                        ConeKotlinTypeProjectionOut(
-                                            session.builtinTypes.annotationType.coneType
+                "extensions" -> {
+                    val type = session.symbolProvider.getClassLikeSymbolByClassId(Names.abstractPageExtensionClass)!!
+                        .constructType(arrayOf(
+                            ConeStarProjection
+                        ))
+
+                    FirPageGenerated.PageExtensionsProperty to session.symbolProvider.getClassLikeSymbolByClassId(
+                        Names.mapClass
+                    )!!
+                        .constructType(
+                            arrayOf(
+                                session.symbolProvider.getClassLikeSymbolByClassId(Names.kClassClass)!!
+                                    .constructType(
+                                        arrayOf(
+                                            ConeKotlinTypeProjectionOut(
+                                                type
+                                            )
                                         )
-                                    )
-                                ),
-                            session.symbolProvider.getClassLikeSymbolByClassId(Names.abstractPageExtensionClass)!!
-                                .defaultType()
+                                    ),
+                                    type
+                                )
                         )
-                    )
+                }
 
                 "descriptor" -> FirPageGenerated.PageDescriptorProperty to session.symbolProvider.getClassLikeSymbolByClassId(
                     Names.serialDescriptorClass

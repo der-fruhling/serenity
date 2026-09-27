@@ -3,7 +3,7 @@ package net.derfruhling.serenity.annotations
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.BINARY)
 @MustBeDocumented
-@UsedFromCompilerPlugin
+@Intrinsic
 annotation class Page(
     val path: String
 )

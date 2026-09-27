@@ -12,10 +12,6 @@ component-localization = { module = "net.derfruhling.serenity:serenity-localizat
 component-channel = { module = "net.derfruhling.serenity:serenity-channel", version.ref = "serenity" }
 component-channel-ktor = { module = "net.derfruhling.serenity:serenity-channel-ktor", version.ref = "serenity" }
 test = { module = "net.derfruhling.serenity:serenity-test", version.ref = "serenity" }
-collectors-common = { module = "net.derfruhling.serenity:serenity-common-collector", version.ref = "serenity" }
-collectors-ktor = { module = "net.derfruhling.serenity:serenity-ktor-collector", version.ref = "serenity" }
-collectors-lib = { module = "net.derfruhling.serenity:serenity-collector-lib", version.ref = "serenity" }
-collectors-web = { module = "net.derfruhling.serenity:serenity-web-collector", version.ref = "serenity" }
 
 [bundles]
 core = [

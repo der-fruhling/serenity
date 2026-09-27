@@ -20,7 +20,7 @@ interface SerialPageHolder {
     val details: PageDetails
 
     @Transient
-    val extensions: Map<KClass<out Annotation>, AbstractPageExtension>
+    val extensions: Map<KClass<out AbstractPageExtension<*>>, AbstractPageExtension<*>>
         get() = emptyMap()
 
     @Composable

@@ -1,14 +1,19 @@
 package net.derfruhling.serenity
 
+import net.derfruhling.serenity.annotations.PageExtensionImplementationApi
 import net.derfruhling.serenity.annotations.UsedByGeneratedCode
 import net.derfruhling.serenity.modularity.extension.AbstractPageExtension
 import kotlin.reflect.KClass
+
+class MultipleExtensionsException : Exception {
+    internal constructor(message: String?) : super(message)
+}
 
 @PublishedApi
 @UsedByGeneratedCode
 internal class PageContractBuilder : PageContract {
     private var _title: String? = null
-    private val _extensions = mutableMapOf<KClass<out Annotation>, AbstractPageExtension>()
+    private val _extensions = mutableMapOf<KClass<out AbstractPageExtension<*>>, AbstractPageExtension<*>>()
 
     override var title: String
         get() = _title ?: ""
@@ -16,6 +21,17 @@ internal class PageContractBuilder : PageContract {
             _title = value
         }
 
-    fun getDetails(): PageDetails = PageDetails(_title)
-    fun getExtensions(): Map<KClass<out Annotation>, AbstractPageExtension> = _extensions.toMap()
+    @UsedByGeneratedCode
+    @PublishedApi
+    internal fun getDetails(): PageDetails = PageDetails(_title)
+
+    @UsedByGeneratedCode
+    @PublishedApi
+    internal fun getExtensions(): Map<KClass<out AbstractPageExtension<*>>, AbstractPageExtension<*>> = _extensions.toMap()
+
+    @PageExtensionImplementationApi
+    override fun <T : AbstractPageExtension<*>> extend(kClass: KClass<T>, value: T) {
+        if(kClass in _extensions) throw MultipleExtensionsException("Class $kClass already has an extension present")
+        _extensions[kClass] = value
+    }
 }

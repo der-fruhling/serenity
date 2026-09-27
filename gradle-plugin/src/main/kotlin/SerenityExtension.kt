@@ -36,8 +36,6 @@ abstract class SerenityExtension(internal val mpp: KotlinMultiplatformExtension)
 
             DefaultMutableVersionConstraint(BuildConfig.VERSION)
         })
-
-        extensions.create("collectors", SerenityCollectorsExtension::class, this)
     }
 
     fun dependencies(fn: SerenityDependencyHandler.() -> Unit) {
