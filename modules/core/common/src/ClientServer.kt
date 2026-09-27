@@ -34,6 +34,8 @@ fun ifServer(fn: @Composable () -> Unit) {
     }
 }
 
+expect inline fun ifServerStatic(fn: () -> Unit)
+
 @Composable
 expect fun <T> alternative(onServer: @Composable () -> T, onClient: @Composable @ClientOnly () -> T)
 

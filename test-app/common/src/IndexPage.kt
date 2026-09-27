@@ -20,7 +20,11 @@ import net.derfruhling.serenity.elements.layout.Content
 import net.derfruhling.serenity.elements.layout.FlexColumn
 import net.derfruhling.serenity.elements.layout.Footer
 import net.derfruhling.serenity.elements.layout.Header
+import net.derfruhling.serenity.embeds.discord.discordComponent
+import net.derfruhling.serenity.embeds.embed
+import net.derfruhling.serenity.embeds.opengraph.ogWebsite
 import net.derfruhling.serenity.extend
+import net.derfruhling.serenity.ifServerStatic
 import net.derfruhling.serenity.localization.TextOf
 import net.derfruhling.serenity.localization.n
 import net.derfruhling.serenity.pageContract
@@ -32,6 +36,23 @@ private val logger = KotlinLogging.logger {}
 fun IndexPage() {
     pageContract {
         title = "Hello, world!"
+
+        embed {
+            description = "Hello description"
+
+            ogWebsite()
+
+            ifServerStatic {
+                discordComponent(accentColor = 0xeeeeee) {
+                    text("# Index page")
+                    separator()
+
+                    text("This is a cool description")
+
+                    text("~# footer")
+                }
+            }
+        }
     }
 
     Header {

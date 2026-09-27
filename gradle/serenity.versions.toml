@@ -11,26 +11,10 @@ component-dynamic = { module = "net.derfruhling.serenity:serenity-dynamic", vers
 component-localization = { module = "net.derfruhling.serenity:serenity-localization", version.ref = "serenity" }
 component-channel = { module = "net.derfruhling.serenity:serenity-channel", version.ref = "serenity" }
 component-channel-ktor = { module = "net.derfruhling.serenity:serenity-channel-ktor", version.ref = "serenity" }
+component-embed = { module = "net.derfruhling.serenity:serenity-embed", version.ref = "serenity" }
+component-embed-discord = { module = "net.derfruhling.serenity:serenity-embed-discord", version.ref = "serenity" }
+component-embed-opengraph = { module = "net.derfruhling.serenity:serenity-embed-opengraph", version.ref = "serenity" }
 test = { module = "net.derfruhling.serenity:serenity-test", version.ref = "serenity" }
-
-[bundles]
-core = [
-    "core",
-    "annotations",
-    "logging",
-]
-complete = [
-    "core",
-    "annotations",
-    "logging",
-    "component-inlineStyle",
-    "component-dynamic",
-    "component-localization",
-    "component-channel",
-]
-ktor = [
-    "server-ktor",
-]
 
 [plugins]
 base = { id = "net.derfruhling.serenity.base", version.ref = "serenity" }

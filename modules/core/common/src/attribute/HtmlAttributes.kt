@@ -33,4 +33,6 @@ object HtmlAttributes : AbstractAttributeContainer() {
     val novalidate by name<Boolean>("novalidate")
     val placeholder by name<String>("placeholder")
     val title by name<String>("title")
+    val property by name<String>("property")
+    val content by name<String>("content")
 }

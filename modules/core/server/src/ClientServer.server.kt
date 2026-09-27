@@ -25,3 +25,7 @@ actual inline fun <T> alternative(
 
 actual inline val isClientStatic: Boolean
     inline get() = false
+
+actual inline fun ifServerStatic(fn: () -> Unit) {
+    fn()
+}

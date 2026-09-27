@@ -12,18 +12,13 @@ class MultipleExtensionsException : Exception {
 @PublishedApi
 @UsedByGeneratedCode
 internal class PageContractBuilder : PageContract {
-    private var _title: String? = null
     private val _extensions = mutableMapOf<KClass<out AbstractPageExtension<*>>, AbstractPageExtension<*>>()
 
-    override var title: String
-        get() = _title ?: ""
-        set(value) {
-            _title = value
-        }
+    override var title: String? = null
 
     @UsedByGeneratedCode
     @PublishedApi
-    internal fun getDetails(): PageDetails = PageDetails(_title)
+    internal fun getDetails(): PageDetails = PageDetails(title)
 
     @UsedByGeneratedCode
     @PublishedApi

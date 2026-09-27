@@ -188,6 +188,12 @@ object HeadContext {
         @OptIn(UnescapedTextDanger::class)
         inlineScript(sourceCode)
     }
+
+    @Composable
+    fun meta(property: String, content: String) = Element("meta", update = {
+        attribute(HtmlAttributes.property, property)
+        attribute(HtmlAttributes.content, content)
+    })
 }
 
 private val regex = Regex("""(\s{2,}|[\r\n\t]+)""")
