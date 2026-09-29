@@ -19,30 +19,6 @@ pluginManagement {
         maven("https://maven.amphoreus.info/repository/maven-snapshot") {
             name = "NexusSnapshot"
         }
-
-        maven("https://maven.pkg.github.com/der-fruhling/serene-wasm") {
-            name = "GitHubPackages"
-
-            credentials {
-                val props = java.util.Properties()
-                val globalProps = gradle.gradleUserHomeDir.resolve("gradle.properties")
-
-                if(globalProps.exists()) {
-                    globalProps.inputStream().use {
-                        props.load(it)
-                    }
-                }
-
-                try {
-                    file("gradle.properties").inputStream().use {
-                        props.load(it)
-                    }
-                } catch(_: java.io.FileNotFoundException) {}
-
-                username = props.getProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = props.getProperty("gpr.key") ?: System.getenv("TOKEN")
-            }
-        }
     }
 
     includeBuild("gradle-plugin")

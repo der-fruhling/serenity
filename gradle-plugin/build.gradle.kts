@@ -32,15 +32,6 @@ allprojects {
         maven("https://maven.amphoreus.info/repository/maven-snapshot") {
             name = "NexusSnapshot"
         }
-
-        maven("https://maven.pkg.github.com/der-fruhling/serene-wasm") {
-            name = "GitHubPackages"
-
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
-            }
-        }
     }
 
     plugins.withType<PublishingPlugin> {
@@ -48,17 +39,6 @@ allprojects {
             repositories {
                 maven(rootProject.layout.projectDirectory.dir("../build/local-publish")) {
                     name = "LocalDirectory"
-                }
-
-                maven("https://maven.pkg.github.com/der-fruhling/serenity") {
-                    name = "GithubPackages"
-
-                    credentials {
-                        username = project.findProperty("gpr.user")?.toString()
-                            ?: System.getenv("USERNAME")
-                        password =
-                            project.findProperty("gpr.key")?.toString() ?: System.getenv("TOKEN")
-                    }
                 }
             }
         }
