@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException
 
 // The settings file is the entry point of every Gradle build.
 // Its primary purpose is to define the subprojects.
@@ -30,9 +31,11 @@ pluginManagement {
                     }
                 }
 
-                file("gradle.properties").inputStream().use {
-                    props.load(it)
-                }
+                try {
+                    file("gradle.properties").inputStream().use {
+                        props.load(it)
+                    }
+                } catch(_: FileNotFoundException) {}
 
                 username = props.getProperty("gpr.user") ?: System.getenv("USERNAME")
                 password = props.getProperty("gpr.key") ?: System.getenv("TOKEN")
@@ -117,9 +120,11 @@ buildCache {
                     }
                 }
 
-                file("gradle.properties").inputStream().use {
-                    props.load(it)
-                }
+                try {
+                    file("gradle.properties").inputStream().use {
+                        props.load(it)
+                    }
+                } catch(_: FileNotFoundException) {}
 
                 username = props.getProperty("aanexus.user") ?: System.getenv("AA_USERNAME")
                 password = props.getProperty("aanexus.key") ?: System.getenv("AA_PASSWORD")

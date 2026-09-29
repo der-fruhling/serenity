@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException
+
 plugins {
     id("com.gradle.develocity")
 }
@@ -33,9 +35,11 @@ buildCache {
                     }
                 }
 
-                file("gradle.properties").inputStream().use {
-                    props.load(it)
-                }
+                try {
+                    file("gradle.properties").inputStream().use {
+                        props.load(it)
+                    }
+                } catch(_: FileNotFoundException) {}
 
                 username = props.getProperty("aanexus.user") ?: System.getenv("AA_USERNAME")
                 password = props.getProperty("aanexus.key") ?: System.getenv("AA_PASSWORD")
