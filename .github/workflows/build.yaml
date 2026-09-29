@@ -76,6 +76,8 @@ jobs:
               }
           }
           EOF
+      - name: Setup compiler plugin
+        run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
       - name: Run tests
         run: ./gradlew ${{ matrix.platform }}Test
 
@@ -108,6 +110,8 @@ jobs:
               }
           }
           EOF
+      - name: Setup compiler plugin
+        run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
       - name: Run tests
         run: ./gradlew :gradle-plugin:test :gradle-plugin:serenity-sass-gradle-plugin:test
 
@@ -142,6 +146,8 @@ jobs:
             }
         }
         EOF
+    - name: Setup compiler plugin
+      run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
     - name: Publish
       run: ./gradlew publishAllPublicationsToNexusRepository :gradle-plugin:publishAllPublicationsToNexusRepository :gradle-plugin:serenity-sass-gradle-plugin:publishAllPublicationsToNexusRepository
 
@@ -185,5 +191,7 @@ jobs:
               }
           }
           EOF
+      - name: Setup compiler plugin
+        run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
       - name: Publish
         run: ./gradlew publishAllPublicationsToGithubPackagesRepository :gradle-plugin:publishAllPublicationsToGithubPackagesRepository :gradle-plugin:serenity-sass-gradle-plugin:publishAllPublicationsToGithubPackagesRepository
