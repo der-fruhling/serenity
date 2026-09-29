@@ -33,7 +33,7 @@ afterEvaluate {
 
                 credentials {
                     username = project.findProperty("aanexus.user")?.toString() ?: System.getenv("AA_USERNAME")
-                    password = project.findProperty("aanexus.key")?.toString() ?: System.getenv("AA_TOKEN")
+                    password = project.findProperty("aanexus.key")?.toString() ?: System.getenv("AA_PASSWORD")
                 }
             }
         }
