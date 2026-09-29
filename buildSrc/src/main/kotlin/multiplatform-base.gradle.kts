@@ -134,7 +134,6 @@ kotlin {
             }
             testTask {
                 useKarma {
-                    useChromiumHeadless()
                     useFirefoxHeadless()
                 }
             }
@@ -150,7 +149,6 @@ kotlin {
 
             testTask {
                 useKarma {
-                    useChromiumHeadless()
                     useFirefoxHeadless()
 
                     useConfigDirectory(rootProject.file("wasm-karma.config.d"))

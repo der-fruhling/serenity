@@ -48,12 +48,6 @@ jobs:
               }
           }
           EOF
-      - name: Setup Chromium
-        uses: browser-actions/setup-chrome@v2
-        if: ${{ matrix.platform == 'js' || matrix.platform == 'wasmJs' }}
-        with:
-          chrome-version: latest
-          install-dependencies: true
       - name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
         if: ${{ matrix.platform == 'js' || matrix.platform == 'wasmJs' }}
