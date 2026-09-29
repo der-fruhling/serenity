@@ -3,15 +3,18 @@ on:
 
 name: Build & publish
 
+env:
+  USERNAME: ${{ github.actor }}
+  TOKEN: ${{ github.token }}
+  AA_USERNAME: ${{ vars.AA_USERNAME }}
+  AA_PASSWORD: ${{ secrets.AA_PASSWORD }}
+
 jobs:
   build:
     name: Build Project
     runs-on: ubuntu-latest
     permissions:
       packages: read
-    env:
-      USERNAME: ${{ github.actor }}
-      TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -46,9 +49,6 @@ jobs:
     needs: build
     permissions:
       packages: read
-    env:
-      USERNAME: ${{ github.actor }}
-      TOKEN: ${{ github.token }}
     strategy:
       matrix:
         platform: [jvm]
@@ -85,9 +85,6 @@ jobs:
     needs: build
     permissions:
       packages: read
-    env:
-      USERNAME: ${{ github.actor }}
-      TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -122,11 +119,6 @@ jobs:
     environment: production
     permissions:
       packages: read
-    env:
-      USERNAME: ${{ github.actor }}
-      TOKEN: ${{ github.token }}
-      AA_USERNAME: ${{ vars.AA_USERNAME }}
-      AA_PASSWORD: ${{ secrets.AA_PASSWORD }}
     steps:
     - name: Checkout
       uses: actions/checkout@v7
@@ -161,9 +153,6 @@ jobs:
     environment: production
     permissions:
       packages: write
-    env:
-      USERNAME: ${{ github.actor }}
-      TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
