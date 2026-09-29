@@ -51,8 +51,13 @@ jobs:
       packages: read
     strategy:
       matrix:
-        platform: [jvm]
-        runs-on: [ubuntu-latest]
+        platform: [jvm, js, wasmJs, linuxX64]
+        runs-on: [ubuntu-26.04]
+        include:
+          - platform: linuxArm64
+            runs-on: ubuntu-26.04-arm
+          - platform: macosArm64
+            runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v7
