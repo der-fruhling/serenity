@@ -268,7 +268,7 @@ FILE fqName:<root> fileName:/ComplexPage.kt
         INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:ComplexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPage>]' type=kotlin.Unit
         VAR IR_TEMPORARY_VARIABLE name:tmp_9 type:net.derfruhling.serenity.PageContractBuilder [val]
           CONSTRUCTOR_CALL 'public constructor <init> () declared in net.derfruhling.serenity.PageContractBuilder' type=net.derfruhling.serenity.PageContractBuilder origin=null
-        CALL 'local final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.ComplexPage): kotlin.Unit declared in <root>.ComplexPage' type=kotlin.Unit origin=null
+        CALL 'private final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.ComplexPage): kotlin.Unit declared in <root>.ComplexPage' type=kotlin.Unit origin=null
           ARG $this$pageContract: GET_VAR 'val tmp_9: net.derfruhling.serenity.PageContractBuilder declared in <root>.ComplexPage.<init>' type=net.derfruhling.serenity.PageContractBuilder origin=null
           ARG serenity$thisPage: GET_VAR '<this>: <root>.ComplexPage declared in <root>.ComplexPage' type=<root>.ComplexPage origin=null
         SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private' type=kotlin.Unit origin=null
@@ -320,7 +320,7 @@ FILE fqName:<root> fileName:/ComplexPage.kt
       BLOCK_BODY
         RETURN type=kotlin.Nothing from='public final fun serializer (): kotlinx.serialization.KSerializer<<root>.ComplexPage> declared in <root>.ComplexPage'
           GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPage>]' type=<root>.ComplexPage.Serializer
-    FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:local modality:FINAL returnType:kotlin.Unit
+    FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:private modality:FINAL returnType:kotlin.Unit [companion]
       VALUE_PARAMETER kind:ExtensionReceiver name:$this$pageContract index:0 type:net.derfruhling.serenity.PageContract
       VALUE_PARAMETER kind:Regular name:serenity$thisPage index:1 type:<root>.ComplexPage
       annotations:
@@ -611,7 +611,7 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
         INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:ComplexPageReciever modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPageReciever>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPageReciever>]' type=kotlin.Unit
         VAR IR_TEMPORARY_VARIABLE name:tmp_9 type:net.derfruhling.serenity.PageContractBuilder [val]
           CONSTRUCTOR_CALL 'public constructor <init> () declared in net.derfruhling.serenity.PageContractBuilder' type=net.derfruhling.serenity.PageContractBuilder origin=null
-        CALL 'local final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.ComplexPageReciever): kotlin.Unit declared in <root>.ComplexPageReciever' type=kotlin.Unit origin=null
+        CALL 'private final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.ComplexPageReciever): kotlin.Unit declared in <root>.ComplexPageReciever' type=kotlin.Unit origin=null
           ARG $this$pageContract: GET_VAR 'val tmp_9: net.derfruhling.serenity.PageContractBuilder declared in <root>.ComplexPageReciever.<init>' type=net.derfruhling.serenity.PageContractBuilder origin=null
           ARG serenity$thisPage: GET_VAR '<this>: <root>.ComplexPageReciever declared in <root>.ComplexPageReciever' type=<root>.ComplexPageReciever origin=null
         SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private' type=kotlin.Unit origin=null
@@ -663,7 +663,7 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
       BLOCK_BODY
         RETURN type=kotlin.Nothing from='public final fun serializer (): kotlinx.serialization.KSerializer<<root>.ComplexPageReciever> declared in <root>.ComplexPageReciever'
           GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>]' type=<root>.ComplexPageReciever.Serializer
-    FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:local modality:FINAL returnType:kotlin.Unit
+    FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:private modality:FINAL returnType:kotlin.Unit [companion]
       VALUE_PARAMETER kind:ExtensionReceiver name:$this$pageContract index:0 type:net.derfruhling.serenity.PageContract
       VALUE_PARAMETER kind:Regular name:serenity$thisPage index:1 type:<root>.ComplexPageReciever
       annotations:
@@ -864,7 +864,7 @@ FILE fqName:<root> fileName:/IndexPage.kt
         INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=kotlin.Unit
         VAR IR_TEMPORARY_VARIABLE name:tmp_5 type:net.derfruhling.serenity.PageContractBuilder [val]
           CONSTRUCTOR_CALL 'public constructor <init> () declared in net.derfruhling.serenity.PageContractBuilder' type=net.derfruhling.serenity.PageContractBuilder origin=null
-        CALL 'local final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.IndexPage): kotlin.Unit declared in <root>.IndexPage' type=kotlin.Unit origin=null
+        CALL 'private final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.IndexPage): kotlin.Unit declared in <root>.IndexPage' type=kotlin.Unit origin=null
           ARG $this$pageContract: GET_VAR 'val tmp_5: net.derfruhling.serenity.PageContractBuilder declared in <root>.IndexPage.<init>' type=net.derfruhling.serenity.PageContractBuilder origin=null
           ARG serenity$thisPage: GET_VAR '<this>: <root>.IndexPage declared in <root>.IndexPage' type=<root>.IndexPage origin=null
         SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private' type=kotlin.Unit origin=null
@@ -912,7 +912,7 @@ FILE fqName:<root> fileName:/IndexPage.kt
       BLOCK_BODY
         RETURN type=kotlin.Nothing from='public final fun serializer (): kotlinx.serialization.KSerializer<<root>.IndexPage> declared in <root>.IndexPage'
           GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.IndexPage>]' type=<root>.IndexPage.Serializer
-    FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:local modality:FINAL returnType:kotlin.Unit
+    FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:private modality:FINAL returnType:kotlin.Unit [companion]
       VALUE_PARAMETER kind:ExtensionReceiver name:$this$pageContract index:0 type:net.derfruhling.serenity.PageContract
       VALUE_PARAMETER kind:Regular name:serenity$thisPage index:1 type:<root>.IndexPage
       annotations:
@@ -1304,7 +1304,7 @@ FILE fqName:<root> fileName:/Page2.kt
               CONST String type=kotlin.String value=""
           VAR IR_TEMPORARY_VARIABLE name:tmp_9 type:net.derfruhling.serenity.PageContractBuilder [val]
             CONSTRUCTOR_CALL 'public constructor <init> () declared in net.derfruhling.serenity.PageContractBuilder' type=net.derfruhling.serenity.PageContractBuilder origin=null
-          CALL 'local final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.Page2.Instance): kotlin.Unit declared in <root>.Page2.Instance' type=kotlin.Unit origin=null
+          CALL 'private final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract, serenity$thisPage: <root>.Page2.Instance): kotlin.Unit declared in <root>.Page2.Instance' type=kotlin.Unit origin=null
             ARG $this$pageContract: GET_VAR 'val tmp_9: net.derfruhling.serenity.PageContractBuilder declared in <root>.Page2.Instance.<init>' type=net.derfruhling.serenity.PageContractBuilder origin=null
             ARG serenity$thisPage: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance' type=<root>.Page2.Instance origin=null
           SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private' type=kotlin.Unit origin=null
@@ -1352,7 +1352,7 @@ FILE fqName:<root> fileName:/Page2.kt
               ARG <this>: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.Main' type=<root>.Page2.Instance origin=null
             ARG param2: CALL 'public final fun <get-param2> (): kotlin.Int declared in <root>.Page2.Instance' type=kotlin.Int origin=null
               ARG <this>: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.Main' type=<root>.Page2.Instance origin=null
-      FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:local modality:FINAL returnType:kotlin.Unit
+      FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:private modality:FINAL returnType:kotlin.Unit [companion]
         VALUE_PARAMETER kind:ExtensionReceiver name:$this$pageContract index:0 type:net.derfruhling.serenity.PageContract
         VALUE_PARAMETER kind:Regular name:serenity$thisPage index:1 type:<root>.Page2.Instance
         annotations:
