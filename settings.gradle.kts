@@ -1,3 +1,5 @@
+@file:Suppress("RemoveRedundantQualifierName")
+
 import java.io.FileNotFoundException
 
 // The settings file is the entry point of every Gradle build.
@@ -35,7 +37,7 @@ pluginManagement {
                     file("gradle.properties").inputStream().use {
                         props.load(it)
                     }
-                } catch(_: FileNotFoundException) {}
+                } catch(_: java.io.FileNotFoundException) {}
 
                 username = props.getProperty("gpr.user") ?: System.getenv("USERNAME")
                 password = props.getProperty("gpr.key") ?: System.getenv("TOKEN")
