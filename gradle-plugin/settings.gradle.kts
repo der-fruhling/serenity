@@ -28,7 +28,7 @@ val isPublishBuildCacheServer = System.getenv().containsKey("PUBLISH_BUILD_CACHE
 // Cache build artifacts, so expensive operations do not need to be re-computed
 buildCache {
     local {
-        isEnabled = !isCiServer
+        isEnabled = true
     }
 
     remote<HttpBuildCache> {

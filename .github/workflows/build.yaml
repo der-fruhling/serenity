@@ -20,6 +20,11 @@ jobs:
         with:
           read-only: ${{ github.ref != 'refs/heads/master' }}
           remote-build-cache-proxy-enabled: false
+      - name: Cache konan
+        uses: actions/cache@v5
+        with:
+          key: 'konan'
+          path: '/home/runner/.konan'
       - name: Accept Develocity Terms of Use
         run: |
           cat >> ./settings.gradle.kts <<EOF
@@ -66,6 +71,20 @@ jobs:
       with:
         read-only: ${{ github.ref != 'refs/heads/master' }}
         remote-build-cache-proxy-enabled: false
+    - name: Cache konan
+      uses: actions/cache@v5
+      with:
+        key: 'konan'
+        path: '/home/runner/.konan'
+    - name: Restore dir
+      uses: actions/cache/restore@v5
+      with:
+        key: 'saved-build'
+        path: |
+          build
+          modules
+          gradle-plugin
+          buildSrc
     - name: Accept Develocity Terms of Use
       run: |
         cat >> ./settings.gradle.kts <<EOF
@@ -76,8 +95,6 @@ jobs:
             }
         }
         EOF
-    - name: Setup compiler plugin
-      run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
     - name: Publish
       run: ./gradlew publishAllPublicationsToNexusRepository :gradle-plugin:publishAllPublicationsToNexusRepository :gradle-plugin:serenity-sass-gradle-plugin:publishAllPublicationsToNexusRepository
 
@@ -100,6 +117,20 @@ jobs:
         with:
           read-only: ${{ github.ref != 'refs/heads/master' }}
           remote-build-cache-proxy-enabled: false
+      - name: Cache konan
+        uses: actions/cache@v5
+        with:
+          key: 'konan'
+          path: '/home/runner/.konan'
+      - name: Restore dir
+        uses: actions/cache/restore@v5
+        with:
+          key: 'saved-build'
+          path: |
+            build
+            modules
+            gradle-plugin
+            buildSrc
       - name: Accept Develocity Terms of Use
         run: |
           cat >> ./settings.gradle.kts <<EOF
@@ -110,7 +141,5 @@ jobs:
               }
           }
           EOF
-      - name: Setup compiler plugin
-        run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
       - name: Publish
         run: ./gradlew publishAllPublicationsToGithubPackagesRepository :gradle-plugin:publishAllPublicationsToGithubPackagesRepository :gradle-plugin:serenity-sass-gradle-plugin:publishAllPublicationsToGithubPackagesRepository
