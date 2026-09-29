@@ -25,6 +25,14 @@ allprojects {
     repositories {
         gradlePluginPortal()
 
+        maven("https://maven.amphoreus.info/repository/maven-release") {
+            name = "Nexus"
+        }
+
+        maven("https://maven.amphoreus.info/repository/maven-snapshot") {
+            name = "NexusSnapshot"
+        }
+
         maven("https://maven.pkg.github.com/der-fruhling/serene-wasm") {
             name = "GitHubPackages"
 
@@ -50,6 +58,27 @@ allprojects {
                             ?: System.getenv("USERNAME")
                         password =
                             project.findProperty("gpr.key")?.toString() ?: System.getenv("TOKEN")
+                    }
+                }
+            }
+        }
+
+        afterEvaluate {
+            val repoName = if("SNAPSHOT" in (version as String)) {
+                "maven-snapshot"
+            } else {
+                "maven-release"
+            }
+
+            configure<PublishingExtension> {
+                repositories {
+                    maven("https://maven.amphoreus.info/repository/$repoName") {
+                        name = "Nexus"
+
+                        credentials {
+                            username = project.findProperty("aanexus.user")?.toString() ?: System.getenv("AA_USERNAME")
+                            password = project.findProperty("aanexus.key")?.toString() ?: System.getenv("AA_TOKEN")
+                        }
                     }
                 }
             }

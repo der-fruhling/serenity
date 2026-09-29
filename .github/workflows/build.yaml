@@ -55,6 +55,8 @@ jobs:
     env:
       USERNAME: ${{ github.actor }}
       TOKEN: ${{ github.token }}
+      AA_USERNAME: ${{ vars.AA_USERNAME }}
+      AA_PASSWORD: ${{ secrets.AA_PASSWORD }}
     steps:
     - name: Checkout
       uses: actions/checkout@v7
@@ -75,4 +77,4 @@ jobs:
     - name: Setup compiler plugin
       run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
     - name: Publish
-      run: ./gradlew publishAllPublicationsToGithubPackagesRepository :gradle-plugin:publishAllPublicationsToGithubPackagesRepository
+      run: ./gradlew publishAllPublicationsToGithubPackagesRepository :gradle-plugin:publishAllPublicationsToGithubPackagesRepository :gradle-plugin:serenity-sass-gradle-plugin:publishAllPublicationsToGithubPackagesRepository publishAllPublicationsToNexusRepository :gradle-plugin:publishAllPublicationsToNexusRepository :gradle-plugin:serenity-sass-gradle-plugin:publishAllPublicationsToNexusRepository

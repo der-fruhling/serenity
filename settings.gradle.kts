@@ -9,6 +9,14 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
 
+        maven("https://maven.amphoreus.info/repository/maven-release") {
+            name = "Nexus"
+        }
+
+        maven("https://maven.amphoreus.info/repository/maven-snapshot") {
+            name = "NexusSnapshot"
+        }
+
         maven("https://maven.pkg.github.com/der-fruhling/serene-wasm") {
             name = "GitHubPackages"
 

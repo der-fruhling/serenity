@@ -73,7 +73,7 @@ private fun LinkAnchor(
     }) {
         fn()
 
-        On(ClickEvent) @ClientOnly {
+        On(ClickEvent) {
             preventDefault()
             navigate(to)
         }

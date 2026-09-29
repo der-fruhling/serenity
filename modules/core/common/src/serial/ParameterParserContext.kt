@@ -1,7 +1,6 @@
 package net.derfruhling.serenity.serial
 
 import net.derfruhling.serenity.annotations.UsedByGeneratedCode
-import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
@@ -24,20 +23,24 @@ class ParameterParserContext {
         registerParser(typeOf<T>(), parser)
     }
 
+    inline fun <reified T> registerParser(crossinline parser: (String) -> T) {
+        registerParser(typeOf<T>()) { _, text -> parser(text) }
+    }
+
     inline fun <reified T> getParser(): ParameterParser<T> {
         @OptIn(UsedByGeneratedCode::class)
         return getParser(typeOf<T>())
     }
 
     init {
-        registerParser { _, text -> text.toByte() }
-        registerParser { _, text -> text.toShort() }
-        registerParser { _, text -> text.toInt() }
-        registerParser { _, text -> text.toLong() }
-        registerParser { _, text -> text.toUByte() }
-        registerParser { _, text -> text.toUShort() }
-        registerParser { _, text -> text.toUInt() }
-        registerParser { _, text -> text.toULong() }
-        registerParser { _, text -> text.toBoolean() }
+        registerParser(String::toByte)
+        registerParser(String::toShort)
+        registerParser(String::toInt)
+        registerParser(String::toLong)
+        registerParser(String::toUByte)
+        registerParser(String::toUShort)
+        registerParser(String::toUInt)
+        registerParser(String::toULong)
+        registerParser(String::toBoolean)
     }
 }
