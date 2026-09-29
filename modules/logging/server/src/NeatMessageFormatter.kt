@@ -18,11 +18,11 @@ open class NeatMessageFormatter : Formatter {
         val time = formatTime(Instant.fromEpochMilliseconds(loggingEvent.timestamp))
         val name = formatName(loggingEvent.loggerName)
         val level = formatLevel(loggingEvent.level)
-        return "$time <$name> $level: ${loggingEvent.message}" + loggingEvent.cause?.let {
+        return "$time <$name> $level: ${loggingEvent.message}" + (loggingEvent.cause?.let {
             '\n' + formatException(
                 it.stackTraceToString()
             )
-        }
+        } ?: "")
     }
 
     open fun formatException(stackTrace: String) = stackTrace

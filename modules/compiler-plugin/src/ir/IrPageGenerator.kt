@@ -235,6 +235,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     })
 
                     contractFunction?.let { fn ->
+                        fn.visibility = DescriptorVisibilities.PRIVATE
                         declaration.addChild(fn)
                     }
 
