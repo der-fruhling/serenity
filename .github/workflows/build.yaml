@@ -145,7 +145,7 @@ jobs:
     - name: Setup compiler plugin
       run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
     - name: Build
-      run: ./gradlew assemble :gradle-plugin:assemble :gradle-plugin:serenity-sass-gradle-plugin:assemble --exclude :test-app:assemble
+      run: ./gradlew assemble :gradle-plugin:assemble :gradle-plugin:serenity-sass-gradle-plugin:assemble --exclude-task :test-app:assemble
     - name: Publish
       run: ./gradlew publishAllPublicationsToNexusRepository :gradle-plugin:publishAllPublicationsToNexusRepository :gradle-plugin:serenity-sass-gradle-plugin:publishAllPublicationsToNexusRepository
 
@@ -192,6 +192,6 @@ jobs:
       - name: Setup compiler plugin
         run: ./gradlew :serenity-compiler-plugin:publishJavaPublicationToLocalDirectoryRepository
       - name: Build
-        run: ./gradlew assemble :gradle-plugin:assemble :gradle-plugin:serenity-sass-gradle-plugin:assemble --exclude :test-app:assemble
+        run: ./gradlew assemble :gradle-plugin:assemble :gradle-plugin:serenity-sass-gradle-plugin:assemble --exclude-task :test-app:assemble
       - name: Publish
         run: ./gradlew publishAllPublicationsToGithubPackagesRepository :gradle-plugin:publishAllPublicationsToGithubPackagesRepository :gradle-plugin:serenity-sass-gradle-plugin:publishAllPublicationsToGithubPackagesRepository
