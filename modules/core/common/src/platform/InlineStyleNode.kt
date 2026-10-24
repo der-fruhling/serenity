@@ -3,7 +3,7 @@ package net.derfruhling.serenity.platform
 import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.attribute.HtmlAttributes
 
-class InlineStyleNode : ChildNode<ElementNode> {
+class InlineStyleNode() : ChildNode<ElementNode> {
     override val index: Index<InlineStyleNode> = Index(this)
     override var parent: ElementNode? = null
 
@@ -15,6 +15,12 @@ class InlineStyleNode : ChildNode<ElementNode> {
             _style = value
             value.setNotifyChanged(this::notifyChanged)
         }
+
+    constructor(from: InlineStyleNode) : this() {
+        if (from::_style.isInitialized) {
+            style = from._style.copy()
+        }
+    }
 
     override fun format(fmt: Formatter) {
         fmt.block("InlineStyle") {
@@ -34,4 +40,6 @@ class InlineStyleNode : ChildNode<ElementNode> {
     fun notifyChanged() {
         parent?.attribute(HtmlAttributes.style, style.makeStyle())
     }
+
+    override fun deepCopy() = InlineStyleNode(this)
 }

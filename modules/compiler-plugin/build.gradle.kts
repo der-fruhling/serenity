@@ -134,9 +134,10 @@ val annotationsRuntimeClasspath = configurations.dependencyScope("annotationsRun
     isTransitive = false
 }
 
-val annotationsRuntimeClasspathJs = configurations.dependencyScope("annotationsRuntimeClasspathJs") {
-    isTransitive = false
-}
+val annotationsRuntimeClasspathJs =
+    configurations.dependencyScope("annotationsRuntimeClasspathJs") {
+        isTransitive = false
+    }
 
 val annotationsJvmRuntimeClasspath = configurations.resolvable("annotationsJvmRuntimeClasspath") {
     extendsFrom(annotationsRuntimeClasspath)

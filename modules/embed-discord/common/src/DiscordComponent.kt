@@ -40,7 +40,7 @@ sealed class DiscordComponent {
             (encoder as JsonEncoder).encodeJsonElement(buildJsonObject {
                 val json = encoder.json
                 put("type", JsonPrimitive(value.type))
-                val tree = when(value) {
+                val tree = when (value) {
                     is ActionRow -> json.encodeToJsonElement(ActionRow.serializer(), value)
                     is Button -> json.encodeToJsonElement(Button.serializer(), value)
                     is Container -> json.encodeToJsonElement(Container.serializer(), value)
@@ -51,7 +51,7 @@ sealed class DiscordComponent {
                     is Thumbnail -> json.encodeToJsonElement(Thumbnail.serializer(), value)
                 } as JsonObject
 
-                for((key, value) in tree) {
+                for ((key, value) in tree) {
                     put(key, value)
                 }
             })

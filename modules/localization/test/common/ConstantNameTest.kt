@@ -33,13 +33,25 @@ class ConstantNameTest {
 
     @Test
     fun testConstantName168Char() {
-        assertEquals(0xf3160b4d04a9ce0cu, n("i mean, i **could** paste the entire bee movie script in here, but today we're really concerned about lawsuits and intellectual property for whatever reason, so no dice").asULong)
-        assertEquals(0xf3160b4d04a9ce0cu, rt("i mean, i **could** paste the entire bee movie script in here, but today we're really concerned about lawsuits and intellectual property for whatever reason, so no dice").asULong)
+        assertEquals(
+            0xf3160b4d04a9ce0cu,
+            n("i mean, i **could** paste the entire bee movie script in here, but today we're really concerned about lawsuits and intellectual property for whatever reason, so no dice").asULong
+        )
+        assertEquals(
+            0xf3160b4d04a9ce0cu,
+            rt("i mean, i **could** paste the entire bee movie script in here, but today we're really concerned about lawsuits and intellectual property for whatever reason, so no dice").asULong
+        )
     }
 
     @Test
     fun testConstantName367Char() {
-        assertEquals(0x76080ad0fbecde37u, n("i mean, i **could** paste the entire bee movie script in here, but today we're really concerned about lawsuits and intellectual property for whatever reason, so no dice. instead, we could generate a bunch of characters of lorem ipsum with some kind of online lorem ipsum generator, but where's the fun in that? really? you used a website to generate lorem ipsum? why?").asULong)
-        assertEquals(0x76080ad0fbecde37u, rt("i mean, i **could** paste the entire bee movie script in here, but today we're really concerned about lawsuits and intellectual property for whatever reason, so no dice. instead, we could generate a bunch of characters of lorem ipsum with some kind of online lorem ipsum generator, but where's the fun in that? really? you used a website to generate lorem ipsum? why?").asULong)
+        assertEquals(
+            0x76080ad0fbecde37u,
+            n("i mean, i **could** paste the entire bee movie script in here, but today we're really concerned about lawsuits and intellectual property for whatever reason, so no dice. instead, we could generate a bunch of characters of lorem ipsum with some kind of online lorem ipsum generator, but where's the fun in that? really? you used a website to generate lorem ipsum? why?").asULong
+        )
+        assertEquals(
+            0x76080ad0fbecde37u,
+            rt("i mean, i **could** paste the entire bee movie script in here, but today we're really concerned about lawsuits and intellectual property for whatever reason, so no dice. instead, we could generate a bunch of characters of lorem ipsum with some kind of online lorem ipsum generator, but where's the fun in that? really? you used a website to generate lorem ipsum? why?").asULong
+        )
     }
 }

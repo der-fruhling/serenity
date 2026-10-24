@@ -19,5 +19,8 @@ abstract class AbstractConfiguredEmbed<Cfg> : AbstractEmbed() {
     abstract fun configure(base: MutableEmbedConfig, cfg: Cfg.() -> Unit)
 }
 
-abstract class AbstractPolymorphicEmbedVoid<out T : AbstractEmbed>(override val typeKey: KClass<out T>) : AbstractEmbedVoid()
-abstract class AbstractPolymorphicConfiguredEmbed<out T : AbstractEmbed, Cfg>(override val typeKey: KClass<out T>) : AbstractConfiguredEmbed<Cfg>()
+abstract class AbstractPolymorphicEmbedVoid<out T : AbstractEmbed>(override val typeKey: KClass<out T>) :
+    AbstractEmbedVoid()
+
+abstract class AbstractPolymorphicConfiguredEmbed<out T : AbstractEmbed, Cfg>(override val typeKey: KClass<out T>) :
+    AbstractConfiguredEmbed<Cfg>()

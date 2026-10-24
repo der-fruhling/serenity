@@ -28,4 +28,6 @@ class TextNode(real: RealText) : ComposeNodeWithReal<RealText>(real), ChildNode<
     override fun reuse() {
         textContent = ""
     }
+
+    override fun deepCopy() = TextNode(textContent)
 }

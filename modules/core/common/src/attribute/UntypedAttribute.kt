@@ -4,7 +4,7 @@ import net.derfruhling.serenity.Name
 
 abstract class UntypedAttribute {
     abstract val name: Name
-    abstract val parser: (String) -> Any?
+    abstract val parser: (String?) -> Any?
     abstract val keepNulls: Boolean
     open val permitExplicitSet: Boolean get() = true
     open val defaultValue: (() -> Any?)? get() = null
@@ -21,4 +21,11 @@ abstract class UntypedAttribute {
     override fun hashCode(): Int {
         return name.hashCode()
     }
+}
+
+class ExistingAttribute internal constructor(override val name: Name) : UntypedAttribute() {
+    override val parser: (String?) -> Any? = { it }
+    override val keepNulls: Boolean = false
+    override val permitExplicitSet: Boolean
+        get() = false
 }

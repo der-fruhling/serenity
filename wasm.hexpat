@@ -34,8 +34,8 @@ struct Section {
 struct Wasm {
     be u32 magic;
     le u32 version;
-    
-    Section sections[while(!std::mem::eof())];
+
+    Section sections[while (!std::mem::eof())];
 };
 
 Wasm wasm @ 0;

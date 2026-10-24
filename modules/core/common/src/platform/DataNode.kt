@@ -32,4 +32,7 @@ class DataNode(real: RealData) : ComposeNodeWithReal<RealData>(real), ChildNode<
     override fun reuse() {
         textContent = ""
     }
+
+    @OptIn(UnescapedTextDanger::class)
+    override fun deepCopy() = DataNode(textContent)
 }

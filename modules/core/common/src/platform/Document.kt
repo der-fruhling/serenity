@@ -4,6 +4,8 @@ import net.derfruhling.serenity.Formatter
 
 open class Document(node: RealDocument) : DocumentLike<Document, RealDocument>(node),
     RootNode {
+    constructor() : this(RealDocument())
+
     init {
         updateReal()
     }
@@ -39,6 +41,8 @@ open class Document(node: RealDocument) : DocumentLike<Document, RealDocument>(n
             }
         }
     }
+
+    override fun shallowCopy() = Document()
 
     companion object
 }

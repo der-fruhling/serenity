@@ -1,8 +1,6 @@
 package net.derfruhling.serenity.compiler
 
 import org.jetbrains.kotlin.backend.common.extensions.DeclarationFinder
-import org.jetbrains.kotlin.ir.builders.IrBuilder
-import org.jetbrains.kotlin.ir.builders.irAnnotation
 import org.jetbrains.kotlin.ir.expressions.IrAnnotation
 import org.jetbrains.kotlin.ir.expressions.impl.IrAnnotationImpl
 import org.jetbrains.kotlin.ir.types.defaultType

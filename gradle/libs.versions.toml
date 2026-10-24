@@ -92,4 +92,4 @@ sassBase = { id = "io.freefair.sass-base", version = "9.5.0" }
 stabilityAnalyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.12.0" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-version" }
 node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }
-buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig"}
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }

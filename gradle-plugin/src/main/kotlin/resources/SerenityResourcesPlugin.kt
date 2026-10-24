@@ -160,7 +160,7 @@ class SerenityResourcesPlugin @Inject constructor(
             builtBy(resourcesDebugZip)
         }
 
-        resourceElements.outgoing.variants.register("resourceDirDebug") {
+        resourceElementsDebug.outgoing.variants.register("resourceDirDebug") {
             artifact(target.layout.buildDirectory.dir("distributions/sync-debug")) {
                 type = "zip"
                 builtBy(resourcesSyncDebug)

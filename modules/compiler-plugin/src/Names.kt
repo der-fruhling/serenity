@@ -20,8 +20,10 @@ object Names {
 
     private fun annotation(name: String): ClassId =
         ClassId(annotationsPackage, Name.identifier(name))
+
     private fun FqName.classOf(name: String): ClassId =
         ClassId(this, Name.identifier(name))
+
     private fun FqName.callableOf(name: String): CallableId =
         CallableId(this, Name.identifier(name))
 
@@ -40,8 +42,10 @@ object Names {
     val pageContractFn: CallableId = corePackage.callableOf("pageContract")
     val htmlComposableClass: ClassId = corePackage.classOf("HtmlComposable")
     val invokeCommonEntryPoint: CallableId = corePackage.callableOf("invokeCommonEntryPoint")
-    val pageContractImplGetDetails: CallableId = CallableId(pageContractImplClass, Name.identifier("getDetails"))
-    val pageContractImplGetExtensions: CallableId = CallableId(pageContractImplClass, Name.identifier("getExtensions"))
+    val pageContractImplGetDetails: CallableId =
+        CallableId(pageContractImplClass, Name.identifier("getDetails"))
+    val pageContractImplGetExtensions: CallableId =
+        CallableId(pageContractImplClass, Name.identifier("getExtensions"))
     val abstractPageExtensionClass: ClassId = pageExtensionPackage.classOf("AbstractPageExtension")
     val serialRegistryClass: ClassId = serialPackage.classOf("SerialRegistry")
     val decodeFromObjectExtension: CallableId = serialPackage.callableOf("decodeFromObject")
@@ -63,7 +67,9 @@ object Names {
     val decoderClass: ClassId = serializationEncodingPackage.classOf("Decoder")
     val compositeEncoderClass: ClassId = serializationEncodingPackage.classOf("CompositeEncoder")
     val compositeDecoderClass: ClassId = serializationEncodingPackage.classOf("CompositeDecoder")
-    val buildClassSerialDescriptor: CallableId = serializationDescriptorsPackage.callableOf("buildClassSerialDescriptor")
-    val classSerialDescriptorBuilderClass: ClassId = serializationDescriptorsPackage.classOf("ClassSerialDescriptorBuilder")
+    val buildClassSerialDescriptor: CallableId =
+        serializationDescriptorsPackage.callableOf("buildClassSerialDescriptor")
+    val classSerialDescriptorBuilderClass: ClassId =
+        serializationDescriptorsPackage.classOf("ClassSerialDescriptorBuilder")
     val serializerFun: CallableId = serializationPackage.callableOf("serializer")
 }

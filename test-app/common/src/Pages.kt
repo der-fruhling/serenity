@@ -1,7 +1,6 @@
 package net.derfruhling.serenity.testapp
 
 import net.derfruhling.serenity.PageRegistry
-import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.elements.Page
 
 fun PageRegistry.registerPages() {

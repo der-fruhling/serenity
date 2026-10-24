@@ -10,12 +10,7 @@ import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.serializer
-import net.derfruhling.serenity.PageContext
-import net.derfruhling.serenity.PageHolder
-import net.derfruhling.serenity.PageHolderFactory
-import net.derfruhling.serenity.PageRegistry
-import net.derfruhling.serenity.PageTemplate
-import net.derfruhling.serenity.TemplateBuilder
+import net.derfruhling.serenity.*
 import kotlin.reflect.KClass
 
 @PublishedApi
@@ -24,11 +19,17 @@ internal fun jsonStringify(@Suppress("unused") value: JsAny): String = js("JSON.
 @PublishedApi
 internal fun jsonParse(@Suppress("unused") value: String): JsAny = js("JSON.parse(value)")
 
-inline fun <reified T> SerialRegistry.encodeToObject(value: T, serializationStrategy: SerializationStrategy<T> = serializersModule.serializer()): JsAny {
+inline fun <reified T> SerialRegistry.encodeToObject(
+    value: T,
+    serializationStrategy: SerializationStrategy<T> = serializersModule.serializer()
+): JsAny {
     return jsonParse(encode(value, serializationStrategy))
 }
 
-inline fun <reified T> SerialRegistry.decodeFromObject(obj: JsAny, deserializationStrategy: DeserializationStrategy<T> = serializersModule.serializer()): T {
+inline fun <reified T> SerialRegistry.decodeFromObject(
+    obj: JsAny,
+    deserializationStrategy: DeserializationStrategy<T> = serializersModule.serializer()
+): T {
     return decode(jsonStringify(obj), deserializationStrategy)
 }
 

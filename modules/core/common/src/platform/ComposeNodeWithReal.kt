@@ -23,4 +23,6 @@ sealed class ComposeNodeWithReal<R : RealNode> : ComposeNode {
     constructor(from: R) : this() {
         this._real = from
     }
+
+    abstract override fun deepCopy(): ComposeNodeWithReal<R>
 }

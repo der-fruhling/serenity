@@ -3,7 +3,9 @@ package net.derfruhling.serenity.platform
 import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.Name
 import net.derfruhling.serenity.attribute.Attribute
+import net.derfruhling.serenity.attribute.AttributeRegistry
 import net.derfruhling.serenity.attribute.AttributeValue
+import net.derfruhling.serenity.attribute.UntypedAttribute
 import net.derfruhling.serenity.event.EventSubscriptionHandle
 import net.derfruhling.serenity.event.EventType
 
@@ -31,6 +33,10 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
 
     override fun updateReal() {
         _name = real.name
+        _attributes = real.attributeSet.associateTo(mutableMapOf()) {
+            val attr = AttributeRegistry.attributeForName(it.name)
+            attr to attr.parser(it.value)
+        }
         byUnderlyingItem[real.node] = this
         super.updateReal()
     }
@@ -48,7 +54,7 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
         updateReal()
     }
 
-    constructor(name: Name) : super(RealElement(name))
+    constructor(name: Name) : this(RealElement(name))
     constructor(name: String) : this(Name.of(name))
 
     val classes: MutableSet<String> = object : AbstractMutableSet<String>() {
@@ -173,18 +179,27 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
 
     final override fun testAttribute() {}
 
+    private lateinit var _attributes: MutableMap<UntypedAttribute, Any?>
+    val attributes: Map<UntypedAttribute, Any?> by ::_attributes
+
     inline fun <reified T : Any> attribute(name: Attribute<T>): T? {
-        return real.attributeSet.find { it.name == name.name }?.let { name.parser(it.value) }
+        return attributes[name] as T?
     }
 
     fun <T : Any> attribute(name: Attribute<T>, value: T?, keepNulls: Boolean = name.keepNulls) {
-        if (keepNulls) {
+        fun actuallyAdd() {
             real.attributeSet.add(RealAttribute(name.name, AttributeValue.of(value)))
+            _attributes[name] = value
+        }
+
+        if (keepNulls) {
+            actuallyAdd()
         } else {
             if (value == null) {
                 real.attributeSet.removeAll { it.name == name.name }
+                _attributes.remove(name)
             } else {
-                real.attributeSet.add(RealAttribute(name.name, AttributeValue.of(value)))
+                actuallyAdd()
             }
         }
     }
@@ -192,8 +207,10 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
     fun attribute(name: Attribute<Boolean>, value: Boolean) {
         if (value) {
             real.attributeSet.add(RealAttribute(name.name, null))
+            _attributes[name] = true
         } else {
             real.attributeSet.removeAll { it.name == name.name }
+            _attributes[name] = false
         }
     }
 
@@ -231,6 +248,14 @@ open class ElementNode : NodeWithChildren<ElementNode, RealElement>,
 
         fun tryGet(element: UnderlyingElement): ElementNode {
             return byUnderlyingItem[element] ?: ElementNode(RealElement(element))
+        }
+    }
+
+    override fun shallowCopy(): ElementNode = ElementNode(name)
+
+    override fun deepCopy(): ElementNode {
+        return (super.deepCopy() as ElementNode).also {
+            it._attributes += attributes
         }
     }
 }

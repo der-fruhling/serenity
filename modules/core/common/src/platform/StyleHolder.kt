@@ -4,4 +4,6 @@ interface StyleHolder {
     fun removed()
     fun setNotifyChanged(fn: () -> Unit)
     fun makeStyle(): String
+
+    fun copy(): StyleHolder
 }

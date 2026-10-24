@@ -7,8 +7,8 @@ import net.derfruhling.serenity.event.EventType
 import kotlin.properties.Delegates
 
 actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>(), ComposeNodeLifecycleCallback {
-    actual var type: EventType<T> by Delegates.notNull()
-    actual var fn: (T) -> Unit by Delegates.notNull()
+    actual override var type: EventType<T> by Delegates.notNull()
+    actual var fn: (T) -> Unit = {}
     actual override val index: Index<EventHandlerNode<T>> = Index(this)
     actual override var parent: NodeWithChildren<*, *>? = null
 
@@ -40,6 +40,31 @@ actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>(), ComposeNodeLif
                     }
                 )
             }
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EventHandlerNode<*>) return false
+
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return type.hashCode()
+    }
+
+    actual override fun deepCopy(): EventHandlerNode<T> {
+        return EventHandlerNode<T>().also {
+            try {
+                it.type = type
+            } catch (_: IllegalStateException) {
+
+            }
+
+            it.fn = fn
         }
     }
 }

@@ -71,7 +71,7 @@ fun Select(
     autofocus: Boolean = false,
     disabled: Boolean = false,
     form: String? = null,
-    onChange: Handler2<Event<HTMLSelectElement>, String>? = null,
+    onChange: (context(EventContext) Event<HTMLSelectElement>.(String) -> Unit)? = null,
     fn: @Composable SelectOptionsRoot.() -> Unit
 ) {
     val useBody = remember(onChange) { onChange != null }

@@ -15,7 +15,7 @@ interface Freezable {
 }
 
 private fun Any.freeze(): Any {
-    return when(this) {
+    return when (this) {
         is Freezable -> freeze()
         else -> this
     }

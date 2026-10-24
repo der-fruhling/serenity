@@ -13,37 +13,37 @@ import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 @PageContractsDsl
-interface PageContract {
-    var title: String?
+sealed class PageContract {
+    abstract var title: String?
 
     @PageExtensionImplementationApi
-    fun <T : AbstractPageExtension<*>> extend(kClass: KClass<T>, value: T)
-}
+    abstract fun <T : AbstractPageExtension<*>> extend(kClass: KClass<T>, value: T)
 
-inline fun <reified T : AbstractPageExtensionVoid> PageContract.extend(value: T) {
-    @OptIn(PageExtensionImplementationApi::class)
-    extend(T::class, value)
-}
+    inline fun <reified T : AbstractPageExtensionVoid> extend(value: T) {
+        @OptIn(PageExtensionImplementationApi::class)
+        extend(T::class, value)
+    }
 
-inline fun <reified T : AbstractPageExtension<C>, C> PageContract.extend(
-    value: T,
-    noinline cfg: C.() -> Unit
-) {
-    @OptIn(PageExtensionImplementationApi::class)
-    extend(T::class, value.also { it.configure(this, cfg) })
-}
+    inline fun <reified T : AbstractPageExtension<C>, C> extend(
+        value: T,
+        noinline cfg: C.() -> Unit
+    ) {
+        @OptIn(PageExtensionImplementationApi::class)
+        extend(T::class, value.also { it.configure(this, cfg) })
+    }
 
-inline fun <reified T : AbstractPageExtensionVoid> PageContract.extend(value: () -> T) {
-    @OptIn(PageExtensionImplementationApi::class)
-    extend(T::class, value())
-}
+    inline fun <reified T : AbstractPageExtensionVoid> extend(value: () -> T) {
+        @OptIn(PageExtensionImplementationApi::class)
+        extend(T::class, value())
+    }
 
-inline fun <reified T : AbstractPageExtension<C>, C> PageContract.extend(
-    value: () -> T,
-    noinline cfg: C.() -> Unit
-) {
-    @OptIn(PageExtensionImplementationApi::class)
-    extend(T::class, value().also { it.configure(this, cfg) })
+    inline fun <reified T : AbstractPageExtension<C>, C> extend(
+        value: () -> T,
+        noinline cfg: C.() -> Unit
+    ) {
+        @OptIn(PageExtensionImplementationApi::class)
+        extend(T::class, value().also { it.configure(this, cfg) })
+    }
 }
 
 /**
@@ -64,7 +64,7 @@ inline fun <reified T : AbstractPageExtension<C>, C> PageContract.extend(
  */
 @OptIn(ExperimentalContracts::class)
 @Intrinsic
-fun pageContract(fn: ContractFun) {
+fun pageContract(fn: @PromotedLambda @DisallowComposableCalls PageContract.() -> Unit) {
     @Suppress("WRONG_INVOCATION_KIND")
     contract {
         callsInPlace(fn, kind = InvocationKind.EXACTLY_ONCE)
@@ -72,5 +72,3 @@ fun pageContract(fn: ContractFun) {
 
     throw NotImplementedError()
 }
-
-typealias ContractFun = @PromotedLambda @DisallowComposableCalls PageContract.() -> Unit

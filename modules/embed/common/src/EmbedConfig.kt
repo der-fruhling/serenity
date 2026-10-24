@@ -18,21 +18,24 @@ class MutableEmbedConfig(private val contract: PageContract) : Extensible() {
         val embed = constructor()
         val typeKey = embed.typeKey
 
-        if(typeKey in embeds) {
+        if (typeKey in embeds) {
             throw IllegalStateException("Key $typeKey already is use for another embed")
         }
 
         embeds[typeKey] = embed
     }
 
-    fun <T : AbstractConfiguredEmbed<Cfg>, Cfg> installEmbed(constructor: () -> T, cfg: Cfg.() -> Unit = {}) {
+    fun <T : AbstractConfiguredEmbed<Cfg>, Cfg> installEmbed(
+        constructor: () -> T,
+        cfg: Cfg.() -> Unit = {}
+    ) {
         val embed = constructor()
 
         // allow typeKey to depend on user configuration if needed
         embed.configure(this, cfg)
         val typeKey = embed.typeKey
 
-        if(typeKey in embeds) {
+        if (typeKey in embeds) {
             throw IllegalStateException("Key $typeKey already is use for another embed")
         }
 

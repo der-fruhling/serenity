@@ -2,11 +2,17 @@ package net.derfruhling.serenity.style
 
 import net.derfruhling.serenity.platform.StyleHolder
 
-class InlineStyle : StylistTarget<RuleNode>, StyleHolder {
+class InlineStyle() : StylistTarget<RuleNode>, StyleHolder {
     val rules: List<RuleNode>
         field = mutableListOf()
 
     private var _notifyChanged: (() -> Unit)? = null
+
+    constructor(from: InlineStyle) : this() {
+        for (rule in from.rules) {
+            add(rule)
+        }
+    }
 
     override fun removed() {
         _notifyChanged = null
@@ -86,4 +92,6 @@ class InlineStyle : StylistTarget<RuleNode>, StyleHolder {
     override fun makeStyle(): String {
         return rules.joinToString("; ") { "${it.ruleName}: ${it.ruleValue}" }
     }
+
+    override fun copy() = InlineStyle(this)
 }

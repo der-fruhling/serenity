@@ -2,7 +2,6 @@ package net.derfruhling.serenity.embeds
 
 import net.derfruhling.serenity.PageContract
 import net.derfruhling.serenity.elements.HeadContext
-import net.derfruhling.serenity.extend
 import net.derfruhling.serenity.modularity.extension.AbstractPageExtension
 import net.derfruhling.serenity.modularity.extension.PageExtensionPoints
 
@@ -17,7 +16,7 @@ class Embed : AbstractPageExtension<MutableEmbedConfig>() {
     override fun initialize(extends: PageExtensionPoints) {
         extends.head {
             with(HeadContext) {
-                for(embed in config.embeds) {
+                for (embed in config.embeds) {
                     with(embed) { content(config) }
                 }
             }

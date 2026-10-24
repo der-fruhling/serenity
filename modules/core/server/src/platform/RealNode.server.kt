@@ -188,6 +188,8 @@ actual class RealDocument actual constructor(actual override val node: Underlyin
     override val element: Element
         get() = node
 
+    actual constructor() : this(Document(null))
+
     object UnsupportedAttributeSet : AbstractMutableSet<RealAttribute>() {
         override fun add(element: RealAttribute): Boolean {
             throw UnsupportedOperationException()

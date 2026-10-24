@@ -85,7 +85,7 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
         val classId = annotation.classId
 
         override fun visitDeclaration(declaration: IrDeclarationBase): IrStatement {
-            if(!declaration.hasAnnotation(classId)) {
+            if (!declaration.hasAnnotation(classId)) {
                 declaration.copyAnnotationsFrom(container)
             }
 
@@ -189,7 +189,8 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
                                         targetFun,
                                         subMap
                                     )
-                                    fn.parameters = fn.parameters.filter { it.kind != IrParameterKind.DispatchReceiver }
+                                    fn.parameters =
+                                        fn.parameters.filter { it.kind != IrParameterKind.DispatchReceiver }
                                 },
                                 IrStatementOrigin.LAMBDA
                             ).also {
@@ -205,7 +206,13 @@ class IrSidedFunctionBodyDeleter(private val context: IrPluginContext) : Abstrac
                 }
 
                 if (expr is IrFunctionExpression) {
-                    expr.function.copyAnnotationsFrom(AnnotationContainerImpl(side.createAnnotation(finder)))
+                    expr.function.copyAnnotationsFrom(
+                        AnnotationContainerImpl(
+                            side.createAnnotation(
+                                finder
+                            )
+                        )
+                    )
                 }
             }
 

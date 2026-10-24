@@ -10,7 +10,6 @@ import kotlinx.coroutines.Job
 import net.derfruhling.serenity.HtmlComposable
 import net.derfruhling.serenity.InternalPageEntryPoint
 import net.derfruhling.serenity.htmlComposer
-import net.derfruhling.serenity.ifClient
 import net.derfruhling.serenity.platform.EventHandlerNode
 import net.derfruhling.serenity.platform.HtmlApplier
 import net.derfruhling.serenity.serial.SnapshotContext
@@ -31,21 +30,21 @@ actual class EventContext internal constructor(
 @OptIn(InternalPageEntryPoint::class)
 @Composable
 @HtmlComposable
-actual fun <T> On(type: EventType<T>, fn: Handler<T>) {
+actual fun <T : Event<*>> On(type: EventType<T>, fn: Handler<T>) {
     val lambda = remember(type, fn) {
         { e: T ->
             htmlComposer.snapshot.enter {
                 context(EventContext(htmlComposer.snapshot, type)) {
-                    e.fn()
+                    with(fn) {
+                        e.invoke()
+                    }
                 }
             }
         }
     }
 
-    ifClient {
-        ComposeNode<EventHandlerNode<T>, HtmlApplier>(::EventHandlerNode, update = {
-            set(type) { this.type = type }
-            set(lambda) { this.fn = lambda }
-        })
-    }
+    ComposeNode<EventHandlerNode<T>, HtmlApplier>(::EventHandlerNode, update = {
+        set(type) { this.type = type }
+        set(lambda) { this.fn = lambda }
+    })
 }

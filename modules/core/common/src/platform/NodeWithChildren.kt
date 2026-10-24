@@ -175,4 +175,16 @@ sealed class NodeWithChildren<This : NodeWithChildren<This, U>, U : RealElementL
     fun findDescendentNamed(name: Name, maxDepth: Int): ElementNode? {
         return descendentsMaxDepth(maxDepth).find { it is ElementNode && it.name == name } as ElementNode?
     }
+
+    abstract fun shallowCopy(): NodeWithChildren<This, U>
+
+    override fun deepCopy(): ComposeNodeWithReal<U> {
+        val copy = shallowCopy()
+
+        for (child in children) {
+            copy.add(child.deepCopy())
+        }
+
+        return copy
+    }
 }

@@ -11,7 +11,7 @@ publishing {
 }
 
 afterEvaluate {
-    val repoName = if("SNAPSHOT" in (project.version as String)) {
+    val repoName = if ("SNAPSHOT" in (project.version as String)) {
         "maven-snapshot"
     } else {
         "maven-release"
@@ -23,8 +23,10 @@ afterEvaluate {
                 name = "Nexus"
 
                 credentials {
-                    username = project.findProperty("aanexus.user")?.toString() ?: System.getenv("AA_USERNAME")
-                    password = project.findProperty("aanexus.key")?.toString() ?: System.getenv("AA_PASSWORD")
+                    username = project.findProperty("aanexus.user")?.toString()
+                        ?: System.getenv("AA_USERNAME")
+                    password = project.findProperty("aanexus.key")?.toString()
+                        ?: System.getenv("AA_PASSWORD")
                 }
             }
         }

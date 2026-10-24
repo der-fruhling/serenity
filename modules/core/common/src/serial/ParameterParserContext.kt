@@ -11,7 +11,8 @@ class ParameterParserContext {
     @PublishedApi
     @UsedByGeneratedCode
     internal fun <T> getParser(kType: KType): ParameterParser<T> {
-        return (parsers[kType] ?: throw IllegalStateException("type $kType has no registered parameter parser")) as ParameterParser<T>
+        return (parsers[kType]
+            ?: throw IllegalStateException("type $kType has no registered parameter parser")) as ParameterParser<T>
     }
 
     @PublishedApi

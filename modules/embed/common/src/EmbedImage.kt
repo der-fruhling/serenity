@@ -20,7 +20,7 @@ class EmbedImage(from: MutableEmbedImage) : Extended(from) {
 }
 
 inline fun <T> Int.maybe(fn: (Int) -> T): T? {
-    return if(this != -1) {
+    return if (this != -1) {
         fn(this)
     } else null
 }

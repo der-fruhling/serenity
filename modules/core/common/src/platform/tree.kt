@@ -1,8 +1,11 @@
 package net.derfruhling.serenity.platform
 
 import net.derfruhling.serenity.Name
+import net.derfruhling.serenity.annotations.UnescapedTextDanger
 import net.derfruhling.serenity.attribute.Attribute
 import net.derfruhling.serenity.attribute.HtmlAttributes
+import net.derfruhling.serenity.event.Event
+import net.derfruhling.serenity.event.EventType
 import kotlin.jvm.JvmInline
 
 @JvmInline
@@ -28,10 +31,29 @@ value class Builder<N : ComposeNode>(val node: N) {
         node.insert(node.children.size, this)
     }
 
+    @UnescapedTextDanger
+    fun data(content: String): DataNode = DataNode().apply {
+        require(node is NodeWithChildren<*, *>)
+        textContent = content
+        node.insert(node.children.size, this)
+    }
+
     fun <T : Any> attribute(name: Attribute<T>, value: T?) {
         require(node is ElementNode)
         node.attribute(name, value)
     }
+
+    fun attribute(name: Attribute<Boolean>, value: Boolean) {
+        require(node is ElementNode)
+        node.attribute(name, value)
+    }
+
+    fun <T : Event<*>> eventHandler(event: EventType<T>): EventHandlerNode<T> =
+        EventHandlerNode<T>().apply {
+            require(node is ElementNode)
+            type = event
+            node.insert(node.children.size, this)
+        }
 
     inline fun page(
         title: String,

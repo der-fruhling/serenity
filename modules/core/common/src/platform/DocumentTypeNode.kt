@@ -45,8 +45,14 @@ class DocumentTypeNode : ComposeNodeWithReal<RealDocumentType>, ChildNode<Docume
     }
 
     constructor() : super()
-
     constructor(real: RealDocumentType) : super(real)
+
+    @OptIn(RequiresRealizationCheck::class)
+    constructor(from: DocumentTypeNode) : this() {
+        type = from.type
+        public = from.public
+        system = from.system
+    }
 
     override fun format(fmt: Formatter) {
         fmt.enter(Formatter.Begin.VALUE) {
@@ -70,4 +76,6 @@ class DocumentTypeNode : ComposeNodeWithReal<RealDocumentType>, ChildNode<Docume
         require(newParent is Document) { "Document types can only be added to documents" }
         parent = newParent
     }
+
+    override fun deepCopy() = DocumentTypeNode(this)
 }

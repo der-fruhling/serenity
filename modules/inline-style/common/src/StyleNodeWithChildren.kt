@@ -59,4 +59,6 @@ sealed class StyleNodeWithChildren : StyleNode() {
         for (c in children) removeParent(c)
         children.clear()
     }
+
+    abstract override fun deepCopy(): StyleNodeWithChildren
 }

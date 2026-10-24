@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinTest
-import kotlin.jvm.java
 
 plugins {
     id("net.derfruhling.serenity.base") apply false

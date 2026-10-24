@@ -5,10 +5,10 @@ import net.derfruhling.serenity.event.EventType
 import kotlin.properties.Delegates
 
 actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>() {
-    actual var type: EventType<T> by Delegates.notNull()
+    actual override var type: EventType<T> by Delegates.notNull()
     actual inline var fn: (T) -> Unit
         get() = {}
-        set(value) {}
+        set(_) {}
     actual override val index: Index<EventHandlerNode<T>> = Index(this)
     actual override var parent: NodeWithChildren<*, *>? = null
 
@@ -21,6 +21,12 @@ actual class EventHandlerNode<T> : AbstractEventHandlerNode<T>() {
             fmt.enter(Formatter.Begin.DEBUG, "EventHandler") {
                 write(type.name)
             }
+        }
+    }
+
+    actual override fun deepCopy(): EventHandlerNode<T> {
+        return EventHandlerNode<T>().also {
+            it.type = type
         }
     }
 }

@@ -1,5 +1,7 @@
 package net.derfruhling.serenity.event
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import kotlinx.datetime.Month
 import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.annotations.Since
@@ -12,6 +14,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 @WidelyAvailable
+@Immutable
 interface Event<T : EventTarget> {
     val bubbles: Boolean
     val cancelable: Boolean
@@ -48,5 +51,9 @@ inline fun <reified T : EventTarget> Event<*>.checkType(): Event<T> {
     return this as Event<T>
 }
 
-typealias Handler<T> = @ClientOnly context(EventContext) T.() -> Unit
-typealias Handler2<T, U> = @ClientOnly context(EventContext) T.(U) -> Unit
+@Stable
+fun interface Handler<in T : Event<*>> {
+    @ClientOnly
+    context(_: EventContext)
+    fun T.invoke()
+}

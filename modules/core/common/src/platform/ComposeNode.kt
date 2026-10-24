@@ -14,7 +14,11 @@ sealed interface ComposeNode {
     fun reuse() {}
 
     fun format(fmt: Formatter)
+
+    fun deepCopy(): ComposeNode
 }
+
+sealed interface ComparableComposeNode : ComposeNode, Comparable<ComposeNode>
 
 val ComposeNode.textContent: String
     get() = when (this) {

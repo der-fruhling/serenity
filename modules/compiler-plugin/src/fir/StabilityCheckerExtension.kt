@@ -29,20 +29,28 @@ class StabilityCheckerExtension(session: FirSession) : FirAdditionalCheckersExte
         )
         override fun check(declaration: FirClassLikeDeclaration) {
             val applicableAnnotations = declaration.annotations.filter {
-                it.annotationTypeRef.toClassLikeSymbol(session)!!.hasAnnotation(Names.androidxStableMarkerClass, session)
+                it.annotationTypeRef.toClassLikeSymbol(session)!!
+                    .hasAnnotation(Names.androidxStableMarkerClass, session)
             }
 
-            if(applicableAnnotations.isNotEmpty()) {
-                val isImmutable = applicableAnnotations.any { it.annotationTypeRef.toClassLikeSymbol(session)!!.classId == Names.androidxImmutableClass }
+            if (applicableAnnotations.isNotEmpty()) {
+                val isImmutable =
+                    applicableAnnotations.any { it.annotationTypeRef.toClassLikeSymbol(session)!!.classId == Names.androidxImmutableClass }
 
                 declaration.acceptChildren(object : FirVisitorVoid() {
                     override fun visitElement(element: FirElement) {}
 
                     override fun visitProperty(property: FirProperty) {
-                        if(property.setter != null && (isImmutable || !property.hasAnnotation(Names.notifiedRuntimeClass, session))) {
-                            reporter.reportOn(property.source, if(isImmutable) {
-                                SerenityWarnings.MUTABLE_PROPERTY
-                            } else SerenityWarnings.UNSTABLE_PROPERTY)
+                        if (property.setter != null && (isImmutable || !property.hasAnnotation(
+                                Names.notifiedRuntimeClass,
+                                session
+                            ))
+                        ) {
+                            reporter.reportOn(
+                                property.source, if (isImmutable) {
+                                    SerenityWarnings.MUTABLE_PROPERTY
+                                } else SerenityWarnings.UNSTABLE_PROPERTY
+                            )
                         }
                     }
                 })

@@ -3,7 +3,9 @@
 package net.derfruhling.serenity
 
 import androidx.compose.runtime.Immutable
-import kotlinx.serialization.*
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.Serializable
 
 @Immutable
 @Polymorphic

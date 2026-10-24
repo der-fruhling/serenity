@@ -17,6 +17,7 @@ kotlin {
                 api(project(":serenity-core"))
                 api(libs.kotlinx.coroutines.core)
                 api(libs.kotlinx.coroutines.test)
+                implementation(kotlin("test"))
             }
         }
 

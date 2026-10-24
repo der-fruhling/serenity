@@ -32,5 +32,7 @@ sealed class StyleNode : Apply<StyleNode, StyleNodeWithChildren> {
     override fun clear() {
         throw UnsupportedOperationException("This node cannot have children")
     }
+
+    abstract fun deepCopy(): StyleNode
 }
 

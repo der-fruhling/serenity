@@ -23,13 +23,13 @@ buildCache {
     remote<HttpBuildCache> {
         url = uri("https://maven.amphoreus.info/repository/gradle-build-cache/")
 
-        if(isCiServer || isPublishBuildCacheServer) {
+        if (isCiServer || isPublishBuildCacheServer) {
             isPush = true
             credentials {
                 val props = java.util.Properties()
                 val globalProps = gradle.gradleUserHomeDir.resolve("gradle.properties")
 
-                if(globalProps.exists()) {
+                if (globalProps.exists()) {
                     globalProps.inputStream().use {
                         props.load(it)
                     }
@@ -39,7 +39,8 @@ buildCache {
                     file("gradle.properties").inputStream().use {
                         props.load(it)
                     }
-                } catch(_: FileNotFoundException) {}
+                } catch (_: FileNotFoundException) {
+                }
 
                 username = props.getProperty("aanexus.user") ?: System.getenv("AA_USERNAME")
                 password = props.getProperty("aanexus.key") ?: System.getenv("AA_PASSWORD")

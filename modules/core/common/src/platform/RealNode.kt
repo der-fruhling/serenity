@@ -77,6 +77,8 @@ expect class RealDocument(node: UnderlyingDocument) : RealElementLike {
     @Deprecated("Attributes not supported on document objects", level = DeprecationLevel.ERROR)
     override val attributeSet: MutableSet<RealAttribute>
 
+    constructor()
+
     fun applyFragment(realDocumentFragment: RealDocumentFragment)
 }
 

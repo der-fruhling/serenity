@@ -46,7 +46,11 @@ abstract class ComponentBuilder {
         addChild(Separator(divider = divider, spacing = spacing))
     }
 
-    inline fun container(accentColor: Int? = null, spoiler: Boolean = false, fn: ComponentBuilder.() -> Unit) {
+    inline fun container(
+        accentColor: Int? = null,
+        spoiler: Boolean = false,
+        fn: ComponentBuilder.() -> Unit
+    ) {
         addChild(ContainerBuilder(accentColor, spoiler).apply(fn).build())
     }
 }
@@ -132,10 +136,18 @@ internal class ContainerBuilder(val accentColor: Int?, val spoiler: Boolean) : C
     }
 
     fun build(): Container {
-        return Container(components = components.toList(), accentColor = accentColor, spoiler = spoiler)
+        return Container(
+            components = components.toList(),
+            accentColor = accentColor,
+            spoiler = spoiler
+        )
     }
 }
 
-inline fun container(accentColor: Int? = null, spoiler: Boolean = false, fn: ComponentBuilder.() -> Unit): DiscordComponent {
+inline fun container(
+    accentColor: Int? = null,
+    spoiler: Boolean = false,
+    fn: ComponentBuilder.() -> Unit
+): DiscordComponent {
     return ContainerBuilder(accentColor, spoiler).apply(fn).build()
 }

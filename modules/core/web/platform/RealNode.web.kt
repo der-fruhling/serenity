@@ -212,6 +212,8 @@ actual class RealElement actual constructor(node: UnderlyingElement) : RealEleme
 
 actual class RealDocument actual constructor(actual override val node: UnderlyingDocument) :
     RealElementLike() {
+    actual constructor() : this(document)
+
     object UnsupportedAttributeSet : AbstractMutableSet<RealAttribute>() {
         override fun add(element: RealAttribute): Boolean {
             throw UnsupportedOperationException()

@@ -1,12 +1,14 @@
 package net.derfruhling.serenity.attribute
 
+import net.derfruhling.serenity.Name
+
 private val setParserRegex by lazy { Regex("\\s+") }
 
 abstract class AbstractAttributeContainer {
     protected val map = mutableMapOf<String, Lazy<UntypedAttribute>>()
 
     protected fun <T : Any> register(name: String, lazy: Lazy<Attribute<T>>) =
-        lazy.also { map[name] = it }
+        lazy.also { AttributeRegistry.registerAttribute(Name.of(name), lazy); map[name] = it }
 
     protected inline fun <reified T : Any> name(name: String): Lazy<Attribute<T>> =
         register(name, lazy { Attribute<T>(name) })

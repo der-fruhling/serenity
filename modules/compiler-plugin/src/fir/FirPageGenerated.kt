@@ -2,7 +2,6 @@ package net.derfruhling.serenity.compiler.fir
 
 import org.jetbrains.kotlin.GeneratedDeclarationKey
 import org.jetbrains.kotlin.name.CallableId
-import org.jetbrains.kotlin.name.ClassId
 
 sealed class FirPageGenerated : GeneratedDeclarationKey() {
     data class PageClass(val isSubClass: Boolean) : FirPageGenerated()

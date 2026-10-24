@@ -7,7 +7,6 @@ import net.derfruhling.serenity.elements.HeadContext
 import net.derfruhling.serenity.embeds.AbstractConfiguredEmbed
 import net.derfruhling.serenity.embeds.EmbedConfig
 import net.derfruhling.serenity.embeds.MutableEmbedConfig
-import net.derfruhling.serenity.serial.SerialRegistry
 
 class DiscordEmbed : AbstractConfiguredEmbed<MutableDiscordConfig>() {
     private lateinit var _config: MutableDiscordConfig

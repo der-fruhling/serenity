@@ -12,27 +12,28 @@ import org.jetbrains.kotlin.ir.util.isNullable
 class PathStringInterpolator(val arguments: Map<String, IrExpression>) {
     context(ir: IrBlockBodyBuilder, builtin: IrBuiltIns)
     fun interpolatePath(path: String): IrExpression = with(ir) {
-        if(arguments.isEmpty()) {
+        if (arguments.isEmpty()) {
             irString(path)
         } else {
             ir.irConcat().also {
                 var p = path
 
-                if(p.startsWith('/')) {
+                if (p.startsWith('/')) {
                     p = p.substring(1)
                 }
 
-                for(segment in p.split('/')) {
+                for (segment in p.split('/')) {
                     it.arguments += irString("/")
-                    if(segment.startsWith('{') && segment.endsWith('}')) {
+                    if (segment.startsWith('{') && segment.endsWith('}')) {
                         val name = segment.removeSurrounding("{", "}")
-                        val arg = arguments[name] ?: throw IllegalStateException("Argument $name not available")
+                        val arg = arguments[name]
+                            ?: throw IllegalStateException("Argument $name not available")
 
-                        it.arguments += if(arg.type.isString()) {
+                        it.arguments += if (arg.type.isString()) {
                             arg
                         } else {
                             val toString = arg.type.classOrFail.functionByName("toString")
-                            if(arg.type.isNullable()) {
+                            if (arg.type.isNullable()) {
                                 val value = createTmpVariable(arg, name)
                                 irIfNull(
                                     builtin.stringType,

@@ -7,6 +7,3 @@ abstract class AbstractPageExtension<Cfg> {
     abstract fun initialize(extends: PageExtensionPoints)
 }
 
-abstract class AbstractPageExtensionVoid : AbstractPageExtension<Nothing>() {
-    final override fun configure(page: PageContract, fn: Nothing.() -> Unit) {}
-}

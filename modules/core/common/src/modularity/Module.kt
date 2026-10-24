@@ -36,10 +36,3 @@ abstract class Module<Config : Any>(
     }
 }
 
-abstract class SimpleModule(name: String) : Module<Unit>(name) {
-    final override var mutableConfig: Unit
-        get() = Unit
-        set(_) {}
-
-    final override fun defaultConfig() = Unit
-}

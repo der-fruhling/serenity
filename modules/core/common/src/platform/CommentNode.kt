@@ -5,6 +5,9 @@ import net.derfruhling.serenity.Formatter
 class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real),
     ChildNode<NodeWithChildren<*, *>> {
     constructor() : this(RealComment())
+    constructor(content: String) : this() {
+        commentContent = content
+    }
 
     override val index: Index<CommentNode> = Index(this)
     override var parent: NodeWithChildren<*, *>? = null
@@ -26,4 +29,6 @@ class CommentNode(real: RealComment) : ComposeNodeWithReal<RealComment>(real),
     override fun reuse() {
         commentContent = ""
     }
+
+    override fun deepCopy() = CommentNode(commentContent)
 }

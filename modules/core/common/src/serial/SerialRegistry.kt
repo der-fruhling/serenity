@@ -1,14 +1,10 @@
 package net.derfruhling.serenity.serial
 
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import kotlinx.serialization.serializer
 import net.derfruhling.serenity.PageHolder
 import net.derfruhling.serenity.SerialPageHolder
 import net.derfruhling.serenity.manifest.Manifest
@@ -125,11 +121,17 @@ object SerialRegistry {
         registerManifestEntry(T::class, serializer<T>())
     }
 
-    inline fun <reified T> decode(value: String, deserializationStrategy: DeserializationStrategy<T> = serializersModule.serializer()): T {
+    inline fun <reified T> decode(
+        value: String,
+        deserializationStrategy: DeserializationStrategy<T> = serializersModule.serializer()
+    ): T {
         return json.decodeFromString(deserializationStrategy, value)
     }
 
-    inline fun <reified T> encode(value: T, serializationStrategy: SerializationStrategy<T> = serializersModule.serializer()): String {
+    inline fun <reified T> encode(
+        value: T,
+        serializationStrategy: SerializationStrategy<T> = serializersModule.serializer()
+    ): String {
         return json.encodeToString(serializationStrategy, value)
     }
 

@@ -7,8 +7,10 @@ fun Document.encodeToString(): String {
     if (real.node.documentType() == null) {
         real.node.prependChild(DocumentType("html", "", ""))
     }
-    real.node.outputSettings(OutputSettings(
-        prettyPrint = false
-    ))
+    real.node.outputSettings(
+        OutputSettings(
+            prettyPrint = false
+        )
+    )
     return real.node.html()
 }

@@ -32,7 +32,17 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
                         it.packageName.asString(),
                         it.fileName.replace(".kt", ".stub")
                     ).bufferedWriter().use { writer ->
+                        writer.appendLine(
+                            """
+                            /**
+                             * This file was generated automatically and MUST not be edited.
+                             * All declarations in this file are stubs added to allow their
+                             * presence in server-sided sources.
+                             */
+                        """.trimIndent()
+                        )
                         writer.appendLine("@file:OptIn(UsedByGeneratedCode::class)")
+                        writer.appendAnnotations(it, isFile = true)
                         writer.appendLine("package ${it.packageName.asString()}")
                         writer.appendLine()
                         writer.appendLine("import net.derfruhling.serenity.annotations.*")
@@ -79,8 +89,9 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
                         ClassKind.OBJECT -> "object"
                         else -> "class"
                     }
+                    appendAnnotations(classDeclaration)
                     append(
-                        "@Stub actual ${
+                        "actual ${
                             printModifiers(
                                 classDeclaration,
                                 noExpect = true
@@ -147,7 +158,9 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
         ) {
             if (inExpectContext || property.isExpect) {
                 data.indented(buildString {
-                    append("@Stub actual ${printModifiers(property, noExpect = true)}")
+                    appendAnnotations(property)
+
+                    append("actual ${printModifiers(property, noExpect = true)}")
                     append(if (property.isMutable) "var " else "val ")
                     property.extensionReceiver?.let {
                         append("(${printType(it)}).")
@@ -168,7 +181,8 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
         ) {
             if (inExpectContext || function.isExpect) {
                 data.indented(buildString {
-                    append("@Stub actual ${printModifiers(function, noExpect = true)}fun ")
+                    appendAnnotations(function)
+                    append("actual ${printModifiers(function, noExpect = true)}fun ")
                     function.extensionReceiver?.let {
                         append("(${printType(it)}).")
                     }
@@ -200,6 +214,70 @@ class PlatformDefinitionsProcessor(env: SymbolProcessorEnvironment) : SymbolProc
     class Provider : SymbolProcessorProvider {
         override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
             return PlatformDefinitionsProcessor(environment)
+        }
+    }
+}
+
+private fun Appendable.appendAnnotations(annotated: KSAnnotated, isFile: Boolean = false) {
+    if (isFile) appendLine("@file:Stub")
+    else append("@Stub ")
+    for (annot in annotated.annotations) {
+        val annotName = annot.annotationType.resolve().declaration.qualifiedName!!.asString()
+        if (isFile) {
+            if (annotName == "net.derfruhling.serenity.annotations.GenerateServerStubs" || annotName == "kotlin.OptIn") continue
+
+            append("@file:$annotName")
+        } else {
+            if (annotName.startsWith("kotlin.js")) continue
+
+            append("@$annotName")
+        }
+        if (annot.arguments.isNotEmpty()) {
+            fun putAnnotation(annot: KSAnnotation) {
+                append('(')
+
+                for (arg in annot.arguments) {
+                    arg.name?.let { append("${it.asString()} = ") }
+                    fun putValue(arg: Any?) {
+                        when (val value = arg) {
+                            is KSType -> append(value.declaration.qualifiedName!!.asString() + "::class")
+                            is KSClassDeclaration -> append(value.qualifiedName!!.asString())
+                            is KSAnnotation -> {
+                                append(value.annotationType.resolve().declaration.qualifiedName!!.asString())
+                                putAnnotation(value)
+                            }
+
+                            is Array<*> -> {
+                                append('[')
+                                for (v in value) putValue(v)
+                                append(']')
+                            }
+
+                            is Collection<*> -> {
+                                append('[')
+                                for (v in value) putValue(v)
+                                append(']')
+                            }
+
+                            else -> append(value.toString())
+                        }
+
+                        append(", ")
+                    }
+
+                    putValue(arg.value)
+                }
+
+                append(')')
+            }
+
+            putAnnotation(annot)
+        }
+
+        if (isFile) {
+            appendLine()
+        } else {
+            append(' ')
         }
     }
 }

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import net.derfruhling.serenity.*
-import net.derfruhling.serenity.annotations.ClientOnly
 import net.derfruhling.serenity.attribute.HtmlAttributes
 import net.derfruhling.serenity.event.ClickEvent
 import net.derfruhling.serenity.event.On

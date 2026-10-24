@@ -23,7 +23,7 @@ fun TextInput(
     id: String? = null,
     initialText: String = "",
     placeholder: String? = null,
-    onChange: Handler2<Event<HTMLInputElement>, String>
+    onChange: context(EventContext) Event<HTMLInputElement>.(String) -> Unit
 ) {
     if (hasSpan) {
         Element("span", update = {
@@ -84,9 +84,12 @@ private fun commonTextInput(
     id: String?,
     initialText: String,
     placeholder: String?,
-    onChange: Handler2<Event<HTMLInputElement>, String>
+    onChange: context(EventContext) Event<HTMLInputElement>.(String) -> Unit
 ) {
-    Element("input", update = commonTextInputUpdater(hasSpan, type, name, id, initialText, placeholder)) {
+    Element(
+        "input",
+        update = commonTextInputUpdater(hasSpan, type, name, id, initialText, placeholder)
+    ) {
         On(InputEvent) {
             checkType<HTMLInputElement>()
             onChange(target.value)

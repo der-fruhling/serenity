@@ -40,5 +40,5 @@ open class DocumentFragment(node: RealDocumentFragment) : DocumentLike<DocumentF
 
     constructor() : this(RealDocumentFragment())
 
-    fun deepCopy() = DocumentFragment(real.deepCopy()).also { it.updateReal() }
+    override fun shallowCopy() = DocumentFragment()
 }
