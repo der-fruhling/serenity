@@ -10,8 +10,8 @@ import kotlinx.serialization.Serializable
 // Kotlin/Wasm
 @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
 @Serializable(PolymorphicSerializer::class)
-interface PageHolderFactory<in Ctx, R : PageHolder<R>> {
+interface PageHolderFactory<R : PageHolder<R>> {
     val id: String
     val path: String
-    fun create(ctx: Ctx): R
+    fun create(ctx: PageContext): R
 }

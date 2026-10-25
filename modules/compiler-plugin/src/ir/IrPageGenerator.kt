@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.ir.expressions.impl.*
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrType
+import org.jetbrains.kotlin.ir.types.classOrFail
 import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl
 import org.jetbrains.kotlin.ir.types.impl.makeTypeProjection
@@ -58,6 +59,24 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
     private val jvmNameType by lazy { jvmNameClass.defaultType }
     private val jvmNameConstructor by lazy { jvmNameClass.constructors.single() }
 
+    private val serverOnlyClass by lazy {
+        context.finderForBuiltins()
+            .findClass(Names.serverClass)!!
+    }
+    private val serverOnlyType by lazy { serverOnlyClass.defaultType }
+    private val serverOnlyConstructor by lazy { serverOnlyClass.constructors.single() }
+
+    private val clientOnlyClass by lazy {
+        context.finderForBuiltins()
+            .findClass(Names.clientClass)!!
+    }
+    private val clientOnlyType by lazy { clientOnlyClass.defaultType }
+    private val clientOnlyConstructor by lazy { clientOnlyClass.constructors.single() }
+
+    private val initFunctions: MutableList<IrFunction> = mutableListOf()
+    private val serverInitFunctions: MutableList<IrFunction> = mutableListOf()
+    private val clientInitFunctions: MutableList<IrFunction> = mutableListOf()
+
     private fun jvmName(name: String): IrAnnotation = IrAnnotationImpl(
         SYNTHETIC_OFFSET,
         SYNTHETIC_OFFSET,
@@ -68,6 +87,24 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
     ).also {
         it.arguments[0] = name.toIrConst(context.irBuiltIns.stringType)
     }
+
+    private fun serverOnly(): IrAnnotation = IrAnnotationImpl(
+        SYNTHETIC_OFFSET,
+        SYNTHETIC_OFFSET,
+        serverOnlyType,
+        serverOnlyConstructor,
+        0,
+        0,
+    )
+
+    private fun clientOnly(): IrAnnotation = IrAnnotationImpl(
+        SYNTHETIC_OFFSET,
+        SYNTHETIC_OFFSET,
+        clientOnlyType,
+        clientOnlyConstructor,
+        0,
+        0,
+    )
 
     override fun visitClass(declaration: IrClass, data: FileFinder) {
         val origin = declaration.origin
@@ -142,6 +179,12 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     var contractFunction: IrFunction? = null
                     var thisParam: IrValueParameter? = null
 
+                    initFunctions.clear()
+                    serverInitFunctions.clear()
+                    clientInitFunctions.clear()
+
+                    var initCounter = 0
+
                     actualCallable.transformChildrenVoid(object : IrElementTransformerVoid() {
                         private fun actuallyGetValue(expression: IrGetValue): IrExpression {
                             val parameter = expression.symbol.owner
@@ -171,68 +214,140 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                                 null
                             }
 
-                            if (actualCallableId == Names.pageContractFn) {
-                                val lambda =
-                                    expression.arguments.last()!! as IrFunctionExpression
+                            return when (actualCallableId) {
+                                Names.pageContractFn -> liftPageContractLambda(expression)
+                                Names.pageInitFn -> liftPageInitLambda(expression)
+                                Names.serverInitFn -> liftPageServerInitLambda(expression)
+                                Names.clientInitFn -> liftPageClientInitLambda(expression)
+                                else -> super.visitCall(expression)
+                            }
+                        }
 
-                                contractFunction = context.irFactory.buildFun {
-                                    updateFrom(lambda.function)
-                                    name = Name.special("<page-contract>")
-                                    returnType = lambda.function.returnType
-                                    originalDeclaration = lambda.function
-                                }.also { f ->
-                                    f.annotations += jvmName($$"serenity$pageContract")
-                                    f.copyParametersFrom(lambda.function)
-                                    f.body = lambda.function.moveBodyTo(f)
-                                    thisParam = f.addValueParameter(
-                                        $$"serenity$thisPage",
-                                        declaration.defaultType
-                                    )
-                                    f.startOffset = UNDEFINED_OFFSET
-                                    f.endOffset = UNDEFINED_OFFSET
-                                    f.transformChildrenVoid(object : IrElementTransformerVoid() {
-                                        private fun <T : IrElement> T.erase(): T {
-                                            this.startOffset = UNDEFINED_OFFSET
-                                            this.endOffset = UNDEFINED_OFFSET
-                                            return this
-                                        }
+                        private fun liftPageContractLambda(expression: IrCall): IrGetObjectValueImpl {
+                            val lambda =
+                                expression.arguments.last()!! as IrFunctionExpression
 
-                                        override fun visitElement(element: IrElement): IrElement {
-                                            return super.visitElement(element).erase()
-                                        }
+                            contractFunction = liftLambda(lambda, Name.special("<page-contract>"), $$"serenity$pageContract")
 
-                                        override fun visitExpression(expression: IrExpression): IrExpression {
-                                            return super.visitExpression(expression).erase()
-                                        }
+                            return IrGetObjectValueImpl(
+                                SYNTHETIC_OFFSET,
+                                SYNTHETIC_OFFSET,
+                                context.irBuiltIns.unitType,
+                                context.irBuiltIns.unitClass
+                            )
+                        }
 
-                                        override fun visitDeclaration(declaration: IrDeclarationBase): IrStatement {
-                                            return super.visitDeclaration(declaration).erase()
-                                        }
+                        private fun liftPageInitLambda(expression: IrCall): IrGetObjectValueImpl {
+                            val lambda =
+                                expression.arguments.last()!! as IrFunctionExpression
 
-                                        override fun visitBody(body: IrBody): IrBody {
-                                            return super.visitBody(body).erase()
-                                        }
+                            val index = initCounter++
+                            initFunctions += liftLambda(lambda, Name.special("<page-init-$index>"), $$"serenity$init$$index")
 
-                                        override fun visitGetValue(expression: IrGetValue): IrExpression {
-                                            expression.transformChildrenVoid()
-                                            return actuallyGetValue(expression).erase()
-                                        }
-                                    })
+                            return IrGetObjectValueImpl(
+                                SYNTHETIC_OFFSET,
+                                SYNTHETIC_OFFSET,
+                                context.irBuiltIns.unitType,
+                                context.irBuiltIns.unitClass
+                            )
+                        }
+
+                        private fun liftPageServerInitLambda(expression: IrCall): IrGetObjectValueImpl {
+                            val lambda =
+                                expression.arguments.last()!! as IrFunctionExpression
+
+                            val index = initCounter++
+                            serverInitFunctions += liftLambda(lambda, Name.special("<page-init-$index>"), $$"serenity$init$$index").also {
+                                it.annotations += serverOnly()
+                            }
+
+                            return IrGetObjectValueImpl(
+                                SYNTHETIC_OFFSET,
+                                SYNTHETIC_OFFSET,
+                                context.irBuiltIns.unitType,
+                                context.irBuiltIns.unitClass
+                            )
+                        }
+
+                        private fun liftPageClientInitLambda(expression: IrCall): IrGetObjectValueImpl {
+                            val lambda =
+                                expression.arguments.last()!! as IrFunctionExpression
+
+                            val index = initCounter++
+                            clientInitFunctions += liftLambda(lambda, Name.special("<page-init-$index>"), $$"serenity$init$$index").also {
+                                it.annotations += clientOnly()
+                            }
+
+                            return IrGetObjectValueImpl(
+                                SYNTHETIC_OFFSET,
+                                SYNTHETIC_OFFSET,
+                                context.irBuiltIns.unitType,
+                                context.irBuiltIns.unitClass
+                            )
+                        }
+
+                        private fun liftLambda(
+                            lambda: IrFunctionExpression,
+                            newName: Name,
+                            jvmName: String
+                        ): IrSimpleFunction = context.irFactory.buildFun {
+                            updateFrom(lambda.function)
+                            name = newName
+                            returnType = lambda.function.returnType
+                            originalDeclaration = lambda.function
+                        }.also { f ->
+                            f.annotations += jvmName(jvmName)
+                            thisParam = ir.buildValueParameter(IrValueParameterBuilder().apply {
+                                kind = IrParameterKind.DispatchReceiver
+                                type = declaration.defaultType
+                                name = Name.identifier($$"serenity$thisPage")
+                                isHidden = true
+                            }, f).also { f.parameters += it }
+                            f.copyParametersFrom(lambda.function)
+                            val parameters = lambda.function.parameters.zip(f.parameters.drop(1)).toMap()
+                            f.body = lambda.function.moveBodyTo(f, parameters)
+                            f.startOffset = UNDEFINED_OFFSET
+                            f.endOffset = UNDEFINED_OFFSET
+                            f.transformChildrenVoid(
+                                object : IrElementTransformerVoid() {
+                                    private fun <T : IrElement> T.erase(): T {
+                                        this.startOffset = UNDEFINED_OFFSET
+                                        this.endOffset = UNDEFINED_OFFSET
+                                        return this
+                                    }
+
+                                    override fun visitElement(element: IrElement): IrElement {
+                                        return super.visitElement(element).erase()
+                                    }
+
+                                    override fun visitExpression(expression: IrExpression): IrExpression {
+                                        return super.visitExpression(expression).erase()
+                                    }
+
+                                    override fun visitDeclaration(declaration: IrDeclarationBase): IrStatement {
+                                        return super.visitDeclaration(declaration).erase()
+                                    }
+
+                                    override fun visitBody(body: IrBody): IrBody {
+                                        return super.visitBody(body).erase()
+                                    }
+
+                                    override fun visitGetValue(expression: IrGetValue): IrExpression {
+                                        expression.transformChildrenVoid()
+                                        return actuallyGetValue(expression).erase()
+                                    }
                                 }
-
-                                return IrGetObjectValueImpl(
-                                    SYNTHETIC_OFFSET,
-                                    SYNTHETIC_OFFSET,
-                                    context.irBuiltIns.unitType,
-                                    context.irBuiltIns.unitClass
-                                )
-                            } else return super.visitCall(expression)
+                            )
                         }
                     })
 
-                    contractFunction?.let { fn ->
-                        fn.visibility = DescriptorVisibilities.PRIVATE
-                        declaration.addChild(fn)
+                    for(fn in initFunctions + serverInitFunctions + clientInitFunctions) {
+                        fn.visibility = DescriptorVisibilities.LOCAL
+                    }
+
+                    contractFunction?.let {
+                        it.visibility = DescriptorVisibilities.PRIVATE
+                        declaration.addChild(it)
                     }
 
                     constructor.body = IrBlockBodyBuilder(
@@ -285,8 +400,8 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                                     .single()
 
                             +irCall(contractFunction).also { call ->
-                                call.arguments[0] = irGet(contractBuilder)
-                                call.arguments[1] = irGet(declaration.thisReceiver!!)
+                                call.arguments[0] = irGet(declaration.thisReceiver!!)
+                                call.arguments[1] = irGet(contractBuilder)
                             }
 
                             +irSetField(
@@ -714,6 +829,61 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                                     }
                                 }
                             })
+                        }
+                }
+
+                FirPageGenerated.PageInitFun -> {
+                    val valueParam =
+                        declaration.parameters.find { it.name == Name.identifier("ctx") }!!
+
+                    val pageContextType = finder.findClass(Names.pageContextClass)!!.owner
+                    val registerInitFun by lazy { pageContextType.getSimpleFunction("registerInitFun")!! }
+                    val registerServerInitFun by lazy { pageContextType.getSimpleFunction("registerServerInitFun")!! }
+                    val registerClientInitFun by lazy { pageContextType.getSimpleFunction("registerClientInitFun")!! }
+
+                    declaration.body =
+                        IrBlockBodyBuilder(
+                            context,
+                            Scope(declaration.symbol),
+                            SYNTHETIC_OFFSET,
+                            SYNTHETIC_OFFSET
+                        ).blockBody {
+                            fun callInitFunction(register: IrSimpleFunctionSymbol, fn: IrFunction): IrCall {
+                                fn.parent = declaration
+                                val initFunType = register.owner.parameters.last().type
+                                val thisValueParam = fn.parameters[0]
+                                fn.transformChildrenVoid(object : IrElementTransformerVoid() {
+                                    override fun visitGetValue(expression: IrGetValue): IrExpression {
+                                        return if(expression.symbol == thisValueParam.symbol) {
+                                            irGet(declaration.dispatchReceiverParameter!!)
+                                        } else expression
+                                    }
+                                })
+                                fn.parameters = fn.parameters.drop(1)
+
+                                return irCall(register).also {
+                                    it.arguments[0] = irGet(valueParam)
+                                    it.arguments[1] = IrFunctionExpressionImpl(
+                                        SYNTHETIC_OFFSET,
+                                        SYNTHETIC_OFFSET,
+                                        initFunType,
+                                        fn as IrSimpleFunction,
+                                        IrStatementOrigin.LAMBDA
+                                    )
+                                }
+                            }
+
+                            for(fn in initFunctions) {
+                                +callInitFunction(registerInitFun, fn)
+                            }
+
+                            for(fn in serverInitFunctions) {
+                                +callInitFunction(registerServerInitFun, fn)
+                            }
+
+                            for(fn in clientInitFunctions) {
+                                +callInitFunction(registerClientInitFun, fn)
+                            }
                         }
                 }
 

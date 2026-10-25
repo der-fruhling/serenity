@@ -2,6 +2,7 @@
 
 import net.derfruhling.serenity.annotations.*
 import net.derfruhling.serenity.pageContract
+import net.derfruhling.serenity.pageInit
 import net.derfruhling.serenity.PageHolder
 import net.derfruhling.serenity.PageHolderFactory
 import net.derfruhling.serenity.PageContext
@@ -10,6 +11,10 @@ import androidx.compose.runtime.*
 @Composable
 @Page("/")
 fun IndexPage() {
+    pageInit {
+        println("hello, world!")
+    }
+
     pageContract {
         title = "Hello, world!"
     }
@@ -18,6 +23,10 @@ fun IndexPage() {
 @Composable
 @Page("/")
 fun Page2(param1: String, param2: Int) {
+    pageInit {
+        println("hello, $param1!")
+    }
+
     pageContract {
         title = "Hello, ${param1}!"
     }
@@ -51,12 +60,20 @@ class Test {
     }
 }
 
-inline fun <reified T : PageHolder<T>> accept(factory: PageHolderFactory<PageContext, T>) {
+inline fun <reified T : PageHolder<T>> accept(factory: PageHolderFactory<T>) {
+
+}
+
+fun testSus(fn: suspend () -> Unit) {
 
 }
 
 fun box(): String {
     test { println(this) }
+
+    with(12) {
+        testSus { println(this) }
+    }
 
     val page1 = IndexPage
     val page2 = Page2.of("world", 42)

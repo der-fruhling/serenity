@@ -116,9 +116,9 @@ fun InputsPage() {
         val inputs = remember { mutableStateSetOf<String>() }
 
         var plainText by remember { mutableStateOf("<hello!>") }
-        TextInput(placeholder = "Plain", id = "the-input", onChange = { plainText = it })
+        TextInput(placeholder = "Plain", id = "the-input", onChange = @ClientOnly { plainText = it })
 
-        Button("Save input", onClick = {
+        Button("Save input", onClick = @ClientOnly {
             val input = document.getElementById("the-input")!! as HTMLInputElement
             inputs.add(input.value)
             input.value = ""
@@ -130,13 +130,13 @@ fun InputsPage() {
         TextInput(
             type = TextInputType.SEARCH,
             placeholder = "Search the site...",
-            onChange = { searchText = it }
+            onChange = @ClientOnly { searchText = it }
         )
 
         Text(searchText)
 
         var selection by remember { mutableStateOf("nothing") }
-        Select(onChange = { selection = it }) {
+        Select(onChange = @ClientOnly { selection = it }) {
             Option("nothing", text = "Make a selection", selected = true, disabled = true)
             Option("miaw", text = "Miaw")
             Option("cat", text = "Cat")

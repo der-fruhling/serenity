@@ -1,0 +1,15 @@
+FILE: serverInterface.kt
+    package miaw
+
+    @R|net/derfruhling/serenity/annotations/ServerOnly|() public final fun test(): R|kotlin/Unit| {
+    }
+    public abstract fun interface ClientFun : R|kotlin/Any| {
+        @R|net/derfruhling/serenity/annotations/ClientOnly|() public abstract fun execute(): R|kotlin/Unit|
+
+    }
+    public final fun main(): R|kotlin/Unit| {
+        lval f: R|miaw/ClientFun| = R|miaw/ClientFun|(<L> = ClientFun@fun <anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            R|miaw/test|()
+        }
+        )
+    }

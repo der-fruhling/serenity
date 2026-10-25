@@ -12,9 +12,11 @@ import kotlinx.serialization.Serializable
 // Kotlin/Wasm
 @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
 @Serializable(PolymorphicSerializer::class)
-interface PageHolder<R : PageHolder<R>> : SerialPageHolder, PageHolderFactory<Any?, R> {
+interface PageHolder<R : PageHolder<R>> : SerialPageHolder, PageHolderFactory<R> {
+    fun init(ctx: PageContext)
+
     @Suppress("UNCHECKED_CAST")
-    override fun create(ctx: Any?): R {
-        return this as R
+    override fun create(ctx: PageContext): R {
+        return (this as R).also { it.init(ctx) }
     }
 }

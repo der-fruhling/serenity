@@ -9,14 +9,14 @@ import kotlin.reflect.KClass
 abstract class PageRegistry {
     abstract fun template(fn: @Composable TemplateBuilder.() -> Unit)
 
-    abstract fun <R : PageHolder<R>, T : PageHolderFactory<PageContext, R>> register(
+    abstract fun <R : PageHolder<R>, T : PageHolderFactory<R>> register(
         kClass: KClass<R>,
         kSerializer: KSerializer<R>,
         page: T
     )
 
     @Suppress("UNCHECKED_CAST")
-    inline fun <reified R : PageHolder<R>, reified T : PageHolderFactory<PageContext, R>> register(
+    inline fun <reified R : PageHolder<R>, reified T : PageHolderFactory<R>> register(
         page: T
     ) = register(
         R::class,

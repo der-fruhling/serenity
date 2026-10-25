@@ -40,6 +40,9 @@ object Names {
     val pageContextClass: ClassId = corePackage.classOf("PageContext")
     val pageContractImplClass: ClassId = corePackage.classOf("PageContractBuilder")
     val pageContractFn: CallableId = corePackage.callableOf("pageContract")
+    val pageInitFn: CallableId = corePackage.callableOf("pageInit")
+    val serverInitFn: CallableId = corePackage.callableOf("serverInit")
+    val clientInitFn: CallableId = corePackage.callableOf("clientInit")
     val htmlComposableClass: ClassId = corePackage.classOf("HtmlComposable")
     val invokeCommonEntryPoint: CallableId = corePackage.callableOf("invokeCommonEntryPoint")
     val pageContractImplGetDetails: CallableId =

@@ -72,11 +72,11 @@ data class ActionRow(
         get() = 1
 }
 
-@Serializable(with = UnsafeButtonStyle.Serializer::class)
-internal enum class UnsafeButtonStyle(val number: Int) {
+@Serializable(with = ButtonStyle.Serializer::class)
+enum class ButtonStyle(val number: Int) {
     LINK(5);
 
-    object Serializer : KSerializer<UnsafeButtonStyle> {
+    object Serializer : KSerializer<ButtonStyle> {
         override val descriptor: SerialDescriptor = SerialDescriptor(
             "net.derfruhling.serenity.embeds.discord.UnsafeButtonStyle",
             Int.serializer().descriptor
@@ -84,12 +84,12 @@ internal enum class UnsafeButtonStyle(val number: Int) {
 
         override fun serialize(
             encoder: Encoder,
-            value: UnsafeButtonStyle
+            value: ButtonStyle
         ) {
             encoder.encodeInline(descriptor).encodeInt(value.number)
         }
 
-        override fun deserialize(decoder: Decoder): UnsafeButtonStyle {
+        override fun deserialize(decoder: Decoder): ButtonStyle {
             val int = decoder.decodeInline(descriptor).decodeInt()
             require(int == 5) { "Not a link" }
             return LINK
@@ -105,7 +105,7 @@ data class Emoji(val id: String, val name: String, val animated: Boolean)
 @ConsistentCopyVisibility
 data class Button private constructor(
     val id: Int = -1,
-    private val style: UnsafeButtonStyle,
+    val style: ButtonStyle,
     val label: String? = null,
     val emoji: Emoji? = null,
     @SerialName("custom_id")
@@ -123,7 +123,7 @@ data class Button private constructor(
             emoji: Emoji? = null,
             disabled: Boolean = false,
             id: Int = -1
-        ): Button = Button(id, UnsafeButtonStyle.LINK, label, emoji, url = url, disabled = disabled)
+        ): Button = Button(id, ButtonStyle.LINK, label, emoji, url = url, disabled = disabled)
     }
 }
 

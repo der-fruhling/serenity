@@ -10,6 +10,11 @@ fun testServer(fn: @ServerOnly () -> Unit) {
     fn()
 }
 
+fun interface TestServerOnly {
+    @ServerOnly
+    fun testFn()
+}
+
 fun box(): String {
     testClient {
         println("Hello, $it!")
@@ -18,6 +23,8 @@ fun box(): String {
     testServer {
         println("Hello, server!")
     }
+
+    val testServer = TestServerOnly { println("Oh no!") }
 
     return "OK"
 }

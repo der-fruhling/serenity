@@ -63,8 +63,6 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
             session.symbolProvider.getClassLikeSymbolByClassId(Names.pageFactoryClass)!!
                 .constructType(
                     arrayOf(
-                        session.symbolProvider.getClassLikeSymbolByClassId(Names.pageContextClass)!!
-                            .defaultType(),
                         instanceId.constructClassLikeType()
                     )
                 )
@@ -213,6 +211,13 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                         callableId,
                         context,
                         targetClass
+                    ).symbol
+                )
+
+                "init" -> listOf(
+                    generatePageInitFunction(
+                        callableId,
+                        context
                     ).symbol
                 )
 
@@ -451,7 +456,33 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
 
         isLocal = false
 
-        valueParameters += buildValueParameter {
+        valueParameters += makePageContextParameter(this@buildNamedFunction.symbol)
+    }
+
+    private fun generatePageInitFunction(
+        callableId: CallableId,
+        context: MemberGenerationContext
+    ): FirNamedFunction = buildNamedFunction {
+        resolvePhase = FirResolvePhase.BODY_RESOLVE
+        symbol = FirNamedFunctionSymbol(callableId)
+        dispatchReceiverType = context.owner.defaultType()
+        moduleData = session.moduleData
+        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageInitFun)
+        name = Name.identifier("init")
+        status = FirResolvedDeclarationStatusImpl(
+            Visibilities.Public,
+            Modality.FINAL,
+            EffectiveVisibility.Public
+        ).also { it.isOverride = true }
+
+        returnTypeRef = session.builtinTypes.unitType
+        isLocal = false
+
+        valueParameters += makePageContextParameter(this@buildNamedFunction.symbol)
+    }
+
+    private fun makePageContextParameter(parentSymbol: FirNamedFunctionSymbol): FirValueParameter =
+        buildValueParameter {
             moduleData = session.moduleData
             origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
             returnTypeRef = buildResolvedTypeRef {
@@ -461,9 +492,8 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
             }
             name = Name.identifier("ctx")
             symbol = FirValueParameterSymbol()
-            containingDeclarationSymbol = this@buildNamedFunction.symbol
+            containingDeclarationSymbol = parentSymbol
         }
-    }
 
     private fun generateMainContentFunction(
         callableId: CallableId,
@@ -579,6 +609,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                     Name.identifier("path"),
                     Name.identifier("details"),
                     Name.identifier("extensions"),
+                    Name.identifier("init"),
                     Name.identifier("Main"),
                     Name.identifier("serializer"),
                 )
@@ -591,6 +622,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                     Name.identifier("path"),
                     Name.identifier("details"),
                     Name.identifier("extensions"),
+                    Name.identifier("init"),
                     Name.identifier("Main"),
                 )
             }

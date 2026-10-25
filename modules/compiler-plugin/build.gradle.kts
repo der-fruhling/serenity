@@ -195,6 +195,8 @@ dependencies {
 }
 
 tasks.test {
+    outputs.upToDateWhen { false }
+
     dependsOn(testArtifacts)
     dependsOn(annotationsJvmRuntimeClasspath)
     dependsOn(annotationsJsRuntimeClasspath)

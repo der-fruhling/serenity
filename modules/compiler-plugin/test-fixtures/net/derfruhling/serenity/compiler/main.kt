@@ -1,5 +1,6 @@
 package net.derfruhling.serenity.compiler
 
+import net.derfruhling.serenity.compiler.runners.AbstractJsBoxTest
 import net.derfruhling.serenity.compiler.runners.AbstractJsDiagnosticTest
 import net.derfruhling.serenity.compiler.runners.AbstractJvmBoxTest
 import net.derfruhling.serenity.compiler.runners.AbstractJvmDiagnosticTest

@@ -4,6 +4,7 @@ import net.derfruhling.serenity.compiler.services.configurePlugin
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.test.FirParser
 import org.jetbrains.kotlin.test.builders.TestConfigurationBuilder
+import org.jetbrains.kotlin.test.directives.AsmLikeInstructionListingDirectives
 import org.jetbrains.kotlin.test.directives.CodegenTestDirectives
 import org.jetbrains.kotlin.test.directives.FirDiagnosticsDirectives
 import org.jetbrains.kotlin.test.directives.JvmEnvironmentConfigurationDirectives
@@ -34,6 +35,7 @@ open class AbstractJvmBoxTest : AbstractJvmBlackBoxCodegenTestBase(FirParser.Lig
             +FirDiagnosticsDirectives.FIR_DUMP
             +JvmEnvironmentConfigurationDirectives.FULL_JDK
             JvmEnvironmentConfigurationDirectives.JVM_TARGET.with(JvmTarget.JVM_17)
+            +AsmLikeInstructionListingDirectives.CHECK_ASM_LIKE_INSTRUCTIONS
 
             +CodegenTestDirectives.IGNORE_DEXING // Avoids loading R8 from the classpath.
         }

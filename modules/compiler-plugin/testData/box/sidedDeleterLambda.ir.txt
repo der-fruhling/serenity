@@ -1,4 +1,23 @@
 FILE fqName:<root> fileName:/sidedDeleterLambda.kt
+  CLASS INTERFACE name:TestServerOnly modality:ABSTRACT visibility:public [fun] superTypes:[kotlin.Any]
+    thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.TestServerOnly
+    FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
+      overridden:
+        public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in kotlin.Any
+    FUN FAKE_OVERRIDE name:hashCode visibility:public modality:OPEN returnType:kotlin.Int [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      overridden:
+        public open fun hashCode (): kotlin.Int declared in kotlin.Any
+    FUN FAKE_OVERRIDE name:toString visibility:public modality:OPEN returnType:kotlin.String [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      overridden:
+        public open fun toString (): kotlin.String declared in kotlin.Any
+    FUN name:testFn visibility:public modality:ABSTRACT returnType:kotlin.Unit
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.TestServerOnly
+      annotations:
+        ServerOnly
   FUN name:box visibility:public modality:FINAL returnType:kotlin.String
     BLOCK_BODY
       CALL 'public final fun testClient (fn: @[ClientOnly] @[ExtensionFunctionType] kotlin.Function2<kotlin.Int, kotlin.String, kotlin.Unit>): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
@@ -19,6 +38,13 @@ FILE fqName:<root> fileName:/sidedDeleterLambda.kt
             BLOCK_BODY
               CALL 'public final fun println (message: kotlin.Any?): kotlin.Unit declared in kotlin.io' type=kotlin.Unit origin=null
                 ARG message: CONST String type=kotlin.String value="Hello, server!"
+      VAR name:testServer type:<root>.TestServerOnly [val]
+        TYPE_OP type=<root>.TestServerOnly origin=SAM_CONVERSION typeOperand=<root>.TestServerOnly
+          FUN_EXPR type=kotlin.Function0<kotlin.Unit> origin=LAMBDA
+            FUN LOCAL_FUNCTION_FOR_LAMBDA name:<anonymous> visibility:local modality:FINAL returnType:kotlin.Unit
+              BLOCK_BODY
+                CALL 'public final fun println (message: kotlin.Any?): kotlin.Unit declared in kotlin.io' type=kotlin.Unit origin=null
+                  ARG message: CONST String type=kotlin.String value="Oh no!"
       RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
         CONST String type=kotlin.String value="OK"
   FUN name:testClient visibility:public modality:FINAL returnType:kotlin.Unit

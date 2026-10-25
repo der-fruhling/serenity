@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package net.derfruhling.serenity
 
 import androidx.compose.runtime.*
@@ -5,6 +7,7 @@ import androidx.compose.runtime.tooling.CompositionObserver
 import androidx.compose.runtime.tooling.ObservableComposition
 import androidx.compose.runtime.tooling.setObserver
 import io.github.oshai.kotlinlogging.KotlinLogging
+import js.errors.toJsErrorLike
 import js.objects.Object
 import js.objects.TypedPropertyDescriptor
 import js.promise.Promise
@@ -34,6 +37,7 @@ import web.location.location
 import web.prompts.alert
 import web.url.URLSearchParams
 import web.window.window
+import kotlin.coroutines.CoroutineContext
 
 @Retention(AnnotationRetention.BINARY)
 @RequiresOptIn(
@@ -76,6 +80,26 @@ private external fun createSerenityDebugProperty(
 @OptIn(ExperimentalWasmJsInterop::class)
 @JsFun("() => ({})")
 private external fun emptyObject(): JsAny
+
+private class WebPageContext(val scope: CoroutineScope) : PageContext() {
+    val jobs = mutableListOf<Job>()
+
+    private val pageInit = PageClientInit()
+
+    override fun getParameter(name: String): String? {
+        throw UnsupportedOperationException("This shouldn't be called on the client (for now)")
+    }
+
+    override fun registerInitFun(fn: suspend PageInit.() -> Unit) {
+        jobs += scope.launch { pageInit.fn() }
+    }
+
+    suspend fun use(page: PageHolder<*>) {
+        page.init(this)
+
+        jobs.joinAll()
+    }
+}
 
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class WebEntryPoint private constructor() : CommonContext {
@@ -123,7 +147,9 @@ internal class WebEntryPoint private constructor() : CommonContext {
         fun build() = list.toTypedArray()
     }
 
-    private lateinit var scope: CoroutineScope
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock)
+    private lateinit var initJob: Job
+    private var updateJob: Job? = null
     private val manifestDeferred = CompletableDeferred<Manifest>()
 
     suspend fun reinitialize() {
@@ -135,8 +161,7 @@ internal class WebEntryPoint private constructor() : CommonContext {
 
     @OptIn(InternalPageEntryPoint::class)
     private fun initialize() {
-        scope = CoroutineScope(Dispatchers.Main.immediate + AnimationFrameClock)
-        scope.launch {
+        initJob = scope.launch {
             val initJob = launch { reinitialize() }
 
             htmlContext = HtmlCompositionContext(Recomposer(coroutineContext))
@@ -267,12 +292,26 @@ internal class WebEntryPoint private constructor() : CommonContext {
     }
 
     internal fun setPageDirect(page: PageHolder<*>) {
-        actualCurrentPage = page
-        this.page = page
-        extensionController.setPage(page)
+        val oldJob = updateJob
+        updateJob = scope.launch {
+            oldJob?.cancelAndJoin()
+            try {
+                actualCurrentPage = page
+                this@WebEntryPoint.page = page
+                val clientContext = WebPageContext(this)
 
-        if (first) {
-            initialize()
+                clientContext.use(page)
+                extensionController.setPage(page)
+
+                if (first) {
+                    initialize()
+                }
+            } catch(e: Exception) {
+                logger.error(e) { "An error occurred initializing page $page" }
+                alert("An error occurred: ${e::class.simpleName}\n${e.message}")
+            } finally {
+                updateJob = null
+            }
         }
     }
 
@@ -280,7 +319,7 @@ internal class WebEntryPoint private constructor() : CommonContext {
     fun tearDown() {
         first = true
         htmlComposer.close()
-        scope.cancel()
+        initJob.cancel()
     }
 
     companion object {

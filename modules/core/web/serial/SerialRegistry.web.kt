@@ -41,7 +41,7 @@ fun SerialRegistry.registerClientPages(fn: PageRegistry.() -> Unit) {
             pageTemplate = PageTemplate(fn)
         }
 
-        override fun <R : PageHolder<R>, T : PageHolderFactory<PageContext, R>> register(
+        override fun <R : PageHolder<R>, T : PageHolderFactory<R>> register(
             kClass: KClass<R>,
             kSerializer: KSerializer<R>,
             page: T
