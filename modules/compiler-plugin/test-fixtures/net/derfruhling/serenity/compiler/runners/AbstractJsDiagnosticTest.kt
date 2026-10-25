@@ -27,6 +27,7 @@ open class AbstractJsDiagnosticTest : AbstractJsDiagnosticWithBackendTestBase(Fi
         defaultDirectives {
             +FirDiagnosticsDirectives.FIR_DUMP
             +FirDiagnosticsDirectives.DISABLE_GENERATED_FIR_TAGS
+            +FirDiagnosticsDirectives.DISABLE_FIR_DUMP_HANDLER
         }
 
         configurePlugin()

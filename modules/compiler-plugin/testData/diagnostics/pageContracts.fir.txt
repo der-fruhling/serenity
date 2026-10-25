@@ -1,0 +1,159 @@
+FILE: pageContracts.kt
+    package miaw
+
+    @R|net/derfruhling/serenity/annotations/Page|(path = String(/test) [evaluated = String(/test)]) @R|androidx/compose/runtime/Composable|() public final fun wellFormed(): R|kotlin/Unit| {
+        R|net/derfruhling/serenity/pageInit|(<L> = pageInit@fun R|net/derfruhling/serenity/PageInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
+            ^@pageInit Unit
+        }
+        )
+        R|net/derfruhling/serenity/serverInit|(<L> = serverInit@fun R|net/derfruhling/serenity/PageServerInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=AT_MOST_ONCE>  {
+            ^@serverInit Unit
+        }
+        )
+        R|net/derfruhling/serenity/clientInit|(<L> = clientInit@fun R|net/derfruhling/serenity/PageClientInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=AT_MOST_ONCE>  {
+            ^@clientInit Unit
+        }
+        )
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
+            ^@pageContract Unit
+        }
+        )
+        R|kotlin/io/println|(String(Yep!))
+    }
+    @R|net/derfruhling/serenity/annotations/Page|(path = String(/test) [evaluated = String(/test)]) @R|androidx/compose/runtime/Composable|() public final fun misplacedBody(): R|kotlin/Unit| {
+        R|net/derfruhling/serenity/pageInit|(<L> = pageInit@fun R|net/derfruhling/serenity/PageInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
+            ^@pageInit Unit
+        }
+        )
+        R|net/derfruhling/serenity/serverInit|(<L> = serverInit@fun R|net/derfruhling/serenity/PageServerInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=AT_MOST_ONCE>  {
+            ^@serverInit Unit
+        }
+        )
+        R|net/derfruhling/serenity/clientInit|(<L> = clientInit@fun R|net/derfruhling/serenity/PageClientInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=AT_MOST_ONCE>  {
+            ^@clientInit Unit
+        }
+        )
+        R|kotlin/io/println|(String(Nope!))
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
+            ^@pageContract Unit
+        }
+        )
+    }
+    @R|net/derfruhling/serenity/annotations/Page|(path = String(/test) [evaluated = String(/test)]) @R|androidx/compose/runtime/Composable|() public final fun misplacedInit(): R|kotlin/Unit| {
+        R|net/derfruhling/serenity/pageContract|(<L> = pageContract@fun R|net/derfruhling/serenity/PageContract|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
+            ^@pageContract Unit
+        }
+        )
+        R|net/derfruhling/serenity/pageInit|(<L> = pageInit@fun R|net/derfruhling/serenity/PageInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=EXACTLY_ONCE>  {
+            ^@pageInit Unit
+        }
+        )
+        R|net/derfruhling/serenity/serverInit|(<L> = serverInit@fun R|net/derfruhling/serenity/PageServerInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=AT_MOST_ONCE>  {
+            ^@serverInit Unit
+        }
+        )
+        R|net/derfruhling/serenity/clientInit|(<L> = clientInit@fun R|net/derfruhling/serenity/PageClientInit|.<anonymous>(): R|kotlin/Unit| <inline=NoInline, kind=AT_MOST_ONCE>  {
+            ^@clientInit Unit
+        }
+        )
+        R|kotlin/io/println|(String(Nope!))
+    }
+FILE: miaw/wellFormed.kt
+    package miaw
+
+    public final object wellFormed : R|net/derfruhling/serenity/PageHolder<miaw/wellFormed>|, R|net/derfruhling/serenity/PageSerializerProvider<miaw/wellFormed>| {
+        public final val id: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val path: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val details: R|net/derfruhling/serenity/PageDetails|
+            public get(): R|net/derfruhling/serenity/PageDetails|
+
+        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+
+        public final override fun init(ctx: R|net/derfruhling/serenity/PageContext|): R|kotlin/Unit|
+
+        @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
+
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<miaw/wellFormed>|
+
+        private final object Serializer : R|kotlinx/serialization/KSerializer<miaw/wellFormed>| {
+            public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+            public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|miaw/wellFormed|): R|kotlin/Unit|
+
+            public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|miaw/wellFormed|
+
+        }
+
+    }
+FILE: miaw/misplacedBody.kt
+    package miaw
+
+    public final object misplacedBody : R|net/derfruhling/serenity/PageHolder<miaw/misplacedBody>|, R|net/derfruhling/serenity/PageSerializerProvider<miaw/misplacedBody>| {
+        public final val id: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val path: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val details: R|net/derfruhling/serenity/PageDetails|
+            public get(): R|net/derfruhling/serenity/PageDetails|
+
+        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+
+        public final override fun init(ctx: R|net/derfruhling/serenity/PageContext|): R|kotlin/Unit|
+
+        @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
+
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<miaw/misplacedBody>|
+
+        private final object Serializer : R|kotlinx/serialization/KSerializer<miaw/misplacedBody>| {
+            public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+            public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|miaw/misplacedBody|): R|kotlin/Unit|
+
+            public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|miaw/misplacedBody|
+
+        }
+
+    }
+FILE: miaw/misplacedInit.kt
+    package miaw
+
+    public final object misplacedInit : R|net/derfruhling/serenity/PageHolder<miaw/misplacedInit>|, R|net/derfruhling/serenity/PageSerializerProvider<miaw/misplacedInit>| {
+        public final val id: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val path: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val details: R|net/derfruhling/serenity/PageDetails|
+            public get(): R|net/derfruhling/serenity/PageDetails|
+
+        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+
+        public final override fun init(ctx: R|net/derfruhling/serenity/PageContext|): R|kotlin/Unit|
+
+        @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
+
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<miaw/misplacedInit>|
+
+        private final object Serializer : R|kotlinx/serialization/KSerializer<miaw/misplacedInit>| {
+            public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+            public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|miaw/misplacedInit|): R|kotlin/Unit|
+
+            public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|miaw/misplacedInit|
+
+        }
+
+    }

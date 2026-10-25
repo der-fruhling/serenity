@@ -1,0 +1,55 @@
+FILE: duplicatePageFun.kt
+    package miaw
+
+    @R|net/derfruhling/serenity/annotations/Page|(path = String(/test) [evaluated = String(/test)]) @R|androidx/compose/runtime/Composable|() public final fun test(param1: R|kotlin/Int|): R|kotlin/Unit| {
+    }
+    @R|net/derfruhling/serenity/annotations/Page|(path = String(/test) [evaluated = String(/test)]) @R|androidx/compose/runtime/Composable|() public final fun test(param2: R|kotlin/Long|): R|kotlin/Unit| {
+    }
+FILE: miaw/test.kt
+    package miaw
+
+    public final object test : R|net/derfruhling/serenity/PageHolderFactory<miaw/test.Instance>|, R|net/derfruhling/serenity/PageSerializerProvider<miaw/test.Instance>| {
+        public final val id: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val path: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final override fun create(ctx: R|net/derfruhling/serenity/PageContext|): R|miaw/test.Instance|
+
+        public final override fun of(param1: R|kotlin/Int|): R|miaw/test.Instance|
+
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<miaw/test.Instance>|
+
+        public final class Instance : R|net/derfruhling/serenity/PageHolder<miaw/test.Instance>| {
+            public final val id: R|kotlin/String|
+                public get(): R|kotlin/String|
+
+            public final val path: R|kotlin/String|
+                public get(): R|kotlin/String|
+
+            public final val details: R|net/derfruhling/serenity/PageDetails|
+                public get(): R|net/derfruhling/serenity/PageDetails|
+
+            public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+                public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+
+            public final override fun init(ctx: R|net/derfruhling/serenity/PageContext|): R|kotlin/Unit|
+
+            @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
+
+            internal constructor(serenity$identifier: R|kotlin/Unit|, param1: R|kotlin/Int|): R|miaw/test.Instance|
+
+            private final object Serializer : R|kotlinx/serialization/KSerializer<miaw/test.Instance>| {
+                public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                    public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+                public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|miaw/test.Instance|): R|kotlin/Unit|
+
+                public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|miaw/test.Instance|
+
+            }
+
+        }
+
+    }

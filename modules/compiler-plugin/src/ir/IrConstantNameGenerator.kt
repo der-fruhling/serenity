@@ -56,8 +56,6 @@ class IrConstantNameGenerator(private val context: IrPluginContext) : AbstractSe
                 0
             ).also {
                 val hash = xx3.hashBytes((string.value as String).toByteArray())
-                context.diagnosticReporter.at(it, currentDeclaration)
-                    .report(SerenityWarnings.HELP_CONSTANT_NAME, string.value as String, hash)
                 it.arguments[0] = hash
                     .toIrConst(textType.typeWith().unboxInlineClass())
             }

@@ -27,6 +27,7 @@ import net.derfruhling.serenity.ifServerStatic
 import net.derfruhling.serenity.localization.TextOf
 import net.derfruhling.serenity.localization.n
 import net.derfruhling.serenity.pageContract
+import net.derfruhling.serenity.pageInit
 
 private val logger = KotlinLogging.logger {}
 

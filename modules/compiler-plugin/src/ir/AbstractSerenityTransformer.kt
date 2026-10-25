@@ -22,10 +22,6 @@ abstract class AbstractSerenityTransformer : IrElementTransformerVoid(),
         return super.visitFile(declaration)
     }
 
-    override fun lower(irModule: IrModuleFragment) {
-        irModule.transformChildrenVoid(this)
-    }
-
     override fun lower(irFile: IrFile) {
         irFile.transformChildrenVoid(this)
     }

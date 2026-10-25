@@ -1,7 +1,7 @@
 package net.derfruhling.serenity.compiler.ir
 
 import net.derfruhling.serenity.compiler.Names
-import net.derfruhling.serenity.compiler.fir.FirPageGenerated
+import net.derfruhling.serenity.compiler.PageKey
 import net.derfruhling.serenity.compiler.hashFunctionName
 import net.derfruhling.serenity.compiler.ir.components.PathStringInterpolator
 import org.jetbrains.kotlin.backend.common.descriptors.synthesizedName
@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.ir.expressions.impl.*
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.types.classOrFail
 import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl
 import org.jetbrains.kotlin.ir.types.impl.makeTypeProjection
@@ -113,7 +112,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
             val ir = context.irFactory
             val finder = context.finderForSource(declaration.file)
             when (val key = origin.pluginKey) {
-                is FirPageGenerated.PageClass -> {
+                is PageKey.PageClass -> {
                     val actualCallable = getActualCallable(currentClassId, declaration).owner
                     arguments = actualCallable.parameters.associateWith { arg ->
                         declaration.addProperty {
@@ -425,7 +424,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                FirPageGenerated.PageFactoryClass -> {
+                PageKey.PageFactoryClass -> {
                     val serialRegistryClass = finder.findClass(Names.serialRegistryClass)!!
                     val parserContextClass = finder.findClass(Names.parameterParserContextClass)!!
                     val parserClass = finder.findClass(Names.parameterParserClass)!!
@@ -494,7 +493,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     super.visitClass(declaration, data)
                 }
 
-                FirPageGenerated.PageSerializerClass -> {
+                PageKey.PageSerializerClass -> {
                     declaration.addSimpleDelegatingConstructor(
                         context.irBuiltIns.anyClass.constructors.single().owner,
                         context.irBuiltIns,
@@ -524,13 +523,13 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
             val currentClassId = declaration.parentAsClass.classId!!
 
             when (origin.pluginKey) {
-                FirPageGenerated.PageIdProperty -> {
+                PageKey.PageIdProperty -> {
                     val id = hashFunctionName(currentClassId)
                     declaration.backingField!!.initializer =
                         context.irFactory.createExpressionBody(id.toIrConst(context.irBuiltIns.stringType))
                 }
 
-                FirPageGenerated.PagePathProperty -> {
+                PageKey.PagePathProperty -> {
                     val actualCallable = getActualCallable(currentClassId, declaration)
 
                     val path = actualCallable.owner.getAnnotationArgumentValue<String>(
@@ -548,7 +547,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                FirPageGenerated.PageDetailsProperty -> context(context.irBuiltIns) {
+                PageKey.PageDetailsProperty -> context(context.irBuiltIns) {
                     val pageDetailsType by Names.pageDetailsClass.defaultType()
                     declaration.backingField!!.also {
                         it.initializer = null
@@ -556,7 +555,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                FirPageGenerated.PageExtensionsProperty -> context(context.irBuiltIns) {
+                PageKey.PageExtensionsProperty -> context(context.irBuiltIns) {
                     val outAnnotation =
                         makeTypeProjection(context.irBuiltIns.annotationType, Variance.OUT_VARIANCE)
                     val extensionKClassType =
@@ -574,7 +573,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                FirPageGenerated.PageDescriptorProperty -> context(context.irBuiltIns) {
+                PageKey.PageDescriptorProperty -> context(context.irBuiltIns) {
                     val id = hashFunctionName(currentClassId)
                     val finder = context.finderForSource(declaration.file)
 
@@ -712,7 +711,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
             val currentClassId = parentClass?.classIdOrFail
             val finder = context.finderForSource(declaration.file)
             when (val key = origin.pluginKey) {
-                FirPageGenerated.PageMainFun -> {
+                PageKey.PageMainFun -> {
                     val actualCallable = getActualCallable(currentClassId!!, declaration)
                     declaration.body = IrBlockBodyBuilder(
                         context,
@@ -732,7 +731,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                FirPageGenerated.PageFactoryCreateFun -> {
+                PageKey.PageFactoryCreateFun -> {
                     val parserClass = finder.findClass(Names.parameterParserClass)!!
                     val parseFn = parserClass.getSimpleFunction("parse")!!
 
@@ -832,7 +831,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                         }
                 }
 
-                FirPageGenerated.PageInitFun -> {
+                PageKey.PageInitFun -> {
                     val valueParam =
                         declaration.parameters.find { it.name == Name.identifier("ctx") }!!
 
@@ -887,7 +886,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                         }
                 }
 
-                FirPageGenerated.PageFactoryOfFun -> {
+                PageKey.PageFactoryOfFun -> {
                     val actualClass = parentClass!!.nestedClasses.single()
                     val actualConstructor = actualClass.primaryConstructor!!
                     val syntheticArgument = actualConstructor.parameters.first()
@@ -910,12 +909,12 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                FirPageGenerated.PageSerializerGetter -> {
+                PageKey.PageSerializerGetter -> {
                     parentClass!!
 
                     val parentOrigin = parentClass.origin
                     val targetClass =
-                        if (parentOrigin is IrDeclarationOrigin.GeneratedByPlugin && parentOrigin.pluginKey == FirPageGenerated.PageFactoryClass) {
+                        if (parentOrigin is IrDeclarationOrigin.GeneratedByPlugin && parentOrigin.pluginKey == PageKey.PageFactoryClass) {
                             parentClass.nestedClasses.single().nestedClasses.single()
                         } else parentClass.nestedClasses.single()
 
@@ -929,7 +928,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                FirPageGenerated.PageSerializeFun -> {
+                PageKey.PageSerializeFun -> {
                     val self = declaration.dispatchReceiverParameter!!
                     val (encoder, value) = declaration.nonDispatchParameters
                     val descriptor = parentClass!!.getPropertyGetter("descriptor")!!
@@ -985,7 +984,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                FirPageGenerated.PageDeserializeFun -> {
+                PageKey.PageDeserializeFun -> {
                     val self = declaration.dispatchReceiverParameter!!
                     val (decoder) = declaration.nonDispatchParameters
 
@@ -1004,7 +1003,7 @@ class IrPageGenerator(context: IrPluginContext) : AbstractSerenityGenerator(cont
                     }
                 }
 
-                is FirPageGenerated.PageEntrypointFun if context.platform?.all { it is PotentiallyWebPlatform && it.isWeb }
+                is PageKey.PageEntrypointFun if context.platform?.all { it is PotentiallyWebPlatform && it.isWeb }
                     ?: false -> {
                     val actualCallable = finder.findFunctions(key.callableId).single {
                         it.owner.hasAnnotation(Names.pageClass)

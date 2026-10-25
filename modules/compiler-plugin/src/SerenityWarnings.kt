@@ -2,18 +2,11 @@ package net.derfruhling.serenity.compiler
 
 import org.jetbrains.kotlin.diagnostics.*
 import org.jetbrains.kotlin.diagnostics.rendering.BaseDiagnosticRendererFactory
+import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 
 object SerenityWarnings : KtDiagnosticsContainer() {
-    val HELP_CONSTANT_NAME = KtDiagnosticFactory2<String, Long>(
-        "HELP_CONSTANT_NAME",
-        Severity.WARNING,
-        SourceElementPositioningStrategies.DEFAULT,
-        KtExpression::class,
-        SerenityWarningMessages
-    )
-
     val UNSTABLE_PROPERTY = KtDiagnosticFactory0(
         "UNSTABLE_PROPERTY",
         Severity.WARNING,
@@ -30,6 +23,14 @@ object SerenityWarnings : KtDiagnosticsContainer() {
         SerenityWarningMessages
     )
 
+    val CALLED_PAGE_FUN = KtDiagnosticFactory0(
+        "CALLED_PAGE_FUN",
+        Severity.WARNING,
+        SourceElementPositioningStrategies.DEFAULT,
+        KtCallElement::class,
+        SerenityWarningMessages
+    )
+
     override fun getRendererFactory(): BaseDiagnosticRendererFactory {
         return SerenityWarningMessages
     }
@@ -38,13 +39,6 @@ object SerenityWarnings : KtDiagnosticsContainer() {
 object SerenityWarningMessages : BaseDiagnosticRendererFactory() {
     override val MAP by KtDiagnosticFactoryToRendererMap("Serenity") {
         it.put(
-            SerenityWarnings.HELP_CONSTANT_NAME,
-            "{0} ::> {1}",
-            KtDiagnosticRenderers.TO_STRING,
-            KtDiagnosticRenderers.TO_STRING
-        )
-
-        it.put(
             SerenityWarnings.UNSTABLE_PROPERTY,
             "This property is in a stable class, but has a setter, and therefore may not be upholding it's contract. If the setter is notifying the runtime as @StableMarker describes, annotate the property with @NotifiesRuntime"
         )
@@ -52,6 +46,11 @@ object SerenityWarningMessages : BaseDiagnosticRendererFactory() {
         it.put(
             SerenityWarnings.MUTABLE_PROPERTY,
             "Properties in @Immutable classes must not have a setter"
+        )
+
+        it.put(
+            SerenityWarnings.CALLED_PAGE_FUN,
+            "@Page functions shouldn't be called as this will ignore a lot of internal machinery"
         )
     }
 }

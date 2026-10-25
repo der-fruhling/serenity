@@ -1,0 +1,41 @@
+FILE: callPageFun.kt
+    package miaw
+
+    @R|net/derfruhling/serenity/annotations/Page|(path = String(/test) [evaluated = String(/test)]) @R|androidx/compose/runtime/Composable|() public final fun test(): R|kotlin/Unit| {
+    }
+    public final fun main(): R|kotlin/Unit| {
+        R|miaw/test|()
+    }
+FILE: miaw/test.kt
+    package miaw
+
+    public final object test : R|net/derfruhling/serenity/PageHolder<miaw/test>|, R|net/derfruhling/serenity/PageSerializerProvider<miaw/test>| {
+        public final val id: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val path: R|kotlin/String|
+            public get(): R|kotlin/String|
+
+        public final val details: R|net/derfruhling/serenity/PageDetails|
+            public get(): R|net/derfruhling/serenity/PageDetails|
+
+        public final val extensions: R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+            public get(): R|kotlin/collections/Map<kotlin/reflect/KClass<out net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>, net/derfruhling/serenity/modularity/extension/AbstractPageExtension<*>>|
+
+        public final override fun init(ctx: R|net/derfruhling/serenity/PageContext|): R|kotlin/Unit|
+
+        @R|androidx/compose/runtime/Composable|() @R|net/derfruhling/serenity/HtmlComposable|() public final override fun Main(): R|kotlin/Unit|
+
+        public final override fun serializer(): R|kotlinx/serialization/KSerializer<miaw/test>|
+
+        private final object Serializer : R|kotlinx/serialization/KSerializer<miaw/test>| {
+            public final val descriptor: R|kotlinx/serialization/descriptors/SerialDescriptor|
+                public get(): R|kotlinx/serialization/descriptors/SerialDescriptor|
+
+            public final override fun serialize(encoder: R|kotlinx/serialization/encoding/Encoder|, value: R|miaw/test|): R|kotlin/Unit|
+
+            public final override fun deserialize(decoder: R|kotlinx/serialization/encoding/Decoder|): R|miaw/test|
+
+        }
+
+    }

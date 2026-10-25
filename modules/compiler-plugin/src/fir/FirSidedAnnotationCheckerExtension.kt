@@ -1,6 +1,8 @@
 package net.derfruhling.serenity.compiler.fir
 
 import net.derfruhling.serenity.compiler.Names
+import net.derfruhling.serenity.compiler.Predicates.isClientFun
+import net.derfruhling.serenity.compiler.Predicates.isServerFun
 import net.derfruhling.serenity.compiler.SerenityErrors
 import net.derfruhling.serenity.compiler.Side
 import org.jetbrains.kotlin.descriptors.ClassKind
@@ -20,7 +22,6 @@ import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirPropertyAccessEx
 import org.jetbrains.kotlin.fir.analysis.checkers.toClassLikeSymbol
 import org.jetbrains.kotlin.fir.analysis.checkers.type.TypeCheckers
 import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtension
-import org.jetbrains.kotlin.fir.declarations.FirClass
 import org.jetbrains.kotlin.fir.declarations.FirClassLikeDeclaration
 import org.jetbrains.kotlin.fir.declarations.FirDeclaration
 import org.jetbrains.kotlin.fir.declarations.FirDeclarationOrigin
@@ -29,22 +30,19 @@ import org.jetbrains.kotlin.fir.declarations.utils.isAbstract
 import org.jetbrains.kotlin.fir.declarations.utils.isFun
 import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.extensions.FirDeclarationPredicateRegistrar
-import org.jetbrains.kotlin.fir.extensions.predicate.DeclarationPredicate
 import org.jetbrains.kotlin.fir.extensions.predicateBasedProvider
 import org.jetbrains.kotlin.fir.moduleData
 import org.jetbrains.kotlin.fir.resolve.calls.FirSyntheticFunctionSymbol
 import org.jetbrains.kotlin.fir.resolve.firClassLike
 import org.jetbrains.kotlin.fir.resolve.getContainingClassSymbol
-import org.jetbrains.kotlin.fir.resolve.providers.getClassDeclaredPropertySymbols
 import org.jetbrains.kotlin.fir.resolve.toClassLikeSymbol
 import org.jetbrains.kotlin.fir.scopes.collectAllFunctions
 import org.jetbrains.kotlin.fir.scopes.impl.declaredMemberScope
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import org.jetbrains.kotlin.fir.types.resolvedType
 
-class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalCheckersExtension(session) {
+class FirSidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalCheckersExtension(session) {
     val expectedSide: Side? by lazy { Side.of(session.moduleData.platform) }
 
     private fun FirDeclaration.getSide(): Side? {
@@ -245,14 +243,6 @@ class SidedAnnotationCheckerExtension(session: FirSession) : FirAdditionalChecke
 
     override val typeCheckers: TypeCheckers
         get() = super.typeCheckers
-
-    val isClientFun = DeclarationPredicate.create {
-        metaAnnotated(Names.clientClass.asSingleFqName(), includeItself = true)
-    }
-
-    val isServerFun = DeclarationPredicate.create {
-        metaAnnotated(Names.serverClass.asSingleFqName(), includeItself = true)
-    }
 
     override fun FirDeclarationPredicateRegistrar.registerPredicates() {
         register(isClientFun, isServerFun)

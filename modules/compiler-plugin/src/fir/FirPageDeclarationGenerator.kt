@@ -1,5 +1,6 @@
 package net.derfruhling.serenity.compiler.fir
 
+import net.derfruhling.serenity.compiler.PageKey
 import net.derfruhling.serenity.compiler.Names
 import net.derfruhling.serenity.compiler.Predicates
 import net.derfruhling.serenity.compiler.hashFunctionName
@@ -55,7 +56,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
     @ExperimentalTopLevelDeclarationsGenerationApi
     private fun generatePageFactoryClass(classId: ClassId): FirRegularClass = createTopLevelClass(
         classId,
-        FirPageGenerated.PageFactoryClass,
+        PageKey.PageFactoryClass,
         classKind = ClassKind.OBJECT
     ) {
         val instanceId = classId.createNestedClassId(Name.identifier("Instance"))
@@ -83,7 +84,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
             resolvePhase = FirResolvePhase.BODY_RESOLVE
             symbol = FirRegularClassSymbol(classId)
             moduleData = session.moduleData
-            origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageClass(isSubClass))
+            origin = FirDeclarationOrigin.Plugin(PageKey.PageClass(isSubClass))
             name = classId.shortClassName
             scopeProvider = session.kotlinScopeProvider
             classKind = if (isSubClass) ClassKind.CLASS else ClassKind.OBJECT
@@ -131,7 +132,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
 
         return createConstructor(
             owner,
-            FirPageGenerated.PageConstructor,
+            PageKey.PageConstructor,
             isPrimary = true
         ) {
             visibility = Visibilities.Internal
@@ -160,10 +161,10 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         context: NestedClassGenerationContext
     ): FirClassLikeSymbol<*>? {
         return when ((owner.origin as? FirDeclarationOrigin.Plugin ?: return null).key) {
-            FirPageGenerated.PageFactoryClass ->
+            PageKey.PageFactoryClass ->
                 generatePageClass(owner.classId.createNestedClassId(name), true).symbol
 
-            is FirPageGenerated.PageClass ->
+            is PageKey.PageClass ->
                 generateSerializerClass(owner, name).symbol
 
             else -> null
@@ -176,7 +177,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
     ): FirRegularClass = createNestedClass(
         owner,
         name,
-        FirPageGenerated.PageSerializerClass,
+        PageKey.PageSerializerClass,
         classKind = ClassKind.OBJECT
     ) {
         visibility = Visibilities.Private
@@ -263,7 +264,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
             actualCallableId.packageName,
             actualCallableId.callableName
         )
-            .single { it.hasAnnotation(Names.pageClass, session) }
+            .first { it.hasAnnotation(Names.pageClass, session) }
         val id = hashFunctionName(actualCallableId)
 
         val entrypointFunction = buildNamedFunction {
@@ -271,7 +272,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
             symbol = FirNamedFunctionSymbol(callableId)
             moduleData = session.moduleData
             origin = FirDeclarationOrigin.Plugin(
-                FirPageGenerated.PageEntrypointFun(actualCallableId)
+                PageKey.PageEntrypointFun(actualCallableId)
             )
             this.name = callableId.callableName
             status = FirResolvedDeclarationStatusImpl(
@@ -287,7 +288,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                     resolvePhase = FirResolvePhase.BODY_RESOLVE
                     symbol = FirValueParameterSymbol()
                     moduleData = session.moduleData
-                    origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
+                    origin = FirDeclarationOrigin.Plugin(PageKey.Parameter)
                     this.name = Name.identifier("obj")
                     returnTypeRef = session.symbolProvider.getClassLikeSymbolByClassId(
                         JsStandardClassIds.JsAny
@@ -333,7 +334,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         callableId: CallableId
     ): FirNamedFunction = createMemberFunction(
         context.owner,
-        FirPageGenerated.PageDeserializeFun,
+        PageKey.PageDeserializeFun,
         callableId.callableName,
         context.owner.classId.outerClassId!!.constructClassLikeType()
     ) {
@@ -349,7 +350,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         callableId: CallableId
     ): FirNamedFunction = createMemberFunction(
         context.owner,
-        FirPageGenerated.PageSerializeFun,
+        PageKey.PageSerializeFun,
         callableId.callableName,
         session.builtinTypes.unitType.coneType
     ) {
@@ -370,7 +371,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         targetCallable: FirCallableSymbol<*>
     ): FirNamedFunction = createMemberFunction(
         context.owner,
-        FirPageGenerated.PageSerializerGetter,
+        PageKey.PageSerializerGetter,
         callableId.callableName,
         Names.kSerializerClass.constructClassLikeType(
             typeArguments = arrayOf(
@@ -397,7 +398,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         symbol = FirNamedFunctionSymbol(callableId)
         dispatchReceiverType = context.owner.defaultType()
         moduleData = session.moduleData
-        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryOfFun)
+        origin = FirDeclarationOrigin.Plugin(PageKey.PageFactoryOfFun)
         name = Name.identifier("of")
         status = FirResolvedDeclarationStatusImpl(
             Visibilities.Public,
@@ -416,7 +417,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
             for (param in targetCallable.valueParameterSymbols) {
                 valueParameters += buildValueParameter {
                     moduleData = session.moduleData
-                    origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
+                    origin = FirDeclarationOrigin.Plugin(PageKey.Parameter)
                     returnTypeRef = param.resolvedReturnTypeRef
                     name = param.name
                     symbol = FirValueParameterSymbol()
@@ -441,7 +442,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         symbol = FirNamedFunctionSymbol(callableId)
         dispatchReceiverType = context.owner.defaultType()
         moduleData = session.moduleData
-        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryCreateFun)
+        origin = FirDeclarationOrigin.Plugin(PageKey.PageFactoryCreateFun)
         name = Name.identifier("create")
         status = FirResolvedDeclarationStatusImpl(
             Visibilities.Public,
@@ -467,7 +468,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         symbol = FirNamedFunctionSymbol(callableId)
         dispatchReceiverType = context.owner.defaultType()
         moduleData = session.moduleData
-        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageInitFun)
+        origin = FirDeclarationOrigin.Plugin(PageKey.PageInitFun)
         name = Name.identifier("init")
         status = FirResolvedDeclarationStatusImpl(
             Visibilities.Public,
@@ -484,7 +485,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
     private fun makePageContextParameter(parentSymbol: FirNamedFunctionSymbol): FirValueParameter =
         buildValueParameter {
             moduleData = session.moduleData
-            origin = FirDeclarationOrigin.Plugin(FirPageGenerated.Parameter)
+            origin = FirDeclarationOrigin.Plugin(PageKey.Parameter)
             returnTypeRef = buildResolvedTypeRef {
                 coneType =
                     session.symbolProvider.getClassLikeSymbolByClassId(Names.pageContextClass)!!
@@ -503,7 +504,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         symbol = FirNamedFunctionSymbol(callableId)
         dispatchReceiverType = context.owner.defaultType()
         moduleData = session.moduleData
-        origin = FirDeclarationOrigin.Plugin(FirPageGenerated.PageMainFun)
+        origin = FirDeclarationOrigin.Plugin(PageKey.PageMainFun)
         name = Name.identifier("Main")
         status = FirResolvedDeclarationStatusImpl(
             Visibilities.Public,
@@ -540,18 +541,18 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
     ): List<FirPropertySymbol> {
         if (context != null) {
             val (actualOrigin, type) = when (callableId.callableName.identifier) {
-                "id" -> FirPageGenerated.PageIdProperty to session.builtinTypes.stringType.coneType
-                "path" -> FirPageGenerated.PagePathProperty to session.builtinTypes.stringType.coneType
-                "details" -> FirPageGenerated.PageDetailsProperty to session.symbolProvider.getClassLikeSymbolByClassId(
+                "id" -> PageKey.PageIdProperty to session.builtinTypes.stringType.coneType
+                "path" -> PageKey.PagePathProperty to session.builtinTypes.stringType.coneType
+                "details" -> PageKey.PageDetailsProperty to session.symbolProvider.getClassLikeSymbolByClassId(
                     Names.pageDetailsClass
                 )!!
                     .defaultType()
 
                 "extensions" -> {
-                    FirPageGenerated.PageExtensionsProperty to derivedExtensionMapType
+                    PageKey.PageExtensionsProperty to derivedExtensionMapType
                 }
 
-                "descriptor" -> FirPageGenerated.PageDescriptorProperty to session.symbolProvider.getClassLikeSymbolByClassId(
+                "descriptor" -> PageKey.PageDescriptorProperty to session.symbolProvider.getClassLikeSymbolByClassId(
                     Names.serialDescriptorClass
                 )!!.defaultType()
 
@@ -603,7 +604,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
         context: MemberGenerationContext
     ): Set<Name> {
         return when (classSymbol.origin) {
-            FirDeclarationOrigin.Plugin(FirPageGenerated.PageClass(false)) -> {
+            FirDeclarationOrigin.Plugin(PageKey.PageClass(false)) -> {
                 setOf(
                     Name.identifier("id"),
                     Name.identifier("path"),
@@ -615,7 +616,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                 )
             }
 
-            FirDeclarationOrigin.Plugin(FirPageGenerated.PageClass(true)) -> {
+            FirDeclarationOrigin.Plugin(PageKey.PageClass(true)) -> {
                 setOf(
                     SpecialNames.INIT,
                     Name.identifier("id"),
@@ -627,7 +628,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                 )
             }
 
-            FirDeclarationOrigin.Plugin(FirPageGenerated.PageFactoryClass) -> {
+            FirDeclarationOrigin.Plugin(PageKey.PageFactoryClass) -> {
                 setOf(
                     Name.identifier("id"),
                     Name.identifier("path"),
@@ -637,7 +638,7 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
                 )
             }
 
-            FirDeclarationOrigin.Plugin(FirPageGenerated.PageSerializerClass) -> {
+            FirDeclarationOrigin.Plugin(PageKey.PageSerializerClass) -> {
                 setOf(
                     Name.identifier("descriptor"),
                     Name.identifier("serialize"),
@@ -657,8 +658,8 @@ class FirPageDeclarationGenerator(session: FirSession) : FirDeclarationGeneratio
     ): Set<Name> {
         return when ((classSymbol.origin as? FirDeclarationOrigin.Plugin
             ?: return emptySet()).key) {
-            FirPageGenerated.PageFactoryClass -> setOf(Name.identifier("Instance"))
-            is FirPageGenerated.PageClass -> setOf(Name.identifier("Serializer"))
+            PageKey.PageFactoryClass -> setOf(Name.identifier("Instance"))
+            is PageKey.PageClass -> setOf(Name.identifier("Serializer"))
             else -> emptySet()
         }
     }
