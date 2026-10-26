@@ -39,13 +39,15 @@ fun module(name: String, dirName: String = name) {
 
 fun library(name: String, dirName: String = name) {
     include(name)
-    project(":$name").projectDir = file("modules").resolve(dirName)
+    project(":$name").projectDir = file("libraries").resolve(dirName)
 }
 
 fun collector(name: String, dirName: String = name) {
     include("serenity-$name")
     project(":serenity-$name").projectDir = file("modules").resolve("collectors").resolve(dirName)
 }
+
+library("serene-xxhash")
 
 module("compiler-plugin")
 module("annotations")

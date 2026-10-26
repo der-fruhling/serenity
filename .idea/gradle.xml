@@ -30,6 +30,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/gradle-plugin" />
             <option value="$PROJECT_DIR$/gradle-plugin/sass-plugin" />
+            <option value="$PROJECT_DIR$/libraries/serene-xxhash" />
             <option value="$PROJECT_DIR$/modules/annotations" />
             <option value="$PROJECT_DIR$/modules/channel" />
             <option value="$PROJECT_DIR$/modules/channel-ktor" />

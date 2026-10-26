@@ -72,8 +72,20 @@ FILE fqName:<root> fileName:/constantNames.kt
       VAR name:v type:net.derfruhling.serenity.localization.ConstantName [val]
         CONSTRUCTOR_CALL 'internal constructor <init> (asLong: kotlin.Long) declared in net.derfruhling.serenity.localization.ConstantName' type=net.derfruhling.serenity.localization.ConstantName origin=null
           ARG asLong: CONST Long type=kotlin.Long value=4739537262115603309
+      VAR name:m type:net.derfruhling.serenity.localization.ConstantName [val]
+        CONSTRUCTOR_CALL 'internal constructor <init> (asLong: kotlin.Long) declared in net.derfruhling.serenity.localization.ConstantName' type=net.derfruhling.serenity.localization.ConstantName origin=null
+          ARG asLong: CONST Long type=kotlin.Long value=3289395183319729754
       VAR name:t type:<root>.TestValueClass [val]
         CONSTRUCTOR_CALL 'public constructor <init> (long: kotlin.Long) declared in <root>.TestValueClass' type=<root>.TestValueClass origin=null
           ARG long: CONST Long type=kotlin.Long value=7
       RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
         CONST String type=kotlin.String value="OK"
+  PROPERTY name:NAME visibility:public modality:FINAL [const,val]
+    FIELD PROPERTY_BACKING_FIELD name:NAME type:kotlin.String visibility:public [final,static]
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value="miaw miaw"
+    FUN DEFAULT_PROPERTY_ACCESSOR name:<get-NAME> visibility:public modality:FINAL returnType:kotlin.String
+      correspondingProperty: PROPERTY name:NAME visibility:public modality:FINAL [const,val]
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun <get-NAME> (): kotlin.String declared in <root>'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:NAME type:kotlin.String visibility:public [final,static]' type=kotlin.String origin=null

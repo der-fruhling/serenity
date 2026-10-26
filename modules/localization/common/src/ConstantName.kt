@@ -1,6 +1,12 @@
+@file:OptIn(IntrinsicHasSpecialMeaning::class)
+
 package net.derfruhling.serenity.localization
 
 import kotlinx.serialization.Serializable
+import net.derfruhling.serene.xxhash.XXH3
+import net.derfruhling.serenity.annotations.Intrinsic
+import net.derfruhling.serenity.annotations.IntrinsicHasSpecialMeaning
+import net.derfruhling.serenity.annotations.Role
 import kotlin.jvm.JvmInline
 
 /**
@@ -51,6 +57,7 @@ value class ConstantName @PublishedApi internal constructor(val asLong: Long) {
  * @param name The name to hash.
  * @return A 64-bit XXH3 hash of the provided name.
  */
+@Intrinsic(Role.LOCALIZATION_CONSTANT_NAME)
 fun n(@Suppress("unused") name: String): ConstantName {
     return ConstantName(name)
 }

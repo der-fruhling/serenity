@@ -8,8 +8,11 @@ FILE: constantNames.kt
             public get(): R|kotlin/Long|
 
     }
+    public final const val NAME: R|kotlin/String| = String(miaw miaw)
+        public get(): R|kotlin/String|
     public final fun box(): R|kotlin/String| {
         lval v: R|net/derfruhling/serenity/localization/ConstantName| = R|net/derfruhling/serenity/localization/n|(String(test-app/hello))
+        lval m: R|net/derfruhling/serenity/localization/ConstantName| = R|net/derfruhling/serenity/localization/n|(R|/NAME|)
         lval t: R|TestValueClass| = R|/TestValueClass.TestValueClass|(Long(7))
         ^box String(OK)
     }

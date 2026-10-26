@@ -1,10 +1,29 @@
 @file:OptIn(ExperimentalUnsignedTypes::class)
 
-package net.derfruhling.serenity.localization
+package net.derfruhling.serene.xxhash
+
+import kotlin.jvm.JvmInline
 
 // https://github.com/Cyan4973/xxHash/blob/dev/doc/xxhash_spec.md#xxh3-algorithm-overview
 
-class XXH3 private constructor(val seed: ULong, internal val secret: ByteArray) {
+// @formatter:off
+private val defaultSecret = intArrayOf(
+    0xb8, 0xfe, 0x6c, 0x39, 0x23, 0xa4, 0x4b, 0xbe, 0x7c, 0x01, 0x81, 0x2c, 0xf7, 0x21, 0xad, 0x1c,
+    0xde, 0xd4, 0x6d, 0xe9, 0x83, 0x90, 0x97, 0xdb, 0x72, 0x40, 0xa4, 0xa4, 0xb7, 0xb3, 0x67, 0x1f,
+    0xcb, 0x79, 0xe6, 0x4e, 0xcc, 0xc0, 0xe5, 0x78, 0x82, 0x5a, 0xd0, 0x7d, 0xcc, 0xff, 0x72, 0x21,
+    0xb8, 0x08, 0x46, 0x74, 0xf7, 0x43, 0x24, 0x8e, 0xe0, 0x35, 0x90, 0xe6, 0x81, 0x3a, 0x26, 0x4c,
+    0x3c, 0x28, 0x52, 0xbb, 0x91, 0xc3, 0x00, 0xcb, 0x88, 0xd0, 0x65, 0x8b, 0x1b, 0x53, 0x2e, 0xa3,
+    0x71, 0x64, 0x48, 0x97, 0xa2, 0x0d, 0xf9, 0x4e, 0x38, 0x19, 0xef, 0x46, 0xa9, 0xde, 0xac, 0xd8,
+    0xa8, 0xfa, 0x76, 0x3f, 0xe3, 0x9c, 0x34, 0x3f, 0xf9, 0xdc, 0xbb, 0xc7, 0xc7, 0x0b, 0x4f, 0x1d,
+    0x8a, 0x51, 0xe0, 0x4b, 0xcd, 0xb4, 0x59, 0x31, 0xc8, 0x9f, 0x7e, 0xc9, 0xd9, 0x78, 0x73, 0x64,
+    0xea, 0xc5, 0xac, 0x83, 0x34, 0xd3, 0xeb, 0xc3, 0xc5, 0x81, 0xa0, 0xff, 0xfa, 0x13, 0x63, 0xeb,
+    0x17, 0x0d, 0xdd, 0x51, 0xb7, 0xf0, 0xda, 0x49, 0xd3, 0x16, 0x55, 0x26, 0x29, 0xd4, 0x68, 0x9e,
+    0x2b, 0x16, 0xbe, 0x58, 0x7d, 0x47, 0xa1, 0xfc, 0x8f, 0xf8, 0xb8, 0xd1, 0x7a, 0xd0, 0x31, 0xce,
+    0x45, 0xcb, 0x3a, 0x8f, 0x95, 0x16, 0x04, 0x28, 0xaf, 0xd7, 0xfb, 0xca, 0xbb, 0x4b, 0x40, 0x7e
+).map { it.toByte() }.toByteArray()
+// @formatter:on
+
+sealed class XXH3(private val seed: ULong, private val secret: ByteArray) : ULongHashFunction {
     private val xxh3b64f4to8Seed by lazy { seed xor bswap((seed and 0xFFFFFFFFu).toUInt()).toULong() }
 
     private val xxh3b64Empty by lazy {
@@ -57,8 +76,7 @@ class XXH3 private constructor(val seed: ULong, internal val secret: ByteArray) 
         val low = ((x1 xor x2).toULong() + seed) xor inputFirst
         val high = ((x3 xor x4).toULong() - seed) xor inputLast
 
-        val (mh, ml) = u128Mul(low, high)
-        val value = inputLength + bswap(low) + high + (ml xor mh)
+        val value = inputLength + bswap(low) + high + u128Mul(low, high, ULong::xor)
         return avalanche(value)
     }
 
@@ -86,8 +104,7 @@ class XXH3 private constructor(val seed: ULong, internal val secret: ByteArray) 
             val d2 = data.getLong(offset + 8).toULong()
             val x1 = secret.getLong(secretOffset).toULong()
             val x2 = secret.getLong(secretOffset + 8).toULong()
-            val (mh, ml) = u128Mul(d1 xor (x1 + seed), d2 xor (x2 - seed))
-            return ml xor mh
+            return u128Mul(d1 xor (x1 + seed), d2 xor (x2 - seed), ULong::xor)
         }
     }
 
@@ -206,11 +223,11 @@ class XXH3 private constructor(val seed: ULong, internal val secret: ByteArray) 
             var result: ULong = initValue
 
             repeat(4) { i ->
-                val (mh, ml) = u128Mul(
+                result += u128Mul(
                     acc[i * 2] xor secretWords[i * 2],
-                    acc[i * 2 + 1] xor secretWords[i * 2 + 1]
+                    acc[i * 2 + 1] xor secretWords[i * 2 + 1],
+                    ULong::xor
                 )
-                result += ml xor mh
             }
 
             return avalanche(result)
@@ -223,19 +240,23 @@ class XXH3 private constructor(val seed: ULong, internal val secret: ByteArray) 
         finalMerge(bytes.size.toULong() * PRIME64_1, 11)
     }
 
-    fun digest(bytes: ByteArray): ULong = when {
+    fun digest(bytes: ByteArray): XXH3Hash = XXH3Hash(when {
         bytes.size <= 16 -> xxh3b64Small(bytes)
         bytes.size in 17..240 -> xxh3b64Medium(bytes)
         else -> xxh3b64Large(bytes)
+    })
+
+    override fun invoke(bytes: ByteArray): ULong {
+        return digest(bytes).asULong
     }
 
-    companion object {
-        private val default by lazy { XXH3(0u, defaultSecret) }
-        private fun fromSeedLarge(seed: ULong) = XXH3(seed, deriveSecret(seed))
-        private fun fromSeed(seed: ULong) = XXH3(seed, defaultSecret)
+    private class Impl(seed: ULong, secret: ByteArray) : XXH3(seed, secret)
 
-        fun digest(bytes: ByteArray): ULong = default.digest(bytes)
-        fun digestWithSeed(bytes: ByteArray, seed: ULong): ULong = when {
+    companion object : XXH3(0u, defaultSecret) {
+        fun fromSeedLarge(seed: ULong): XXH3 = Impl(seed, deriveSecret(seed))
+        fun fromSeed(seed: ULong): XXH3 = Impl(seed, defaultSecret)
+
+        fun digestWithSeed(bytes: ByteArray, seed: ULong): XXH3Hash = when {
             bytes.size <= 240 -> fromSeed(seed)
             else -> fromSeedLarge(seed)
         }.digest(bytes)
@@ -257,23 +278,6 @@ class XXH3 private constructor(val seed: ULong, internal val secret: ByteArray) 
             0x165667919E3779F9UL  // 0b0001011001010110011001111001000110011110001101110111100111111001
         private const val PRIME_MX2: ULong =
             0x9FB21C651E98DF25UL  // 0b1001111110110010000111000110010100011110100110001101111100100101
-
-        // @formatter:off
-        private val defaultSecret = intArrayOf(
-            0xb8, 0xfe, 0x6c, 0x39, 0x23, 0xa4, 0x4b, 0xbe, 0x7c, 0x01, 0x81, 0x2c, 0xf7, 0x21, 0xad, 0x1c,
-            0xde, 0xd4, 0x6d, 0xe9, 0x83, 0x90, 0x97, 0xdb, 0x72, 0x40, 0xa4, 0xa4, 0xb7, 0xb3, 0x67, 0x1f,
-            0xcb, 0x79, 0xe6, 0x4e, 0xcc, 0xc0, 0xe5, 0x78, 0x82, 0x5a, 0xd0, 0x7d, 0xcc, 0xff, 0x72, 0x21,
-            0xb8, 0x08, 0x46, 0x74, 0xf7, 0x43, 0x24, 0x8e, 0xe0, 0x35, 0x90, 0xe6, 0x81, 0x3a, 0x26, 0x4c,
-            0x3c, 0x28, 0x52, 0xbb, 0x91, 0xc3, 0x00, 0xcb, 0x88, 0xd0, 0x65, 0x8b, 0x1b, 0x53, 0x2e, 0xa3,
-            0x71, 0x64, 0x48, 0x97, 0xa2, 0x0d, 0xf9, 0x4e, 0x38, 0x19, 0xef, 0x46, 0xa9, 0xde, 0xac, 0xd8,
-            0xa8, 0xfa, 0x76, 0x3f, 0xe3, 0x9c, 0x34, 0x3f, 0xf9, 0xdc, 0xbb, 0xc7, 0xc7, 0x0b, 0x4f, 0x1d,
-            0x8a, 0x51, 0xe0, 0x4b, 0xcd, 0xb4, 0x59, 0x31, 0xc8, 0x9f, 0x7e, 0xc9, 0xd9, 0x78, 0x73, 0x64,
-            0xea, 0xc5, 0xac, 0x83, 0x34, 0xd3, 0xeb, 0xc3, 0xc5, 0x81, 0xa0, 0xff, 0xfa, 0x13, 0x63, 0xeb,
-            0x17, 0x0d, 0xdd, 0x51, 0xb7, 0xf0, 0xda, 0x49, 0xd3, 0x16, 0x55, 0x26, 0x29, 0xd4, 0x68, 0x9e,
-            0x2b, 0x16, 0xbe, 0x58, 0x7d, 0x47, 0xa1, 0xfc, 0x8f, 0xf8, 0xb8, 0xd1, 0x7a, 0xd0, 0x31, 0xce,
-            0x45, 0xcb, 0x3a, 0x8f, 0x95, 0x16, 0x04, 0x28, 0xaf, 0xd7, 0xfb, 0xca, 0xbb, 0x4b, 0x40, 0x7e
-        ).map { it.toByte() }.toByteArray()
-        // @formatter:on
 
         private val defaultSecretLongs: LongArray by lazy {
             LongArray(24) {
@@ -355,28 +359,16 @@ class XXH3 private constructor(val seed: ULong, internal val secret: ByteArray) 
             x = x xor (x shr 32)
             return x
         }
-
-        // https://stackoverflow.com/questions/25095741/how-can-i-multiply-64-bit-operands-and-get-128-bit-result-portably
-        private fun u128Mul(a: ULong, b: ULong): Pair<ULong, ULong> {
-            val u1 = a and 0xFFFFFFFFu
-            val v1 = b and 0xFFFFFFFFu
-            var t = u1 * v1
-            val w3 = t and 0xFFFFFFFFu
-            var k = t shr 32
-
-            val op1 = a shr 32
-            t = (op1 * v1) + k
-            k = (t and 0xFFFFFFFFu)
-            val w1 = t shr 32
-
-            val op2 = b shr 32
-            t = (u1 * op2) + k
-            k = (t shr 32)
-
-            val hi = (op1 * op2) + w1 + k
-            val lo = (t shl 32) + w3
-
-            return hi to lo
-        }
     }
 }
+
+@JvmInline
+value class XXH3Hash internal constructor(val asULong: ULong) {
+    fun toLong(): Long = asULong.toLong()
+    fun toULong(): ULong = asULong
+}
+
+fun xxh3(bytes: ByteArray): XXH3Hash = XXH3.digest(bytes)
+fun xxh3(bytes: String): XXH3Hash = xxh3(bytes.encodeToByteArray())
+fun xxh3(bytes: ByteArray, seed: ULong): XXH3Hash = XXH3.digestWithSeed(bytes, seed)
+fun xxh3(bytes: String, seed: ULong): XXH3Hash = xxh3(bytes.encodeToByteArray(), seed)

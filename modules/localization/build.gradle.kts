@@ -13,6 +13,7 @@ kotlin {
                 api(project(":serenity-core"))
                 api(project(":serenity-dynamic"))
                 api(libs.kotlinx.serialization.cbor)
+                implementation(project(":serene-xxhash"))
             }
         }
 
