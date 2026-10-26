@@ -1,0 +1,90 @@
+name: Bug Report
+description: File a bug report.
+projects: ["der-fruhling/8"]
+type: bug
+
+body:
+  - type: markdown
+    value: |
+      Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Tell us what strange things have happened that you weren't expecting!
+      placeholder: Be descriptive. Don't just write 'title', that's not helpful.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: What did you expect to happen?
+      description: How does what you described above differ from what should've happened?
+      placeholder: Be descriptive. If unsure, just leave this blank.
+    validations:
+      required: false
+  - type: dropdown
+    id: serenity-version
+    attributes:
+      label: Serenity Version
+      description: Select the version of Serenity you're using. Unlisted versions aren't supported and you should probably update.
+      options:
+        - 0.1.0-SNAPSHOT (master branch)
+      default: 0
+    validations:
+      required: true
+  - type: dropdown
+    id: kotlin-version
+    attributes:
+      label: Kotlin Version
+      description: Select the version of Kotlin you're using. Unlisted versions aren't supported and you should probably update / downgrade.
+      options:
+        - 2.5-beta
+        - 2.4.21 ← latest stable
+        - 2.4.20 ← serenity build version
+        - 2.4.10
+      default: 2
+    validations:
+      required: true
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Affected Platforms
+      description: Select the platforms you're seeing this on. Leave blank for all-of-the-above or if this isn't applicable to the issue.
+      options:
+        - JVM server
+        - Linux server (x64)
+        - Linux server (arm64)
+        - macOS server (arm64)
+        - JS client
+        - Wasm/JS client
+        - Exclusively in common code (none-of-the-above)
+    validations:
+      required: false
+  - type: dropdown
+    id: compiler-plugin
+    attributes:
+      label: Compiler plugin details
+      description: If you can, please provide some extra details to help us debug the compiler plugin.
+      options:
+        - Could not test / not applicable
+        - Issue only occurs _with_ compiler plugin enabled
+        - Issue only occurs _without_ compiler plugin enabled
+        - Issue occurs both with and without compiler plugin
+      validations:
+        required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://xn--derfrhling-eeb.net/code-of-conduct).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
+  - type: upload
+    id: screenshots
+    attributes:
+      label: Upload screenshots
+      description: If applicable, add screenshots to help explain your problem.
+    validations:
+      required: false

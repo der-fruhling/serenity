@@ -1,0 +1,45 @@
+name: Feature Request
+description: Request a new feature.
+projects: ["der-fruhling/8"]
+type: feature
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe your feature.
+      description: Tell us what you want to see in Serenity.
+      placeholder: Be descriptive. Don't just write 'title', that's not helpful.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What alternatives have you considered?
+      description: Is this a feature in other frameworks like Serenity?
+      placeholder: Be descriptive.
+    validations:
+      required: true
+  - type: textarea
+    id: existing-feature
+    attributes:
+      label: Can this be done already with Serenity?
+      description: If so, please describe why your feature is better. Otherwise, just leave this field blank.
+      placeholder: Be descriptive.
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://xn--derfrhling-eeb.net/code-of-conduct).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
+  - type: upload
+    id: screenshots
+    attributes:
+      label: Upload screenshots
+      description: If applicable, add screenshots to help explain your feature.
+    validations:
+      required: false
