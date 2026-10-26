@@ -1,5 +1,10 @@
 on:
-  - push
+  push:
+    paths-ignore:
+      - .github/ISSUE_TEMPLATE/**
+      - "*.md"
+      - .idea/**
+      - .hexana/**
 
 name: Build & publish
 
