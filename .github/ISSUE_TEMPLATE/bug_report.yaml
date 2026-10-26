@@ -52,6 +52,7 @@ body:
     attributes:
       label: Affected Platforms
       description: Select the platforms you're seeing this on. Leave blank for all-of-the-above or if this isn't applicable to the issue.
+      multiple: true
       options:
         - JVM server
         - Linux server (x64)
