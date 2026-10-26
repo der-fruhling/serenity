@@ -80,8 +80,8 @@ value class Builder<N : ComposeNode>(val node: N) {
 
 expect fun getDocumentForTesting(): Document
 
-fun tree(fn: Builder<Document>.() -> Unit): Document {
-    val doc = getDocumentForTesting()
+fun tree(fn: Builder<DocumentFragment>.() -> Unit): DocumentFragment {
+    val doc = DocumentFragment()
     Builder(doc).fn()
     return doc
 }

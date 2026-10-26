@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import net.derfruhling.serenity.*
 import net.derfruhling.serenity.elements.pageTemplateLocal
+import net.derfruhling.serenity.http.HttpStatus
 import net.derfruhling.serenity.modularity.extension.PageExtensionController
 import net.derfruhling.serenity.modularity.extension.pageExtensionControllerLocal
 import net.derfruhling.serenity.serial.SerialRegistry

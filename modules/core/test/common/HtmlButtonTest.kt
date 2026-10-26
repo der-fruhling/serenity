@@ -1,6 +1,7 @@
 package net.derfruhling.serenity.tests
 
 import kotlinx.coroutines.test.runTest
+import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.elements.form.Button
 import net.derfruhling.serenity.event.ClickEvent
 import net.derfruhling.serenity.platform.tree

@@ -1,5 +1,6 @@
 package net.derfruhling.serenity.test
 
+import net.derfruhling.serenity.Formatter
 import net.derfruhling.serenity.platform.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -33,6 +34,8 @@ private inline fun <reified T> imply(expected: ComposeNode, value: ComposeNode) 
     value as T
 }
 
+fun ComposeNode.debug() = Formatter.formatStringDebug(this::format)
+
 private inline fun <reified T : NodeWithChildren<*, *>> compareTree(expected: T, value: T) {
     val lhsChildren = expected.children.sortedWith(::compareNodes)
     val rhsChildren = value.children.sortedWith(::compareNodes)
@@ -40,7 +43,7 @@ private inline fun <reified T : NodeWithChildren<*, *>> compareTree(expected: T,
     assertEquals(
         lhsChildren.size,
         rhsChildren.size,
-        "Count of $expected and $value node's children differ"
+        "Count of ${expected.debug()} and ${value.debug()} node's children differ"
     )
 
     for ((lhs, rhs) in lhsChildren zip rhsChildren) {

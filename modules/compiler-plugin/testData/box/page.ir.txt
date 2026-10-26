@@ -1,7 +1,7 @@
 FILE fqName:<root> fileName:/ComplexPage.kt
-  CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:ComplexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPage>]
+  CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:ComplexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPage>]
     thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.ComplexPage
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
       overridden:
         public abstract id: kotlin.String declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]
@@ -9,14 +9,14 @@ FILE fqName:<root> fileName:/ComplexPage.kt
           CONST String type=kotlin.String value="azHOzP5Qj6v_x8mD45hHNA"
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-id> visibility:public modality:FINAL returnType:kotlin.String
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-id> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-id> (): kotlin.String declared in <root>.ComplexPage'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
               receiver: GET_VAR '<this>: <root>.ComplexPage declared in <root>.ComplexPage.<get-id>' type=<root>.ComplexPage origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
       overridden:
         public abstract path: kotlin.String declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]
@@ -24,33 +24,33 @@ FILE fqName:<root> fileName:/ComplexPage.kt
           CONST String type=kotlin.String value="/"
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-path> visibility:public modality:FINAL returnType:kotlin.String
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-path> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-path> (): kotlin.String declared in <root>.ComplexPage'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
               receiver: GET_VAR '<this>: <root>.ComplexPage declared in <root>.ComplexPage.<get-path>' type=<root>.ComplexPage origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
       overridden:
         public abstract details: net.derfruhling.serenity.PageDetails declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-details> visibility:public modality:FINAL returnType:net.derfruhling.serenity.PageDetails
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-details> (): net.derfruhling.serenity.PageDetails declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-details> (): net.derfruhling.serenity.PageDetails declared in <root>.ComplexPage'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private' type=net.derfruhling.serenity.PageDetails origin=null
               receiver: GET_VAR '<this>: <root>.ComplexPage declared in <root>.ComplexPage.<get-details>' type=<root>.ComplexPage origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
       overridden:
         public open extensions: kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:extensions type:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> visibility:private
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-extensions> visibility:public modality:FINAL returnType:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
         overridden:
           public open fun <get-extensions> (): kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
@@ -75,9 +75,9 @@ FILE fqName:<root> fileName:/ComplexPage.kt
           RETURN type=kotlin.Nothing from='public final fun <get-param2> (): kotlin.Int declared in <root>.ComplexPage'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:param2 type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
               receiver: GET_VAR '<this>: <root>.ComplexPage declared in <root>.ComplexPage.<get-param2>' type=<root>.ComplexPage origin=null
-    CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPage>]
+    CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPage>]
       thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.ComplexPage.Serializer
-      PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
+      PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
         overridden:
           public abstract descriptor: kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.KSerializer
         FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]
@@ -104,17 +104,17 @@ FILE fqName:<root> fileName:/ComplexPage.kt
                           TYPE_ARG T: kotlin.Int
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-descriptor> visibility:public modality:FINAL returnType:kotlinx.serialization.descriptors.SerialDescriptor
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage.Serializer
-          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
+          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
           overridden:
             public abstract fun <get-descriptor> (): kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.KSerializer
           BLOCK_BODY
             RETURN type=kotlin.Nothing from='public final fun <get-descriptor> (): kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPage.Serializer'
               GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
                 receiver: GET_VAR '<this>: <root>.ComplexPage.Serializer declared in <root>.ComplexPage.Serializer.<get-descriptor>' type=<root>.ComplexPage.Serializer origin=null
-      CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] visibility:private returnType:<root>.ComplexPage.Serializer [primary]
+      CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] visibility:private returnType:<root>.ComplexPage.Serializer [primary]
         BLOCK_BODY
           DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPage>]' type=kotlin.Unit
+          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPage>]' type=kotlin.Unit
       FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
         VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
@@ -128,9 +128,9 @@ FILE fqName:<root> fileName:/ComplexPage.kt
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
         overridden:
           public open fun toString (): kotlin.String declared in kotlinx.serialization.KSerializer
-      FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDeserializeFun] name:deserialize visibility:public modality:FINAL returnType:<root>.ComplexPage
+      FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDeserializeFun] name:deserialize visibility:public modality:FINAL returnType:<root>.ComplexPage
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage.Serializer
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDeserializeFun] kind:Regular name:decoder index:1 type:kotlinx.serialization.encoding.Decoder
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDeserializeFun] kind:Regular name:decoder index:1 type:kotlinx.serialization.encoding.Decoder
         overridden:
           public abstract fun deserialize (decoder: kotlinx.serialization.encoding.Decoder): T of kotlinx.serialization.KSerializer declared in kotlinx.serialization.KSerializer
         BLOCK_BODY
@@ -138,10 +138,10 @@ FILE fqName:<root> fileName:/ComplexPage.kt
             CALL 'private/*private to this*/ final fun deserializeNormally (<this>: <root>.ComplexPage.Serializer, decoder: kotlinx.serialization.encoding.Decoder): <root>.ComplexPage declared in <root>.ComplexPage.Serializer' type=<root>.ComplexPage origin=null
               ARG <this>: GET_VAR '<this>: <root>.ComplexPage.Serializer declared in <root>.ComplexPage.Serializer.deserialize' type=<root>.ComplexPage.Serializer origin=null
               ARG decoder: GET_VAR 'decoder: kotlinx.serialization.encoding.Decoder declared in <root>.ComplexPage.Serializer.deserialize' type=kotlinx.serialization.encoding.Decoder origin=null
-      FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] name:serialize visibility:public modality:FINAL returnType:kotlin.Unit
+      FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] name:serialize visibility:public modality:FINAL returnType:kotlin.Unit
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage.Serializer
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] kind:Regular name:encoder index:1 type:kotlinx.serialization.encoding.Encoder
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] kind:Regular name:value index:2 type:<root>.ComplexPage
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] kind:Regular name:encoder index:1 type:kotlinx.serialization.encoding.Encoder
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] kind:Regular name:value index:2 type:<root>.ComplexPage
         overridden:
           public abstract fun serialize (encoder: kotlinx.serialization.encoding.Encoder, value: T of kotlinx.serialization.KSerializer): kotlin.Unit declared in kotlinx.serialization.KSerializer
         BLOCK_BODY
@@ -261,11 +261,11 @@ FILE fqName:<root> fileName:/ComplexPage.kt
             ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
             ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
           RETURN type=kotlin.Nothing from='private/*private to this*/ final fun deserializeNormally (<this>: <root>.ComplexPage.Serializer, decoder: kotlinx.serialization.encoding.Decoder): <root>.ComplexPage declared in <root>.ComplexPage.Serializer'
-            GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:ComplexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPage>]' type=<root>.ComplexPage
+            GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:ComplexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPage>]' type=<root>.ComplexPage
     CONSTRUCTOR visibility:private returnType:<root>.ComplexPage [primary]
       BLOCK_BODY
         DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:ComplexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPage>]' type=kotlin.Unit
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:ComplexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPage>]' type=kotlin.Unit
         VAR IR_TEMPORARY_VARIABLE name:tmp_9 type:net.derfruhling.serenity.PageContractBuilder [val]
           CONSTRUCTOR_CALL 'public constructor <init> () declared in net.derfruhling.serenity.PageContractBuilder' type=net.derfruhling.serenity.PageContractBuilder origin=null
         CALL 'private final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract): kotlin.Unit declared in <root>.ComplexPage' type=kotlin.Unit origin=null
@@ -300,9 +300,9 @@ FILE fqName:<root> fileName:/ComplexPage.kt
       overridden:
         public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageSerializerProvider
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageInitFun] name:init visibility:public modality:FINAL returnType:kotlin.Unit
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageInitFun] name:init visibility:public modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage
-      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
+      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
       overridden:
         public abstract fun init (ctx: net.derfruhling.serenity.PageContext): kotlin.Unit declared in net.derfruhling.serenity.PageHolder
       BLOCK_BODY
@@ -320,7 +320,7 @@ FILE fqName:<root> fileName:/ComplexPage.kt
                     CALL 'public final fun <get-param1> (): kotlin.String declared in <root>.Page2.Instance' type=kotlin.String origin=null
                       ARG <this>: GET_VAR '<this>: <root>.ComplexPage declared in <root>.ComplexPage.init' type=<root>.ComplexPage origin=null
                     CONST String type=kotlin.String value="!"
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageMainFun] name:Main visibility:public modality:FINAL returnType:kotlin.Unit
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageMainFun] name:Main visibility:public modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage
       annotations:
         Composable
@@ -333,13 +333,13 @@ FILE fqName:<root> fileName:/ComplexPage.kt
             ARG <this>: GET_VAR '<this>: <root>.ComplexPage declared in <root>.ComplexPage.Main' type=<root>.ComplexPage origin=null
           ARG param2: CALL 'public final fun <get-param2> (): kotlin.Int declared in <root>.ComplexPage' type=kotlin.Int origin=null
             ARG <this>: GET_VAR '<this>: <root>.ComplexPage declared in <root>.ComplexPage.Main' type=<root>.ComplexPage origin=null
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerGetter] name:serializer visibility:public modality:FINAL returnType:kotlinx.serialization.KSerializer<<root>.ComplexPage>
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerGetter] name:serializer visibility:public modality:FINAL returnType:kotlinx.serialization.KSerializer<<root>.ComplexPage>
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPage
       overridden:
         public abstract fun serializer (): kotlinx.serialization.KSerializer<T of net.derfruhling.serenity.PageSerializerProvider> declared in net.derfruhling.serenity.PageSerializerProvider
       BLOCK_BODY
         RETURN type=kotlin.Nothing from='public final fun serializer (): kotlinx.serialization.KSerializer<<root>.ComplexPage> declared in <root>.ComplexPage'
-          GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPage>]' type=<root>.ComplexPage.Serializer
+          GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPage>]' type=<root>.ComplexPage.Serializer
     FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:private modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:serenity$thisPage index:0 type:<root>.ComplexPage
       VALUE_PARAMETER kind:ExtensionReceiver name:$this$pageContract index:1 type:net.derfruhling.serenity.PageContract
@@ -362,9 +362,9 @@ FILE fqName:<root> fileName:/ComplexPage.kt
         overridden:
           public open fun <get-hash> (): kotlin.collections.Map<kotlin.String, kotlin.String> declared in net.derfruhling.serenity.PageHolder
 FILE fqName:<root> fileName:/ComplexPageReciever.kt
-  CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:ComplexPageReciever modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPageReciever>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPageReciever>]
+  CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:ComplexPageReciever modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPageReciever>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPageReciever>]
     thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.ComplexPageReciever
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
       overridden:
         public abstract id: kotlin.String declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]
@@ -372,14 +372,14 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
           CONST String type=kotlin.String value="KpBfyBgorfnf9_IrCXgZBg"
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-id> visibility:public modality:FINAL returnType:kotlin.String
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-id> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-id> (): kotlin.String declared in <root>.ComplexPageReciever'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
               receiver: GET_VAR '<this>: <root>.ComplexPageReciever declared in <root>.ComplexPageReciever.<get-id>' type=<root>.ComplexPageReciever origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
       overridden:
         public abstract path: kotlin.String declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]
@@ -387,33 +387,33 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
           CONST String type=kotlin.String value="/"
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-path> visibility:public modality:FINAL returnType:kotlin.String
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-path> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-path> (): kotlin.String declared in <root>.ComplexPageReciever'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
               receiver: GET_VAR '<this>: <root>.ComplexPageReciever declared in <root>.ComplexPageReciever.<get-path>' type=<root>.ComplexPageReciever origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
       overridden:
         public abstract details: net.derfruhling.serenity.PageDetails declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-details> visibility:public modality:FINAL returnType:net.derfruhling.serenity.PageDetails
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-details> (): net.derfruhling.serenity.PageDetails declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-details> (): net.derfruhling.serenity.PageDetails declared in <root>.ComplexPageReciever'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private' type=net.derfruhling.serenity.PageDetails origin=null
               receiver: GET_VAR '<this>: <root>.ComplexPageReciever declared in <root>.ComplexPageReciever.<get-details>' type=<root>.ComplexPageReciever origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
       overridden:
         public open extensions: kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:extensions type:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> visibility:private
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-extensions> visibility:public modality:FINAL returnType:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
         overridden:
           public open fun <get-extensions> (): kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
@@ -438,9 +438,9 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
           RETURN type=kotlin.Nothing from='public final fun <get-<this>> (): kotlin.String declared in <root>.ComplexPageReciever'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:<this> type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
               receiver: GET_VAR '<this>: <root>.ComplexPageReciever declared in <root>.ComplexPageReciever.<get-<this>>' type=<root>.ComplexPageReciever origin=null
-    CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>]
+    CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>]
       thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.ComplexPageReciever.Serializer
-      PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
+      PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
         overridden:
           public abstract descriptor: kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.KSerializer
         FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]
@@ -467,17 +467,17 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
                           TYPE_ARG T: kotlin.String
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-descriptor> visibility:public modality:FINAL returnType:kotlinx.serialization.descriptors.SerialDescriptor
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever.Serializer
-          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
+          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
           overridden:
             public abstract fun <get-descriptor> (): kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.KSerializer
           BLOCK_BODY
             RETURN type=kotlin.Nothing from='public final fun <get-descriptor> (): kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPageReciever.Serializer'
               GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
                 receiver: GET_VAR '<this>: <root>.ComplexPageReciever.Serializer declared in <root>.ComplexPageReciever.Serializer.<get-descriptor>' type=<root>.ComplexPageReciever.Serializer origin=null
-      CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] visibility:private returnType:<root>.ComplexPageReciever.Serializer [primary]
+      CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] visibility:private returnType:<root>.ComplexPageReciever.Serializer [primary]
         BLOCK_BODY
           DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>]' type=kotlin.Unit
+          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>]' type=kotlin.Unit
       FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
         VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
@@ -491,9 +491,9 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
         overridden:
           public open fun toString (): kotlin.String declared in kotlinx.serialization.KSerializer
-      FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDeserializeFun] name:deserialize visibility:public modality:FINAL returnType:<root>.ComplexPageReciever
+      FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDeserializeFun] name:deserialize visibility:public modality:FINAL returnType:<root>.ComplexPageReciever
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever.Serializer
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDeserializeFun] kind:Regular name:decoder index:1 type:kotlinx.serialization.encoding.Decoder
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDeserializeFun] kind:Regular name:decoder index:1 type:kotlinx.serialization.encoding.Decoder
         overridden:
           public abstract fun deserialize (decoder: kotlinx.serialization.encoding.Decoder): T of kotlinx.serialization.KSerializer declared in kotlinx.serialization.KSerializer
         BLOCK_BODY
@@ -501,10 +501,10 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
             CALL 'private/*private to this*/ final fun deserializeNormally (<this>: <root>.ComplexPageReciever.Serializer, decoder: kotlinx.serialization.encoding.Decoder): <root>.ComplexPageReciever declared in <root>.ComplexPageReciever.Serializer' type=<root>.ComplexPageReciever origin=null
               ARG <this>: GET_VAR '<this>: <root>.ComplexPageReciever.Serializer declared in <root>.ComplexPageReciever.Serializer.deserialize' type=<root>.ComplexPageReciever.Serializer origin=null
               ARG decoder: GET_VAR 'decoder: kotlinx.serialization.encoding.Decoder declared in <root>.ComplexPageReciever.Serializer.deserialize' type=kotlinx.serialization.encoding.Decoder origin=null
-      FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] name:serialize visibility:public modality:FINAL returnType:kotlin.Unit
+      FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] name:serialize visibility:public modality:FINAL returnType:kotlin.Unit
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever.Serializer
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] kind:Regular name:encoder index:1 type:kotlinx.serialization.encoding.Encoder
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] kind:Regular name:value index:2 type:<root>.ComplexPageReciever
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] kind:Regular name:encoder index:1 type:kotlinx.serialization.encoding.Encoder
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] kind:Regular name:value index:2 type:<root>.ComplexPageReciever
         overridden:
           public abstract fun serialize (encoder: kotlinx.serialization.encoding.Encoder, value: T of kotlinx.serialization.KSerializer): kotlin.Unit declared in kotlinx.serialization.KSerializer
         BLOCK_BODY
@@ -624,11 +624,11 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
             ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
             ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.ComplexPageReciever.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
           RETURN type=kotlin.Nothing from='private/*private to this*/ final fun deserializeNormally (<this>: <root>.ComplexPageReciever.Serializer, decoder: kotlinx.serialization.encoding.Decoder): <root>.ComplexPageReciever declared in <root>.ComplexPageReciever.Serializer'
-            GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:ComplexPageReciever modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPageReciever>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPageReciever>]' type=<root>.ComplexPageReciever
+            GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:ComplexPageReciever modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPageReciever>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPageReciever>]' type=<root>.ComplexPageReciever
     CONSTRUCTOR visibility:private returnType:<root>.ComplexPageReciever [primary]
       BLOCK_BODY
         DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:ComplexPageReciever modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPageReciever>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPageReciever>]' type=kotlin.Unit
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:ComplexPageReciever modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.ComplexPageReciever>; net.derfruhling.serenity.PageSerializerProvider<<root>.ComplexPageReciever>]' type=kotlin.Unit
         VAR IR_TEMPORARY_VARIABLE name:tmp_9 type:net.derfruhling.serenity.PageContractBuilder [val]
           CONSTRUCTOR_CALL 'public constructor <init> () declared in net.derfruhling.serenity.PageContractBuilder' type=net.derfruhling.serenity.PageContractBuilder origin=null
         CALL 'private final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract): kotlin.Unit declared in <root>.ComplexPageReciever' type=kotlin.Unit origin=null
@@ -663,13 +663,13 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
       overridden:
         public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageSerializerProvider
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageInitFun] name:init visibility:public modality:FINAL returnType:kotlin.Unit
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageInitFun] name:init visibility:public modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever
-      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
+      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
       overridden:
         public abstract fun init (ctx: net.derfruhling.serenity.PageContext): kotlin.Unit declared in net.derfruhling.serenity.PageHolder
       BLOCK_BODY
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageMainFun] name:Main visibility:public modality:FINAL returnType:kotlin.Unit
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageMainFun] name:Main visibility:public modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever
       annotations:
         Composable
@@ -682,13 +682,13 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
             ARG <this>: GET_VAR '<this>: <root>.ComplexPageReciever declared in <root>.ComplexPageReciever.Main' type=<root>.ComplexPageReciever origin=null
           ARG <this>: CALL 'public final fun <get-<this>> (): kotlin.String declared in <root>.ComplexPageReciever' type=kotlin.String origin=null
             ARG <this>: GET_VAR '<this>: <root>.ComplexPageReciever declared in <root>.ComplexPageReciever.Main' type=<root>.ComplexPageReciever origin=null
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerGetter] name:serializer visibility:public modality:FINAL returnType:kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerGetter] name:serializer visibility:public modality:FINAL returnType:kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.ComplexPageReciever
       overridden:
         public abstract fun serializer (): kotlinx.serialization.KSerializer<T of net.derfruhling.serenity.PageSerializerProvider> declared in net.derfruhling.serenity.PageSerializerProvider
       BLOCK_BODY
         RETURN type=kotlin.Nothing from='public final fun serializer (): kotlinx.serialization.KSerializer<<root>.ComplexPageReciever> declared in <root>.ComplexPageReciever'
-          GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>]' type=<root>.ComplexPageReciever.Serializer
+          GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.ComplexPageReciever>]' type=<root>.ComplexPageReciever.Serializer
     FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:private modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:serenity$thisPage index:0 type:<root>.ComplexPageReciever
       VALUE_PARAMETER kind:ExtensionReceiver name:$this$pageContract index:1 type:net.derfruhling.serenity.PageContract
@@ -711,9 +711,9 @@ FILE fqName:<root> fileName:/ComplexPageReciever.kt
         overridden:
           public open fun <get-hash> (): kotlin.collections.Map<kotlin.String, kotlin.String> declared in net.derfruhling.serenity.PageHolder
 FILE fqName:<root> fileName:/IndexPage.kt
-  CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]
+  CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]
     thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.IndexPage
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
       overridden:
         public abstract id: kotlin.String declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]
@@ -721,14 +721,14 @@ FILE fqName:<root> fileName:/IndexPage.kt
           CONST String type=kotlin.String value="11tH5pc9xiFN8WL2nPzxQQ"
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-id> visibility:public modality:FINAL returnType:kotlin.String
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-id> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-id> (): kotlin.String declared in <root>.IndexPage'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
               receiver: GET_VAR '<this>: <root>.IndexPage declared in <root>.IndexPage.<get-id>' type=<root>.IndexPage origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
       overridden:
         public abstract path: kotlin.String declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]
@@ -736,42 +736,42 @@ FILE fqName:<root> fileName:/IndexPage.kt
           CONST String type=kotlin.String value="/"
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-path> visibility:public modality:FINAL returnType:kotlin.String
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-path> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-path> (): kotlin.String declared in <root>.IndexPage'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
               receiver: GET_VAR '<this>: <root>.IndexPage declared in <root>.IndexPage.<get-path>' type=<root>.IndexPage origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
       overridden:
         public abstract details: net.derfruhling.serenity.PageDetails declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-details> visibility:public modality:FINAL returnType:net.derfruhling.serenity.PageDetails
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-details> (): net.derfruhling.serenity.PageDetails declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-details> (): net.derfruhling.serenity.PageDetails declared in <root>.IndexPage'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private' type=net.derfruhling.serenity.PageDetails origin=null
               receiver: GET_VAR '<this>: <root>.IndexPage declared in <root>.IndexPage.<get-details>' type=<root>.IndexPage origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
       overridden:
         public open extensions: kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in net.derfruhling.serenity.PageHolder
       FIELD PROPERTY_BACKING_FIELD name:extensions type:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> visibility:private
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-extensions> visibility:public modality:FINAL returnType:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
         overridden:
           public open fun <get-extensions> (): kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-extensions> (): kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in <root>.IndexPage'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:extensions type:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> visibility:private' type=kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> origin=null
               receiver: GET_VAR '<this>: <root>.IndexPage declared in <root>.IndexPage.<get-extensions>' type=<root>.IndexPage origin=null
-    CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.IndexPage>]
+    CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.IndexPage>]
       thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.IndexPage.Serializer
-      PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
+      PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
         overridden:
           public abstract descriptor: kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.KSerializer
         FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]
@@ -786,17 +786,17 @@ FILE fqName:<root> fileName:/IndexPage.kt
                   BLOCK_BODY
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-descriptor> visibility:public modality:FINAL returnType:kotlinx.serialization.descriptors.SerialDescriptor
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage.Serializer
-          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
+          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
           overridden:
             public abstract fun <get-descriptor> (): kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.KSerializer
           BLOCK_BODY
             RETURN type=kotlin.Nothing from='public final fun <get-descriptor> (): kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.IndexPage.Serializer'
               GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
                 receiver: GET_VAR '<this>: <root>.IndexPage.Serializer declared in <root>.IndexPage.Serializer.<get-descriptor>' type=<root>.IndexPage.Serializer origin=null
-      CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] visibility:private returnType:<root>.IndexPage.Serializer [primary]
+      CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] visibility:private returnType:<root>.IndexPage.Serializer [primary]
         BLOCK_BODY
           DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.IndexPage>]' type=kotlin.Unit
+          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.IndexPage>]' type=kotlin.Unit
       FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
         VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
@@ -810,9 +810,9 @@ FILE fqName:<root> fileName:/IndexPage.kt
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
         overridden:
           public open fun toString (): kotlin.String declared in kotlinx.serialization.KSerializer
-      FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDeserializeFun] name:deserialize visibility:public modality:FINAL returnType:<root>.IndexPage
+      FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDeserializeFun] name:deserialize visibility:public modality:FINAL returnType:<root>.IndexPage
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage.Serializer
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDeserializeFun] kind:Regular name:decoder index:1 type:kotlinx.serialization.encoding.Decoder
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDeserializeFun] kind:Regular name:decoder index:1 type:kotlinx.serialization.encoding.Decoder
         overridden:
           public abstract fun deserialize (decoder: kotlinx.serialization.encoding.Decoder): T of kotlinx.serialization.KSerializer declared in kotlinx.serialization.KSerializer
         BLOCK_BODY
@@ -820,10 +820,10 @@ FILE fqName:<root> fileName:/IndexPage.kt
             CALL 'private/*private to this*/ final fun deserializeNormally (<this>: <root>.IndexPage.Serializer, decoder: kotlinx.serialization.encoding.Decoder): <root>.IndexPage declared in <root>.IndexPage.Serializer' type=<root>.IndexPage origin=null
               ARG <this>: GET_VAR '<this>: <root>.IndexPage.Serializer declared in <root>.IndexPage.Serializer.deserialize' type=<root>.IndexPage.Serializer origin=null
               ARG decoder: GET_VAR 'decoder: kotlinx.serialization.encoding.Decoder declared in <root>.IndexPage.Serializer.deserialize' type=kotlinx.serialization.encoding.Decoder origin=null
-      FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] name:serialize visibility:public modality:FINAL returnType:kotlin.Unit
+      FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] name:serialize visibility:public modality:FINAL returnType:kotlin.Unit
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage.Serializer
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] kind:Regular name:encoder index:1 type:kotlinx.serialization.encoding.Encoder
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] kind:Regular name:value index:2 type:<root>.IndexPage
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] kind:Regular name:encoder index:1 type:kotlinx.serialization.encoding.Encoder
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] kind:Regular name:value index:2 type:<root>.IndexPage
         overridden:
           public abstract fun serialize (encoder: kotlinx.serialization.encoding.Encoder, value: T of kotlinx.serialization.KSerializer): kotlin.Unit declared in kotlinx.serialization.KSerializer
         BLOCK_BODY
@@ -883,11 +883,11 @@ FILE fqName:<root> fileName:/IndexPage.kt
             ARG <this>: GET_VAR 'val tmp_3: kotlinx.serialization.encoding.CompositeDecoder declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.encoding.CompositeDecoder origin=null
             ARG descriptor: GET_VAR 'val tmp_2: kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.IndexPage.Serializer.deserializeNormally' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
           RETURN type=kotlin.Nothing from='private/*private to this*/ final fun deserializeNormally (<this>: <root>.IndexPage.Serializer, decoder: kotlinx.serialization.encoding.Decoder): <root>.IndexPage declared in <root>.IndexPage.Serializer'
-            GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=<root>.IndexPage
+            GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=<root>.IndexPage
     CONSTRUCTOR visibility:private returnType:<root>.IndexPage [primary]
       BLOCK_BODY
         DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=kotlin.Unit
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=kotlin.Unit
         VAR IR_TEMPORARY_VARIABLE name:tmp_5 type:net.derfruhling.serenity.PageContractBuilder [val]
           CONSTRUCTOR_CALL 'public constructor <init> () declared in net.derfruhling.serenity.PageContractBuilder' type=net.derfruhling.serenity.PageContractBuilder origin=null
         CALL 'private final fun <page-contract> ($this$pageContract: net.derfruhling.serenity.PageContract): kotlin.Unit declared in <root>.IndexPage' type=kotlin.Unit origin=null
@@ -922,13 +922,13 @@ FILE fqName:<root> fileName:/IndexPage.kt
       overridden:
         public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageHolder
         public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageSerializerProvider
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageInitFun] name:init visibility:public modality:FINAL returnType:kotlin.Unit
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageInitFun] name:init visibility:public modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage
-      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
+      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
       overridden:
         public abstract fun init (ctx: net.derfruhling.serenity.PageContext): kotlin.Unit declared in net.derfruhling.serenity.PageHolder
       BLOCK_BODY
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageMainFun] name:Main visibility:public modality:FINAL returnType:kotlin.Unit
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageMainFun] name:Main visibility:public modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage
       annotations:
         Composable
@@ -937,13 +937,13 @@ FILE fqName:<root> fileName:/IndexPage.kt
         public abstract fun Main (): kotlin.Unit declared in net.derfruhling.serenity.PageHolder
       BLOCK_BODY
         CALL 'public final fun IndexPage (): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerGetter] name:serializer visibility:public modality:FINAL returnType:kotlinx.serialization.KSerializer<<root>.IndexPage>
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerGetter] name:serializer visibility:public modality:FINAL returnType:kotlinx.serialization.KSerializer<<root>.IndexPage>
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.IndexPage
       overridden:
         public abstract fun serializer (): kotlinx.serialization.KSerializer<T of net.derfruhling.serenity.PageSerializerProvider> declared in net.derfruhling.serenity.PageSerializerProvider
       BLOCK_BODY
         RETURN type=kotlin.Nothing from='public final fun serializer (): kotlinx.serialization.KSerializer<<root>.IndexPage> declared in <root>.IndexPage'
-          GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.IndexPage>]' type=<root>.IndexPage.Serializer
+          GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.IndexPage>]' type=<root>.IndexPage.Serializer
     FUN LOCAL_FUNCTION_FOR_LAMBDA name:<page-contract> visibility:private modality:FINAL returnType:kotlin.Unit
       VALUE_PARAMETER kind:DispatchReceiver name:serenity$thisPage index:0 type:<root>.IndexPage
       VALUE_PARAMETER kind:ExtensionReceiver name:$this$pageContract index:1 type:net.derfruhling.serenity.PageContract
@@ -962,9 +962,9 @@ FILE fqName:<root> fileName:/IndexPage.kt
         overridden:
           public open fun <get-hash> (): kotlin.collections.Map<kotlin.String, kotlin.String> declared in net.derfruhling.serenity.PageHolder
 FILE fqName:<root> fileName:/Page2.kt
-  CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]
+  CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]
     thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.Page2
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
       overridden:
         public abstract id: kotlin.String declared in net.derfruhling.serenity.PageHolderFactory
       FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]
@@ -972,14 +972,14 @@ FILE fqName:<root> fileName:/Page2.kt
           CONST String type=kotlin.String value="lACeYUAbnYrINHVLpnekug"
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-id> visibility:public modality:FINAL returnType:kotlin.String
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-id> (): kotlin.String declared in net.derfruhling.serenity.PageHolderFactory
         BLOCK_BODY
           RETURN type=kotlin.Nothing from='public final fun <get-id> (): kotlin.String declared in <root>.Page2'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
               receiver: GET_VAR '<this>: <root>.Page2 declared in <root>.Page2.<get-id>' type=<root>.Page2 origin=null
-    PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+    PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
       overridden:
         public abstract path: kotlin.String declared in net.derfruhling.serenity.PageHolderFactory
       FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private [final]
@@ -987,7 +987,7 @@ FILE fqName:<root> fileName:/Page2.kt
           CONST String type=kotlin.String value="/"
       FUN DEFAULT_PROPERTY_ACCESSOR name:<get-path> visibility:public modality:FINAL returnType:kotlin.String
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2
-        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+        correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
         overridden:
           public abstract fun <get-path> (): kotlin.String declared in net.derfruhling.serenity.PageHolderFactory
         BLOCK_BODY
@@ -1022,9 +1022,9 @@ FILE fqName:<root> fileName:/Page2.kt
           RETURN type=kotlin.Nothing from='public final fun <get-param2$parser> (): net.derfruhling.serenity.serial.ParameterParser<kotlin.Int> declared in <root>.Page2'
             GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:param2$parser type:net.derfruhling.serenity.serial.ParameterParser<kotlin.Int> visibility:private' type=net.derfruhling.serenity.serial.ParameterParser<kotlin.Int> origin=null
               receiver: GET_VAR '<this>: <root>.Page2 declared in <root>.Page2.<get-param2$parser>' type=<root>.Page2 origin=null
-    CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] CLASS name:Instance modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.Page2.Instance>]
+    CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] CLASS name:Instance modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.Page2.Instance>]
       thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.Page2.Instance
-      PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+      PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
         overridden:
           public abstract id: kotlin.String declared in net.derfruhling.serenity.PageHolder
         FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]
@@ -1032,46 +1032,46 @@ FILE fqName:<root> fileName:/Page2.kt
             CONST String type=kotlin.String value="lACeYUAbnYrINHVLpnekug"
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-id> visibility:public modality:FINAL returnType:kotlin.String
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance
-          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageIdProperty] name:id visibility:public modality:FINAL [val]
+          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageIdProperty] name:id visibility:public modality:FINAL [val]
           overridden:
             public abstract fun <get-id> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
           BLOCK_BODY
             RETURN type=kotlin.Nothing from='public final fun <get-id> (): kotlin.String declared in <root>.Page2.Instance'
               GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:id type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
                 receiver: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.<get-id>' type=<root>.Page2.Instance origin=null
-      PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+      PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
         overridden:
           public abstract path: kotlin.String declared in net.derfruhling.serenity.PageHolder
         FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-path> visibility:public modality:FINAL returnType:kotlin.String
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance
-          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PagePathProperty] name:path visibility:public modality:FINAL [val]
+          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PagePathProperty] name:path visibility:public modality:FINAL [val]
           overridden:
             public abstract fun <get-path> (): kotlin.String declared in net.derfruhling.serenity.PageHolder
           BLOCK_BODY
             RETURN type=kotlin.Nothing from='public final fun <get-path> (): kotlin.String declared in <root>.Page2.Instance'
               GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private' type=kotlin.String origin=null
                 receiver: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.<get-path>' type=<root>.Page2.Instance origin=null
-      PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
+      PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
         overridden:
           public abstract details: net.derfruhling.serenity.PageDetails declared in net.derfruhling.serenity.PageHolder
         FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-details> visibility:public modality:FINAL returnType:net.derfruhling.serenity.PageDetails
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance
-          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
+          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDetailsProperty] name:details visibility:public modality:FINAL [val]
           overridden:
             public abstract fun <get-details> (): net.derfruhling.serenity.PageDetails declared in net.derfruhling.serenity.PageHolder
           BLOCK_BODY
             RETURN type=kotlin.Nothing from='public final fun <get-details> (): net.derfruhling.serenity.PageDetails declared in <root>.Page2.Instance'
               GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:details type:net.derfruhling.serenity.PageDetails visibility:private' type=net.derfruhling.serenity.PageDetails origin=null
                 receiver: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.<get-details>' type=<root>.Page2.Instance origin=null
-      PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
+      PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
         overridden:
           public open extensions: kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in net.derfruhling.serenity.PageHolder
         FIELD PROPERTY_BACKING_FIELD name:extensions type:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> visibility:private
         FUN DEFAULT_PROPERTY_ACCESSOR name:<get-extensions> visibility:public modality:FINAL returnType:kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance
-          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
+          correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageExtensionsProperty] name:extensions visibility:public modality:FINAL [val]
           overridden:
             public open fun <get-extensions> (): kotlin.collections.Map<kotlin.reflect.KClass<out net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>>, net.derfruhling.serenity.modularity.extension.AbstractPageExtension<*>> declared in net.derfruhling.serenity.PageHolder
           BLOCK_BODY
@@ -1096,9 +1096,9 @@ FILE fqName:<root> fileName:/Page2.kt
             RETURN type=kotlin.Nothing from='public final fun <get-param2> (): kotlin.Int declared in <root>.Page2.Instance'
               GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:param2 type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
                 receiver: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance.<get-param2>' type=<root>.Page2.Instance origin=null
-      CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.Page2.Instance>]
+      CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.Page2.Instance>]
         thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.Page2.Instance.Serializer
-        PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
+        PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
           overridden:
             public abstract descriptor: kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.KSerializer
           FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]
@@ -1125,17 +1125,17 @@ FILE fqName:<root> fileName:/Page2.kt
                             TYPE_ARG T: kotlin.Int
           FUN DEFAULT_PROPERTY_ACCESSOR name:<get-descriptor> visibility:public modality:FINAL returnType:kotlinx.serialization.descriptors.SerialDescriptor
             VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance.Serializer
-            correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
+            correspondingProperty: PROPERTY GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDescriptorProperty] name:descriptor visibility:public modality:FINAL [val]
             overridden:
               public abstract fun <get-descriptor> (): kotlinx.serialization.descriptors.SerialDescriptor declared in kotlinx.serialization.KSerializer
             BLOCK_BODY
               RETURN type=kotlin.Nothing from='public final fun <get-descriptor> (): kotlinx.serialization.descriptors.SerialDescriptor declared in <root>.Page2.Instance.Serializer'
                 GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:descriptor type:kotlinx.serialization.descriptors.SerialDescriptor visibility:private [final]' type=kotlinx.serialization.descriptors.SerialDescriptor origin=null
                   receiver: GET_VAR '<this>: <root>.Page2.Instance.Serializer declared in <root>.Page2.Instance.Serializer.<get-descriptor>' type=<root>.Page2.Instance.Serializer origin=null
-        CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] visibility:private returnType:<root>.Page2.Instance.Serializer [primary]
+        CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] visibility:private returnType:<root>.Page2.Instance.Serializer [primary]
           BLOCK_BODY
             DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-            INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.Page2.Instance>]' type=kotlin.Unit
+            INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.Page2.Instance>]' type=kotlin.Unit
         FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
           VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
@@ -1149,9 +1149,9 @@ FILE fqName:<root> fileName:/Page2.kt
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
           overridden:
             public open fun toString (): kotlin.String declared in kotlinx.serialization.KSerializer
-        FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDeserializeFun] name:deserialize visibility:public modality:FINAL returnType:<root>.Page2.Instance
+        FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDeserializeFun] name:deserialize visibility:public modality:FINAL returnType:<root>.Page2.Instance
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance.Serializer
-          VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageDeserializeFun] kind:Regular name:decoder index:1 type:kotlinx.serialization.encoding.Decoder
+          VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageDeserializeFun] kind:Regular name:decoder index:1 type:kotlinx.serialization.encoding.Decoder
           overridden:
             public abstract fun deserialize (decoder: kotlinx.serialization.encoding.Decoder): T of kotlinx.serialization.KSerializer declared in kotlinx.serialization.KSerializer
           BLOCK_BODY
@@ -1159,10 +1159,10 @@ FILE fqName:<root> fileName:/Page2.kt
               CALL 'private/*private to this*/ final fun deserializeNormally (<this>: <root>.Page2.Instance.Serializer, decoder: kotlinx.serialization.encoding.Decoder): <root>.Page2.Instance declared in <root>.Page2.Instance.Serializer' type=<root>.Page2.Instance origin=null
                 ARG <this>: GET_VAR '<this>: <root>.Page2.Instance.Serializer declared in <root>.Page2.Instance.Serializer.deserialize' type=<root>.Page2.Instance.Serializer origin=null
                 ARG decoder: GET_VAR 'decoder: kotlinx.serialization.encoding.Decoder declared in <root>.Page2.Instance.Serializer.deserialize' type=kotlinx.serialization.encoding.Decoder origin=null
-        FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] name:serialize visibility:public modality:FINAL returnType:kotlin.Unit
+        FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] name:serialize visibility:public modality:FINAL returnType:kotlin.Unit
           VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance.Serializer
-          VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] kind:Regular name:encoder index:1 type:kotlinx.serialization.encoding.Encoder
-          VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializeFun] kind:Regular name:value index:2 type:<root>.Page2.Instance
+          VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] kind:Regular name:encoder index:1 type:kotlinx.serialization.encoding.Encoder
+          VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializeFun] kind:Regular name:value index:2 type:<root>.Page2.Instance
           overridden:
             public abstract fun serialize (encoder: kotlinx.serialization.encoding.Encoder, value: T of kotlinx.serialization.KSerializer): kotlin.Unit declared in kotlinx.serialization.KSerializer
           BLOCK_BODY
@@ -1320,15 +1320,15 @@ FILE fqName:<root> fileName:/Page2.kt
                     if: CONST Boolean type=kotlin.Boolean value=true
                     then: TYPE_OP type=kotlin.Int origin=IMPLICIT_CAST typeOperand=kotlin.Int
                       GET_VAR 'var tmp_6: kotlin.Int? declared in <root>.Page2.Instance.Serializer.deserializeNormally' type=kotlin.Int? origin=null
-      CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageConstructor] visibility:internal returnType:<root>.Page2.Instance [primary]
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageConstructor] kind:Regular name:serenity$identifier index:0 type:kotlin.Unit
+      CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.PageKey.PageConstructor] visibility:internal returnType:<root>.Page2.Instance [primary]
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageConstructor] kind:Regular name:serenity$identifier index:0 type:kotlin.Unit
           EXPRESSION_BODY
             GET_OBJECT 'CLASS IR_EXTERNAL_DECLARATION_STUB OBJECT name:Unit modality:FINAL visibility:public superTypes:[kotlin.Any]' type=kotlin.Unit
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageConstructor] kind:Regular name:param1 index:1 type:kotlin.String
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageConstructor] kind:Regular name:param2 index:2 type:kotlin.Int
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageConstructor] kind:Regular name:param1 index:1 type:kotlin.String
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.PageConstructor] kind:Regular name:param2 index:2 type:kotlin.Int
         BLOCK_BODY
           DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] CLASS name:Instance modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.Page2.Instance>]' type=kotlin.Unit
+          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] CLASS name:Instance modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.Page2.Instance>]' type=kotlin.Unit
           SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:path type:kotlin.String visibility:private' type=kotlin.Unit origin=null
             receiver: GET_VAR '<this>: <root>.Page2.Instance declared in <root>.Page2.Instance' type=<root>.Page2.Instance origin=null
             value: STRING_CONCATENATION type=kotlin.String
@@ -1371,9 +1371,9 @@ FILE fqName:<root> fileName:/Page2.kt
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
         overridden:
           public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageHolder
-      FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageInitFun] name:init visibility:public modality:FINAL returnType:kotlin.Unit
+      FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageInitFun] name:init visibility:public modality:FINAL returnType:kotlin.Unit
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance
-        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
+        VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
         overridden:
           public abstract fun init (ctx: net.derfruhling.serenity.PageContext): kotlin.Unit declared in net.derfruhling.serenity.PageHolder
         BLOCK_BODY
@@ -1387,7 +1387,7 @@ FILE fqName:<root> fileName:/Page2.kt
                 BLOCK_BODY
                   CALL 'public final fun println (message: kotlin.Any?): kotlin.Unit declared in kotlin.io' type=kotlin.Unit origin=null
                     ARG message: CONST String type=kotlin.String value="hello, world!"
-      FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageMainFun] name:Main visibility:public modality:FINAL returnType:kotlin.Unit
+      FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageMainFun] name:Main visibility:public modality:FINAL returnType:kotlin.Unit
         VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2.Instance
         annotations:
           Composable
@@ -1421,10 +1421,10 @@ FILE fqName:<root> fileName:/Page2.kt
           correspondingProperty: PROPERTY FAKE_OVERRIDE name:hash visibility:public modality:OPEN [fake_override,val]
           overridden:
             public open fun <get-hash> (): kotlin.collections.Map<kotlin.String, kotlin.String> declared in net.derfruhling.serenity.PageHolder
-    CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryClass] visibility:private returnType:<root>.Page2 [primary]
+    CONSTRUCTOR GENERATED[net.derfruhling.serenity.compiler.PageKey.PageFactoryClass] visibility:private returnType:<root>.Page2 [primary]
       BLOCK_BODY
         DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
-        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=kotlin.Unit
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=kotlin.Unit
     FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
       VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
@@ -1441,9 +1441,9 @@ FILE fqName:<root> fileName:/Page2.kt
       overridden:
         public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageHolderFactory
         public open fun toString (): kotlin.String declared in net.derfruhling.serenity.PageSerializerProvider
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryCreateFun] name:create visibility:public modality:FINAL returnType:<root>.Page2.Instance
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageFactoryCreateFun] name:create visibility:public modality:FINAL returnType:<root>.Page2.Instance
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2
-      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
+      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.Parameter] kind:Regular name:ctx index:1 type:net.derfruhling.serenity.PageContext
       overridden:
         public abstract fun create (ctx: net.derfruhling.serenity.PageContext): R of net.derfruhling.serenity.PageHolderFactory declared in net.derfruhling.serenity.PageHolderFactory
       BLOCK_BODY
@@ -1487,26 +1487,26 @@ FILE fqName:<root> fileName:/Page2.kt
               RETURN type=kotlin.Nothing from='{IrReturnableBlockImpl}'
                 CALL 'public abstract fun parse (fieldName: kotlin.String, text: kotlin.String): T of net.derfruhling.serenity.serial.ParameterParser declared in net.derfruhling.serenity.serial.ParameterParser' type=kotlin.Int origin=null
                   ARG <this>: CALL 'public final fun <get-param2$parser> (): net.derfruhling.serenity.serial.ParameterParser<kotlin.Int> declared in <root>.Page2' type=net.derfruhling.serenity.serial.ParameterParser<kotlin.Int> origin=null
-                    ARG <this>: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=<root>.Page2
+                    ARG <this>: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=<root>.Page2
                   ARG fieldName: CONST String type=kotlin.String value="param2"
                   ARG text: GET_VAR 'val tmp_13: kotlin.String declared in <root>.Page2.create' type=kotlin.String origin=null
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryOfFun] name:of visibility:public modality:FINAL returnType:<root>.Page2.Instance
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageFactoryOfFun] name:of visibility:public modality:FINAL returnType:<root>.Page2.Instance
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2
-      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.Parameter] kind:Regular name:param1 index:1 type:kotlin.String
-      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.Parameter] kind:Regular name:param2 index:2 type:kotlin.Int
+      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.Parameter] kind:Regular name:param1 index:1 type:kotlin.String
+      VALUE_PARAMETER GENERATED[net.derfruhling.serenity.compiler.PageKey.Parameter] kind:Regular name:param2 index:2 type:kotlin.Int
       BLOCK_BODY
         RETURN type=kotlin.Nothing from='public final fun of (param1: kotlin.String, param2: kotlin.Int): <root>.Page2.Instance declared in <root>.Page2'
           CONSTRUCTOR_CALL 'internal constructor <init> (serenity$identifier: kotlin.Unit, param1: kotlin.String, param2: kotlin.Int) declared in <root>.Page2.Instance' type=<root>.Page2.Instance origin=null
             ARG serenity$identifier: GET_OBJECT 'CLASS IR_EXTERNAL_DECLARATION_STUB OBJECT name:Unit modality:FINAL visibility:public superTypes:[kotlin.Any]' type=kotlin.Unit
             ARG param1: GET_VAR 'param1: kotlin.String declared in <root>.Page2.of' type=kotlin.String origin=null
             ARG param2: GET_VAR 'param2: kotlin.Int declared in <root>.Page2.of' type=kotlin.Int origin=null
-    FUN GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerGetter] name:serializer visibility:public modality:FINAL returnType:kotlinx.serialization.KSerializer<<root>.Page2.Instance>
+    FUN GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerGetter] name:serializer visibility:public modality:FINAL returnType:kotlinx.serialization.KSerializer<<root>.Page2.Instance>
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Page2
       overridden:
         public abstract fun serializer (): kotlinx.serialization.KSerializer<T of net.derfruhling.serenity.PageSerializerProvider> declared in net.derfruhling.serenity.PageSerializerProvider
       BLOCK_BODY
         RETURN type=kotlin.Nothing from='public final fun serializer (): kotlinx.serialization.KSerializer<<root>.Page2.Instance> declared in <root>.Page2'
-          GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.Page2.Instance>]' type=<root>.Page2.Instance.Serializer
+          GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageSerializerClass] OBJECT name:Serializer modality:FINAL visibility:private superTypes:[kotlinx.serialization.KSerializer<<root>.Page2.Instance>]' type=<root>.Page2.Instance.Serializer
 FILE fqName:<root> fileName:/page.kt
   CLASS CLASS name:Test modality:FINAL visibility:public superTypes:[kotlin.Any]
     thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.Test
@@ -1609,20 +1609,20 @@ FILE fqName:<root> fileName:/page.kt
                       CALL 'public final fun println (message: kotlin.Int): kotlin.Unit declared in kotlin.io' type=kotlin.Unit origin=null
                         ARG message: GET_VAR '$this$with: kotlin.Int declared in <root>.box.<anonymous>' type=kotlin.Int origin=null
       VAR name:page1 type:<root>.IndexPage [val]
-        GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=<root>.IndexPage
+        GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=<root>.IndexPage
       VAR name:page2 type:<root>.Page2.Instance [val]
         CALL 'public final fun of (param1: kotlin.String, param2: kotlin.Int): <root>.Page2.Instance declared in <root>.Page2' type=<root>.Page2.Instance origin=null
-          ARG <this>: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=<root>.Page2
+          ARG <this>: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=<root>.Page2
           ARG param1: CONST String type=kotlin.String value="world"
           ARG param2: CONST Int type=kotlin.Int value=42
       CALL 'public final fun of (): kotlin.Unit declared in <root>.Test.Factory' type=kotlin.Unit origin=null
         ARG <this>: GET_OBJECT 'CLASS OBJECT name:Factory modality:FINAL visibility:public [companion] superTypes:[kotlin.Any]' type=<root>.Test.Factory
       CALL 'public final fun accept <T> (factory: net.derfruhling.serenity.PageHolderFactory<T of <root>.accept>): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
         TYPE_ARG T: <root>.IndexPage
-        ARG factory: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=<root>.IndexPage
+        ARG factory: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageClass] OBJECT name:IndexPage modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolder<<root>.IndexPage>; net.derfruhling.serenity.PageSerializerProvider<<root>.IndexPage>]' type=<root>.IndexPage
       CALL 'public final fun accept <T> (factory: net.derfruhling.serenity.PageHolderFactory<T of <root>.accept>): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
         TYPE_ARG T: <root>.Page2.Instance
-        ARG factory: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.fir.FirPageGenerated.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=<root>.Page2
+        ARG factory: GET_OBJECT 'CLASS GENERATED[net.derfruhling.serenity.compiler.PageKey.PageFactoryClass] OBJECT name:Page2 modality:FINAL visibility:public superTypes:[net.derfruhling.serenity.PageHolderFactory<<root>.Page2.Instance>; net.derfruhling.serenity.PageSerializerProvider<<root>.Page2.Instance>]' type=<root>.Page2
       RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
         CONST String type=kotlin.String value="OK"
   FUN name:test visibility:public modality:FINAL returnType:kotlin.Unit
